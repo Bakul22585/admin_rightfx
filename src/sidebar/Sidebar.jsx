@@ -68,7 +68,7 @@ const Sidebar = (prop) => {
             <div className="sidebar-navigation">
               <ul className="pt-2">
                 <li>
-                  <NavLink className="nav-link-simple " to="/Dashboard" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/dashboard" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                       dashboard
                     </span>
@@ -76,9 +76,90 @@ const Sidebar = (prop) => {
                   </NavLink>
                 </li>
                 <li>
+                  <NavLink className="nav-link-simple " to="/employees" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    person
+                    </span>
+                    Employees
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/role_management" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    manage_accounts
+                    </span>
+                    Role Management
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/user_list" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    view_list
+                    </span>
+                    User List
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/list_request" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    fact_check
+                    </span>
+                    List Requests
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/pending_kyc" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    pending_actions
+                    </span>
+                    Pending KYC
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/history_kyc" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    history
+                    </span>
+                    History KYC
+                  </NavLink>
+                </li>
+                <li>
+                  <a
+                    className={`ibManagement ${open.ibManagement ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <span className="material-icons" style={style}>
+                    engineering
+                    </span>
+                    IB Management
+                    <span className="sidebar-icon-indicator">
+
+                      {open.ibManagement ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.ibManagement} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/commision_group" onClick={CloseSidebar}>Commision Group</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/generate_income" onClick={CloseSidebar}>Generate Income</NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/mt5_group" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    groups
+                    </span>
+                    MT5 Groups
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink className="nav-link-simple " to="/Deposit" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      attach_money
+                    add
                     </span>
                     Deposit
                   </NavLink>
@@ -86,49 +167,26 @@ const Sidebar = (prop) => {
                 <li>
                   <NavLink className="nav-link-simple " to="/Withdrawal" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      attach_money
+                    file_upload
                     </span>
-
                     Withdrawal
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/Internal_Transfer" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/ib_withdraw" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      auto_graph
+                    file_upload
                     </span>
-                    Internal_Transfer
+                    IB Withdraw
                   </NavLink>
                 </li>
                 <li>
-                  <a
-                    className={`operation ${open.operation ? "active" : ""}`}
-                    onClick={handleClick}
-                  >
+                  <NavLink className="nav-link-simple " to="/partnership_withdraw" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      people
+                    file_upload
                     </span>
-                    Operation_Account
-                    <span className="sidebar-icon-indicator">
-
-                      {open.operation ? <ExpandMore /> : <ExpandLess />}
-                    </span>
-                  </a>
-                  <Collapse in={open.operation} timeout="auto" unmountOnExit>
-                    <ul>
-                      <li>
-                        <NavLink to="/deposit_history" onClick={CloseSidebar}>Deposit_History</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/withdraw_history" onClick={CloseSidebar}>
-                          Withdraw_History   </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/transfer_history" onClick={CloseSidebar}>
-                          Transfer_History   </NavLink>
-                      </li>
-                    </ul>
-                  </Collapse>
+                    Partnership Withdraw
+                  </NavLink>
                 </li>
                 <li>
                   <a
@@ -136,9 +194,9 @@ const Sidebar = (prop) => {
                     onClick={handleClick}
                   >
                     <span className="material-icons" style={style}>
-                      people
+                    auto_graph
                     </span>
-                    Trading_Accounts
+                    Reports
                     <span className="sidebar-icon-indicator">
 
                       {open.trading ? <ExpandMore /> : <ExpandLess />}
@@ -147,30 +205,43 @@ const Sidebar = (prop) => {
                   <Collapse in={open.trading} timeout="auto" unmountOnExit>
                     <ul>
                       <li>
-                        <NavLink to="/account_list" onClick={CloseSidebar}>Account_List   </NavLink>
+                        <NavLink to="/account_list" onClick={CloseSidebar}>Deposit</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/manage_bonuses" onClick={CloseSidebar}>Manage_Bonuses   </NavLink>
+                        <NavLink to="/manage_bonuses" onClick={CloseSidebar}>Withdraw</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>
-
-                          OReal_Account   </NavLink>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>MT5 Bonus</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_demo_account">
-                          ODemo_Account   </NavLink>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Position</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Trade History</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Trade History Total</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Copy Open Trades</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>IB Commision</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Partnership Main Commision</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Partnership Level Commision</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Partnership Pending Commision</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/open_real_account" onClick={CloseSidebar}>User Profit & Loss</NavLink>
                       </li>
                     </ul>
                   </Collapse>
-                </li>
-                <li>
-                  <NavLink className="nav-link-simple " to="/Reports" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                      auto_graph
-                    </span>
-
-                    Reports   </NavLink>
                 </li>
                 <li>
                   <a
@@ -178,9 +249,9 @@ const Sidebar = (prop) => {
                     onClick={handleClick}
                   >
                     <span className="material-icons" style={style}>
-                      computer
+                    auto_graph
                     </span>
-                    Platforms
+                    Admin Accounts
                     <span className="sidebar-icon-indicator">
                       {open.platforms ? <ExpandMore /> : <ExpandLess />}
                     </span>
@@ -188,112 +259,80 @@ const Sidebar = (prop) => {
                   <Collapse in={open.platforms} timeout="auto" unmountOnExit>
                     <ul>
                       <li>
-                        <NavLink to="/Platforms/destop" onClick={CloseSidebar}>Destop   </NavLink>
+                        <NavLink to="/Platforms/destop" onClick={CloseSidebar}>IB Commisions</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/Platforms/android" onClick={CloseSidebar}>Android   </NavLink>
+                        <NavLink to="/Platforms/android" onClick={CloseSidebar}>Partnership Commisions</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Iphone   </NavLink>
+                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Copy Trading Commisions</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Trade Statistics</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Accounts</NavLink>
                       </li>
                     </ul>
                   </Collapse>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/partnership" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/faq_editor" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      align_vertical_bottom
+                    border_color
                     </span>
-
-                    Partnership   </NavLink>
+                    FAQ Editor
+                    </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/Web_Trader" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/activity_log" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      align_vertical_bottom
+                    list_alt
                     </span>
-
-                    Web_Trader   </NavLink>
+                    Activity Log
+                    </NavLink>
                 </li>
                 <li>
-                  <a
-                    className={`contests ${open.Contests ? "active" : null}`}
-                    onClick={handleClick}
-                  >
+                  <NavLink className="nav-link-simple " to="/notification" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      account_circle
+                    ballot
                     </span>
-                    Contests
-                    <span className="sidebar-icon-indicator">
-                      {open.contests ? <ExpandMore /> : <ExpandLess />}
-                    </span>
-                  </a>
-                  <Collapse in={open.contests} timeout="auto" unmountOnExit>
-                    <ul>
-                      <li>
-                        <NavLink to="/Champion_Demo_Contes" onClick={CloseSidebar}>
-
-                          cdc   </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="Open_Champion_Demo_Contest_account" onClick={CloseSidebar}>
-
-                          ocdca   </NavLink>
-                      </li>
-                    </ul>
-                  </Collapse>
+                    Notification
+                    </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/copytrading" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/ticket" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      align_vertical_bottom
+                    receipt_long
                     </span>
-
-                    Copytrading   </NavLink>
+                    Ticket
+                    </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/promo_code" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/currency_rate" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      align_vertical_bottom
+                    calculate
                     </span>
-
-                    Promo_code   </NavLink>
+                    Currency Rate
+                    </NavLink>
                 </li>
                 <li>
-                  <a
-                    className={`my_profile ${open.my_profile ? "active" : null
-                      }`}
-                    onClick={handleClick}
-                  >
+                  <NavLink className="nav-link-simple " to="/popup_image" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
-                      account_circle
+                    dashboard
                     </span>
-
-                    Profile
-                    <span className="sidebar-icon-indicator">
-                      {open.my_profile ? <ExpandMore /> : <ExpandLess />}
-                    </span>
-                  </a>
-                  <Collapse in={open.my_profile} timeout="auto" unmountOnExit>
-                    <ul>
-                      <li>
-                        <NavLink to="/User-Profile" onClick={CloseSidebar}>User_Profile   </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="My-Documents" onClick={CloseSidebar}>My_Documents   </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="My-Applications" onClick={CloseSidebar}>My_Applications   </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="Bank-Accounts" onClick={CloseSidebar}>Bank_Accounts   </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="Activities" onClick={CloseSidebar}>Activities   </NavLink>
-                      </li>
-                    </ul>
-                  </Collapse>
+                    Popup Image
+                    </NavLink>
                 </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/setting" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    settings
+                    </span>
+                    Settings
+                    </NavLink>
+                </li>
+                
                 <li>
                   <a
                     className={`logout ${open.logout ? "active" : null

@@ -6,8 +6,11 @@ import InputBase from "@mui/material/InputBase";
 import { styled } from "@mui/material/styles";
 import ButtonBase from "@mui/material/ButtonBase";
 import Avatar from "@mui/material/Avatar";
+import GppGoodIcon from '@mui/icons-material/GppGood';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { red } from "@mui/material/colors";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { List, ListItem, Menu } from "@mui/material";
 // import i18next, { use } from "i18next";
 // import { useTranslation } from "react-i18next";
 // import cookies from "js-cookie";
@@ -110,6 +113,14 @@ const Header = (prop) => {
     console.log(event.target.value);
     // i18next.changeLanguage(event.target.value);
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className="app-header app-header--shadow app-header--opacity-bg">
       <div className="app-header--pane">
@@ -142,7 +153,7 @@ const Header = (prop) => {
         </FormControl>
       </div>
       <div className="app-header--pane">
-        <ButtonBase>
+        <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
             <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>{" "}
           </span>
@@ -151,6 +162,65 @@ const Header = (prop) => {
           </span>
           <KeyboardArrowDownIcon />
         </ButtonBase>
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <div className="dropdown-menu-xl overflow-hidden p-0">
+            <div className="d-flex p-4">
+              <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>
+              <div className="mx-3">
+                <h6 className="font-weight-bold mb-1 text-black">
+                  Dhiren Bhayani
+                </h6>
+                <p className="text-black-50 mb-0">bhayanidhiren777@gmail.com</p>
+              </div>
+            </div>
+            <div className="divider"></div>
+            <div className="divider"></div>
+            {/* <div className="bg-secondary d-flex align-items-center flex-column py-4">
+              <div className="display-3 mb-0 text-center font-weight-bold">
+                <small className="opacity-6">$</small>
+                <span className="pl-1">
+                  <span> 0.00</span>
+                </span>
+              </div>
+              <small className="text-center font-weight-bold opacity-6 text-uppercase">
+                {" "}
+                Total balance
+              </small>
+            </div>
+            <div className="divider"></div> */}
+            {/* <List className="nav-neutral-first nav-pills-rounded flex-column p-3">
+              <ListItem button={true}>
+                  <div className="mr-2 ">
+                    <GppGoodIcon />
+                  </div>
+                  <span className="font-size-md">Profile</span>
+              </ListItem>
+            </List>
+            <div className="divider"></div> */}
+            <List className="nav-neutral-danger nav-pills-rounded flex-column p-3">
+              <ListItem button={true} onClick={()=>prop.setLogin(true)}>
+                <div className="mr-2">
+                  <ExitToAppIcon />
+                </div>
+                <span className="font-size-md">Log out</span>
+              </ListItem>
+            </List>
+          </div>
+        </Menu>
       </div>
     </div>
   );
