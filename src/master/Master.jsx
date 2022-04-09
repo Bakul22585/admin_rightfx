@@ -1,0 +1,1516 @@
+import './master.css';
+import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
+import { FormControl, Grid, MenuItem, Select, Menu } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
+import { Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
+import { ColorButton } from "../common/CustomElement";
+import { Button } from "@mui/material";
+import DataTable from 'react-data-table-component';
+import axios from 'axios';
+import Collapse from "@mui/material/Collapse";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import TextField from "@mui/material/TextField";
+import LoadingButton from '@mui/lab/LoadingButton';
+import CustomImageModal from '../common/CustomImageModal';
+import CommonTable from '../common/CommonTable';
+
+const CssTextField = styled(TextField)({
+});
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+    "label + &": {
+        marginTop: theme.spacing(0),
+    },
+    "& .MuiInputBase-input": {
+        borderRadius: 9,
+        position: "relative",
+        backgroundColor: theme.palette.background.paper,
+        border: "1px solid #ced4da",
+        fontSize: 16,
+        padding: "8px 26px 8px 10px",
+        transition: theme.transitions.create(["border-color", "box-shadow"]),
+        // Use the system font instead of the default Roboto font.
+        fontFamily: [
+            "-apple-system",
+            "BlinkMacSystemFont",
+            '"Segoe UI"',
+            "Roboto",
+            '"Helvetica Neue"',
+            "Arial",
+            "sans-serif",
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(","),
+        "&:focus": {
+            borderRadius: 9,
+            borderColor: "#80bdff",
+        },
+    },
+}));
+
+const Master = () => {
+    const { id } = useParams();
+    const [info, setinfo] = useState({});
+    const [anchorEl, setAnchorEl] = React.useState([]);
+    const [openTableMenus, setOpenTableMenus] = useState([]);
+    const open = Boolean(anchorEl);
+    const [openCollapse, setOpen] = React.useState({
+        operation: false,
+        trading: false,
+        platforms: false,
+        contests: false,
+    });
+    const handleCollapseClick = (e) => {
+        const name = e.target.classList[0];
+        setOpen((preValue) => {
+            return {
+                ...preValue,
+                [name]: !openCollapse[name],
+            };
+        });
+        console.log(openCollapse[name]);
+        if (name == 'myClient' && openCollapse[name] != true) {
+            // fetchClient();
+        }
+        console.log("collapse", name);
+    };
+    const input1 = (event) => {
+        const { name, value } = event.target;
+        if (name == "myclient_search") {
+            // setClientSearch(value);
+        } else {
+            setinfo((prevalue) => {
+                return {
+                    ...prevalue,
+                    [name]: value,
+                };
+            });
+        }
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(info);
+    };
+    const [age, setAge] = React.useState("");
+    const handleChange = (event) => {
+        setAge(event.target.value);
+        console.log(event.target.value);
+    };
+    const handleClick = (event, index) => {
+        console.log(event.currentTarget.getAttribute('id'), index);
+        let tableMenus = [...openTableMenus];
+        tableMenus[index] = event.currentTarget;
+        setOpenTableMenus(tableMenus);
+      };
+    const handleClose = (index) => {
+        let tableMenus = [...openTableMenus];
+        tableMenus[index] = null;
+        setOpenTableMenus(tableMenus);
+    };
+    const columns = [
+        {
+            name: 'First Name',
+            selector: row => row.first_name,
+            sortable: true,
+            reorder: true,
+        },
+        {
+            name: 'Last Name',
+            selector: row => row.last_name,
+            sortable: true,
+            reorder: true,
+        },
+        {
+            name: 'Email',
+            selector: row => row.email,
+            sortable: true,
+            reorder: true,
+        },
+        {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div>
+                    <Button
+                        id={`actionButton_${row.id}`}
+                        aria-controls={open ? `basic-menu-${row.id}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleClick(event, row.id)}
+                        {...row}
+                    >
+                        Action
+                    </Button>
+                    <Menu
+                        id={`basic-menu-${row.id}`}
+                        anchorEl={openTableMenus[row.id]}
+                        open={Boolean(openTableMenus[row.id])}
+                        onClose={(event) => handleClose(row.id)}
+                    >
+                        <MenuItem {...row} onClick={(event) => handleClose(row.id)}>Profile {`${open}`}</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.id)}>My account</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.id)}>Logout</MenuItem>
+                    </Menu>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        },
+    ];
+
+    const myClientColumns = [
+        {
+            name: 'ID',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.2,
+        },
+        {
+            name: 'UPLINE',
+            selector: row => row.upline,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'IB GROUP',
+            selector: row => row.ib_group,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'NAME',
+            selector: row => row.name,
+            sortable: true,
+            reorder: true,
+            grow: 2,
+        },
+        {
+            name: 'EMAIL',
+            selector: row => row.user_email,
+            sortable: true,
+            reorder: true,
+            grow: 2,
+        },
+        {
+            name: 'PHONE',
+            selector: row => row.user_phone,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'REGISTRATION DATE',
+            selector: row => row.added_datetime,
+            sortable: true,
+            reorder: true,
+            grow: 2,
+        },
+    ];
+
+    const activityColumn = [
+        {
+            name: 'USER NAME',
+            selector: row => row.full_name,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'IP ADDRESS',
+            selector: row => row.ip_address,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'DATETIME',
+            selector: row => row.datetime,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        }
+    ];
+
+    const partnershipCommisionColumn = [
+        {
+            name: 'SR.NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'DATE',
+            selector: row => row.date,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'FROM NAME',
+            selector: row => row.from_name,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => row.amount,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'START DATE',
+            selector: row => row.start_date,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'END DATE',
+            selector: row => row.end_date,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+    ];
+
+    const depositColumn = [
+        {
+            name: 'SR.NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.1,
+        },
+        {
+            name: 'REFERENCE NO',
+            selector: row => row.refrence_no,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'DATE',
+            selector: row => row.date,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'WALLET CODE',
+            selector: row => row.wallet_code,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'PAYMENT METHOD',
+            selector: row => row.method,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => row.amount,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        /* {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div>
+                    <Button
+                        id={`actionButton_${row.sr_no}`}
+                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleClick(event, row.sr_no)}
+                        {...row}
+                    >
+                        Action
+                    </Button>
+                    <Menu
+                        id={`basic-menu-${row.sr_no}`}
+                        anchorEl={openTableMenus[row.sr_no]}
+                        open={Boolean(openTableMenus[row.sr_no])}
+                        onClose={(event) => handleClose(row.sr_no)}
+                    >
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>View</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>Approved</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>Rejected</MenuItem>
+                    </Menu>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        } */
+    ];
+
+    const withdrawColumn = [
+        {
+            name: 'SR.NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.1,
+        },
+        {
+            name: 'DATE',
+            selector: row => row.date,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'NAME',
+            selector: row => row.name,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'ACCOUNT NO',
+            selector: row => row.account_number,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'PAYMENT METHOD',
+            selector: row => row.method,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'REMARKS',
+            selector: row => row.remarks,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => row.amount,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        /* {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div>
+                    <Button
+                        id={`actionButton_${row.sr_no}`}
+                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleClick(event, row.sr_no)}
+                        {...row}
+                    >
+                        Action
+                    </Button>
+                    <Menu
+                        id={`basic-menu-${row.sr_no}`}
+                        anchorEl={openTableMenus[row.sr_no]}
+                        open={Boolean(openTableMenus[row.sr_no])}
+                        onClose={(event) => handleClose(row.sr_no)}
+                    >
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>View</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>Approved</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>Rejected</MenuItem>
+                    </Menu>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        } */
+    ];
+
+    const ibwithdrawColumn = [
+        {
+            name: 'SR.NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.1,
+        },
+        {
+            name: 'DATE',
+            selector: row => row.date,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'NAME',
+            selector: row => row.name,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'EMAIL',
+            selector: row => row.email,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'MT5 A/C NO',
+            selector: row => row.mt5_acc_no,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => row.amount,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'REMARKS',
+            selector: row => row.remarks,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        /* {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div>
+                    <Button
+                        id={`actionButton_${row.sr_no}`}
+                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleClick(event, row.sr_no)}
+                        {...row}
+                    >
+                        Action
+                    </Button>
+                    <Menu
+                        id={`basic-menu-${row.sr_no}`}
+                        anchorEl={openTableMenus[row.sr_no]}
+                        open={Boolean(openTableMenus[row.sr_no])}
+                        onClose={(event) => handleClose(row.sr_no)}
+                    >
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>View</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>Approved</MenuItem>
+                        <MenuItem {...row} onClick={(event) => handleClose(row.sr_no)}>Rejected</MenuItem>
+                    </Menu>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        } */
+    ];
+
+    const [depositData, setDepositData] = useState([]);
+    const [depositLoading, setDepositLoading] = useState(false);
+    const [depositTotalRows, setDepositTotalRows] = useState(0);
+    const [depositPerPage, setDepositPerPage] = useState(10);
+    const [depositSort, setDepositSort] = useState(0);
+    const [depositDir, setDepositDir] = useState('desc');
+
+    const [clientLevel, setClientLevel] = useState(1);
+    
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [totalRows, setTotalRows] = useState(0);
+    const [perPage, setPerPage] = useState(10);
+
+    const fetchUsers = async page => {
+        setLoading(true);
+
+        const response = await axios.get(`https://reqres.in/api/users?page=${page}&per_page=${perPage}&delay=1`);
+
+        setData(response.data.data);
+        setTotalRows(response.data.total);
+        setLoading(false);
+    };
+
+    const handlePageChange = page => {
+        console.log("page", page);
+        fetchUsers(page);
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        setLoading(true);
+        console.log(newPerPage, page);
+        const response = await axios.get(`https://reqres.in/api/users?page=${page}&per_page=${newPerPage}&delay=1`);
+
+        setData(response.data.data);
+        setPerPage(newPerPage);
+        setLoading(false);
+    };
+
+    const handleSort = async (column, sortDirection) => {
+        console.log('cusotm sort', column, sortDirection);
+    };
+
+    const actionClick = (e) => {
+        var id = e.target.getAttribute("id");
+        var email = e.target.getAttribute("email");
+        var first_name = e.target.getAttribute("first_name");
+        var last_name = e.target.getAttribute("last_name");
+        var avatar = e.target.getAttribute("avatar");
+        console.log("data", id, email, first_name, last_name, avatar);
+    }
+
+    useEffect(() => {
+        fetchUsers(1); // fetch page 1 of users
+    }, []);
+
+    console.log(`search value ${id}`);
+    return (
+        <div>
+            <div className="app-content--inner">
+                <div className="app-content--inner__wrapper mh-100-vh">
+                    <div style={{ opacity: 1 }}>
+                        <Grid container>
+                            <Grid item md={12} lg={12} xl={12}>
+                                <p className='main-heading'>{id}</p>
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`userInfo ${openCollapse.userInfo ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                person
+                                            </span>
+                                            User Info
+                                        </div>
+                                        <span className="sidebar-icon-indicator">
+                                            {openCollapse.userInfo ? <ExpandMore /> : <ExpandLess />}
+                                        </span>
+                                    </a>
+                                    <Collapse in={openCollapse.userInfo} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <div className='elementSection'>
+                                                <form onSubmit={handleSubmit} >
+                                                    <div className='userInforFrom'>
+                                                        <div className='element'>
+                                                            <label>First Name</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="frist_name"
+                                                                value={info.first_name}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Last Name</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="last_name"
+                                                                value={info.last_name}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Email</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="email"
+                                                                value={info.email}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>MT5 ID</label>
+                                                            <p className='fakeinput'>75492</p>
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>WALLET ID</label>
+                                                            <p className='fakeinput'>175238</p>
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>GROUP LEVEL</label>
+                                                            <p className='fakeinput'>Trading</p>
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>PHONE</label>
+                                                            <p className='fakeinput'>+91-9979114524</p>
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>PASSWORD</label>
+                                                            <p className='fakeinput'>132456</p>
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>CREATED DATE</label>
+                                                            <p className='fakeinput'>05 Apr 2022, 11:14 AM</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='formActionSection'>
+                                                        <ColorButton className=" d-block ml-auto mb-3 mr-3 " onClick={handleSubmit}>
+                                                            Sumbit
+                                                        </ColorButton>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`userKyc ${openCollapse.userKyc ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                verified_user
+                                            </span>
+                                            KYC
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className="badge badge-success">Approved</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.userKyc ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.userKyc} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <div className='elementSection'>
+                                                <form onSubmit={handleSubmit} >
+                                                    <div className='userInforFrom'>
+                                                        <div className='element'>
+                                                            <label>Aadhar Card Number</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="aadhar_card_number"
+                                                                value={info.aadhar_card_number}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Bank Account Number</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="bank_account_number"
+                                                                value={info.bank_account_number}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Bank Name</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="bank_name"
+                                                                value={info.bank_name}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Bank Holder Name</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="bank_holder_name"
+                                                                value={info.bank_holder_name}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Bank IFSC Code</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="bank_ifsc_code"
+                                                                value={info.bank_ifsc_code}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Remark</label>
+                                                            <CssTextField
+                                                                id="standard-search"
+                                                                sx={{ width: "100%" }}
+                                                                variant="standard"
+                                                                name="remark"
+                                                                value={info.remark}
+                                                                onChange={input1}
+                                                            />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Status</label>
+                                                            <Select
+                                                                value={age}
+                                                                onChange={handleChange}
+                                                                displayEmpty
+                                                                inputProps={{ "aria-label": "Without label" }}
+                                                                input={<BootstrapInput />}
+                                                            >
+                                                                <MenuItem value="Approved">Approved</MenuItem>
+                                                                <MenuItem value="Rejected">Rejected</MenuItem>
+                                                            </Select>
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Aadhar Card Front Image </label>
+                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/aadhar_front_1648558245_1109.png' />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Aadhar Card Back Image </label>
+                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/aadhar_front_1648477388_1106.png' />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Pan Card Image </label>
+                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/aadhar_back_1648446659_1106.png' />
+                                                        </div>
+                                                        <div className='element'>
+                                                            <label>Passbook Image </label>
+                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/bank_passbook_1648477753_1106.png' />
+                                                        </div>
+                                                    </div>
+                                                    <div className='formActionSection'>
+                                                        <ColorButton className=" d-block ml-auto mb-3 mr-3 " onClick={handleSubmit}>
+                                                            Sumbit
+                                                        </ColorButton>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`myClient ${openCollapse.myClient ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                groups
+                                            </span>
+                                            My Client
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.myClient ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.myClient} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container >
+                                                <Grid item sm={12} md={4} lg={4}>
+                                                    <p class="level_commision_value ib_total_lot"><b>Total Level-1  Lot = 0</b></p>
+                                                </Grid>
+                                                <Grid item sm={12} md={4} lg={4}>
+                                                    <p class="level_commision_value ib_total_commissions"><b>Total Level-1 Commission = $0</b></p>
+                                                </Grid>
+                                                <Grid item sm={12} md={4} lg={4}>
+                                                    <p class="level_commision_value partnership_commision"><b>Total Partnership Level-1 Commission = $0</b></p>
+                                                </Grid>
+                                            </Grid>
+                                            <div className='clientListButton'>
+                                                <LoadingButton
+                                                    size="small"
+                                                    onClick={() => setClientLevel(1)}
+                                                    loading={loading}
+                                                    loadingPosition="end"
+                                                    variant="contained">
+                                                    Level 1 Client
+                                                </LoadingButton>
+                                                <LoadingButton
+                                                    size="small"
+                                                    onClick={() => setClientLevel(2)}
+                                                    loading={loading}
+                                                    loadingPosition="end"
+                                                    variant="contained">
+                                                    Level 2 Client
+                                                </LoadingButton>
+                                                <LoadingButton
+                                                    size="small"
+                                                    onClick={() => setClientLevel(3)}
+                                                    loading={loading}
+                                                    loadingPosition="end"
+                                                    variant="contained">
+                                                    Level 3 Client
+                                                </LoadingButton>
+                                                <LoadingButton
+                                                    size="small"
+                                                    onClick={() => setClientLevel(4)}
+                                                    loading={loading}
+                                                    loadingPosition="end"
+                                                    variant="contained">
+                                                    Level 4 Client
+                                                </LoadingButton>
+                                            </div>
+                                            <br />
+                                            <CommonTable url='https://alphapixclients.com/forex/datatable/my_client_list.php' column={myClientColumns} sort='6' level={clientLevel}/>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`deposit ${openCollapse.deposit ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                add
+                                            </span>
+                                            Deposit
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.deposit ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.deposit} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/deposit_list.php' column={depositColumn} sort='2'/>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`withdraw ${openCollapse.withdraw ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                file_upload
+                                            </span>
+                                            Withdraw
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.withdraw ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.withdraw} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/withdraw_list.php' column={withdrawColumn} sort='1'/>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`ibWithdraw ${openCollapse.ibWithdraw ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                file_upload
+                                            </span>
+                                            IB Withdraw
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.ibWithdraw ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.ibWithdraw} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/ib_withdraw_list.php' column={ibwithdrawColumn} sort='1'/>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`ibCommision ${openCollapse.ibCommision ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                file_upload
+                                            </span>
+                                            IB Commision
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.ibCommision ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.ibCommision} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <div className='tableSearchField'>
+                                                <CssTextField
+                                                    id="standard-search"
+                                                    label="Search"
+                                                    sx={{ width: "200px" }}
+                                                    variant="standard"
+                                                    name="ibCommision_search"
+                                                    value={info.ibCommision_search}
+                                                    onChange={input1}
+                                                />
+                                            </div>
+                                            <DataTable
+                                                columns={columns}
+                                                data={data}
+                                                progressPending={loading}
+                                                onSort={handleSort}
+                                                sortServer
+                                                pagination
+                                                paginationServer
+                                                paginationTotalRows={totalRows}
+                                                onChangeRowsPerPage={handlePerRowsChange}
+                                                onChangePage={handlePageChange}
+                                                highlightOnHover
+                                                pointerOnHover
+                                            />
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`partnershipWithdraw ${openCollapse.partnershipWithdraw ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                file_upload
+                                            </span>
+                                            Partnership Withdraw
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.partnershipWithdraw ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.partnershipWithdraw} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <div className='tableSearchField'>
+                                                <CssTextField
+                                                    id="standard-search"
+                                                    label="Search"
+                                                    sx={{ width: "200px" }}
+                                                    variant="standard"
+                                                    name="partnershipWithdraw_search"
+                                                    value={info.partnershipWithdraw_search}
+                                                    onChange={input1}
+                                                />
+                                            </div>
+                                            <DataTable
+                                                columns={columns}
+                                                data={data}
+                                                progressPending={loading}
+                                                onSort={handleSort}
+                                                sortServer
+                                                pagination
+                                                paginationServer
+                                                paginationTotalRows={totalRows}
+                                                onChangeRowsPerPage={handlePerRowsChange}
+                                                onChangePage={handlePageChange}
+                                                highlightOnHover
+                                                pointerOnHover
+                                            />
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`partnershipCommisions ${openCollapse.partnershipCommisions ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                file_upload
+                                            </span>
+                                            Partnership Commisions
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.partnershipCommisions ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.partnershipCommisions} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/admin_partnership_commissions_list.php' column={partnershipCommisionColumn} sort='1'/>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`copyTradingCommision ${openCollapse.copyTradingCommision ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                file_upload
+                                            </span>
+                                            Copy Trading Commisions
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>$0.00</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.copyTradingCommision ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.copyTradingCommision} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <div className='tableSearchField'>
+                                                <CssTextField
+                                                    id="standard-search"
+                                                    label="Search"
+                                                    sx={{ width: "200px" }}
+                                                    variant="standard"
+                                                    name="copyTradingCommision_search"
+                                                    value={info.copyTradingCommision_search}
+                                                    onChange={input1}
+                                                />
+                                            </div>
+                                            <DataTable
+                                                columns={columns}
+                                                data={data}
+                                                progressPending={loading}
+                                                onSort={handleSort}
+                                                sortServer
+                                                pagination
+                                                paginationServer
+                                                paginationTotalRows={totalRows}
+                                                onChangeRowsPerPage={handlePerRowsChange}
+                                                onChangePage={handlePageChange}
+                                                highlightOnHover
+                                                pointerOnHover
+                                            />
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`ticket ${openCollapse.ticket ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                receipt_long
+                                            </span>
+                                            Ticket
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className='boldFont'>0</span>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.ticket ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.ticket} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <Grid container spacing={2}>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            From
+                                                        </label>
+                                                        <BootstrapInput type="date"></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            To
+                                                        </label>
+                                                        <BootstrapInput type="date" ></BootstrapInput>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={6} md={3}>
+                                                    <FormControl fullWidth={true}>
+                                                        <label className="small font-weight-bold text-dark">
+                                                            Status
+                                                        </label>
+                                                        <Select
+                                                            value={age}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                            inputProps={{ "aria-label": "Without label" }}
+                                                            input={<BootstrapInput />}
+                                                        >
+                                                            <MenuItem value="All">All</MenuItem>
+                                                            <MenuItem value="pending">Pending</MenuItem>
+                                                            <MenuItem value="approved">Approved</MenuItem>
+                                                            <MenuItem value="rejected">Rejected</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item sm={1} md={1}>
+                                                    <ColorButton className="d-block ml-auto mb-3 mr-3 btn-filter" >
+                                                        Filter
+                                                    </ColorButton>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <div className='tableSearchField'>
+                                                <CssTextField
+                                                    id="standard-search"
+                                                    label="Search"
+                                                    sx={{ width: "200px" }}
+                                                    variant="standard"
+                                                    name="ticket_search"
+                                                    value={info.ticket_search}
+                                                    onChange={input1}
+                                                />
+                                            </div>
+                                            <DataTable
+                                                columns={columns}
+                                                data={data}
+                                                progressPending={loading}
+                                                onSort={handleSort}
+                                                sortServer
+                                                pagination
+                                                paginationServer
+                                                paginationTotalRows={totalRows}
+                                                onChangeRowsPerPage={handlePerRowsChange}
+                                                onChangePage={handlePageChange}
+                                                highlightOnHover
+                                                pointerOnHover
+                                            />
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    <a className={`activityLog ${openCollapse.activityLog ? "active" : ""} CollapseSection`} onClick={handleCollapseClick}>
+                                        <div className='CollapseHeadingTitle'>
+                                            <span className="material-icons">
+                                                list_alt
+                                            </span>
+                                            Activity Log
+                                        </div>
+                                        <div className='collapseActionSection'>
+                                            <span className="sidebar-icon-indicator">
+                                                {openCollapse.activityLog ? <ExpandMore /> : <ExpandLess />}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <Collapse in={openCollapse.activityLog} timeout="auto" unmountOnExit>
+                                        <div className='Collapse-body-section'>
+                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2'/>
+                                        </div>
+                                    </Collapse>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Master

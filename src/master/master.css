@@ -1,0 +1,95 @@
+.main-heading {
+    font-weight: 700!important;
+    width: 100%!important;
+    margin-bottom: 1.5rem!important;
+    font-size: 1.7rem;
+    line-height: 1.2;
+    font-family: cairo,sans-serif;
+}
+.collapsible .content {
+    padding: 6px;
+    background-color: rgb(240, 240, 240);
+    font-size: 14px;
+}
+.collapsible .header {
+    background-color: rgb(200, 200, 200);
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid rgb(220, 220, 220);
+}
+.collapsible .header .title {
+    font-weight: 400;
+}
+.preferences label {
+    display: block;
+    padding-bottom: 4px;
+}
+.CollapseSection {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    cursor: pointer;
+}
+.CollapseHeadingTitle {
+    display: flex;
+    gap: 5px;
+    font-weight: 600;
+}
+.Collapse-body-section {
+    padding: 15px;
+}
+.userInforFrom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.elementSection .userInforFrom .element {
+    width: 320px;
+    display: grid;
+    grid-template-columns: 120px 200px;
+    align-items: center;
+}
+.elementSection .userInforFrom .element label {
+    font-weight: 500;
+}
+.elementSection .userInforFrom .element .fakeinput {
+    border-bottom: 1px solid #949494;
+    color: #7a7b97;
+    padding: 4px 0 5px;
+    box-sizing: content-box;
+    height: 1.4375em;
+    font-weight: 700;
+}
+.elementSection .userInforFrom .element img {
+    width: 100%;
+    height: 150px;
+}
+.elementSection .formActionSection {
+    display: flex;
+    justify-content: end;
+    padding: 15px;
+}
+.collapseActionSection {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.collapseActionSection .boldFont {
+    font-weight: bold;
+}
+.btn-filter {
+    margin-bottom: 0 !important;
+    margin-top: 15px !important;
+}
+.clientListButton {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.tableSearchField {
+    display: flex;
+    justify-content: end;
+}

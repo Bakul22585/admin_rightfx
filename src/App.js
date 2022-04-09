@@ -26,6 +26,7 @@ import ActivityLog from './activity_log/ActivityLog';
 import FAQEditor from './faq_editor/FAQEditor';
 import IBWithdraw from './ib_withdraw/IBWithdraw';
 import PartnershipWithdraw from './partnership_withdraw/PartnershipWithdraw';
+import Master from './master/Master';
 
 const App = () => {
 
@@ -72,6 +73,7 @@ const App = () => {
                 <Route exact path="/partnership_withdraw" element={<PartnershipWithdraw />} />
                 <Route exact path="/deposit" element={<Deposit />} />
                 <Route exact path="/withdrawal" element={<Withdraw />} />
+                <Route exact path="/master/:id" element={<Master />} />
                 <Route exact path="/deposit_history" element={<DepositHistory />} />
                 <Route exact path="/withdraw_history" element={<WithdrawHistory />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />

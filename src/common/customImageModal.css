@@ -1,0 +1,11 @@
+.btnImageOpenBtn {
+    width: 100%;
+}
+.modalbody {
+    width: auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}

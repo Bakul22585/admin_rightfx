@@ -1,5 +1,5 @@
 import './deposit.css';
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FormControl, Grid, MenuItem, Select } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { ColorButton } from "../common/CustomElement";
 import { Button } from "@mui/material";
+import DataTable from 'react-data-table-component';
+import axios from 'axios';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
@@ -41,12 +43,38 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const Deposit = () => {
-    // const [age, setAge] = React.useState('');
+    const columns = [
+        {
+            name: 'First Name',
+            selector: row => row.first_name,
+            sortable: true,
+            reorder: true,
+        },
+        {
+            name: 'Last Name',
+            selector: row => row.last_name,
+            sortable: true,
+            reorder: true,
+        },
+        {
+            name: 'Email',
+            selector: row => row.email,
+            sortable: true,
+            reorder: true,
+        },
+        {
+            name: 'Action',
+            button: true,
+            cell: row => <Button onClick={actionClick}>Action</Button>,
+            ignoreRowClick: true,
+            allowOverflow: true
+        },
+    ];
 
-    /* const handleChange = (event: SelectChangeEvent) => {
-        console.log(event);
-        setAge(event.target.value);
-    }; */
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [totalRows, setTotalRows] = useState(0);
+    const [perPage, setPerPage] = useState(10);
 
     const [value, setValue] = React.useState(new Date());
 
@@ -55,6 +83,44 @@ const Deposit = () => {
         setAge(event.target.value);
         console.log(event.target.value);
     };
+
+    const fetchUsers = async page => {
+        setLoading(true);
+
+        const response = await axios.get(`https://reqres.in/api/users?page=${page}&per_page=${perPage}&delay=1`);
+
+        setData(response.data.data);
+        setTotalRows(response.data.total);
+        setLoading(false);
+    };
+
+    const handlePageChange = page => {
+        console.log("page", page);
+        fetchUsers(page);
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        setLoading(true);
+        console.log(newPerPage, page);
+        const response = await axios.get(`https://reqres.in/api/users?page=${page}&per_page=${newPerPage}&delay=1`);
+
+        setData(response.data.data);
+        setPerPage(newPerPage);
+        setLoading(false);
+    };
+
+    const handleSort = async (column, sortDirection) => {
+        console.log('cusotm sort', column, sortDirection);
+    };
+
+    function actionClick(data) {
+        console.log("Action data", data);
+    }
+
+    useEffect(() => {
+        fetchUsers(1); // fetch page 1 of users
+
+    }, []);
 
     return (
         <div>
@@ -133,6 +199,37 @@ const Deposit = () => {
                                                         Sumbit
                                                     </ColorButton>
                                                 </div>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Paper>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                    {/* <div className="card-header font-weight-bold text-dark border-bottom py-2">
+                                        Filter Criteria
+                                    </div> */}
+                                    <CardContent className="py-3">
+                                        <Grid container spacing={2}>
+                                            <Grid item sm={12} md={12} lg={12}>
+                                                {/* <DataTable
+                                                    columns={columns}
+                                                    data={data}
+                                                /> */}
+                                                <DataTable
+                                                    title="Users"
+                                                    columns={columns}
+                                                    data={data}
+                                                    progressPending={loading}
+                                                    onSort={handleSort}
+                                                    sortServer
+                                                    pagination
+                                                    paginationServer
+                                                    paginationTotalRows={totalRows}
+                                                    onChangeRowsPerPage={handlePerRowsChange}
+                                                    onChangePage={handlePageChange}
+                                                    highlightOnHover
+                                                    pointerOnHover
+                                                />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

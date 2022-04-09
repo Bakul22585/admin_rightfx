@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -11,6 +11,9 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { red } from "@mui/material/colors";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { List, ListItem, Menu } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom"
+// import { styled } from "@mui/material/styles";
 // import i18next, { use } from "i18next";
 // import { useTranslation } from "react-i18next";
 // import cookies from "js-cookie";
@@ -95,18 +98,33 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
+const CssTextField = styled(TextField)({
+  // "& label.Mui-focused": {
+  //     color: "white",
+  // },
+  // "& .MuiInputBase-root": {
+  //     color: "white",
+  //     fontSize: "20px",
+  //     fontWeight: "500",
+  // },
+  // "& .MuiInput-underline:after": {
+  //     borderBottomColor: "white",
+  // },
+});
+
 const Header = (prop) => {
   // const { t } = useTranslation();
 
   // const currentLanguageCode = cookies.get("i18next") || "en";
   // const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
- /*  useEffect(() => {
-    console.log(currentLanguage.dir);
-    document.body.dir = currentLanguage.dir || 'ltr'
-    // document.title = t('app_title')
-    prop.setClang(currentLanguage.dir)
-  }, [currentLanguage]); */
-
+  /*  useEffect(() => {
+     console.log(currentLanguage.dir);
+     document.body.dir = currentLanguage.dir || 'ltr'
+     // document.title = t('app_title')
+     prop.setClang(currentLanguage.dir)
+   }, [currentLanguage]); */
+  const navigate = useNavigate();
   const [age, setAge] = React.useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -121,6 +139,27 @@ const Header = (prop) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [info, setinfo] = useState({
+    search: "",
+  });
+
+  const input1 = (event) => {
+    const { name, value } = event.target;
+    setinfo((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (info['search'] && info['search'].trim() != '') {
+      navigate("/master/" + info['search']);
+    }
+  };
+
   return (
     <div className="app-header app-header--shadow app-header--opacity-bg">
       <div className="app-header--pane">
@@ -140,7 +179,7 @@ const Header = (prop) => {
             inputProps={{ "aria-label": "Without label" }}
             input={<BootstrapInput />}
           >
-                      <MenuItem value="">EN</MenuItem>
+            <MenuItem value="">EN</MenuItem>
 
             <MenuItem value="en">EN</MenuItem>
             <MenuItem value="ar">AR</MenuItem>
@@ -153,6 +192,17 @@ const Header = (prop) => {
         </FormControl>
       </div>
       <div className="app-header--pane">
+        <form onSubmit={handleSubmit}>
+          <CssTextField
+            id="standard-search"
+            label="Search"
+            sx={{ width: "100%" }}
+            variant="standard"
+            name="search"
+            value={info.search}
+            onChange={input1}
+          />
+        </form>
         <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
             <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>{" "}
@@ -189,30 +239,8 @@ const Header = (prop) => {
             </div>
             <div className="divider"></div>
             <div className="divider"></div>
-            {/* <div className="bg-secondary d-flex align-items-center flex-column py-4">
-              <div className="display-3 mb-0 text-center font-weight-bold">
-                <small className="opacity-6">$</small>
-                <span className="pl-1">
-                  <span> 0.00</span>
-                </span>
-              </div>
-              <small className="text-center font-weight-bold opacity-6 text-uppercase">
-                {" "}
-                Total balance
-              </small>
-            </div>
-            <div className="divider"></div> */}
-            {/* <List className="nav-neutral-first nav-pills-rounded flex-column p-3">
-              <ListItem button={true}>
-                  <div className="mr-2 ">
-                    <GppGoodIcon />
-                  </div>
-                  <span className="font-size-md">Profile</span>
-              </ListItem>
-            </List>
-            <div className="divider"></div> */}
             <List className="nav-neutral-danger nav-pills-rounded flex-column p-3">
-              <ListItem button={true} onClick={()=>prop.setLogin(true)}>
+              <ListItem button={true} onClick={() => prop.setLogin(true)}>
                 <div className="mr-2">
                   <ExitToAppIcon />
                 </div>
