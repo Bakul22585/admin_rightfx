@@ -27,7 +27,7 @@ const CustomImageModal = (prop) => {
   return (
     <div>
       <Button onClick={handleOpen} className='btnImageOpenBtn'>
-        <img src={prop.image} />
+        <img src={prop.image} className={prop.className}/>
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"

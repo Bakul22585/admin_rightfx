@@ -2,10 +2,34 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
+import styled, { keyframes } from 'styled-components';
 
 const CssTextField = styled(TextField)({
 });
+
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+	margin: 16px;
+	animation: ${rotate360} 1s linear infinite;
+	transform: translateZ(0);
+	border-top: 2px solid grey;
+	border-right: 2px solid grey;
+	border-bottom: 2px solid grey;
+	border-left: 4px solid black;
+	background: transparent;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+`;
 
 const CommonTable = (prop) => {
 
@@ -42,18 +66,12 @@ const CommonTable = (prop) => {
         setClientSearch(value);
     };
 
-    const handleClick = (event, index) => {
-        console.log(event.currentTarget.getAttribute('id'), index);
-        let tableMenus = [...openTableMenus];
-        tableMenus[index] = event.currentTarget;
-        setOpenTableMenus(tableMenus);
-    };
-
-    const handleClose = (index) => {
-        let tableMenus = [...openTableMenus];
-        tableMenus[index] = null;
-        setOpenTableMenus(tableMenus);
-    };
+    const CustomLoader = () => (
+        <div style={{ padding: '24px' }}>
+            <Spinner />
+            <div><center><b>Loading...</b></center></div>
+        </div>
+    );
 
     const fetchClient = async page => {
         setClientLoading(true);
@@ -67,6 +85,26 @@ const CommonTable = (prop) => {
         if (prop.level) {
             param.append('level_id', prop.level);
         }
+        if (prop.filter) {
+            if (prop.filter.deposit_from) {
+                param.append('start_date', prop.filter.deposit_from);
+            }
+            if (prop.filter.deposit_to) {
+                param.append('end_date', prop.filter.deposit_to);
+            }
+            if (prop.filter.deposit_status) {
+                param.append('deposit_status', prop.filter.deposit_status);
+            }
+            if (prop.filter.withdraw_from) {
+                param.append('start_date', prop.filter.withdraw_from);
+            }
+            if (prop.filter.withdraw_to) {
+                param.append('end_date', prop.filter.withdraw_to);
+            }
+            if (prop.filter.withdraw_status) {
+                param.append('withdrawal_status', prop.filter.withdraw_status);
+            }
+        }
         param.append('order[0][column]', clientSort);
         param.append('order[0][dir]', clientDir);
         if (clientSearch.trim() != '') {
@@ -77,6 +115,9 @@ const CommonTable = (prop) => {
             setClientData(res.data.aaData);
             setClientTotalRows(res.data.iTotalRecords);
             setClientLoading(false);
+            if (prop.setResData) {
+                prop.setResData(res.data);
+            }
         });
     };
 
@@ -86,7 +127,11 @@ const CommonTable = (prop) => {
     }, [clientPerPage,
         clientSort,
         clientDir,
-        clientSearch,]);
+        clientSearch,
+        prop.level,
+        prop.filter,
+    ]);
+    // console.log(prop);
     return (
         <div>
             <div className='tableSearchField'>
@@ -113,6 +158,7 @@ const CommonTable = (prop) => {
                 onChangePage={handleClientPageChange}
                 highlightOnHover
                 pointerOnHover
+                progressComponent={<CustomLoader />}
             />
         </div>
     )

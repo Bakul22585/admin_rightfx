@@ -6,3 +6,36 @@
     line-height: 1.2;
     font-family: cairo,sans-serif;
 }
+.pending-all-15px {
+    padding: 15px;
+}
+.linkColor {
+    font-weight: 700;
+    color: #2371ed!important;
+}
+.newFilterSection {
+    display: flex;
+    align-items: center;
+}
+.filterBy {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.searchByCheckbox .MuiFormControlLabel-label {
+    font-size: 12px;
+}
+.multipleSelect .MuiInputLabel-shrink {
+    opacity: 0;
+}
+.multipleSelect .Mui-focused fieldset legend span {
+    opacity: 1;
+}
+.multipleSelect .Mui-focused fieldset legend {
+    line-height: 10px;
+}
+.actionGroupButton {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
