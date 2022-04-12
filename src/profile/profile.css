@@ -1,0 +1,77 @@
+.client-detail-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #efeeee;
+    border-radius: 10px;
+    gap: 15px;
+    align-items: center;
+    padding: 5px 10px;
+    flex-wrap: wrap;
+    border-radius: 10px;
+}
+.client-detail-header .header-highlight {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    flex-grow: 1;
+}
+.client-detail-header .client-name {
+    text-align: center;
+}
+.client-detail-header .client-name label {
+    text-align: center;
+    font-weight: 700;
+    padding: 0 1rem;
+    margin-bottom: 0;
+    font-size: 1.25rem;
+}
+.client-detail-header .header-highlight p span {
+    display: block;
+    font-size: .8rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+}
+.client-detail-header .header-highlight p {
+    margin-bottom: 0;
+    font-weight: 700;
+}
+.tabsBar button {
+    font-size: 11px;
+}
+.panding-left-right-0 .MuiBox-root {
+    padding: 24px 0;
+}
+.header-title {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    border-bottom: 0 solid hsla(0,.4%,50%,.3);
+    font-weight: 700!important;
+    border-width: 1px;
+    border-color: rgba(7,9,25,.125);
+}
+.contentSection {
+    padding: 1.25rem;
+}
+.group-header {
+    font-weight: 700;
+    margin: 0.5rem 0rem;
+    font-size: 13px;
+}
+.group-header::after {
+    content: "";
+    height: 2px;
+    display: block;
+    background: linear-gradient(90deg,rgba(0,0,0,.5),transparent 50%,transparent);
+    margin: 0.5rem 0 0.2rem;
+}
+.grid-handle {
+    display: flex;
+    justify-content: space-between;
+}
+.mt5btngroup {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}

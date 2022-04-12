@@ -17,6 +17,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
 import Typography from '@mui/material/Typography';
 
 const CssTextField = styled(TextField)({
@@ -157,12 +161,18 @@ const UserList = () => {
     });
     const [personName, setPersonName] = useState([]);
     const [sourceName, setSourceName] = useState([]);
+    const [activeStep, setActiveStep] = useState(0);
+    const [clientType, setClientType] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const addNewClientType = (event) => {
+        setClientType(event.target.value);
     };
 
     /* const handleChange = (event) => {
@@ -194,7 +204,7 @@ const UserList = () => {
 
     const gotoProfile = (e) => {
         console.log('goto profile page', e);
-        navigate("/master/" + e.user_id);
+        navigate("/profile/" + e.user_id);
     }
 
     const input1 = (event) => {
@@ -213,6 +223,39 @@ const UserList = () => {
         console.log('selected value', e.target.value);
         setFilterBy(e.target.value);
     };
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+
+    const steps = [
+        {
+            label: 'Select campaign settings',
+            description: `For each ad campaign that you create, you can control how much
+                    you're willing to spend on clicks and conversions, which networks
+                    and geographical locations you want your ads to show on, and more.`,
+        },
+        {
+            label: 'Create an ad group',
+            description:
+                'An ad group contains one or more ads which target a shared set of keywords.',
+        },
+        {
+            label: 'Create an ad',
+            description: `Try out different ad text to see what brings in the most customers,
+                    and learn how to enhance your ads using features like ad extensions.
+                    If you run into any problems with your ads, find out how to tell if
+                    they're running and how to resolve approval issues.`,
+        },
+    ];
 
     const depositColumn = [
         {
@@ -624,31 +667,322 @@ const UserList = () => {
                                     onClose={handleClose}
                                     aria-labelledby="customized-dialog-title"
                                     open={open}
+                                    className='modalWidth100'
                                 >
                                     <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                                         Create new client
                                     </BootstrapDialogTitle>
                                     <DialogContent dividers>
-                                        <Typography gutterBottom>
-                                            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                                            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                                            consectetur ac, vestibulum at eros.
-                                        </Typography>
-                                        <Typography gutterBottom>
-                                            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-                                            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-                                        </Typography>
-                                        <Typography gutterBottom>
-                                            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-                                            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-                                            ullamcorper nulla non metus auctor fringilla.
-                                        </Typography>
+                                        <Stepper activeStep={activeStep} orientation="vertical">
+                                            {/* {steps.map((step, index) => (
+                                                <Step key={step.label}>
+                                                    <StepLabel
+                                                        optional={
+                                                            index === 2 ? (
+                                                                <Typography variant="caption">Last step</Typography>
+                                                            ) : null
+                                                        }
+                                                    >
+                                                        {step.label}
+                                                    </StepLabel>
+                                                    <StepContent>
+                                                        <Typography>{step.description}</Typography>
+                                                        <Box sx={{ mb: 2 }}>
+                                                            <div>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    onClick={handleNext}
+                                                                    sx={{ mt: 1, mr: 1 }}
+                                                                >
+                                                                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                                                                </Button>
+                                                                <Button
+                                                                    disabled={index === 0}
+                                                                    onClick={handleBack}
+                                                                    sx={{ mt: 1, mr: 1 }}
+                                                                >
+                                                                    Back
+                                                                </Button>
+                                                            </div>
+                                                        </Box>
+                                                    </StepContent>
+                                                </Step>
+                                            ))} */}
+                                            <Step key='PERSONAL INFORMATION'>
+                                                <StepLabel>
+                                                    PERSONAL INFORMATION
+                                                </StepLabel>
+                                                <StepContent>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-100'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Client type"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Individual'>Individual</MenuItem>
+                                                                <MenuItem value='Corporate'>Corporate</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-30'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Title"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                <MenuItem value='Miss'>Miss</MenuItem>
+                                                                <MenuItem value='Ms'>Ms</MenuItem>
+                                                                <MenuItem value='Dr'>Dr</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
+                                                        <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
+                                                    </div>
+                                                    
+                                                    <Box sx={{ mb: 2 }}>
+                                                        <div className='btnStepperAction'>
+                                                            <Button
+                                                                variant="contained"
+                                                                onClick={handleNext}
+                                                                sx={{ mt: 1, mr: 1 }}
+                                                            >
+                                                               Next
+                                                            </Button>
+                                                        </div>
+                                                    </Box>
+                                                </StepContent>
+                                            </Step>
+                                            <Step key='CLIENT DETAILS'>
+                                                <StepLabel>
+                                                    CLIENT DETAILS
+                                                </StepLabel>
+                                                <StepContent>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-100'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Client type"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Individual'>Individual</MenuItem>
+                                                                <MenuItem value='Corporate'>Corporate</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-30'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Title"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                <MenuItem value='Miss'>Miss</MenuItem>
+                                                                <MenuItem value='Ms'>Ms</MenuItem>
+                                                                <MenuItem value='Dr'>Dr</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
+                                                        <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
+                                                    </div>
+                                                    
+                                                    <Box sx={{ mb: 2 }}>
+                                                        <div className='btnStepperAction'>
+                                                            <Button
+                                                                variant="contained"
+                                                                onClick={handleNext}
+                                                                sx={{ mt: 1, mr: 1 }}
+                                                            >
+                                                               Next
+                                                            </Button>
+                                                        </div>
+                                                    </Box>
+                                                </StepContent>
+                                            </Step>
+                                            <Step key='KYC DOCUMENTS (optional)'>
+                                                <StepLabel>
+                                                    KYC DOCUMENTS (optional)
+                                                </StepLabel>
+                                                <StepContent>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-100'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Client type"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Individual'>Individual</MenuItem>
+                                                                <MenuItem value='Corporate'>Corporate</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-30'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Title"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                <MenuItem value='Miss'>Miss</MenuItem>
+                                                                <MenuItem value='Ms'>Ms</MenuItem>
+                                                                <MenuItem value='Dr'>Dr</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
+                                                        <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
+                                                    </div>
+                                                    
+                                                    <Box sx={{ mb: 2 }}>
+                                                        <div className='btnStepperAction'>
+                                                            <Button
+                                                                variant="contained"
+                                                                onClick={handleNext}
+                                                                sx={{ mt: 1, mr: 1 }}
+                                                            >
+                                                               Next
+                                                            </Button>
+                                                        </div>
+                                                    </Box>
+                                                </StepContent>
+                                            </Step>
+                                            <Step key='ACCOUNT INFO'>
+                                                <StepLabel>
+                                                    ACCOUNT INFO
+                                                </StepLabel>
+                                                <StepContent>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-100'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Client type"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Individual'>Individual</MenuItem>
+                                                                <MenuItem value='Corporate'>Corporate</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <FormControl variant="standard" className='w-30'>
+                                                            <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-standard-label"
+                                                                id="demo-simple-select-standard"
+                                                                value={clientType}
+                                                                onChange={addNewClientType}
+                                                                label="Title"
+                                                                style={{width: '100%'}}
+                                                            >
+                                                                <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                <MenuItem value='Miss'>Miss</MenuItem>
+                                                                <MenuItem value='Ms'>Ms</MenuItem>
+                                                                <MenuItem value='Dr'>Dr</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
+                                                        <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
+                                                    </div>
+                                                    <div className='elementSection'>
+                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
+                                                    </div>
+                                                    
+                                                    <Box sx={{ mb: 2 }}>
+                                                        <div className='btnStepperAction'>
+                                                            <Button
+                                                                variant="contained"
+                                                                onClick={handleNext}
+                                                                sx={{ mt: 1, mr: 1 }}
+                                                            >
+                                                               Next
+                                                            </Button>
+                                                        </div>
+                                                    </Box>
+                                                </StepContent>
+                                            </Step>
+                                        </Stepper>
                                     </DialogContent>
-                                    <DialogActions>
+                                    {/* <DialogActions>
                                         <Button autoFocus onClick={handleClose}>
                                             Save changes
                                         </Button>
-                                    </DialogActions>
+                                    </DialogActions> */}
                                 </BootstrapDialog>
                             </Grid>
                         </Grid>

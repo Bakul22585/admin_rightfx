@@ -27,11 +27,12 @@ import FAQEditor from './faq_editor/FAQEditor';
 import IBWithdraw from './ib_withdraw/IBWithdraw';
 import PartnershipWithdraw from './partnership_withdraw/PartnershipWithdraw';
 import Master from './master/Master';
+import Profile from './profile/Profile';
 
 const App = () => {
 
   const ref = useRef();
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const [sidebar, setSidebar] = useState(false)
 
 
@@ -74,6 +75,7 @@ const App = () => {
                 <Route exact path="/deposit" element={<Deposit />} />
                 <Route exact path="/withdrawal" element={<Withdraw />} />
                 <Route exact path="/master/:id" element={<Master />} />
+                <Route exact path="/profile/:id" element={<Profile />} />
                 <Route exact path="/deposit_history" element={<DepositHistory />} />
                 <Route exact path="/withdraw_history" element={<WithdrawHistory />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />

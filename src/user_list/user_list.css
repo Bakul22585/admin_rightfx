@@ -39,3 +39,25 @@
     justify-content: end;
     gap: 10px;
 }
+.modalWidth100 .MuiPaper-root{
+    width: 100%;
+    max-width: 800px;
+}
+.elementSection {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.elementSection .w-40 {
+    width: 40% !important;
+}
+.elementSection .w-45 {
+    width: 45% !important;
+}
+.elementSection .w-30 {
+    width: 30% !important;
+}
+.btnStepperAction {
+    display: flex;
+    justify-content: end;
+}
