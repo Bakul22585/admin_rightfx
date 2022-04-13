@@ -75,3 +75,146 @@
     flex-wrap: wrap;
     gap: 15px;
 }
+.mt5btngroup button {
+    font-size: 10px;
+}
+.contentSection .element {
+    width: 200px;
+}
+.element label {
+    font-size: 10px;
+}
+.formSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.newSection-title {
+    padding: 18px 1.25rem 0;
+    margin-bottom: 0;
+    font-size: .8rem;
+}
+.element label.Mui-focused {
+    color: #666666;
+}
+.element .MuiInput-underline.Mui-focused::after {
+    border-bottom: 1px solid #949494;
+}
+.paper-main-section {
+    height: 100%;
+}
+.btnActionSection {
+    display: flex;
+    justify-content: end;
+    padding: 1.25rem;
+}
+.subtitle {
+    font-size: 11px;
+}
+.declarationCheckbox .MuiFormControlLabel-label {
+    font-size: 11px;
+}
+.MuiMenu-root .MuiMenu-paper .MuiMenu-list .MuiMenuItem-gutters {
+    font-size: 11px;
+}
+.employment-details.btnActionSection {
+    padding: 1.25rem 0;
+}
+.cancelButton {
+    background-color: #e0e0e0 !important;
+    color: #000 !important;
+}
+.dialogMultipleActionButton {
+    display: flex;
+    gap: 10px;
+}
+.dialogTitle {
+    font-weight: 700 !important;
+    font-size: .92rem !important;
+}
+.MuiInputLabel-formControl {
+    font-size: 11px !important;
+}
+.fileuploadButton input {
+    display: none;
+}
+.margeField {
+    display: flex;
+    gap: 15px;
+}
+.structureNameSection {
+    display: flex;
+    flex-direction: column;
+}
+.structureNameSection label, .structureInputSection label {
+    padding: 5px 0px;
+    font-weight: bold;
+    font-size: 13px;
+}
+.structureNameSection input {
+    width: 20%;
+    padding: 5px 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+.structureInputSection input {
+    width: 100%;
+    padding: 5px 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+hr.solid {
+    border-top: 1px solid #dedede;
+    border-bottom: 0;
+}
+.label-center {
+    display: flex;
+    align-items: center;
+}
+.btn-danger {
+    color: red !important;
+}
+.contentActionButton {
+    display: flex;
+    justify-content: space-between;
+}
+.modalWidth100 .MuiDialogContent-root {
+    padding: 16px 30px !important;
+}
+.bankDetailsTabSection {
+    padding: 0 25px;
+}
+.margin-0 {
+    margin: 0 !important;
+}
+.headerSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.headerSection.header-title .groun-button {
+    display: flex;
+    gap: 5px;
+}
+.headerSection .header-search-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.documentDetailsTabSection {
+    padding: 25px;
+}
+.documentSelectionSection {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+}
+.font-color-white {
+    color: #fff !important;
+}

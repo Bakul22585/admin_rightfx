@@ -19,8 +19,9 @@
 }
 .filterBy {
     display: flex;
-    align-items: center;
+    align-items: end;
     gap: 15px;
+    margin-top: 15px;
 }
 .searchByCheckbox .MuiFormControlLabel-label {
     font-size: 12px;
@@ -60,4 +61,7 @@
 .btnStepperAction {
     display: flex;
     justify-content: end;
+}
+.filterBy .multipleSelect {
+    margin: 0;
 }
