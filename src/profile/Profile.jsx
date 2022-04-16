@@ -29,6 +29,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -680,14 +682,14 @@ const Profile = () => {
                     </FormControl>
                 </div>
                 <br />
-                <div>
-                    {/* <Editor
+                <div className='editor-section-border'>
+                    <Editor
                         // editorState={editorState}
                         toolbarClassName="toolbarClassName"
                         wrapperClassName="wrapperClassName"
                         editorClassName="editorClassName"
                         // onEditorStateChange={this.onEditorStateChange}
-                    />; */}
+                    />
                 </div>
             </div>;
         } else if (dialogTitle == 'Control Panel Access') {

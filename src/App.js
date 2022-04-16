@@ -28,13 +28,15 @@ import IBWithdraw from './ib_withdraw/IBWithdraw';
 import PartnershipWithdraw from './partnership_withdraw/PartnershipWithdraw';
 import Master from './master/Master';
 import Profile from './profile/Profile';
+import Myaccount from './my_account/Myaccount';
+import CreateRole from './role_management/CreateRole';
 
 const App = () => {
 
   const ref = useRef();
   const [login, setLogin] = useState(true);
   const [sidebar, setSidebar] = useState(false)
-
+  console.log(localStorage.getItem('isLogin'));
 
   if (login) {
     return (
@@ -78,6 +80,8 @@ const App = () => {
                 <Route exact path="/profile/:id" element={<Profile />} />
                 <Route exact path="/deposit_history" element={<DepositHistory />} />
                 <Route exact path="/withdraw_history" element={<WithdrawHistory />} />
+                <Route exact path="/myAccount" element={<Myaccount />} />
+                <Route exact path="/createRole" element={<CreateRole />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
               </Routes>
               {/* <Footer /> */}

@@ -29,6 +29,7 @@ const Sidebar = (prop) => {
     const name = e.target.classList[0];
     console.log(name);
     if (name == "logout") {
+      localStorage.removeItem('isLogin');
       prop.setLogin(true);
       navigate("/login");
     } else {

@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { List, ListItem, Menu } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom"
+import { Logout } from "@mui/icons-material";
 // import { styled } from "@mui/material/styles";
 // import i18next, { use } from "i18next";
 // import { useTranslation } from "react-i18next";
@@ -160,6 +161,16 @@ const Header = (prop) => {
     }
   };
 
+  const Logout = () => {
+    localStorage.removeItem('isLogin');
+    prop.setLogin(true);
+  }
+
+  const MyAccount = () => {
+    setAnchorEl(null);
+    navigate("/myAccount");
+  }
+
   return (
     <div className="app-header app-header--shadow app-header--opacity-bg">
       <div className="app-header--pane">
@@ -228,7 +239,7 @@ const Header = (prop) => {
           }}
         >
           <div className="dropdown-menu-xl overflow-hidden p-0">
-            <div className="d-flex p-4">
+            <div className="d-flex p-4 cursor-pointer" onClick={() => MyAccount()}>
               <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>
               <div className="mx-3">
                 <h6 className="font-weight-bold mb-1 text-black">
@@ -240,7 +251,7 @@ const Header = (prop) => {
             <div className="divider"></div>
             <div className="divider"></div>
             <List className="nav-neutral-danger nav-pills-rounded flex-column p-3">
-              <ListItem button={true} onClick={() => prop.setLogin(true)}>
+              <ListItem button={true} onClick={() => Logout()}>
                 <div className="mr-2">
                   <ExitToAppIcon />
                 </div>

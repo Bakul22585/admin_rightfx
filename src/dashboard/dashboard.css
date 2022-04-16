@@ -1,15 +1,248 @@
 .dashboard {
     padding: 25px;
 }
-.dashboard .chartSection{
+
+.dashboard .chartSection {
     width: 100%;
 }
 
 .main-heading {
-    font-weight: 700!important;
-    width: 100%!important;
-    margin-bottom: 1.5rem!important;
+    font-weight: 700 !important;
+    width: 100% !important;
+    margin-bottom: 1.5rem !important;
     font-size: 1.7rem;
     line-height: 1.2;
-    font-family: cairo,sans-serif;
+    font-family: cairo, sans-serif;
+}
+
+.map-selected {
+    fill: #E3DA37;
+}
+
+.map-unselected {
+    fill: #699EAA;
+}
+
+.map-selected:hover,
+.map-unselected:hover {
+    cursor: pointer;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+}
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+.section-count {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ccc;
+}
+.remainder {
+    display: flex;
+    gap: 15px;
+}
+.remainder i {
+    color: #4191ff;
+    margin-top: 10px;
+}
+.remainder .content p {
+    margin-bottom: 0;
+}
+.remainder .content p:nth-child(1),
+.remainder .content p:nth-child(2) {
+    font-weight: bold;
+}
+.remainder .content p:nth-child(2) {
+    font-size: 12px;
+    font-weight: 700;
+}
+.remainder .content p:nth-child(3) {
+    font-size: 9px;
+    margin-top: 10px;
+}
+.moreRemainderSection {
+    display: flex;
+    justify-content: center;
+}
+.moreRemainderSection span {
+    color: #395b9e;
+    font-weight: 700;
+    cursor: pointer;
+}
+.button-group-off {
+    background-color: #eeeff8 !important;
+    box-shadow: none !important;
+    color: #3b3e66 !important;
+}
+.css-uxd1ve-MuiButtonGroup-root .MuiButtonGroup-grouped:not(:last-of-type) {
+    /* border-color: #cdcdcd; */
+    border-color: transparent !important;
+}
+.css-uxd1ve-MuiButtonGroup-root {
+    display: inline-block !important;
+}
+.margin-bottom-30px {
+    margin-bottom: 70px !important;
+}
+.blur-dot-chart {
+    position: relative;
+}
+.blur-dot-chart::after {
+    background: rgb(0, 143, 251) !important;
+    color: rgb(0, 143, 251);
+    height: 12px;
+    width: 12px;
+    left: -16px;
+    top: 4px;
+    border-width: 0px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    content: '';
+    position: absolute;
+}
+.green-dot-chart {
+    position: relative;
+}
+.green-dot-chart::after {
+    background: rgb(0, 227, 150) !important;
+    color: rgb(0, 227, 150);
+    height: 12px;
+    width: 12px;
+    left: -16px;
+    top: 4px;
+    border-width: 0px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    content: '';
+    position: absolute;
+}
+.red-dot-chart {
+    position: relative;
+}
+.red-dot-chart::after {
+    background: rgb(177, 18, 51) !important;
+    color: rgb(177, 18, 51);
+    height: 12px;
+    width: 12px;
+    left: -16px;
+    top: 4px;
+    border-width: 0px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    content: '';
+    position: absolute;
+}
+.bottom-label-section {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 14px;
+}
+.th-div {
+    display: grid;
+    grid-template-columns: 30% 20% 20% 20%;
+    grid-gap: 15px;
+    padding: 15px;
+}
+.th-div label {
+    font-weight: 600;
+    border-bottom: 2px solid #4ea9f3;
+    text-align: center;
+    color: #4ea9f3;
+}
+.th-div label:nth-child(1) {
+    border-bottom: 0px;
+    text-align: left;
+    color: #5e5b77;
+}
+.td-div label{
+    border-bottom: 0px;
+}
+.td-div label:nth-child(2){
+    color: #fba500;
+}
+.td-div label:nth-child(3){
+    color: #fa0000;
+}
+.td-div label:nth-child(4){
+    color: #39b54a;
+}
+.leadsContentSection {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+}
+.leadRightContentSection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.leadRightContentSection .roundedShapeContent {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.leadRightContentSection .roundedShapeContent span {
+    border: 3px solid #cccccc;
+    border-radius: 50%;
+    width: 60px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    font-size: 20px;
+    font-weight: 700;
+}
+.allLeadsNumner {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.allLeadsNumner b {
+    font-size: 25px;
+}
+.td-div {
+    border-bottom: 2px dotted #eee;
+}
+.kyc-document .leadRightContentSection {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.kyc-document .leadRightContentSection .roundedShapeContent {
+    width: 180px;
+}
+.kyc-document .leadRightContentSection .roundedShapeContent p {
+    font-size: 13px;
+}
+.kyc-document .leadRightContentSection .roundedShapeContent {
+    gap: 10px;
+}
+.section-action-button {
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.section-action-button span {
+    cursor: pointer;
+}
+.section-action-button span.action {
+    color: #1e90ff;
+    border-bottom: 2px solid;
+}
+.montly-sales-target.section-title {
+    margin-bottom: 0;
+}
+.action-group-button {
+    display: inline-block !important;
+}
+.css-1mopxii .MuiButtonGroup-grouped:not(:last-of-type) {
+    border-color: transparent !important;
 }

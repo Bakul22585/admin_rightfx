@@ -42,7 +42,7 @@ const CssTextField = styled(TextField)({
 
 export default function Login1(prop) {
     const navigate = useNavigate();
-    console.log(prop.setLogin);
+    // console.log(prop.setLogin);
     const [isSubmit, setisSubmit] = useState(false);
     const [infoErrors, setInfoErrors] = useState({});
     const [info, setinfo] = useState({
@@ -94,6 +94,7 @@ export default function Login1(prop) {
     useEffect(() => {
         if (Object.keys(infoErrors).length === 0 && isSubmit) {
             notify1("Login successful");
+            localStorage.setItem('isLogin', false);
             prop.setLogin(false);
             navigate("/dashboard");
         }

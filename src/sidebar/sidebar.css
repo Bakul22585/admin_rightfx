@@ -5,3 +5,7 @@
 .app-sidebar--content::-webkit-scrollbar {
   width: 0;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
