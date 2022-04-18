@@ -41,7 +41,7 @@ const RoleManagement = () => {
                 return <div className='actionButtonGroup'>
                     <Button
                         className='btn-edit'
-                        onClick={(event) => handleContextClick(event, row.sr_no)}
+                        onClick={(event) => gotoCreateRole(event, row.role_name)}
                         {...row}
                         style={{ color: 'rgb(144 145 139)' }}>
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -80,6 +80,11 @@ const RoleManagement = () => {
     const gotoRoleCreate = (e) => {
         console.log('goto profile page', e);
         navigate("/createRole");
+    }
+
+    const gotoCreateRole = (e, id) => {
+        console.log('goto profile page', e.target, id);
+        navigate("/createRole/" + id);
     }
 
     return (

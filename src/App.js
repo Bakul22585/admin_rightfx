@@ -34,11 +34,14 @@ import CreateRole from './role_management/CreateRole';
 const App = () => {
 
   const ref = useRef();
-  const [login, setLogin] = useState(true);
-  const [sidebar, setSidebar] = useState(false)
-  console.log(localStorage.getItem('isLogin'));
+  const [login, setLogin] = useState(localStorage.getItem('login'));
+  const [sidebar, setSidebar] = useState(false);
 
-  if (login) {
+  useEffect(() => {
+    console.log("login", login);
+  }, [login]);
+
+  if (login == "true") {
     return (
       <div class="loginbg">
         <Login setLogin={setLogin}/>
@@ -81,6 +84,7 @@ const App = () => {
                 <Route exact path="/deposit_history" element={<DepositHistory />} />
                 <Route exact path="/withdraw_history" element={<WithdrawHistory />} />
                 <Route exact path="/myAccount" element={<Myaccount />} />
+                <Route exact path="/createRole/:id" element={<CreateRole />} />
                 <Route exact path="/createRole" element={<CreateRole />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
               </Routes>

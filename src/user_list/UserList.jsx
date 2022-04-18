@@ -738,7 +738,7 @@ const UserList = () => {
                                                         <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
                                                     </div>
                                                     <div className='elementSection'>
-                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
+                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" focused/>
                                                     </div>
                                                     
                                                     <Box sx={{ mb: 2 }}>

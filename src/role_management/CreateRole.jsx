@@ -1,7 +1,10 @@
 import { Button, Grid, Paper } from '@mui/material'
 import React from 'react'
+import { useParams } from 'react-router-dom';
 
 const CreateRole = () => {
+    const { id } = useParams();
+
     return (
         <div>
             <div className="app-content--inner">
@@ -13,7 +16,7 @@ const CreateRole = () => {
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='create-role-content-section'>
                                         <div className='input-section'>
-                                            <input type='text' className='create-role-input' placeholder='Role Name'/>
+                                            <input type='text' className='create-role-input' placeholder='Role Name' value={id}/>
                                         </div>
                                         {/* <br/> */}
                                         <div className='permission-table'>
@@ -30,553 +33,553 @@ const CreateRole = () => {
                                             <div className='permission-table-body'>
                                                 <label>Roles</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Users</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Leads</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Client Request</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Client</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Transactions Deposit</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Transactions Withdraw</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Transactions Internal</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Requests IB</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Requests Account</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Email Templates</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Team</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Team Members</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Team Manager</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Requests Leverage</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Campaigns</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Sales Target</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Credit</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Requests Promotions</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Requests Structure</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Currency Rates</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Reports</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Marketing Links</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <br/>
@@ -598,391 +601,391 @@ const CreateRole = () => {
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Profile</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Employment</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Bank</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Documents</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Activities</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Notes</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Transaction</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Links</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Leads Agenets</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
 
@@ -1005,79 +1008,79 @@ const CreateRole = () => {
                                             <div className='permission-table-body leads-section'>
                                                 <label>Client Action</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body leads-section'>
                                                 <label>Lead Action</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                             </div>
 
@@ -1093,37 +1096,37 @@ const CreateRole = () => {
                                             <div className='permission-table-body client-lead-section'>
                                                 <label>Client Action</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             <div className='permission-table-body client-lead-section'>
                                                 <label>Lead Action</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                             
@@ -1142,28 +1145,28 @@ const CreateRole = () => {
                                             <div className='permission-table-body dashboard-section'>
                                                 <label>Sidebar</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                             </div>
 
@@ -1179,19 +1182,19 @@ const CreateRole = () => {
                                             <div className='permission-table-body client-lead-section'>
                                                 <label>Dashboard Data</label>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button'/>
+                                                    <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' />
+                                                    <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='radio' className='permission-radio-button' disabled/>
+                                                    <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                             </div>
                                         </div>

@@ -94,8 +94,8 @@ export default function Login1(prop) {
     useEffect(() => {
         if (Object.keys(infoErrors).length === 0 && isSubmit) {
             notify1("Login successful");
-            localStorage.setItem('isLogin', false);
-            prop.setLogin(false);
+            localStorage.setItem('login', false);
+            prop.setLogin("false")
             navigate("/dashboard");
         }
     }, [infoErrors]);

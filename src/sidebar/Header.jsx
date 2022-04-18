@@ -162,8 +162,9 @@ const Header = (prop) => {
   };
 
   const Logout = () => {
-    localStorage.removeItem('isLogin');
-    prop.setLogin(true);
+    localStorage.setItem("login", true);
+    prop.setLogin("true");
+    navigate("/login");
   }
 
   const MyAccount = () => {
@@ -203,7 +204,7 @@ const Header = (prop) => {
         </FormControl>
       </div>
       <div className="app-header--pane">
-        <form onSubmit={handleSubmit}>
+        {/* <form onSubmit={handleSubmit}>
           <CssTextField
             id="standard-search"
             label="Search"
@@ -213,7 +214,7 @@ const Header = (prop) => {
             value={info.search}
             onChange={input1}
           />
-        </form>
+        </form> */}
         <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
             <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>{" "}

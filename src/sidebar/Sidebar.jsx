@@ -29,8 +29,8 @@ const Sidebar = (prop) => {
     const name = e.target.classList[0];
     console.log(name);
     if (name == "logout") {
-      localStorage.removeItem('isLogin');
-      prop.setLogin(true);
+      localStorage.setItem("login", true);
+      prop.setLogin("true");
       navigate("/login");
     } else {
       setOpen((preValue) => {
@@ -45,7 +45,7 @@ const Sidebar = (prop) => {
   console.log(prop)
 
   return (
-    <div>
+    <div className="main-sidebar-content">
       <div className="app-sidebar app-sidebar--light app-sidebar--shadow">
         <div className="app-sidebar--header">
           <div className="app-sidebar-logo">
@@ -98,6 +98,14 @@ const Sidebar = (prop) => {
                     view_list
                     </span>
                     User List
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/leads_list" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    view_list
+                    </span>
+                    Leads List
                   </NavLink>
                 </li>
                 <li>
