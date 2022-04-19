@@ -13,6 +13,7 @@ import { ColorButton } from "../common/CustomElement";
 import { Button } from "@mui/material";
 import mapDataWorld from '@highcharts/map-collection/custom/world.geo.json';
 import Chart from "react-apexcharts";
+import CommonFilter from '../common/CommonFilter';
 const WorldMap = require('react-world-map');
 
 var data: [string, number][] = [
@@ -357,25 +358,11 @@ const Dashboard = () => {
             <div className="app-content--inner">
                 <div className="app-content--inner__wrapper mh-100-vh">
                     <div style={{ opacity: 1 }}>
+                        {/* <CommonFilter />
+                        <br/> */}
                         <Grid container spacing={3}>
                             <Grid item md={12} lg={12} xl={12} sm={12} className='margin-bottom-30px'>
                                 <Grid container spacing={3}>
-                                    {/* <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>Dashboard</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height:'100%' }}>
-                                            <CardContent className="py-3">
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={6} md={6} lg={6}>
-                                                        <div className='chartSection'>
-                                                            <WorldMap selected={selected} onSelect={onSelect} />
-                                                        </div>
-                                                    </Grid>
-                                                    <Grid item sm={6} md={3}>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid> */}
                                     <Grid item md={6} lg={6} xl={6} sm={12}>
                                         <p className='main-heading'>Dashboard&nbsp;</p>
                                         <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>

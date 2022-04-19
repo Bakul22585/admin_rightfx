@@ -3,6 +3,7 @@ import React from "react";
 import { FormControl, Grid, MenuItem, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import CommonFilter from '../common/CommonFilter';
 
 const Mt5Group = () => {
 
@@ -14,6 +15,8 @@ const Mt5Group = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>MT5 Groups</p>
+                                <CommonFilter />
+                                <br/>
                             </Grid>
                         </Grid>
                     </div>

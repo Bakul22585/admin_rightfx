@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { ColorButton } from "../common/CustomElement";
 import { Button } from "@mui/material";
+import CommonFilter from '../common/CommonFilter';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
@@ -64,6 +65,8 @@ const Withdraw = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdrawal</p>
+                                <CommonFilter />
+                                <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }}>
                                     <div className="card-header font-weight-bold text-dark border-bottom py-2">
                                         Filter Criteria

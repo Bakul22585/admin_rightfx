@@ -30,6 +30,8 @@ import Master from './master/Master';
 import Profile from './profile/Profile';
 import Myaccount from './my_account/Myaccount';
 import CreateRole from './role_management/CreateRole';
+import Leads from './leads/Leads';
+import Remainder from './remainder/Remainder';
 
 const App = () => {
 
@@ -55,7 +57,7 @@ const App = () => {
           <div className="app-main">
             <Header setSidebar={setSidebar}  setLogin={setLogin}/>
             <div className="app-content">
-              <Routes basename={'/admin'}>
+              <Routes basename='rightfx_admin'>
                 <Route exact path="/" element={<Dashboard />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
                 <Route exact path="/dashboard" element={<Dashboard />} />
@@ -86,6 +88,8 @@ const App = () => {
                 <Route exact path="/myAccount" element={<Myaccount />} />
                 <Route exact path="/createRole/:id" element={<CreateRole />} />
                 <Route exact path="/createRole" element={<CreateRole />} />
+                <Route exact path="/leads_list" element={<Leads />} />
+                <Route exact path="/remiander" element={<Remainder />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
               </Routes>
               {/* <Footer /> */}

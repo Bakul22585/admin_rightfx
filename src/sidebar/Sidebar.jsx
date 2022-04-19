@@ -35,7 +35,7 @@ const Sidebar = (prop) => {
     } else {
       setOpen((preValue) => {
         return {
-          ...preValue,
+          // ...preValue,
           [name]: !open[name],
         };
       });
@@ -339,6 +339,14 @@ const Sidebar = (prop) => {
                     settings
                     </span>
                     Settings
+                    </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/remiander" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    calendar_month
+                    </span>
+                    Remainder
                     </NavLink>
                 </li>
                 

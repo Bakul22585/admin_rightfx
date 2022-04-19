@@ -9,6 +9,7 @@ import { ColorButton } from "../common/CustomElement";
 import { Button } from "@mui/material";
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
+import CommonFilter from '../common/CommonFilter';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
@@ -130,6 +131,8 @@ const Deposit = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Deposit</p>
+                                <CommonFilter />
+                                <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }}>
                                     <div className="card-header font-weight-bold text-dark border-bottom py-2">
                                         Filter Criteria

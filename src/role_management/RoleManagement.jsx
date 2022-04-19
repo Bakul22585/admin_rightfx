@@ -5,6 +5,7 @@ import CommonTable from '../common/CommonTable';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
+import CommonFilter from '../common/CommonFilter';
 
 const RoleManagement = () => {
 
@@ -95,6 +96,8 @@ const RoleManagement = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Role Management</p>
+                                <CommonFilter />
+                                <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={gotoRoleCreate}>Add Role</Button>

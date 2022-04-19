@@ -2,7 +2,7 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import logo1 from "./loginLogo.png";
+import logo1 from "../sidebar/logo1.png";
 import { useNavigate } from "react-router-dom"
 
 // import logo from './logo2.png';
@@ -20,7 +20,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
     padding: "15px 22px",
     borderRadius: "100px",
     "&:hover": {
-        color: "#ff0000",
+        color: "#3d9730",
         borderRadius: "100px",
         backgroundColor: "black",
     },
@@ -100,79 +100,6 @@ export default function Login1(prop) {
         }
     }, [infoErrors]);
 
-    // const { label, value, error=null, onChange } = props
-
-    // const [values, setValues] = useState({ email: "", password: "" });
-    //   const [errors, setErrors] = useState({});
-    //   const [isSubmit, setIsSubmit] = useState(true);
-
-    //   const handleInputChange = e => {
-    //     const { name, value } = e.target
-    //     setValues({
-    //         ...values,
-    //         [name]: value
-    //     })
-
-    // }
-
-    // const validate = (fieldValues = values) => {
-    //   let temp = { ...errors }
-    //   if ('email' in fieldValues)
-    //     temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Invalid email address"
-    //   if ('password' in fieldValues)
-    //     temp.password = fieldValues.password ? "" : "Invalid password"
-    //     setErrors({
-    //       ...temp
-    //   })
-    //   if (fieldValues == values)
-    //           return Object.values(temp).every(x => x == "")
-    // }
-
-    //   const handleSubmit = (e) => {
-    //        e.preventDefault();
-    //        setErrors(validate(values));
-    //       setIsSubmit(true);
-    //      };
-
-    // const {
-    //   values,
-    //   setValues,
-    //   errors,
-    //   setErrors,
-    //   handleInputChange,
-    // }= useForm(initialFValues, true, validate);
-
-    // const [formValues, setFormValues] = useState({ email: "", password: "" });
-    // const [formErrors, setFormErrors] = useState({});
-    // const [isSubmit, setIsSubmit] = useState(false);
-
-    // const handleChange = (e) => {
-    //   const { name, value } = e.target;
-    //   setFormValues({ ...formValues, [name]: value });
-    // }
-
-    // const handleSubmit = (e) => {
-    //   e.preventDefault();
-    //   setFormErrors(validate(formValues));
-    //   setIsSubmit(true);
-    // };
-
-    // useEffect(() => {
-    //   console.log(formErrors);
-    //   if (Object.keys(formErrors).length == 0 && isSubmit) {
-    //     console.log(formValues);
-    //   }
-    // }, [formErrors]);
-
-    // const validate = (values) => {
-    //   const errors = {};
-    //   if (!values.email) {
-    //     errors.email = "Requied";
-    //   }
-    //   if (!values.password) {
-    //     errors.password = "Requied";
-    //   }
-    // }
     return (
         <>
             <div className="loginCard">
