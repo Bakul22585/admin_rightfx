@@ -93,11 +93,11 @@ const Sidebar = (prop) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/user_list" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/client_list" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     view_list
                     </span>
-                    User List
+                    Client List
                   </NavLink>
                 </li>
                 <li>
@@ -334,6 +334,14 @@ const Sidebar = (prop) => {
                     </NavLink>
                 </li>
                 <li>
+                  <NavLink className="nav-link-simple " to="/reminder" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    calendar_month
+                    </span>
+                    Reminder
+                    </NavLink>
+                </li>
+                <li>
                   <NavLink className="nav-link-simple " to="/setting" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     settings
@@ -341,15 +349,6 @@ const Sidebar = (prop) => {
                     Settings
                     </NavLink>
                 </li>
-                <li>
-                  <NavLink className="nav-link-simple " to="/remiander" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    calendar_month
-                    </span>
-                    Remainder
-                    </NavLink>
-                </li>
-                
                 <li>
                   <a
                     className={`logout ${open.logout ? "active" : null

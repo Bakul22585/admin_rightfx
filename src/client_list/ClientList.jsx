@@ -1,4 +1,4 @@
-import './user_list.css';
+import './client_list.css';
 import React, { useState } from "react";
 import { Theme, useTheme } from '@mui/material/styles';
 import { Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
@@ -141,7 +141,7 @@ const source = [
     'Dedicated Link - IB',
 ];
 
-const UserList = () => {
+const ClientList = () => {
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -354,7 +354,7 @@ const UserList = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>User List</p>
+                                <p className='main-heading'>Client List</p>
 
                                 <CommonFilter />
                                 <br />
@@ -698,4 +698,4 @@ const UserList = () => {
     )
 }
 
-export default UserList
+export default ClientList

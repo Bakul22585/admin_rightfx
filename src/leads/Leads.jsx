@@ -1,6 +1,7 @@
+import './leads.css';
 import React, { useState } from "react";
 import { Theme, useTheme } from '@mui/material/styles';
-import { Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
+import { Autocomplete, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonTable from '../common/CommonTable';
@@ -26,7 +27,7 @@ import CommonFilter from '../common/CommonFilter';
 const CssTextField = styled(TextField)({
 });
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+/* const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
     marginTop: theme.spacing(0),
   },
@@ -56,7 +57,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
       borderColor: "#80bdff",
     },
   },
-}));
+})); */
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -79,7 +80,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
+      {/* {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -92,7 +93,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
+      ) : null} */}
     </DialogTitle>
   );
 };
@@ -117,38 +118,101 @@ function getStyles(name, personName, theme) {
   };
 }
 
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  "label + &": {
+    marginTop: theme.spacing(0),
+  },
+  "& .MuiInputBase-input": {
+    // borderRadius: 9,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    // border: "1px solid #ced4da",
+    fontSize: 16,
+    padding: "8px 26px 8px 10px",
+    // transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      // borderRadius: 9,
+      borderColor: "#80bdff",
+    },
+  },
+}));
+
+interface FilmOptionType {
+  title: string;
+  year: number;
+}
+const nbaTeams = [
+  { id: 1, name: 'Atlanta Hawks' },
+  { id: 2, name: 'Boston Celtics' },
+  { id: 3, name: 'Brooklyn Nets' },
+  { id: 4, name: 'Charlotte Hornets' },
+  { id: 5, name: 'Chicago Bulls' },
+  { id: 6, name: 'Cleveland Cavaliers' },
+  { id: 7, name: 'Dallas Mavericks' },
+  { id: 8, name: 'Denver Nuggets' },
+  { id: 9, name: 'Detroit Pistons' },
+  { id: 10, name: 'Golden State Warriors' },
+  { id: 11, name: 'Houston Rockets' },
+  { id: 12, name: 'Indiana Pacers' },
+  { id: 13, name: 'Los Angeles Clippers' },
+  { id: 14, name: 'Los Angeles Lakers' },
+  { id: 15, name: 'Memphis Grizzlies' },
+  { id: 16, name: 'Miami Heat' },
+  { id: 17, name: 'Milwaukee Bucks' },
+  { id: 18, name: 'Minnesota Timberwolves' },
+  { id: 19, name: 'New Orleans Pelicans' },
+  { id: 20, name: 'New York Knicks' },
+  { id: 21, name: 'Oklahoma City Thunder' },
+  { id: 22, name: 'Orlando Magic' },
+  { id: 23, name: 'Philadelphia 76ers' },
+  { id: 24, name: 'Phoenix Suns' },
+  { id: 25, name: 'Portland Trail Blazers' },
+  { id: 26, name: 'Sacramento Kings' },
+  { id: 27, name: 'San Antonio Spurs' },
+  { id: 28, name: 'Toronto Raptors' },
+  { id: 29, name: 'Utah Jazz' },
+  { id: 30, name: 'Washington Wizards' },
+];
+
 const Leads = () => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState('md');
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState([]);
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [filterData, setFilterData] = useState({});
-  const [filterSection, setFilterSection] = useState(false);
-  const [filterBy, setFilterBy] = useState('');
-  const [clientSearch, setClientSearch] = useState('');
-  const [state, setState] = React.useState({
-    first_name: false,
-    last_name: false,
-    email: false,
-    phone: false,
-    account_id: false,
-    mt5_account: false,
-  });
-  const [personName, setPersonName] = useState([]);
-  const [sourceName, setSourceName] = useState([]);
-  const [activeStep, setActiveStep] = useState(0);
-  const [clientType, setClientType] = useState('');
+  const [dialogTitle, setDialogTitle] = useState('');
 
-  const handleClickOpen = () => {
+  /* const defaultProps = {
+    options: top100Films,
+    getOptionLabel: (option: FilmOptionType) => option.title,
+  }; */
+
+  /* const flatProps = {
+    options: top100Films.map((option) => option.title),
+  }; */
+
+  const handleClickOpen = (e) => {
+    setDialogTitle('Add Lead');
+    setMaxWidth('md');
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const addNewClientType = (event) => {
-    setClientType(event.target.value);
   };
 
   const handleContextClick = (event, index) => {
@@ -164,117 +228,321 @@ const Leads = () => {
     setOpenTableMenus(tableMenus);
   };
 
-  const depositApproved = (e) => {
-    console.log('deposit approved', e);
-  }
-
   const gotoProfile = (e) => {
     console.log('goto profile page', e);
     navigate("/profile/" + e.name);
   }
 
-  const input1 = (event) => {
-    const { name, value } = event.target;
-    setClientSearch(value);
-  };
+  const viewFollowup = (e) => {
+    console.log('view followup', e);
+    setDialogTitle('View Lead (' + e.name + ')');
+    setMaxWidth('lg');
+    setOpen(true);
+  }
 
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  const manageDialogActionButton = () => {
+    if (dialogTitle == 'Add Lead') {
+      return <div className='dialogMultipleActionButton'>
+        <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+        <Button variant="contained" className='btn-gradient btn-success'>Add Lead</Button>
+      </div>;
+    }
+  }
 
-  const filterByChange = (e) => {
-    console.log('selected value', e.target.value);
-    setFilterBy(e.target.value);
-  };
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  const manageContent = () => {
+    console.log(dialogTitle.substring(0, 9));
+    if (dialogTitle == 'Add Lead') {
+      return <div>
+        <div className='element margeTwoField'>
+          <Autocomplete
+            options={nbaTeams}
+            id="disable-close-on-select"
+            Customer
+            sx={{ width: '100%' }}
+            renderInput={(params) => (
+              <TextField {...params} label="Customer" variant="standard" />
+            )}
+            getOptionLabel={option => option.name}
+            // value={selectedTeam}
+            onChange={(_event, newTeam) => {
+              // setSelectedTeam(newTeam);
+              console.log(_event, newTeam);
+            }}
+          />
+          <FormControl variant="standard" sx={{ width: '100%' }} focused>
+            <InputLabel id="demo-simple-select-standard-label">Source</InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              // value={age}
+              // onChange={handleChange}
+              label="Source"
+            >
+              <MenuItem value='1'>Newspaper Ads</MenuItem>
+              <MenuItem value='2'>Banner Ads</MenuItem>
+              <MenuItem value='3'>Billboards</MenuItem>
+              <MenuItem value='4'>Walk-In</MenuItem>
+              <MenuItem value='5'>Facebook Ads</MenuItem>
+              <MenuItem value='6'>Instagram Ads</MenuItem>
+              <MenuItem value='7'>Whatsapp ads</MenuItem>
+              <MenuItem value='8'>Website</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <br />
+        <div className='margeTwoField element'>
+          <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused />
+          <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused />
+        </div>
+        <br />
+        <div className='element margeTwoField'>
+          <FormControl variant="standard" sx={{ width: '100%' }} focused>
+            <InputLabel id="demo-simple-select-standard-label">Interest</InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              // value={age}
+              // onChange={handleChange}
+              label="Interest"
+            >
+              <MenuItem value="1">Very Low</MenuItem>
+              <MenuItem value="2">Low</MenuItem>
+              <MenuItem value="3">Average</MenuItem>
+              <MenuItem value="4">High</MenuItem>
+              <MenuItem value="5">Very High</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ width: '100%' }} focused>
+            <InputLabel id="demo-simple-select-standard-label">Assign To Sales-Executive</InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              // value={age}
+              // onChange={handleChange}
+              label="Assign To Sales-Executive"
+            >
+              <MenuItem value=""></MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <br />
+        <div className='element'>
+          <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} />
+        </div>
+        <br />
+        <div className='element margeTwoField'>
+          <div className='checkboxSection' style={{ width: '100%' }}>
+            <label>Do you want to send project details to Customer?</label>
+            <FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Send Mail?" />
+          </div>
+          <div className='checkboxSection' style={{ width: '100%' }}>
+            <label>Please select user type to send SMS.</label>
+            <div className='checkbox-group'>
+              <FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Client" />
+              <FormControlLabel control={<Checkbox size="small" />} label="Sales-Executive" />
+              <FormControlLabel control={<Checkbox size="small" />} label="Admin" />
+            </div>
+          </div>
+        </div>
+      </div>;
+    } else if (dialogTitle.substring(0, 9) == 'View Lead') {
+      return <div>
+        <Grid container spacing={3}>
+          <Grid item md={6} lg={6} xl={6} sm={12}>
+            <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }} className='pending-all-15px'>
+              <p className='view-lead-popup-header-title'>Lead Details</p>
+              <div className='popup-content-section'>
+                <div className='user-details'>
+                  <label>Customer Name:</label>
+                  <p>yogeshbhai</p>
+                </div>
+                <div className='user-details'>
+                  <label>Source:</label>
+                  <p>Walk-In</p>
+                </div>
+                <div className='user-details'>
+                  <label>Customer Mobile:</label>
+                  <p>9824386783</p>
+                </div>
+                <div className='user-details'>
+                  <label>Customer Email:</label>
+                  <p>9824386783</p>
+                </div>
+                <div className='user-details'>
+                  <label>Lead Added By:</label>
+                  <p>Nirav bhai Sutariya</p>
+                </div>
+                <div className='user-details'>
+                  <label>Lead Added:</label>
+                  <p>2022-03-31 18:42:17</p>
+                </div>
+                <div className='user-details'>
+                  <label>Current Followup:</label>
+                  <p>5 Apr 2022</p>
+                </div>
+                <div className='user-details'>
+                  <label>Reference:</label>
+                  <p></p>
+                </div>
+              </div>
+            </Paper>
+          </Grid>
+          <Grid item md={6} lg={6} xl={6} sm={12}>
+            <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }} className='pending-all-15px'>
+              <p className='view-lead-popup-header-title'>Add New Follow Up</p>
+              <div className='margeTwoField element'>
+                <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused />
+                <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused />
+              </div>
+              <br />
+              <div className='element'>
+                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                  <InputLabel id="demo-simple-select-standard-label">Interest</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    // value={age}
+                    // onChange={handleChange}
+                    label="Interest"
+                  >
+                    <MenuItem value="1">Very Low</MenuItem>
+                    <MenuItem value="2">Low</MenuItem>
+                    <MenuItem value="3">Average</MenuItem>
+                    <MenuItem value="4">High</MenuItem>
+                    <MenuItem value="5">Very High</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+              <br />
+              <div className='element'>
+                <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} />
+              </div>
+              <br />
+              <div className='checkboxSection' style={{ width: '100%' }}>
+                <label>Please select user type to send SMS.</label>
+                <div className='checkbox-group'>
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Client" />
+                  <FormControlLabel control={<Checkbox size="small" />} label="Sales-Executive" />
+                  <FormControlLabel control={<Checkbox size="small" />} label="Admin" />
+                </div>
+              </div>
+              <br/>
+              <div className='popup-add-lead-section'>
+                <Button className='btn btn-success'>Add</Button>
+              </div>
+            </Paper>
+          </Grid>
+          <Grid item md={12} lg={12} xl={12} sm={12}>
+            <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+              <p className='view-lead-popup-header-title'>Follow Up History</p>
+              <CommonTable url='https://alphapixclients.com/forex/admin/datatable/users_list.php' column={column} sort='0' filter={filterData} />
+            </Paper>
+          </Grid>
+          <Grid item md={12} lg={12} xl={12} sm={12}>
+            <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+              <p className='view-lead-popup-header-title'>Call History</p>
+              <CommonTable url='https://alphapixclients.com/forex/admin/datatable/users_list.php' column={callColumn} sort='0' filter={filterData} />
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>;
+    }
+  }
 
   const depositColumn = [
     {
-      name: 'MT5 ID',
+      name: 'SR NO',
       selector: row => {
-        return <span title={row.mt5_id}>{row.mt5_id}</span>
+        return <span>{row.sr_no}</span>
       },
       sortable: true,
       reorder: true,
       grow: 0.1,
     },
     {
-      name: 'WALLET ID',
+      name: 'CUSTOMER',
       selector: row => {
-        return <span title={row.wallet_code}>{row.wallet_code}</span>
-      },
-      sortable: true,
-      reorder: true,
-      grow: 0.1,
-    },
-    {
-      name: 'GROUP LEVEL',
-      selector: row => { return <span title={row.group_level}>{row.group_level}</span> },
-      sortable: true,
-      reorder: true,
-      grow: 0.5,
-    },
-    {
-      name: 'NAME',
-      selector: row => { return <a className='linkColor' title={row.name} onClick={(event) => gotoProfile(row)}>{row.name}</a> },
-      sortable: true,
-      reorder: true,
-      grow: 1,
-    },
-    {
-      name: 'EMAIL',
-      selector: row => { return <span title={row.user_email}>{row.user_email}</span> },
-      sortable: true,
-      reorder: true,
-      grow: 1.5,
-    },
-    {
-      name: 'PHONE',
-      selector: row => { return <span title={row.user_phone}>{row.user_phone}</span> },
-      sortable: true,
-      reorder: true,
-      grow: 1,
-    },
-    {
-      name: 'PASSWORD',
-      selector: row => {
-        return <span title={row.user_visible_password}>{row.user_visible_password}</span>
+        return <a className='linkColor' title={row.name} onClick={(event) => gotoProfile(row)}>{row.name}</a>
       },
       sortable: true,
       reorder: true,
       grow: 1,
     },
     {
-      name: 'KYC',
+      name: 'Interest',
       selector: row => {
         return <div>
-          <span className={`badge ${(row.kyc_status == "0") ? 'pending' : (row.kyc_status == "1") ? "approved" : "rejected"}`}>{(row.kyc_status == "0") ? 'Pending' : (row.kyc_status == "1") ? "Approved" : "Rejected"}</span>
+          <Select
+            displayEmpty
+            inputProps={{
+              "aria-label": "Without label",
+            }}
+            input={<BootstrapInput />}
+          >
+            <MenuItem value="1">Very Low</MenuItem>
+            <MenuItem value="2">Low</MenuItem>
+            <MenuItem value="3">Average</MenuItem>
+            <MenuItem value="4">High</MenuItem>
+            <MenuItem value="5">Very High</MenuItem>
+          </Select>
         </div>
       },
       sortable: true,
       reorder: true,
-      grow: 0.8,
+      grow: 1,
     },
     {
-      name: 'DATE',
+      name: 'Assign To',
+      selector: row => {
+        return <div>
+          <Select
+            displayEmpty
+            inputProps={{
+              "aria-label": "Without label",
+            }}
+            input={<BootstrapInput />}
+          >
+            <MenuItem value={row.name}>{row.name}</MenuItem>
+          </Select>
+        </div>
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Followup Date',
       selector: row => { return <span title={row.date}>{row.date}</span> },
       sortable: true,
       reorder: true,
-      grow: 1.2,
+      grow: 1,
+    },
+    {
+      name: 'Source',
+      selector: row => { return <span title={row.user_country}>{row.user_country}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Next Date',
+      selector: row => {
+        return <input type='date' className="table-date-picker-border-0" />
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Followup',
+      selector: row => {
+        return <div>
+          <i className="material-icons viewLead" onClick={(e) => viewFollowup(row)}>visibility</i>
+        </div>
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
     },
     {
       name: 'Action',
@@ -298,18 +566,117 @@ const Leads = () => {
             open={Boolean(openTableMenus[row.sr_no])}
             onClose={(event) => handleContextClose(row.sr_no)}
           >
-            {(row.kyc_status == "1") ?
-              <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-              : <div><MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
-                <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
-
+            <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
+            <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Not Interested</MenuItem>
+            <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Reject</MenuItem>
           </Menu>
         </div>
       },
       ignoreRowClick: true,
-      allowOverflow: true
+      allowOverflow: true,
+      grow: 0.5,
     }
+  ];
+
+  const column = [
+    {
+      name: 'SR NO',
+      selector: row => {
+        return <span>{row.sr_no}</span>
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.1,
+    },
+    {
+      name: 'Interest',
+      selector: row => { return <span title={row.kyc_status}>{row.kyc_status}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Followup Date',
+      selector: row => { return <span title={row.date}>{row.date}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Remarks',
+      selector: row => { return <span title={row.user_visible_password}>{row.user_visible_password}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Added By',
+      selector: row => {
+        return <div>
+          <Select
+            displayEmpty
+            inputProps={{
+              "aria-label": "Without label",
+            }}
+            input={<BootstrapInput />}
+          >
+            <MenuItem value={row.name}>{row.name}</MenuItem>
+          </Select>
+        </div>
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: 'Recording',
+      button: true,
+      cell: row => {
+        return <div></div>
+      },
+      ignoreRowClick: true,
+      allowOverflow: true,
+      grow: 0.5,
+    }
+  ];
+
+  const callColumn = [
+    {
+      name: 'SR NO',
+      selector: row => {
+        return <span>{row.sr_no}</span>
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.1,
+    },
+    {
+      name: 'Mobile No',
+      selector: row => { return <span title={row.user_phone}>{row.user_phone}</span> },
+      sortable: true,
+      reorder: true,
+    },
+    {
+      name: 'Type',
+      selector: row => { return <span title={row.kyc_status}>{row.kyc_status}</span> },
+      sortable: true,
+      reorder: true,
+    },
+    {
+      name: 'Call Duration',
+      selector: row => { return <span title={row.user_visible_password}>{row.user_visible_password}</span> },
+      sortable: true,
+      reorder: true,
+    },
+    {
+      name: 'Call Datetime',
+      selector: row => {
+        return <div>
+        </div>
+      },
+      sortable: true,
+      reorder: true,
+    },
   ];
 
   return (
@@ -325,9 +692,9 @@ const Leads = () => {
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                   <div className='actionGroupButton'>
-                    <Button variant="contained" onClick={handleClickOpen}>Add New Client</Button>
-                    <Button variant="contained">Add IB</Button>
-                    <Button variant="contained">All</Button>
+                    <Button variant="contained" onClick={handleClickOpen} className='addLead'>Add Lead</Button>
+                    {/* <Button variant="contained">Add IB</Button>
+                    <Button variant="contained">All</Button> */}
                   </div>
                   <br />
                   <CommonTable url='https://alphapixclients.com/forex/admin/datatable/users_list.php' column={depositColumn} sort='0' filter={filterData} />
@@ -337,288 +704,18 @@ const Leads = () => {
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"
                   open={open}
-                  className='modalWidth100'
+                  fullWidth={fullWidth}
+                  maxWidth={maxWidth}
                 >
                   <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    Create new client
+                    {dialogTitle}
                   </BootstrapDialogTitle>
                   <DialogContent dividers>
-                    <Stepper activeStep={activeStep} orientation="vertical">
-                      <Step key='PERSONAL INFORMATION'>
-                        <StepLabel>
-                          PERSONAL INFORMATION
-                        </StepLabel>
-                        <StepContent>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-100'>
-                              <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Individual'>Individual</MenuItem>
-                                <MenuItem value='Corporate'>Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-30'>
-                              <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Mr.'>Mr.</MenuItem>
-                                <MenuItem value='Mrs'>Mrs</MenuItem>
-                                <MenuItem value='Miss'>Miss</MenuItem>
-                                <MenuItem value='Ms'>Ms</MenuItem>
-                                <MenuItem value='Dr'>Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
-                            <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" focused />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className='btnStepperAction'>
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                      <Step key='CLIENT DETAILS'>
-                        <StepLabel>
-                          CLIENT DETAILS
-                        </StepLabel>
-                        <StepContent>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-100'>
-                              <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Individual'>Individual</MenuItem>
-                                <MenuItem value='Corporate'>Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-30'>
-                              <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Mr.'>Mr.</MenuItem>
-                                <MenuItem value='Mrs'>Mrs</MenuItem>
-                                <MenuItem value='Miss'>Miss</MenuItem>
-                                <MenuItem value='Ms'>Ms</MenuItem>
-                                <MenuItem value='Dr'>Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
-                            <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className='btnStepperAction'>
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                      <Step key='KYC DOCUMENTS (optional)'>
-                        <StepLabel>
-                          KYC DOCUMENTS (optional)
-                        </StepLabel>
-                        <StepContent>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-100'>
-                              <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Individual'>Individual</MenuItem>
-                                <MenuItem value='Corporate'>Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-30'>
-                              <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Mr.'>Mr.</MenuItem>
-                                <MenuItem value='Mrs'>Mrs</MenuItem>
-                                <MenuItem value='Miss'>Miss</MenuItem>
-                                <MenuItem value='Ms'>Ms</MenuItem>
-                                <MenuItem value='Dr'>Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
-                            <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className='btnStepperAction'>
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                      <Step key='ACCOUNT INFO'>
-                        <StepLabel>
-                          ACCOUNT INFO
-                        </StepLabel>
-                        <StepContent>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-100'>
-                              <InputLabel id="demo-simple-select-standard-label">Client type</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Individual'>Individual</MenuItem>
-                                <MenuItem value='Corporate'>Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <FormControl variant="standard" className='w-30'>
-                              <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: '100%' }}
-                              >
-                                <MenuItem value='Mr.'>Mr.</MenuItem>
-                                <MenuItem value='Mrs'>Mrs</MenuItem>
-                                <MenuItem value='Miss'>Miss</MenuItem>
-                                <MenuItem value='Ms'>Ms</MenuItem>
-                                <MenuItem value='Dr'>Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-45' label="First Name" variant="standard" />
-                            <TextField id="standard-basic" className='w-45' label="Last Name" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Email" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
-                          </div>
-                          <div className='elementSection'>
-                            <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className='btnStepperAction'>
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                    </Stepper>
+                    {manageContent()}
                   </DialogContent>
-                  {/* <DialogActions>
-                                        <Button autoFocus onClick={handleClose}>
-                                            Save changes
-                                        </Button>
-                                    </DialogActions> */}
+                  <DialogActions>
+                    {manageDialogActionButton()}
+                  </DialogActions>
                 </BootstrapDialog>
               </Grid>
             </Grid>

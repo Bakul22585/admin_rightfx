@@ -1,13 +1,95 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { styled } from "@mui/material/styles";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import DialogActions from '@mui/material/DialogActions';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useTheme } from '@emotion/react'
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
+}));
+
+export interface DialogTitleProps {
+    id: string;
+    children?: React.ReactNode;
+    onClose: () => void;
+}
+
+const BootstrapDialogTitle = (props: DialogTitleProps) => {
+    const { children, onClose, ...other } = props;
+
+    return (
+        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+            {children}
+            {/* {onClose ? (
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            ) : null} */}
+        </DialogTitle>
+    );
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+function getStyles(name, personName, theme) {
+    return {
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
 
 const Remainder = () => {
+
+    const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const [eventData, setEventData] = useState();
+
+    const openDialogbox = (e) => {
+        console.log('popup info', e);
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const handleDateSelect = (selectInfo) => {
-        let title = prompt('Please enter a new title for your event')
+        /* let title = prompt('Please enter a new title for your event')
         let calendarApi = selectInfo.view.calendar
 
         calendarApi.unselect() // clear date selection
@@ -20,7 +102,10 @@ const Remainder = () => {
                 end: selectInfo.endStr,
                 allDay: selectInfo.allDay
             })
-        }
+        } */
+        setEventData(selectInfo);
+        console.log("click event", selectInfo);
+        openDialogbox(selectInfo);
     }
 
     const handleEventClick = (clickInfo) => {
@@ -37,6 +122,25 @@ const Remainder = () => {
 
     const addNewEvent = () => {
         console.log('new event addede');
+    }
+
+    const insertNewEvent = () => {
+        console.log('insert new event', eventData);
+        let title = eventData.note;
+        let calendarApi = eventData.view.calendar
+
+        calendarApi.unselect()
+
+        if (title) {
+            calendarApi.addEvent({
+                id: '',
+                title,
+                start: eventData.startStr,
+                end: eventData.endStr,
+                allDay: eventData.allDay
+            })
+        }
+        setOpen(false);
     }
 
     return (
@@ -75,6 +179,50 @@ const Remainder = () => {
                 eventsSet={(e) => handleEvents(e)}
                 eventAdd={(e) => addNewEvent(e)}
             />
+            <BootstrapDialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+                className='modalWidth100'
+            >
+                <BootstrapDialogTitle id="customized-dialog-title" className='dialogTitle' onClose={handleClose}>
+                    Add Reminder
+                </BootstrapDialogTitle>
+                <DialogContent dividers>
+                    <div>
+                        <div>
+                            <FormControl variant="standard" sx={{ width: '100%' }}>
+                                <InputLabel id="demo-simple-select-standard-label">Client / Lead</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    label="Client / Leads">
+                                    <MenuItem value='client'>Client</MenuItem>
+                                    <MenuItem value='lead'>Lead</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <br />
+                        <div>
+                            <TextField id="standard-textarea" label="Notes" name='notes' multiline variant="standard" sx={{ width: '100%' }} onChange={(e) => setEventData((prevalue) => {
+            return {
+                ...prevalue,
+                'note': e.target.value,
+            };
+        })}/>
+                        </div>
+                        <br />
+                        <div>
+                            <TextField type='date' id="standard-basic" label="Reminder" value={eventData ? eventData.startStr : ''} variant="standard" sx={{ width: '100%' }} focused disabled/>
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div className='dialogMultipleActionButton'>
+                        <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                        <Button variant="contained" className='btn-gradient' onClick={(e) => insertNewEvent()}>Add</Button>
+                    </div>
+                </DialogActions>
+            </BootstrapDialog>
         </div>
     )
 }

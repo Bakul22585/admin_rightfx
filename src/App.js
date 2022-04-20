@@ -10,7 +10,7 @@ import DepositHistory from './deposit_history/DepositHistory';
 import WithdrawHistory from './withdraw_history/WithdrawHistory';
 import Employees from './employees/Employees';
 import RoleManagement from './role_management/RoleManagement';
-import UserList from './user_list/UserList';
+import ClientList from './client_list/ClientList';
 import ListRequest from './list_request/ListRequest';
 import PendingKYC from './pending_kyc/PendingKYC';
 import HistoryKYC from './history_kyc/HistoryKYC';
@@ -63,7 +63,7 @@ const App = () => {
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/employees" element={<Employees />} />
                 <Route exact path="/role_management" element={<RoleManagement />} />
-                <Route exact path="/user_list" element={<UserList />} />
+                <Route exact path="/client_list" element={<ClientList />} />
                 <Route exact path="/list_request" element={<ListRequest />} />
                 <Route exact path="/pending_kyc" element={<PendingKYC />} />
                 <Route exact path="/history_kyc" element={<HistoryKYC />} />
@@ -89,7 +89,7 @@ const App = () => {
                 <Route exact path="/createRole/:id" element={<CreateRole />} />
                 <Route exact path="/createRole" element={<CreateRole />} />
                 <Route exact path="/leads_list" element={<Leads />} />
-                <Route exact path="/remiander" element={<Remainder />} />
+                <Route exact path="/reminder" element={<Remainder />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
               </Routes>
               {/* <Footer /> */}
