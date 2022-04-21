@@ -24,10 +24,18 @@ const CustomImageModal = (prop) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   
+  const manageContent = () => {
+    if (prop.isIcon) {
+      return <i className="material-icons">preview</i>;
+    } else {
+      return <img src={prop.image} className={prop.className}/>;
+    }
+  }
+
   return (
     <div>
       <Button onClick={handleOpen} className='btnImageOpenBtn'>
-        <img src={prop.image} className={prop.className}/>
+        {manageContent()}
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"

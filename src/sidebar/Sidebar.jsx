@@ -113,7 +113,7 @@ const Sidebar = (prop) => {
                     <span className="material-icons" style={style}>
                     fact_check
                     </span>
-                    List Requests
+                    Partnership Requests List
                   </NavLink>
                 </li>
                 <li>
