@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 const CreateRole = () => {
     const { id } = useParams();
-
+    console.log('id', id);
     return (
         <div>
             <div className="app-content--inner">
@@ -33,7 +33,8 @@ const CreateRole = () => {
                                             <div className='permission-table-body'>
                                                 <label>Roles</label>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
+                                                    
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -42,10 +43,10 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button'/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -63,13 +64,13 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -81,7 +82,7 @@ const CreateRole = () => {
                                             <div className='permission-table-body'>
                                                 <label>Leads</label>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -90,7 +91,7 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -111,7 +112,7 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -129,16 +130,16 @@ const CreateRole = () => {
                                             <div className='permission-table-body'>
                                                 <label>Client</label>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -159,7 +160,7 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button' />
+                                                {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -183,7 +184,7 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button' />
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -192,10 +193,10 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
@@ -207,7 +208,7 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button' />
+                                                {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -225,7 +226,7 @@ const CreateRole = () => {
                                             <div className='permission-table-body'>
                                                 <label>Requests IB</label>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -240,16 +241,16 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Requests Account</label>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -264,16 +265,16 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                             </div>
                                             <div className='permission-table-body'>
                                                 <label>Email Templates</label>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' disabled/>
@@ -282,7 +283,7 @@ const CreateRole = () => {
                                                     <input type='checkbox' className='permission-radio-button' />
                                                 </div>
                                                 <div>
-                                                    <input type='checkbox' className='permission-radio-button'/>
+                                                    {(id != undefined) ? <input type='checkbox' className='permission-radio-button' checked/> : <input type='checkbox' className='permission-radio-button'/>}
                                                 </div>
                                                 <div>
                                                     <input type='checkbox' className='permission-radio-button' />

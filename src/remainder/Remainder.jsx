@@ -13,7 +13,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from '@emotion/react'
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material'
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -79,7 +81,7 @@ const Remainder = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [eventData, setEventData] = useState();
-
+    toast.configure();
     const openDialogbox = (e) => {
         console.log('popup info', e);
         setOpen(true);
@@ -140,45 +142,67 @@ const Remainder = () => {
                 allDay: eventData.allDay
             })
         }
+        toast.success('event has been added successfully.');
         setOpen(false);
     }
 
     return (
         <div>
-            <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-                initialView="dayGridMonth"
-                headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-                }}
-                events={[
-                    { title: "event 1", date: "2022-04-03" },
-                    { title: "event 2", date: "2022-04-12" },
-                    { title: "My Event", date: "2022-03-29", url: "http://google.com/" },
-                ]}
-                eventColor="red"
-                eventClick={(e) => {
-                    console.log(e.event.title, e.event.start);
-                    // let str = formatDate(e.event.start, {
-                    //     month: "numeric",
-                    //     year: "numeric",
-                    //     day: "numeric",
-                    // });
-                    console.log("event date", e);
-                    // navigate(`/dashboard/${str}`)
-                }}
-                editable={true}
-                selectable={true}
-                selectMirror={true}
-                dayMaxEvents={true}
-                select={(e) => handleDateSelect(e)}
-                // eventContent={renderEventContent} // custom render function
-                // eventClick={() => handleEventClick}
-                eventsSet={(e) => handleEvents(e)}
-                eventAdd={(e) => addNewEvent(e)}
-            />
+            <div className="app-content--inner">
+                <div className="app-content--inner__wrapper mh-100-vh">
+                    <Grid container>
+                        <Grid item md={12} lg={12} xl={12}>
+                            <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                                {/* <div className='actionGroupButton'>
+                                    <Button variant="contained" onClick={handleClickOpen}>Add Deposit</Button>
+                                </div>
+                                <br /> */}
+                                <CardContent className="py-3">
+                                    <Grid container spacing={2}>
+                                        <Grid item sm={12} md={12} lg={12}>
+                                            <FullCalendar
+                                                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+                                                initialView="dayGridMonth"
+                                                headerToolbar={{
+                                                    left: 'prev,next today',
+                                                    center: 'title',
+                                                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                                                }}
+                                                events={[
+                                                    { title: "event 1", date: "2022-04-03" },
+                                                    { title: "event 2", date: "2022-04-12" },
+                                                    { title: "My Event", date: "2022-03-29", url: "http://google.com/" },
+                                                ]}
+                                                eventColor="red"
+                                                eventClick={(e) => {
+                                                    console.log(e.event.title, e.event.start);
+                                                    // let str = formatDate(e.event.start, {
+                                                    //     month: "numeric",
+                                                    //     year: "numeric",
+                                                    //     day: "numeric",
+                                                    // });
+                                                    console.log("event date", e);
+                                                    // navigate(`/dashboard/${str}`)
+                                                }}
+                                                editable={true}
+                                                selectable={true}
+                                                selectMirror={true}
+                                                dayMaxEvents={true}
+                                                select={(e) => handleDateSelect(e)}
+                                                // eventContent={renderEventContent} // custom render function
+                                                // eventClick={() => handleEventClick}
+                                                eventsSet={(e) => handleEvents(e)}
+                                                eventAdd={(e) => addNewEvent(e)}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>
+            </div>
+
             <BootstrapDialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
@@ -204,15 +228,15 @@ const Remainder = () => {
                         <br />
                         <div>
                             <TextField id="standard-textarea" label="Notes" name='notes' multiline variant="standard" sx={{ width: '100%' }} onChange={(e) => setEventData((prevalue) => {
-            return {
-                ...prevalue,
-                'note': e.target.value,
-            };
-        })}/>
+                                return {
+                                    ...prevalue,
+                                    'note': e.target.value,
+                                };
+                            })} />
                         </div>
                         <br />
                         <div>
-                            <TextField type='date' id="standard-basic" label="Reminder" value={eventData ? eventData.startStr : ''} variant="standard" sx={{ width: '100%' }} focused disabled/>
+                            <TextField type='date' id="standard-basic" label="Reminder" value={eventData ? eventData.startStr : ''} variant="standard" sx={{ width: '100%' }} focused disabled />
                         </div>
                     </div>
                 </DialogContent>

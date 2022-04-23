@@ -32,6 +32,7 @@ import Myaccount from './my_account/Myaccount';
 import CreateRole from './role_management/CreateRole';
 import Leads from './leads/Leads';
 import Remainder from './remainder/Remainder';
+import CopyTrading from './copytrading/CopyTrading';
 
 const App = () => {
 
@@ -90,6 +91,7 @@ const App = () => {
                 <Route exact path="/createRole" element={<CreateRole />} />
                 <Route exact path="/leads_list" element={<Leads />} />
                 <Route exact path="/reminder" element={<Remainder />} />
+                <Route exact path="/copy_trading" element={<CopyTrading />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
               </Routes>
               {/* <Footer /> */}

@@ -217,7 +217,7 @@ const Header = (prop) => {
         </form> */}
         <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
-            <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>{" "}
+            <Avatar sx={{ bgcolor: '#2a3f73' }}>DB</Avatar>{" "}
           </span>
           <span className="d-none d-md-inline-block mx-2">
             Dhaval Bhayani
@@ -241,7 +241,7 @@ const Header = (prop) => {
         >
           <div className="dropdown-menu-xl overflow-hidden p-0">
             <div className="d-flex p-4 cursor-pointer" onClick={() => MyAccount()}>
-              <Avatar sx={{ bgcolor: red[900] }}>DB</Avatar>
+              <Avatar sx={{ bgcolor: '#2a3f73' }}>DB</Avatar>
               <div className="mx-3">
                 <h6 className="font-weight-bold mb-1 text-black">
                   Dhiren Bhayani

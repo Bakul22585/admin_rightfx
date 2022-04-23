@@ -9,8 +9,91 @@
 .cursor-pointer {
   cursor: pointer;
 }
+.sidebar-open-close {
+  /* display: none !important; */
+  opacity: 0;
+  transition: all 1s ease-out 100ms !important;
+  background-color: #fff !important;
+  z-index: 1;
+  box-shadow: 0px 0px 25px #ccc;
+}
+.app-sidebar--header .app-sidebar-logo .app-sidebar-logo .py-2 {
+  position: relative;
+}
+.close-sidebar-logo-image {
+  opacity: 0;
+  transition: all 1s ease-out 100ms !important;
+  position: absolute;
+  left: -7px;
+  top: -10px;
+}
+.open-sidebar-logo-image {
+  position: absolute;
+  left: -80px;
+  transition: all 1s ease-out 100ms !important;
+}
+.sidebar-navigation ul li a {
+  display: flex;
+  gap: 16px;
+}
 @media screen and (min-width: 1100px) {
+  .app-sidebar:hover .sidebar-open-close {
+    /* display: block !important; */
+    opacity: 1;
+  }
+  .sidebar-open-close {
+    /* display: block !important; */
+    position: absolute !important;
+    right: -20px !important;
+    top: 80px !important;
+  }
   .app-sidebar {
+    transition: all 1s ease-out 100ms;
+    border-radius: 0 45px 0 0;
+  }
+  .app-sidebar--header {
+    border-radius: 0 45px 0 0;
+  }
+  .sidebar-with-4rem .app-sidebar {
+    width: 4rem !important;
+    border-radius: 0 45px 45px 0;
+  }
+  .app-sidebar-logo img {
+    width: 144px !important;
+    margin: 0;
+    transition: all 1s ease-out 100ms;
+  }
+  .sidebar-with-4rem .app-sidebar-logo img {
+    width: 60px !important;
+    margin: 0 0 0 -24px;
+  }
+  .sidebar-with-4rem
+  .sidebar-with-4rem .app-content {
+    padding-left: 5rem;
+  }
+  .app-main .app-content {
+    padding-left: 15rem;
+    transition: all 1s ease-out 100ms;
+  }
+  .sidebar-with-4rem + .app-main .app-content {
+    padding-left: 5rem;
+  }
+  .app-main .app-header {
+    left: 14rem;
+    transition: all 1s ease-out 100ms;
+  }
+  .sidebar-with-4rem + .app-main .app-header {
+    left: 2.6rem;
+  }
+  .sidebar-with-4rem img.close-sidebar-logo-image {
+    opacity: 1;
+    width: 50px !important;
+    margin-left: -19px !important;
+  }
+  .sidebar-with-4rem .open-sidebar-logo-image {
+    opacity: 0;
+  }
+  /* .app-sidebar {
     width: 4rem;
     border-radius: 0 45px 45px 0;
     transition: all 1s ease-out 100ms;
@@ -50,5 +133,5 @@
   .main-sidebar-content + .app-main .app-header {
     left: 2.6rem;
     transition: all 1s ease-out 100ms;
-  }
+  } */
 }

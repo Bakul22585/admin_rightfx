@@ -1,0 +1,123 @@
+.copy-trading-main-section {
+    display: flex;
+    justify-content: center;
+}
+.copy-trading-popup-card-section {
+    width: 350px;
+    border: 1px solid #eee;
+    border-radius: 10px 10px 0 0;
+}
+.card-header {
+    padding: 16px;
+    background-color: #f6f7f8;
+    display: flex;
+    gap: 15px;
+}
+.card-header .fileuploadButton {
+    width: 70px;
+    height: 70px;
+    background-color: #dfdfdf;
+    border-radius: 50%;
+}
+.user-avatar-img {
+    width: 64px;
+    margin: 3px 0 0 3px;
+}
+.formControl-input {
+    width: 100%;
+    padding: 5px 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+.name-infor-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+}
+.name-infor-section .achiever-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.risk-score-section {
+    display: flex;
+    padding: 14px 16px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+.risk-score-section p {
+    font-size: 11px;
+    letter-spacing: .02em;
+    font-weight: 700;
+    color: rgba(0,22,49,.6);
+    text-transform: uppercase;
+    line-height: 1;
+}
+.risk-score-silder-section {
+    width: 30%;
+}
+.risk-score-silder-section .MuiSlider-root .MuiSlider-thumb {
+    height: 12px;
+    width: 12px;
+    margin-top: 0;
+    margin-left: 0;
+}
+.risk-score-silder-section .MuiSlider-root .MuiSlider-valueLabel {
+    top: -5px;
+    width: 22px;
+    height: 22px;
+}
+.risk-score-silder-section .MuiSlider-root .MuiSlider-thumb .MuiSlider-valueLabelOpen .MuiSlider-valueLabelCircle .MuiSlider-valueLabelLabel {
+    position: absolute;
+    left: 8px;
+    transform: rotate(45deg);
+    top: 3px;
+    right: 12px;
+}
+.gain-copies-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+}
+.gain-copies-section .gain-element {
+    width: 100%;
+}
+.gain-copies-section .gain-element input {
+    width: 40%;
+}
+.gain-copies-section .gain-element p, .gain-copies-section .copiers-element p, .profit-loss-section p, .commission-section p{
+    font-size: 11px;
+    letter-spacing: .02em;
+    font-weight: 700;
+    color: rgba(0,22,49,.6);
+    text-transform: uppercase;
+    line-height: 1;
+}
+.gain-copies-section .input-section {
+    display: flex;
+    align-items: center;
+}
+.profit-loss-section {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #eee;
+}
+.profit-loss-section .input-element{
+    display: flex;
+    justify-content: space-between;
+}
+.profit-loss-section .input-element input, .commission-section input{
+    width: 20%;
+}
+.commission-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 16px;
+}

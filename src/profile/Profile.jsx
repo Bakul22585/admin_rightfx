@@ -306,6 +306,8 @@ const Profile = () => {
             setDialogTitle('Link to Campaign');
         } else if (e.target.classList.contains('edit_structure')) {
             setDialogTitle('Edit SHARED STRUCTURE');
+        } else if (e.target.classList.contains('change_password')) {
+            setDialogTitle('Change Password');
         }
         setOpen(true);
     };
@@ -1123,6 +1125,16 @@ const Profile = () => {
                     <Button variant="contained">Update For New Clients Only</Button>
                 </div>
             </div>;
+        } else if (dialogTitle == 'Change Password') {
+            return <div>
+                <div className='margeField'>
+                    <TextField id="standard-basic" label="Main Password" variant="standard" sx={{ width: '100%' }} />
+                </div>
+                <br/>
+                <div className='margeField'>
+                    <TextField id="standard-basic" label="View Password" variant="standard" sx={{ width: '100%' }} />
+                </div>
+            </div>;
         }
     }
 
@@ -1199,6 +1211,11 @@ const Profile = () => {
         } else if (dialogTitle == 'Edit SHARED STRUCTURE') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+            </div>;
+        } else if (dialogTitle == 'Change Password') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                <Button variant="contained" className='btn-gradient'>Submit</Button>
             </div>;
         }
     }
@@ -1481,6 +1498,7 @@ const Profile = () => {
                                                             <Button variant="contained" className='link_mt5' onClick={openDialogbox}>Link MT5</Button>
                                                             <Button variant="contained" className='reset_mt5' onClick={openDialogbox}>Reset MT5</Button>
                                                             <Button variant="contained" className='change_leverage' onClick={openDialogbox}>Change Leverage</Button>
+                                                            <Button variant="contained" className='change_password' onClick={openDialogbox}>Change Password</Button>
                                                         </div>
                                                         <br />
                                                         <p className='group-header'>IB</p>

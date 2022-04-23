@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo1 from "./logo1.png";
 import "./sidebar.css";
@@ -10,11 +10,12 @@ import { useNavigate } from "react-router-dom"
 // import { useTranslation } from "react-i18next";
 // import Dashboard from "./Dashboard.svg"
 const style = {
-  margin: "0 1.42857rem 0 0",
+  margin: "0 0 0 0",
 };
 const Sidebar = (prop) => {
   // const { t } = useTranslation();
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [open, setOpen] = React.useState({
     operation: false,
     trading: false,
@@ -42,16 +43,21 @@ const Sidebar = (prop) => {
     }
     
   };
+
+  const handleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  }
   console.log(prop)
 
   return (
-    <div className="main-sidebar-content">
-      <div className="app-sidebar app-sidebar--light app-sidebar--shadow">
+    <div className={`main-sidebar-content  ${(isSidebarOpen) ? 'sidebar-with-4rem':''}`}>
+      <div className={`app-sidebar app-sidebar--light app-sidebar--shadow`}>
         <div className="app-sidebar--header">
           <div className="app-sidebar-logo">
             <a className="app-sidebar-logo" title="RightFx">
               <div className="py-2">
-                <img src={logo1} style={{ width: "144px" }} />
+                <img src={logo1} style={{ width: "144px" }} className='open-sidebar-logo-image'/>
+                <img src='./assets/img/favicon.png' className='close-sidebar-logo-image'/>
               </div>
             </a>
           </div>
@@ -64,6 +70,9 @@ const Sidebar = (prop) => {
             </span>
           </Button>
         </div>
+        <Button className="sidebar-open-close" onClick={handleSidebar}>
+          <i className="material-icons">sync_alt</i>
+        </Button>
         <div className="app-sidebar--content">
           <div>
             <div className="sidebar-navigation">
@@ -76,14 +85,14 @@ const Sidebar = (prop) => {
                     Dashboard
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/employees" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     person
                     </span>
                     Employees
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink className="nav-link-simple " to="/role_management" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
@@ -107,6 +116,14 @@ const Sidebar = (prop) => {
                     </span>
                     Leads List
                   </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/reminder" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    calendar_month
+                    </span>
+                    Reminder
+                    </NavLink>
                 </li>
                 <li>
                   <NavLink className="nav-link-simple " to="/list_request" onClick={CloseSidebar}>
@@ -163,6 +180,14 @@ const Sidebar = (prop) => {
                     groups
                     </span>
                     MT5 Groups
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="nav-link-simple " to="/copy_trading" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    add_chart
+                    </span>
+                    Copy Trading
                   </NavLink>
                 </li>
                 <li>
@@ -331,14 +356,6 @@ const Sidebar = (prop) => {
                     dashboard
                     </span>
                     Popup Image
-                    </NavLink>
-                </li>
-                <li>
-                  <NavLink className="nav-link-simple " to="/reminder" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    calendar_month
-                    </span>
-                    Reminder
                     </NavLink>
                 </li>
                 <li>

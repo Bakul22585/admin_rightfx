@@ -23,6 +23,8 @@ import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Typography from '@mui/material/Typography';
 import CommonFilter from '../common/CommonFilter';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const CssTextField = styled(TextField)({
 });
@@ -297,7 +299,7 @@ const ClientList = () => {
             name: 'KYC',
             selector: row => {
                 return <div>
-                    <span className={`badge ${(row.kyc_status == "0") ? 'pending' : (row.kyc_status == "1") ? "approved" : "rejected"}`}>{(row.kyc_status == "0") ? 'Pending' : (row.kyc_status == "1") ? "Approved" : "Rejected"}</span>
+                    <span className={`status-text-${(row.kyc_status == "0") ? 'pending' : (row.kyc_status == "1") ? "approved" : "rejected"}`}>{(row.kyc_status == "0") ? 'Pending' : (row.kyc_status == "1") ? "Approved" : "Rejected"}</span>
                 </div>
             },
             sortable: true,
@@ -336,8 +338,8 @@ const ClientList = () => {
                         {(row.kyc_status == "1") ?
                             <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -346,6 +348,59 @@ const ClientList = () => {
             allowOverflow: true
         }
     ];
+
+    const actionMenuPopup = (e, index) => {
+        console.log(e.target.getAttribute('class'));
+        console.log(e.target.classList.contains('reject'));
+        handleContextClose(index);
+        if (e.target.classList.contains('reject')) {
+            // setDialogTitle('Reject');
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                      <h1>Are you sure?</h1>
+                      <p>Do you want to reject this?</p>
+                      <div className='confirmation-alert-action-button'>
+                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                        <Button variant="contained" className='btn-gradient btn-danger'
+                            onClick={() => {
+                            this.handleClickDelete();
+                            onClose();
+                            }}
+                        >
+                            Yes, Reject it!
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+        } else if (e.target.classList.contains('approve')) {
+            // setDialogTitle('Approve');
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                      <h1>Are you sure?</h1>
+                      <p>Do you want to approve this?</p>
+                      <div className='confirmation-alert-action-button'>
+                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                        <Button variant="contained" className='btn-gradient btn-success'
+                            onClick={() => {
+                            this.handleClickDelete();
+                            onClose();
+                            }}
+                        >
+                            Yes, Approve it!
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+        }
+    };
 
     return (
         <div>

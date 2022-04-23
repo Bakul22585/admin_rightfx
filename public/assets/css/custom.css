@@ -13582,8 +13582,10 @@ body .modal-content {
 }
 .nav-neutral-danger .MuiListItem-root.MuiListItem-button.Mui-selected,
 .nav-neutral-danger .MuiListItem-root.MuiListItem-button:hover {
-  color: #f83245;
-  background: rgba(248, 50, 69, 0.05);
+  /* color: #f83245;
+  background: rgba(248, 50, 69, 0.05); */
+  color: #2a3f73;
+  background: rgba(42, 63, 115, 0.05);
 }
 .nav-neutral-danger .MuiListItem-root.MuiListItem-button.Mui-selected:before,
 .nav-neutral-danger .MuiListItem-root.MuiListItem-button:hover:before {

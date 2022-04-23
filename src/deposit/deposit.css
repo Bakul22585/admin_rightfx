@@ -71,3 +71,29 @@
     color: #cfcf58;
     font-weight: 600;
 }
+.deposit-upload-image-preview {
+    width: 70px;
+    height: 70px;
+}
+.dialogMultipleActionButton .btn-danger {
+    color: #fff !important;
+}
+.deposit-action-popup-text {
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+}
+.react-confirm-alert {
+    width: 450px;
+    box-shadow: 0 0 24px grey;
+    padding: 20px;
+    border-radius: 15px;
+}
+.react-confirm-alert .confirmation-alert-action-button {
+    display: flex;
+    justify-content: end;
+    gap: 15px;
+}
+.react-confirm-alert .confirmation-alert-action-button .btn-danger{
+    color: #fff !important;
+}

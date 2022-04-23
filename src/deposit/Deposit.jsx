@@ -16,6 +16,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -112,10 +116,13 @@ const Deposit = () => {
 
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
-    const [maxWidth, setMaxWidth] = useState('md');
+    const [maxWidth, setMaxWidth] = useState('sm');
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [filterData, setFilterData] = useState({});
     const [dialogTitle, setDialogTitle] = useState('');
+    const [selectedFile, setSelectedFile] = useState()
+    const [preview, setPreview] = useState();
+    toast.configure();
 
     const columns = [
         {
@@ -210,8 +217,8 @@ const Deposit = () => {
                         {(row.status == "1") ?
                             <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event,row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event,row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -238,7 +245,17 @@ const Deposit = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success'>Add Deposit</Button>
+                <Button variant="contained" className='btn-gradient btn-success'>Add</Button>
+            </div>;
+        } else if (dialogTitle == 'Reject') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                <Button variant="contained" className='btn-gradient btn-danger'>Reject</Button>
+            </div>;
+        } else if (dialogTitle == 'Approve') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                <Button variant="contained" className='btn-gradient btn-success'>Approve</Button>
             </div>;
         }
     }
@@ -280,10 +297,10 @@ const Deposit = () => {
                 <div className='margeField'>
                     <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
                     <label htmlFor="contained-button-file" className='fileuploadButton'>
-                        <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                        <Button variant="contained" component="span">
+                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile}/>
+                        {selectedFile ?  <img src={preview} className='deposit-upload-image-preview'/>  : <Button variant="contained" component="span">
                             <i className="material-icons">backup</i>&nbsp;Upload
-                        </Button>
+                        </Button>}
                     </label>
                 </div>
                 <br />
@@ -294,6 +311,18 @@ const Deposit = () => {
         } else if (dialogTitle == 'View') {
             return <div>
             </div>;
+        } else if (dialogTitle == 'Reject') {
+            return <div>
+                <div className='deposit-action-popup-text'>
+                    <label>Are you want to sure reject this deposit ?</label>
+                </div>
+            </div>;
+        } else if (dialogTitle == 'Approve') {
+            return <div>
+                <div className='deposit-action-popup-text'>
+                    <label>Are you want to sure approve this deposit ?</label>
+                </div>
+            </div>;
         }
     }
 
@@ -302,9 +331,122 @@ const Deposit = () => {
     };
 
     const handleClickOpen = (e) => {
+        setSelectedFile(undefined)
         setDialogTitle('Add New Deposit');
         setOpen(true);
     };
+
+    const actionMenuPopup = (e, index) => {
+        console.log(e.target.getAttribute('class'));
+        console.log(e.target.classList.contains('reject'));
+        handleContextClose(index);
+        if (e.target.classList.contains('reject')) {
+            setDialogTitle('Reject');
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                      <h1>Are you sure?</h1>
+                      <p>Do you want to reject this?</p>
+                      <div className='confirmation-alert-action-button'>
+                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                        <Button variant="contained" className='btn-gradient btn-danger'
+                            onClick={() => {
+                            handleClickReject();
+                            onClose();
+                            }}
+                        >
+                            Yes, Reject it!
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+            /* confirmAlert({
+                title: 'Reject',
+                message: 'Are you sure to do this ?',
+                buttons: [
+                  {
+                    label: 'Yes',
+                    onClick: () => alert('Click Yes')
+                  },
+                  {
+                    label: 'No',
+                    onClick: () => alert('Click No')
+                  }
+                ]
+              }); */
+        } else if (e.target.classList.contains('approve')) {
+            setDialogTitle('Approve');
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                      <h1>Are you sure?</h1>
+                      <p>Do you want to approve this?</p>
+                      <div className='confirmation-alert-action-button'>
+                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                        <Button variant="contained" className='btn-gradient btn-success'
+                            onClick={() => {
+                            handleClickapprove();
+                            onClose();
+                            }}
+                        >
+                            Yes, Approve it!
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+            /* confirmAlert({
+                title: 'Approve',
+                message: 'Are you sure to do this ?',
+                buttons: [
+                  {
+                    label: 'Yes',
+                    onClick: () => alert('Click Yes')
+                  },
+                  {
+                    label: 'No',
+                    onClick: () => alert('Click No')
+                  }
+                ]
+              }); */
+        }
+
+        // setOpen(true);
+    };
+
+    const handleClickapprove = () => {
+        toast.success('Deposit has been approved successfully.');
+    }
+
+    const handleClickReject = () => {
+        toast.success('Deposit has been rejected successfully.');
+    }
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreview(undefined)
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile)
+        setPreview(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [selectedFile])
+
+    const onSelectFile = e => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined)
+            return
+        }
+
+        setSelectedFile(e.target.files[0])
+    }
 
     return (
         <div>
