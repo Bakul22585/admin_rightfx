@@ -81,9 +81,17 @@ const Remainder = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [eventData, setEventData] = useState();
+    const [form, setForm] = useState({
+        type: '',
+        note: ''
+    });
     toast.configure();
     const openDialogbox = (e) => {
         console.log('popup info', e);
+        setForm({
+            type: '',
+            note: ''
+        });
         setOpen(true);
     };
     const handleClose = () => {
@@ -127,24 +135,40 @@ const Remainder = () => {
     }
 
     const insertNewEvent = () => {
-        console.log('insert new event', eventData);
-        let title = eventData.note;
-        let calendarApi = eventData.view.calendar
-
-        calendarApi.unselect()
-
-        if (title) {
-            calendarApi.addEvent({
-                id: '',
-                title,
-                start: eventData.startStr,
-                end: eventData.endStr,
-                allDay: eventData.allDay
-            })
+        if (form.type == '') {
+            toast.error('Please select type');
+        } else if (form.note == '') {
+            toast.error('Please enter notes');
+        } else {
+            console.log('insert new event', eventData);
+            let title = eventData.note;
+            let calendarApi = eventData.view.calendar
+    
+            calendarApi.unselect()
+    
+            if (title) {
+                calendarApi.addEvent({
+                    id: '',
+                    title,
+                    start: eventData.startStr,
+                    end: eventData.endStr,
+                    allDay: eventData.allDay
+                })
+            }
+            toast.success('event has been added successfully.');
+            setOpen(false);
         }
-        toast.success('event has been added successfully.');
-        setOpen(false);
     }
+
+    const input = (event) => {
+        const { name, value } = event.target;
+        setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
 
     return (
         <div>
@@ -219,7 +243,10 @@ const Remainder = () => {
                                 <InputLabel id="demo-simple-select-standard-label">Client / Lead</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-standard-label"
-                                    label="Client / Leads">
+                                    label="Client / Leads"
+                                    name='type'
+                                    onChange={input}
+                                    >
                                     <MenuItem value='client'>Client</MenuItem>
                                     <MenuItem value='lead'>Lead</MenuItem>
                                 </Select>
@@ -227,12 +254,7 @@ const Remainder = () => {
                         </div>
                         <br />
                         <div>
-                            <TextField id="standard-textarea" label="Notes" name='notes' multiline variant="standard" sx={{ width: '100%' }} onChange={(e) => setEventData((prevalue) => {
-                                return {
-                                    ...prevalue,
-                                    'note': e.target.value,
-                                };
-                            })} />
+                            <TextField id="standard-textarea" label="Notes" name='note' multiline variant="standard" sx={{ width: '100%' }} onChange={input} />
                         </div>
                         <br />
                         <div>
@@ -243,7 +265,7 @@ const Remainder = () => {
                 <DialogActions>
                     <div className='dialogMultipleActionButton'>
                         <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                        <Button variant="contained" className='btn-gradient' onClick={(e) => insertNewEvent()}>Add</Button>
+                        <Button variant="contained" className='btn-gradient btn-success' onClick={(e) => insertNewEvent()}>Add</Button>
                     </div>
                 </DialogActions>
             </BootstrapDialog>

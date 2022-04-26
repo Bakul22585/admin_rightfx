@@ -122,6 +122,15 @@ const Deposit = () => {
     const [dialogTitle, setDialogTitle] = useState('');
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState();
+    const [depositForm, setDepositForm] = useState({
+        live_account: '',
+        customer_name: '',
+        account: '',
+        payment_gateway: '',
+        amount: '',
+        file: '',
+        note: ''
+    });
     toast.configure();
 
     const columns = [
@@ -217,8 +226,8 @@ const Deposit = () => {
                         {(row.status == "1") ?
                             <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event,row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event,row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -245,7 +254,7 @@ const Deposit = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success'>Add</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={depositFormSubmit}>Add</Button>
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -260,24 +269,48 @@ const Deposit = () => {
         }
     }
 
+    const depositFormSubmit = () => {
+        
+        if (depositForm.live_account == '') {
+            toast.error('Please enter live account');
+        } else if (depositForm.customer_name == '') {
+            toast.error('Please enter customer name');
+        } else if (depositForm.account == '') {
+            toast.error('Please select account');
+        } else if (depositForm.payment_gateway == '') {
+            toast.error('Please select payment gateway option');
+        } else if (depositForm.amount == '') {
+            toast.error('Please enter amount');
+        } else if (depositForm.file == '') {
+            toast.error('Please select image');
+        } else if (depositForm.note == '') {
+            toast.error('Please enter note');
+        } else {
+            handleClose();
+            toast.success('Deposit has been added successfully.');
+        }
+    }
+
     const manageContent = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Live Account" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Live Account" variant="standard" sx={{ width: '100%' }} name='live_account' value={depositForm.live_account} onChange={input} />
                 </div>
-                <br/>
+                <br />
                 <div>
-                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' value={depositForm.customer_name} onChange={input} />
                 </div>
-                <br/>
+                <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Account">
-                            <MenuItem value=''></MenuItem>
+                            name='account'
+                            label="Account"
+                            onChange={input}>
+                            <MenuItem value='1321321'>1321321</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -287,7 +320,9 @@ const Deposit = () => {
                         <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Payment Gateway">
+                            name='payment_gateway'
+                            label="Payment Gateway"
+                            onChange={input}>
                             <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
                             <MenuItem value='Crypto'>Crypto</MenuItem>
                         </Select>
@@ -295,17 +330,17 @@ const Deposit = () => {
                 </div>
                 <br />
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={depositForm.amount} onChange={input} />
                     <label htmlFor="contained-button-file" className='fileuploadButton'>
-                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile}/>
-                        {selectedFile ?  <img src={preview} className='deposit-upload-image-preview'/>  : <Button variant="contained" component="span">
+                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile} />
+                        {selectedFile ? <img src={preview} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span">
                             <i className="material-icons">backup</i>&nbsp;Upload
                         </Button>}
                     </label>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' value={depositForm.note} onChange={input} />
                 </div>
             </div>;
         } else if (dialogTitle == 'View') {
@@ -331,7 +366,18 @@ const Deposit = () => {
     };
 
     const handleClickOpen = (e) => {
-        setSelectedFile(undefined)
+        setSelectedFile(undefined);
+        setDepositForm(
+            {
+                live_account: '',
+                customer_name: '',
+                account: '',
+                payment_gateway: '',
+                amount: '',
+                file: '',
+                note: ''
+            }
+        );
         setDialogTitle('Add New Deposit');
         setOpen(true);
     };
@@ -344,25 +390,25 @@ const Deposit = () => {
             setDialogTitle('Reject');
             confirmAlert({
                 customUI: ({ onClose }) => {
-                  return (
-                    <div className='custom-ui'>
-                      <h1>Are you sure?</h1>
-                      <p>Do you want to reject this?</p>
-                      <div className='confirmation-alert-action-button'>
-                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                        <Button variant="contained" className='btn-gradient btn-danger'
-                            onClick={() => {
-                            handleClickReject();
-                            onClose();
-                            }}
-                        >
-                            Yes, Reject it!
-                        </Button>
-                      </div>
-                    </div>
-                  );
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to reject this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-danger'
+                                    onClick={() => {
+                                        handleClickReject();
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Reject it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
                 }
-              });
+            });
             /* confirmAlert({
                 title: 'Reject',
                 message: 'Are you sure to do this ?',
@@ -381,25 +427,25 @@ const Deposit = () => {
             setDialogTitle('Approve');
             confirmAlert({
                 customUI: ({ onClose }) => {
-                  return (
-                    <div className='custom-ui'>
-                      <h1>Are you sure?</h1>
-                      <p>Do you want to approve this?</p>
-                      <div className='confirmation-alert-action-button'>
-                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                        <Button variant="contained" className='btn-gradient btn-success'
-                            onClick={() => {
-                            handleClickapprove();
-                            onClose();
-                            }}
-                        >
-                            Yes, Approve it!
-                        </Button>
-                      </div>
-                    </div>
-                  );
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to approve this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-success'
+                                    onClick={() => {
+                                        handleClickapprove();
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Approve it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
                 }
-              });
+            });
             /* confirmAlert({
                 title: 'Approve',
                 message: 'Are you sure to do this ?',
@@ -444,9 +490,19 @@ const Deposit = () => {
             setSelectedFile(undefined)
             return
         }
-
+        setDepositForm({...depositForm, file: e.target.files[0]});
         setSelectedFile(e.target.files[0])
     }
+
+    const input = (event) => {
+        const { name, value } = event.target;
+        setDepositForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
 
     return (
         <div>
@@ -534,7 +590,7 @@ const Deposit = () => {
                                 <br /> */}
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
-                                        <Button variant="contained" onClick={handleClickOpen}>Add Deposit</Button>
+                                        <Button variant="contained" onClick={handleClickOpen}>Add</Button>
                                     </div>
                                     <br />
                                     <CardContent className="py-3">

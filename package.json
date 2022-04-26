@@ -23,6 +23,7 @@
     "apexcharts": "^3.35.0",
     "axios": "^0.26.1",
     "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "fullcalendar": "^5.11.0",
     "highcharts": "^10.0.0",
     "highcharts-react-official": "^2.2.2",

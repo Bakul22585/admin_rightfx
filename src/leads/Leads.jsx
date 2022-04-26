@@ -5,24 +5,17 @@ import { Autocomplete, Button, Checkbox, Chip, FormControl, FormControlLabel, Gr
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonTable from '../common/CommonTable';
-import { ColorButton } from '../common/CustomElement';
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
-import { Box } from '@mui/system';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Typography from '@mui/material/Typography';
 import CommonFilter from '../common/CommonFilter';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const CssTextField = styled(TextField)({
 });
@@ -196,17 +189,48 @@ const Leads = () => {
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [filterData, setFilterData] = useState({});
   const [dialogTitle, setDialogTitle] = useState('');
+  const [form, setForm] = useState({
+    customer: '',
+    source: '',
+    date: '',
+    time: '',
+    interest: '',
+    assign: '',
+    remark: '',
+    isCustomerSendMail: true,
+    isCustomerSendsms: true,
+    isAssignSendsms: false,
+    isAdminSendsms: false,
+  });
+  const [newFollowupForm, setNewFollowupForm] = useState({
+    date: '',
+    time: '',
+    interest: '',
+    remark: '',
+    isCustomerSendsms: true,
+    isAssignSendsms: false,
+    isAdminSendsms: false,
+  });
 
-  /* const defaultProps = {
-    options: top100Films,
-    getOptionLabel: (option: FilmOptionType) => option.title,
-  }; */
-
-  /* const flatProps = {
-    options: top100Films.map((option) => option.title),
-  }; */
+  toast.configure();
+  const interest = ['Very Low', 'Low', 'Average', 'High', 'Very High'];
 
   const handleClickOpen = (e) => {
+    setForm(
+      {
+        customer: '',
+        source: '',
+        date: '',
+        time: '',
+        interest: '',
+        assign: '',
+        remark: '',
+        isCustomerSendMail: true,
+        isCustomerSendsms: true,
+        isAssignSendsms: false,
+        isAdminSendsms: false,
+      }
+    );
     setDialogTitle('Add Lead');
     setMaxWidth('md');
     setOpen(true);
@@ -235,6 +259,15 @@ const Leads = () => {
 
   const viewFollowup = (e) => {
     console.log('view followup', e);
+    setNewFollowupForm({
+      date: '',
+      time: '',
+      interest: '',
+      remark: '',
+      isCustomerSendsms: true,
+      isAssignSendsms: false,
+      isAdminSendsms: false,
+    });
     setDialogTitle('View Lead (' + e.name + ')');
     setMaxWidth('lg');
     setOpen(true);
@@ -244,13 +277,13 @@ const Leads = () => {
     if (dialogTitle == 'Add Lead') {
       return <div className='dialogMultipleActionButton'>
         <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-        <Button variant="contained" className='btn-gradient btn-success'>Add Lead</Button>
+        <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add Lead</Button>
       </div>;
     }
   }
 
   const manageContent = () => {
-    console.log(dialogTitle.substring(0, 9));
+
     if (dialogTitle == 'Add Lead') {
       return <div>
         <div className='element margeTwoField'>
@@ -267,6 +300,7 @@ const Leads = () => {
             onChange={(_event, newTeam) => {
               // setSelectedTeam(newTeam);
               console.log(_event, newTeam);
+              setForm({ ...form, customer: newTeam.id });
             }}
           />
           <FormControl variant="standard" sx={{ width: '100%' }} focused>
@@ -274,9 +308,9 @@ const Leads = () => {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              // value={age}
-              // onChange={handleChange}
+              onChange={input}
               label="Source"
+              name='source'
             >
               <MenuItem value='1'>Newspaper Ads</MenuItem>
               <MenuItem value='2'>Banner Ads</MenuItem>
@@ -291,8 +325,8 @@ const Leads = () => {
         </div>
         <br />
         <div className='margeTwoField element'>
-          <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused />
-          <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused />
+          <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused name='date' onChange={input} />
+          <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused name='time' onChange={input} />
         </div>
         <br />
         <div className='element margeTwoField'>
@@ -301,9 +335,9 @@ const Leads = () => {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              // value={age}
-              // onChange={handleChange}
+              onChange={input}
               label="Interest"
+              name='interest'
             >
               <MenuItem value="1">Very Low</MenuItem>
               <MenuItem value="2">Low</MenuItem>
@@ -317,30 +351,30 @@ const Leads = () => {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              // value={age}
-              // onChange={handleChange}
+              onChange={input}
               label="Assign To Sales-Executive"
+              name='assign'
             >
-              <MenuItem value=""></MenuItem>
+              <MenuItem value="1">Test</MenuItem>
             </Select>
           </FormControl>
         </div>
         <br />
         <div className='element'>
-          <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} />
+          <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input} />
         </div>
         <br />
         <div className='element margeTwoField'>
           <div className='checkboxSection' style={{ width: '100%' }}>
             <label>Do you want to send project details to Customer?</label>
-            <FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Send Mail?" />
+            <FormControlLabel control={<Checkbox defaultChecked size="small" name='isCustomerSendMail' onChange={input} />} label="Send Mail?" />
           </div>
           <div className='checkboxSection' style={{ width: '100%' }}>
             <label>Please select user type to send SMS.</label>
             <div className='checkbox-group'>
-              <FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Client" />
-              <FormControlLabel control={<Checkbox size="small" />} label="Sales-Executive" />
-              <FormControlLabel control={<Checkbox size="small" />} label="Admin" />
+              <FormControlLabel control={<Checkbox defaultChecked size="small" name='isCustomerSendsms' onChange={input} />} label="Client" />
+              <FormControlLabel control={<Checkbox size="small" name='isAssignSendsms' onChange={input} />} label="Sales-Executive" />
+              <FormControlLabel control={<Checkbox size="small" name='isAdminSendsms' onChange={input} />} label="Admin" />
             </div>
           </div>
         </div>
@@ -391,8 +425,8 @@ const Leads = () => {
             <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Add New Follow Up</p>
               <div className='margeTwoField element'>
-                <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused />
-                <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused />
+                <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input1} focused />
+                <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} name='time' onChange={input1} focused />
               </div>
               <br />
               <div className='element'>
@@ -402,8 +436,9 @@ const Leads = () => {
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
                     // value={age}
-                    // onChange={handleChange}
+                    onChange={input1}
                     label="Interest"
+                    name='interest'
                   >
                     <MenuItem value="1">Very Low</MenuItem>
                     <MenuItem value="2">Low</MenuItem>
@@ -415,20 +450,20 @@ const Leads = () => {
               </div>
               <br />
               <div className='element'>
-                <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} />
+                <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input1} />
               </div>
               <br />
               <div className='checkboxSection' style={{ width: '100%' }}>
                 <label>Please select user type to send SMS.</label>
                 <div className='checkbox-group'>
-                  <FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Client" />
-                  <FormControlLabel control={<Checkbox size="small" />} label="Sales-Executive" />
-                  <FormControlLabel control={<Checkbox size="small" />} label="Admin" />
+                  <FormControlLabel control={<Checkbox defaultChecked size="small" name='isCustomerSendsms' onChange={input1} />} label="Client" />
+                  <FormControlLabel control={<Checkbox size="small" name='isAssignSendsms' onChange={input1} />} label="Sales-Executive" />
+                  <FormControlLabel control={<Checkbox size="small" name='isAdminSendsms' onChange={input1} />} label="Admin" />
                 </div>
               </div>
-              <br/>
+              <br />
               <div className='popup-add-lead-section'>
-                <Button className='btn btn-success'>Add</Button>
+                <Button className='btn btn-success' onClick={addNewFollowup}>Add</Button>
               </div>
             </Paper>
           </Grid>
@@ -478,6 +513,8 @@ const Leads = () => {
               "aria-label": "Without label",
             }}
             input={<BootstrapInput />}
+            name='interest'
+            onChange={(e) => changeInterestStatus(e, row)}
           >
             <MenuItem value="1">Very Low</MenuItem>
             <MenuItem value="2">Low</MenuItem>
@@ -501,6 +538,8 @@ const Leads = () => {
               "aria-label": "Without label",
             }}
             input={<BootstrapInput />}
+            name='assign_to'
+            onChange={(e) => changeAssign(e, row)}
           >
             <MenuItem value={row.name}>{row.name}</MenuItem>
           </Select>
@@ -527,7 +566,7 @@ const Leads = () => {
     {
       name: 'Next Date',
       selector: row => {
-        return <input type='date' className="table-date-picker-border-0" />
+        return <input type='date' className="table-date-picker-border-0" name='next_date' onChange={(e) => changeFollowupDate(e, row)} />
       },
       sortable: true,
       reorder: true,
@@ -566,9 +605,9 @@ const Leads = () => {
             open={Boolean(openTableMenus[row.sr_no])}
             onClose={(event) => handleContextClose(row.sr_no)}
           >
-            <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
-            <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Not Interested</MenuItem>
-            <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Reject</MenuItem>
+            <MenuItem className='completed' {...row} onClick={(e) => actionMenuPopup(e, row)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
+            <MenuItem className='not_interested' {...row} onClick={(e) => actionMenuPopup(e, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Not Interested</MenuItem>
+            <MenuItem className='rejected' {...row} onClick={(e) => actionMenuPopup(e, row)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Reject</MenuItem>
           </Menu>
         </div>
       },
@@ -679,6 +718,258 @@ const Leads = () => {
     },
   ];
 
+  const submitForm = () => {
+
+    if (form.customer == '') {
+      toast.error('Please select customer');
+    } else if (form.source == '') {
+      toast.error('Please select source');
+    } else if (form.date == '') {
+      toast.error('Please select follow up date');
+    } else if (form.time == '') {
+      toast.error('Please select follow up time');
+    } else if (form.interest == '') {
+      toast.error('Please select interest');
+    } else if (form.assign == '') {
+      toast.error('Please select Assign To Sales-Executive');
+    } else if (form.remark == '') {
+      toast.error('Please enter remark');
+    } else {
+      handleClose();
+      toast.success('Lead has been added successfully.');
+    }
+  }
+
+  const input = (event) => {
+    var { name, value } = event.target;
+    if (event.target.getAttribute) {
+      if (event.target.getAttribute('type') == 'checkbox') {
+        value = event.target.checked;
+      }
+    }
+
+    setForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
+  const input1 = (event) => {
+    var { name, value } = event.target;
+    if (event.target.getAttribute) {
+      if (event.target.getAttribute('type') == 'checkbox') {
+        value = event.target.checked;
+      }
+    }
+
+    setNewFollowupForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
+  const changeInterestStatus = (e, data) => {
+    console.log(e.target, data);
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>Do you want to change interest status {interest[e.target.value - 1]} ?</p>
+            <div className='confirmation-alert-action-button'>
+              <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+              <Button variant="contained" className='btn-gradient btn-success'
+                onClick={() => {
+                  approveInterestStatus(e, data);
+                  onClose();
+                }}
+              >
+                Yes, Apply it!
+              </Button>
+            </div>
+          </div>
+        );
+      }
+    });
+  }
+
+  const approveInterestStatus = (e, data) => {
+    console.log(e.target.value, data);
+    toast.success('Interest status has been updated successfully.');
+  }
+
+  const changeAssign = (e, data) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>Do you want to change assign sales executive ?</p>
+            <div className='confirmation-alert-action-button'>
+              <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+              <Button variant="contained" className='btn-gradient btn-success'
+                onClick={() => {
+                  approvechangeAssign(e, data);
+                  onClose();
+                }}
+              >
+                Yes, Apply it!
+              </Button>
+            </div>
+          </div>
+        );
+      }
+    });
+  }
+
+  const approvechangeAssign = (e, data) => {
+    toast.success('Assign sales executive has been updated successfully.');
+  }
+
+  const changeFollowupDate = (e, data) => {
+    console.log(e.target.value, data);
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>Do you want to change followup date ?</p>
+            <div className='confirmation-alert-action-button'>
+              <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+              <Button variant="contained" className='btn-gradient btn-success'
+                onClick={() => {
+                  approvechangeFollowupDate(e, data);
+                  onClose();
+                }}
+              >
+                Yes, Apply it!
+              </Button>
+            </div>
+          </div>
+        );
+      }
+    });
+  }
+
+  const approvechangeFollowupDate = (e, data) => {
+    console.log(e.target.value, data);
+    toast.success('Assign sales executive has been updated successfully.');
+  }
+
+  const addNewFollowup = () => {
+    console.log(newFollowupForm);
+    if (newFollowupForm.date == '') {
+      toast.error('Please select followup date');
+    } else if (newFollowupForm.time == '') {
+      toast.error('Please select followup time');
+    } else if (newFollowupForm.interest == '') {
+      toast.error('Please select followup interest');
+    } else if (newFollowupForm.remark == '') {
+      toast.error('Please enter followup remark');
+    } else {
+      toast.success('Followup hsa been added successfully.');
+      setNewFollowupForm({
+        date: '',
+        time: '',
+        interest: '',
+        remark: '',
+        isCustomerSendsms: true,
+        isAssignSendsms: false,
+        isAdminSendsms: false,
+      });
+    }
+  }
+
+  const actionMenuPopup = (e, data) => {
+    console.log(e.target.getAttribute('class'));
+    console.log(e.target.classList.contains('reject'));
+    handleContextClose(data.sr_no);
+    if (e.target.classList.contains('not_interested')) {
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Are you sure?</h1>
+              <p>Do you want to not interest this?</p>
+              <div className='confirmation-alert-action-button'>
+                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                <Button variant="contained" className='btn-gradient btn-danger'
+                  onClick={() => {
+                    changeLeadStatus('not_interested', data);
+                    onClose();
+                  }}
+                >
+                  Yes, Not Interested it!
+                </Button>
+              </div>
+            </div>
+          );
+        }
+      });
+    } else if (e.target.classList.contains('completed')) {
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Are you sure?</h1>
+              <p>Do you want to completed this?</p>
+              <div className='confirmation-alert-action-button'>
+                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                <Button variant="contained" className='btn-gradient btn-success'
+                  onClick={() => {
+                    changeLeadStatus('completed', data);
+                    onClose();
+                  }}
+                >
+                  Yes, Completed it!
+                </Button>
+              </div>
+            </div>
+          );
+        }
+      });
+    } else if (e.target.classList.contains('rejected')) {
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Are you sure?</h1>
+              <p>Do you want to rejected this?</p>
+              <div className='confirmation-alert-action-button'>
+                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                <Button variant="contained" className='btn-gradient btn-danger'
+                  onClick={() => {
+                    changeLeadStatus('rejected', data);
+                    onClose();
+                  }}
+                >
+                  Yes, Rejected it!
+                </Button>
+              </div>
+            </div>
+          );
+        }
+      });
+    }
+
+    // setOpen(true);
+  };
+
+  const changeLeadStatus = (status, data) => {
+    console.log(status, data);
+    if (status == 'not_interested') {
+      toast.success('Lead has been not interested successfully.');
+    } else if (status == 'completed') {
+      toast.success('Lead has been completed successfully.');
+    } else if (status == 'rejected') {
+      toast.success('Lead has been rejected successfully.');
+    }
+  }
+
   return (
     <div>
       <div className="app-content--inner">
@@ -692,7 +983,7 @@ const Leads = () => {
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                   <div className='actionGroupButton'>
-                    <Button variant="contained" onClick={handleClickOpen} className='addLead'>Add Lead</Button>
+                    <Button variant="contained" onClick={handleClickOpen} className='addLead'>Add</Button>
                     {/* <Button variant="contained">Add IB</Button>
                     <Button variant="contained">All</Button> */}
                   </div>

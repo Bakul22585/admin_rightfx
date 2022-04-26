@@ -14,6 +14,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -114,8 +116,15 @@ const Withdraw = () => {
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [filterData, setFilterData] = useState({});
     const [dialogTitle, setDialogTitle] = useState('');
-    const [selectedFile, setSelectedFile] = useState()
-    const [preview, setPreview] = useState()
+    const [Form, setForm] = useState({
+        account_type: '',
+        account: '',
+        customer_name: '',
+        payment_gateway: '',
+        amount: '',
+        note: ''
+    });
+    toast.configure();
 
     const columns = [
         {
@@ -229,7 +238,7 @@ const Withdraw = () => {
         if (dialogTitle == 'Add New Withdrawal') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success'>Add</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add</Button>
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -252,18 +261,21 @@ const Withdraw = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Account">
-                            <MenuItem value=''></MenuItem>
+                            label="Account"
+                            name='account_type'
+                            onChange={input}>
+                            <MenuItem value='live'>Live</MenuItem>
+                            <MenuItem value='demo'>Demo</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Account" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Account" variant="standard" sx={{ width: '100%' }} name='account' onChange={input}/>
                 </div>
                 <br/>
                 <div>
-                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' onChange={input} />
                 </div>
                 <br/>
                 
@@ -272,7 +284,9 @@ const Withdraw = () => {
                         <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Payment Gateway">
+                            label="Payment Gateway"
+                            name='payment_gateway'
+                            onChange={input}>
                             <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
                             <MenuItem value='Crypto'>Crypto</MenuItem>
                         </Select>
@@ -280,7 +294,7 @@ const Withdraw = () => {
                 </div>
                 <br />
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={input}/>
                     {/* <label htmlFor="contained-button-file" className='fileuploadButton'>
                         <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile}/>
                         {selectedFile ?  <img src={preview} className='deposit-upload-image-preview'/>  : <Button variant="contained" component="span">
@@ -290,7 +304,7 @@ const Withdraw = () => {
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={input}/>
                 </div>
             </div>;
         } else if (dialogTitle == 'View') {
@@ -316,7 +330,14 @@ const Withdraw = () => {
     };
 
     const handleClickOpen = (e) => {
-        setSelectedFile(undefined)
+        setForm({
+            account_type: '',
+            account: '',
+            customer_name: '',
+            payment_gateway: '',
+            amount: '',
+            note: ''
+        });
         setDialogTitle('Add New Withdrawal');
         setOpen(true);
     };
@@ -333,26 +354,34 @@ const Withdraw = () => {
         setOpen(true);
     };
 
-    useEffect(() => {
-        if (!selectedFile) {
-            setPreview(undefined)
-            return
+    const input = (event) => {
+        const { name, value } = event.target;
+        setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const submitForm = () => {
+        if (Form.account_type == '') {
+            toast.error('Please select account type');
+        } else if (Form.account == '') {
+            toast.error('Please enter account');
+        } else if (Form.customer_name == '') {
+            toast.error('Please enter customer name');
+        } else if (Form.payment_gateway == '') {
+            toast.error('Please select any one payment gateway');
+        } else if (Form.amount == '') {
+            toast.error('Please enter amount');
+        } else if (Form.note == '') {
+            toast.error('Please enter note');
+        } else {
+            handleClose();
+            toast.success('withdraw has been added successfully.');
         }
-
-        const objectUrl = URL.createObjectURL(selectedFile)
-        setPreview(objectUrl)
-
-        return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile])
-
-    const onSelectFile = e => {
-        if (!e.target.files || e.target.files.length === 0) {
-            setSelectedFile(undefined)
-            return
-        }
-
-        setSelectedFile(e.target.files[0])
-    }
+    };
 
     return (
         <div>
@@ -366,7 +395,7 @@ const Withdraw = () => {
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
-                                        <Button variant="contained" onClick={handleClickOpen}>New</Button>
+                                        <Button variant="contained" onClick={handleClickOpen}>Add</Button>
                                     </div>
                                     <br />
                                     <CardContent className="py-3">

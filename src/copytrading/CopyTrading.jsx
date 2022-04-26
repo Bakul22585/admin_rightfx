@@ -1,11 +1,13 @@
 import './copytrading.css';
 import { Button, FormControl, Grid, Input, InputBase, InputLabel, MenuItem, Paper, Select, Slider, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { styled } from "@mui/material/styles";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -144,12 +146,27 @@ const CopyTrading = () => {
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('md');
     const [dialogTitle, setDialogTitle] = useState('');
+    const [selectedFile, setSelectedFile] = useState()
+    const [preview, setPreview] = useState();
+    const [form, setForm] = useState({
+        img: '',
+        name: '',
+        status: '',
+        risk_score: '',
+        gain: '',
+        copiers_left: '',
+        copiers_right: '',
+        profit: '',
+        loss: '',
+        commission: '',
+    });
+    toast.configure();
 
     const manageDialogActionButton = () => {
         if (dialogTitle == 'Create Copy Trading Account') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success'>Add Account</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add</Button>
             </div>;
         }
     }
@@ -160,14 +177,14 @@ const CopyTrading = () => {
                 <div className='copy-trading-popup-card-section'>
                     <div className='card-header'>
                         <label htmlFor="contained-button-file" className='fileuploadButton'>
-                            <Input accept="image/*" id="contained-button-file" multiple type="file"/>
-                            <img src={'./assets/img/testimony.png'} className='user-avatar-img'/>
+                            <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile}/>
+                            <img src={(selectedFile == undefined) ? './assets/img/testimony.png' : preview} className='user-avatar-img'/>
                         </label>
                         <div className='name-infor-section'>
-                            <input type='text' name="name" placeholder='Name' className='formControl-input'/>
+                            <input type='text' name="name" placeholder='Name' className='formControl-input' value={form.name} onChange={input}/>
                             <div className='achiever-section'>
                                 <i className="material-icons">star</i>
-                                <select className='formControl-input'>
+                                <select className='formControl-input' name='status' onChange={input} value={form.status}>
                                     <option>Very Low</option>
                                     <option>Low</option>
                                     <option>Medium</option>
@@ -190,33 +207,36 @@ const CopyTrading = () => {
                                     marks
                                     min={1}
                                     max={10}
+                                    name='risk_score'
+                                    value={form.risk_score}
+                                    onChange={input}
                                 />
                             </div>
                         </div>
                         <div className='gain-copies-section'>
                             <div className='gain-element'>
                                 <p>GAIN</p>
-                                <input type='text' name="name" placeholder='15' className='formControl-input'/>
+                                <input type='text' name="gain" placeholder='15' className='formControl-input' value={form.gain} onChange={input}/>
                             </div>
                             <div className='copiers-element'>
                                 <p>COPIERS</p>
                                 <div className='input-section'>
-                                    <input type='text' name="name" placeholder='5872' className='formControl-input'/>
+                                    <input type='text' name="copiers_left" placeholder='5872' className='formControl-input' value={form.copiers_left} onChange={input}/>
                                     <i className="material-icons">arrow_upward</i>
-                                    <input type='text' name="name" placeholder='5200' className='formControl-input'/>
+                                    <input type='text' name="copiers_right" placeholder='5200' className='formControl-input' value={form.copiers_right} onChange={input}/>
                                 </div>
                             </div>
                         </div>
                         <div className='profit-loss-section'>
                             <p>PROFIT AND LOSS</p>
                             <div className='input-element'>
-                                <input type='text' name="name" placeholder='15' className='formControl-input'/>
-                                <input type='text' name="name" placeholder='15' className='formControl-input'/>
+                                <input type='text' name="profit" placeholder='15' className='formControl-input' value={form.profit} onChange={input}/>
+                                <input type='text' name="loss" placeholder='15' className='formControl-input' value={form.loss} onChange={input}/>
                             </div>
                         </div>
                         <div className='commission-section'>
                             <p>COMMISSION</p>
-                            <input type='text' name="name" placeholder='15' className='formControl-input'/>
+                            <input type='text' name="commission" placeholder='15' className='formControl-input' value={form.commission} onChange={input}/>
                         </div>
                     </div>
                 </div>
@@ -232,9 +252,81 @@ const CopyTrading = () => {
     };
 
     const handleClickOpen = (e) => {
+        setForm({
+            img: '',
+            name: '',
+            status: '',
+            risk_score: '',
+            gain: '',
+            copiers_left: '',
+            copiers_right: '',
+            profit: '',
+            loss: '',
+            commission: '',
+        });
+        setSelectedFile(undefined);
         setDialogTitle('Create Copy Trading Account');
         setOpen(true);
     };
+
+    const submitForm = () => {
+        console.log(form);
+        if (form.img == '') {
+            toast.error('Please select profile image');
+        } else if (form.name == '') {
+            toast.error('Please enter name');
+        } else if (form.status == '') {
+            toast.error('Please select any one status');
+        } else if (form.risk_score == '') {
+            toast.error('Please select risk score');
+        } else if (form.gain == '') {
+            toast.error('Please enter gain');
+        } else if (form.copiers_left == '') {
+            toast.error('Please enter copiers left box');
+        } else if (form.copiers_right == '') {
+            toast.error('Please enter copiers right box');
+        } else if (form.profit == '') {
+            toast.error('Please enter profit');
+        } else if (form.loss == '') {
+            toast.error('Please enter loss');
+        } else if (form.commission == '') {
+            toast.error('Please enter commission');
+        } else {
+            handleClose();
+            toast.success('Copy trading account has been added successfully.');
+        }
+    }
+
+    const input = (event) => {
+        const { name, value } = event.target;
+        setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const onSelectFile = e => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined)
+            return
+        }
+        setForm({...form, img: e.target.files[0]});
+        setSelectedFile(e.target.files[0])
+    }
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreview(undefined)
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile)
+        setPreview(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [selectedFile])
 
   return (
     <div>

@@ -30,6 +30,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from 'draftjs-to-html';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface TabPanelProps {
@@ -139,6 +140,137 @@ const Profile = () => {
     const [filterData, setFilterData] = useState({});
     const [filterSection, setFilterSection] = useState(false);
     const [filterBy, setFilterBy] = useState('');
+    const [selectedFile, setSelectedFile] = useState()
+    const [preview, setPreview] = useState();
+    const [profileForm, setProfileForm] = useState({
+        title: '',
+        first_name: '',
+        last_name: '',
+        phone: '',
+        mobile: '',
+        email: '',
+        dob: '',
+        nationality: '',
+        country_of_residence: '',
+        city: '',
+        address: '',
+        address_2: '',
+        gender: '',
+        postal_code: '',
+        language: '',
+        source: '',
+        us_citizen: '',
+        finacial_work: '',
+        tax_number: '',
+        politically_exposed: '',
+        id_type: '',
+        id_number: '',
+        country_issuce: '',
+        date_issue: '',
+        date_expiry: '',
+    });
+    const [createMt5Form, setCreateMt5Form] = useState({
+        account_type: '',
+        account_option: ''
+    });
+    const [Mt5AccessForm, setMt5AccessForm] = useState({
+        account_type: '',
+        status: ''
+    });
+    const [linkAccountForm, setLinkAccountForm] = useState({
+        account_number: '',
+        account_type: '',
+        account_name: ''
+    });
+    const [resetMt5PasswordForm, setResetMt5PasswordForm] = useState({
+        account: '',
+    });
+    const [changeLeverageForm, setChangeLeverageForm] = useState({
+        account: '',
+        leverage: '',
+    });
+    const [changeAccountPasswordForm, setChangeAccountPasswordForm] = useState({
+        main_password: '',
+        view_password: '',
+    });
+    const [masterStructureForm, setmasterStructureForm] = useState({
+        name: '',
+        forex_rebate: '',
+        forex_commission: '',
+        bullion_rebate: '',
+        bullion_commission: '',
+        indices_rebate: '',
+        indices_commission: '',
+        energy_rebate: '',
+        energy_commission: '',
+        crypto_rebate: '',
+        crypto_commission: '',
+    });
+    const [employmentDetailsForm, setEmploymentDetailsForm] = useState({
+        status: '',
+        industry: '',
+    });
+    const [sharedStructureForm, setSharedStructureForm] = useState({
+        name: '',
+        total_rebate: '',
+        total_commission: '',
+        list: [
+            {
+                'id': '',
+                'name': '',
+                'value': ''
+            }
+        ]
+    });
+    const [linkClientForm, setLinkClientForm] = useState({
+        client: '',
+        structure: '',
+    });
+    const [linkIBForm, setLinkIBForm] = useState({
+        master_account: '',
+        customer_name: '',
+        structure: '',
+    });
+    const [sendMailForm, setsendMailForm] = useState({
+        from: '',
+        to: '',
+        subject: '',
+        template_title: '',
+        language: '',
+        template: '',
+        body: '',
+    });
+    const [cpAccessForm, setCpAccessForm] = useState({
+        status: '',
+    });
+    const [noteForm, setNoteForm] = useState({
+        notes: '',
+        call_status: '',
+        set_reminder: false,
+        date: ''
+    });
+    const [bankAccountForm, setBankAccountForm] = useState({
+        name: '',
+        bank_name: '',
+        bank_address: '',
+        iban_number: '',
+        account_number: '',
+        swift_code: '',
+        currency_code: ''
+    });
+    const [transactionForm, setTransactionForm] = useState({
+        type: '',
+        from_account_type: '',
+        credit_type: '',
+        transfer_to: '',
+        account: '',
+        account_to: '',
+        payment: '',
+        amount: '',
+        img: '',
+        note: '',
+    });
+    toast.configure();
 
     const depositColumn = [
         {
@@ -270,44 +402,141 @@ const Profile = () => {
         console.log(e.target.classList.contains('edit_structure'));
         if (e.target.classList.contains('createMt5')) {
             setDialogTitle('Create MT5 Account');
+            setCreateMt5Form({
+                account_type: '',
+                account_option: ''
+            });
         } else if (e.target.classList.contains('mt5_access')) {
             setDialogTitle('MT5 Access');
+            setMt5AccessForm({
+                account_type: '',
+                status: ''
+            });
         } else if (e.target.classList.contains('link_mt5')) {
             setDialogTitle('Link Existing Account');
+            setLinkAccountForm({
+                account_number: '',
+                account_type: '',
+                account_name: ''
+            });
         } else if (e.target.classList.contains('reset_mt5')) {
             setDialogTitle('Reset MT5 Password');
+            setResetMt5PasswordForm({
+                account: '',
+            });
         } else if (e.target.classList.contains('change_leverage')) {
             setDialogTitle('Change Account leverage');
+            setChangeLeverageForm({
+                account: '',
+                leverage: '',
+            });
         } else if (e.target.classList.contains('add_master_structure')) {
             setDialogTitle('Add Master Structure');
+            setmasterStructureForm({
+                name: '',
+                forex_rebate: '',
+                forex_commission: '',
+                bullion_rebate: '',
+                bullion_commission: '',
+                indices_rebate: '',
+                indices_commission: '',
+                energy_rebate: '',
+                energy_commission: '',
+                crypto_rebate: '',
+                crypto_commission: '',
+            });
         } else if (e.target.classList.contains('add_shared_structure')) {
             setDialogTitle('ADD SHARED STRUCTURE');
+            setSharedStructureForm({
+                name: '',
+                total_rebate: '',
+                total_commission: '',
+                list: [
+                    {
+                        'id': '',
+                        'name': '',
+                        'value': ''
+                    }
+                ]
+            });
         } else if (e.target.classList.contains('link_client')) {
             setDialogTitle('Link Client');
+            setLinkClientForm({
+                client: '',
+                structure: '',
+            });
         } else if (e.target.classList.contains('link_ib')) {
             setDialogTitle('Link To IB');
+            setLinkIBForm({
+                master_account: '',
+                customer_name: '',
+                structure: '',
+            });
         } else if (e.target.classList.contains('unlink_ib')) {
             setDialogTitle('Unlink IB');
         } else if (e.target.classList.contains('send_email')) {
             setDialogTitle('Send Email');
+            setsendMailForm({
+                from: '',
+                to: '',
+                subject: '',
+                template_title: '',
+                language: '',
+                template: '',
+                body: '',
+            });
         } else if (e.target.classList.contains('cp_access')) {
             setDialogTitle('Control Panel Access');
+            setCpAccessForm({
+                status: '',
+            });
         } else if (e.target.classList.contains('view_cp_password')) {
             setDialogTitle('View Control Panel Access Password');
         } else if (e.target.classList.contains('download_application')) {
             setDialogTitle('Download Client PDF');
         } else if (e.target.classList.contains('add_note')) {
             setDialogTitle('Add New Note');
+            setNoteForm({
+                notes: '',
+                call_status: '',
+                set_reminder: false,
+                date: ''
+            });
         } else if (e.target.classList.contains('add_bank')) {
             setDialogTitle('Add Account');
+            setBankAccountForm({
+                name: '',
+                bank_name: '',
+                bank_address: '',
+                iban_number: '',
+                account_number: '',
+                swift_code: '',
+                currency_code: ''
+            });
         } else if (e.target.classList.contains('add_transaction')) {
             setDialogTitle('Add New Transaction');
+            setTransactionForm({
+                type: '',
+                from_account_type: '',
+                credit_type: '',
+                transfer_to: '',
+                account: '',
+                account_to: '',
+                payment: '',
+                amount: '',
+                img: '',
+                note: '',
+            });
         } else if (e.target.classList.contains('link_campaign')) {
             setDialogTitle('Link to Campaign');
         } else if (e.target.classList.contains('edit_structure')) {
             setDialogTitle('Edit SHARED STRUCTURE');
         } else if (e.target.classList.contains('change_password')) {
             setDialogTitle('Change Password');
+            setChangeAccountPasswordForm({
+                main_password: '',
+                view_password: '',
+            });
         }
         setOpen(true);
     };
@@ -341,7 +570,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Account Type">
+                            label="Account Type"
+                            name='account_type'
+                            onChange={input}>
                             <MenuItem value='live'>Live</MenuItem>
                             <MenuItem value='demo'>Demo</MenuItem>
                         </Select>
@@ -353,7 +584,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account option</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Account option">
+                            label="Account option"
+                            name='account_option'
+                            onChange={input}>
                             <MenuItem value='executive'>Executive</MenuItem>
                         </Select>
                     </FormControl>
@@ -366,7 +599,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Select MT5 Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Select MT5 Account">
+                            label="Select MT5 Account"
+                            name='account_type'
+                            onChange={input1}>
                             <MenuItem value='live'>Live</MenuItem>
                             <MenuItem value='demo'>Demo</MenuItem>
                         </Select>
@@ -378,7 +613,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Status">
+                            label="Status"
+                            name='status'
+                            onChange={input1}>
                             <MenuItem value='true'>Activate</MenuItem>
                             <MenuItem value='false'>Deactivate</MenuItem>
                         </Select>
@@ -388,7 +625,7 @@ const Profile = () => {
         } else if (dialogTitle == "Link Existing Account") {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={input2} />
                 </div>
                 <br />
                 <div>
@@ -396,7 +633,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Account Type">
+                            label="Account Type"
+                            name='account_type'
+                            onChange={input2}>
                             <MenuItem value='live'>Live</MenuItem>
                             <MenuItem value='demo'>Demo</MenuItem>
                         </Select>
@@ -408,7 +647,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Name</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Account Name">
+                            label="Account Name"
+                            name='account_name'
+                            onChange={input2}>
                             <MenuItem value='0'>Executive</MenuItem>
                             <MenuItem value='1'>Other</MenuItem>
                         </Select>
@@ -422,7 +663,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Select MT5 Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Select MT5 Account">
+                            label="Select MT5 Account"
+                            name='account'
+                            onChange={input3}>
                             <MenuItem value='60002830'>60002830 - individual-ib</MenuItem>
                         </Select>
                     </FormControl>
@@ -435,8 +678,10 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">MT5 Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="MT5 Account">
-                            <MenuItem value=''></MenuItem>
+                            label="MT5 Account"
+                            name='account'
+                            onChange={input4}>
+                            <MenuItem value='121212'>122121</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -446,7 +691,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Leverage</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Leverage">
+                            label="Leverage"
+                            name='leverage'
+                            onChange={input4}>
                             <MenuItem value='1:1'>1:1</MenuItem>
                             <MenuItem value='1:30'>1:30</MenuItem>
                             <MenuItem value='1:50'>1:50</MenuItem>
@@ -462,7 +709,7 @@ const Profile = () => {
             return <div>
                 <div className='structureNameSection'>
                     <label>Structure Name</label>
-                    <input type='text' className='' placeholder='Structure Name' />
+                    <input type='text' className='' placeholder='Structure Name' name='name' onChange={input6} />
                 </div>
                 <hr className='solid' />
                 <br />
@@ -477,46 +724,46 @@ const Profile = () => {
                                     <label>forex</label>
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='forex_rebate' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='forex_commission' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
                                     <label>bullion</label>
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='bullion_rebate' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='bullion_commission' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
                                     <label>indices</label>
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='indices_rebate' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='indices_commission' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
                                     <label>energy</label>
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='energy_rebate' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='energy_commission' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
                                     <label>crypto</label>
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='crypto_rebate' onChange={input6} />
                                 </Grid>
                                 <Grid item md={4} lg={4} xl={4}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='crypto_commission' onChange={input6} />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -530,7 +777,7 @@ const Profile = () => {
                         <Grid item md={4} lg={4} xl={4} className='label-center'>
                             <div className='structureNameSection'>
                                 <label>Structure Name</label>
-                                <input type='text' className='' placeholder='Structure Name' />
+                                <input type='text' className='' placeholder='Structure Name' name='name' onChange={sharedStructurIBInput} />
                             </div>
                         </Grid>
                         <Grid item md={8} lg={8} xl={8}>
@@ -554,10 +801,10 @@ const Profile = () => {
                                     <label>Executive</label>
                                 </Grid>
                                 <Grid item md={3} lg={3} xl={3}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='total_rebate' onChange={sharedStructurIBInput} />
                                 </Grid>
                                 <Grid item md={3} lg={3} xl={3}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='total_commission' onChange={sharedStructurIBInput} />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -565,24 +812,25 @@ const Profile = () => {
                 </div>
                 <hr className='solid' />
                 <div className='structureInputSection'>
-                    <Grid container spacing={1}>
+                    {sharedStructureForm.list.map((rowData, i) => <Grid container spacing={1}>
                         <Grid item md={4} lg={4} xl={4}>
                             <label>IB</label>
                         </Grid>
                         <Grid item md={4} lg={4} xl={4}>
-                            <input type='text' className='' value='60002830' style={{ width: '70%' }} />
+                            <input type='text' className='' style={{ width: '70%' }} value={rowData.value} onChange={(e) => inputSteuctureIB(e, i)} />
                         </Grid>
                         <Grid item md={4} lg={4} xl={4}>
                             <Button variant="contained" className='btn-gradient'>Proceed</Button>
-                            <IconButton aria-label="delete" className='btn-danger'>
+                            <IconButton aria-label="delete" className='btn-danger' onClick={(e) => deleteStructureIB(e, i)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Grid>
-                    </Grid>
+                    </Grid>)}
+
                 </div>
                 <hr className='solid' />
                 <div className='contentActionButton'>
-                    <Button variant="contained" className='btn-gradient'>Add another IB</Button>
+                    <Button variant="contained" className='btn-gradient' onClick={sharedStructurAddNewIB}>Add another IB</Button>
                     <Button variant="contained" disabled>Add Structure</Button>
                 </div>
             </div>;
@@ -593,8 +841,10 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Client</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Client">
-                            <MenuItem value=''></MenuItem>
+                            label="Client"
+                            name='client'
+                            onChange={linkClientInput}>
+                            <MenuItem value='Mehul'>Mehul</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -604,7 +854,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Structure">
+                            label="Structure"
+                            name='structure'
+                            onChange={linkClientInput}>
                             <MenuItem value='Test'>Test</MenuItem>
                         </Select>
                     </FormControl>
@@ -613,8 +865,8 @@ const Profile = () => {
         } else if (dialogTitle == 'Link To IB') {
             return <div>
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '50%' }} />
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '50%' }} />
+                    <TextField id="standard-basic" label="Master Account ID" variant="standard" sx={{ width: '50%' }} name='master_account' onChange={linkIBInput} />
+                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '50%' }} name='customer_name' onChange={linkIBInput} />
                 </div>
                 <br />
                 <div>
@@ -622,8 +874,10 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Structure">
-                            <MenuItem value=''></MenuItem>
+                            label="Structure"
+                            name='structure'
+                            onChange={linkIBInput}>
+                            <MenuItem value='test'>Test</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -636,29 +890,24 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">FROM</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="FROM">
-                            <MenuItem value=''></MenuItem>
+                            label="FROM"
+                            name='from'
+                            onChange={sendMailInput}>
+                            <MenuItem value='1'>admin@gmail.com</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
                 <br />
                 <div>
-                    <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">TO</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-standard-label"
-                            label="TO">
-                            <MenuItem value=''></MenuItem>
-                        </Select>
-                    </FormControl>
+                    <TextField id="standard-basic" label="To" variant="standard" sx={{ width: '100%' }} name='to' onChange={sendMailInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Subject" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Subject" variant="standard" sx={{ width: '100%' }} name='subject' onChange={sendMailInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Template Title" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Template Title" variant="standard" sx={{ width: '100%' }} name='template_title' onChange={sendMailInput} />
                 </div>
                 <br />
                 <div>
@@ -666,7 +915,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Language">
+                            label="Language"
+                            name='language'
+                            onChange={sendMailInput}>
                             <MenuItem value='en-gb'>English</MenuItem>
                             <MenuItem value='ar-ae'>عربي</MenuItem>
                         </Select>
@@ -678,8 +929,10 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Template</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Template">
-                            <MenuItem value=''></MenuItem>
+                            label="Template"
+                            name='template'
+                            onChange={sendMailInput}>
+                            <MenuItem value='1'>Test</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -690,7 +943,8 @@ const Profile = () => {
                         toolbarClassName="toolbarClassName"
                         wrapperClassName="wrapperClassName"
                         editorClassName="editorClassName"
-                        // onEditorStateChange={this.onEditorStateChange}
+                        name='body'
+                        onChange={onContentStateChange}
                     />
                 </div>
             </div>;
@@ -701,7 +955,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Status">
+                            label="Status"
+                            name='status'
+                            onChange={input7}>
                             <MenuItem value='true'>Active</MenuItem>
                             <MenuItem value='false'>Blocked</MenuItem>
                         </Select>
@@ -713,7 +969,7 @@ const Profile = () => {
         } else if (dialogTitle == 'Add New Note') {
             return <div>
                 <div>
-                    <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='notes' onChange={input8} />
                 </div>
                 <br />
                 <div>
@@ -721,7 +977,9 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Call Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Call Status">
+                            label="Call Status"
+                            name='call_status'
+                            onChange={input8}>
                             <MenuItem value='1'>1st Call Attempted</MenuItem>
                             <MenuItem value='2'>2nd Call Attempted</MenuItem>
                             <MenuItem value='3'>3rd Call Attempted</MenuItem>
@@ -745,53 +1003,58 @@ const Profile = () => {
                     <FormControlLabel className='declarationCheckbox'
                         control={
                             // <Checkbox checked={true} name="declaration" size="small"/>
-                            <Checkbox defaultChecked name="declaration" size="small" />
+                            <Checkbox name="set_reminder" size="small" onChange={input8}/>
                         }
                         label="Set Reminder"
                     />
                 </div>
+                <br />
+                {(noteForm.set_reminder == true) ? <div>
+                    <TextField type='date' id="standard-textarea" label="Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input8} focused/>
+                </div>: ''}
             </div>;
         } else if (dialogTitle == 'Add Account') {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Name" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Beneficiary Name" variant="standard" sx={{ width: '100%' }} name='name' onChange={bankInput}/>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Bank Name" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Beneficiary Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={bankInput}/>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Bank Address" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Beneficiary Bank Address" variant="standard" sx={{ width: '100%' }} name='bank_address' onChange={bankInput}/>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="IBAN Number" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="IBAN Number" variant="standard" sx={{ width: '100%' }} name='iban_number' onChange={bankInput}/>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={bankInput}/>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="SWIFT Code" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="SWIFT Code" variant="standard" sx={{ width: '100%' }} name='swift_code' onChange={bankInput}/>
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Currency Code" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Currency Code" variant="standard" sx={{ width: '100%' }} name='currency_code' onChange={bankInput}/>
                 </div>
             </div>;
         } else if (dialogTitle == 'Add New Transaction') {
-            if (dialogTransactionType == '') {
+            if (transactionForm.type == '') {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
-                                onChange={(e) => setDialogTransactionType(e.target.value)}
-                                value={dialogTransactionType}
                                 labelId="demo-simple-select-standard-label"
-                                label="Transaction Type">
+                                label="Transaction Type"
+                                name='type'
+                                value={transactionForm.type}
+                                onChange={transactionInput}>
                                 <MenuItem value='DEPOSIT'>Deposit</MenuItem>
                                 <MenuItem value='WITHDRAWAL'>Withdraw</MenuItem>
                                 <MenuItem value='INTERNAL_TRANSFER'>Internal Transfer</MenuItem>
@@ -800,16 +1063,17 @@ const Profile = () => {
                         </FormControl>
                     </div>
                 </div>;
-            } else if (dialogTransactionType == 'DEPOSIT') {
+            } else if (transactionForm.type == 'DEPOSIT') {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
-                                onChange={(e) => setDialogTransactionType(e.target.value)}
-                                value={dialogTransactionType}
                                 labelId="demo-simple-select-standard-label"
-                                label="Transaction Type">
+                                label="Transaction Type"
+                                value={transactionForm.type}
+                                name='type'
+                                onChange={transactionInput}>
                                 <MenuItem value='DEPOSIT'>Deposit</MenuItem>
                                 <MenuItem value='WITHDRAWAL'>Withdraw</MenuItem>
                                 <MenuItem value='INTERNAL_TRANSFER'>Internal Transfer</MenuItem>
@@ -823,8 +1087,10 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="Account">
-                                <MenuItem value=''></MenuItem>
+                                label="Account"
+                                name='account'
+                                onChange={transactionInput}>
+                                <MenuItem value='1'>132211</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -834,7 +1100,9 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="Payment Gateway">
+                                label="Payment Gateway"
+                                name='payment'
+                                onChange={transactionInput}>
                                 <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
                                 <MenuItem value='Crypto'>Crypto</MenuItem>
                             </Select>
@@ -842,9 +1110,9 @@ const Profile = () => {
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
                         <label htmlFor="contained-button-file" className='fileuploadButton'>
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" />
+                            <Input accept="image/*" id="contained-button-file" multiple type="file" name='img'/>
                             <Button variant="contained" component="span">
                                 <i className="material-icons">backup</i>Upload
                             </Button>
@@ -852,19 +1120,20 @@ const Profile = () => {
                     </div>
                     <br />
                     <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
                     </div>
                 </div>;
-            } else if (dialogTransactionType == 'WITHDRAWAL') {
+            } else if (transactionForm.type == 'WITHDRAWAL') {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
-                                onChange={(e) => setDialogTransactionType(e.target.value)}
-                                value={dialogTransactionType}
                                 labelId="demo-simple-select-standard-label"
-                                label="Transaction Type">
+                                label="Transaction Type"
+                                value={transactionForm.type}
+                                name='type'
+                                onChange={transactionInput}>
                                 <MenuItem value='DEPOSIT'>Deposit</MenuItem>
                                 <MenuItem value='WITHDRAWAL'>Withdraw</MenuItem>
                                 <MenuItem value='INTERNAL_TRANSFER'>Internal Transfer</MenuItem>
@@ -878,7 +1147,9 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="From Account Type">
+                                label="From Account Type"
+                                name='from_account_type'
+                                onChange={transactionInput}>
                                 <MenuItem value='live'>Live Accounts</MenuItem>
                                 <MenuItem value='ib'>IB Account</MenuItem>
                             </Select>
@@ -890,8 +1161,10 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="From Account">
-                                <MenuItem value=''></MenuItem>
+                                label="From Account"
+                                name='account'
+                                onChange={transactionInput}>
+                                <MenuItem value='1'>1212</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -901,7 +1174,9 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="Payment Gateway">
+                                label="Payment Gateway"
+                                name='payment'
+                                onChange={transactionInput}>
                                 <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
                                 <MenuItem value='Crypto'>Crypto</MenuItem>
                             </Select>
@@ -909,23 +1184,24 @@ const Profile = () => {
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
                     </div>
                     <br />
                     <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
                     </div>
                 </div>;
-            } else if (dialogTransactionType == 'INTERNAL_TRANSFER') {
+            } else if (transactionForm.type == 'INTERNAL_TRANSFER') {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
-                                onChange={(e) => setDialogTransactionType(e.target.value)}
-                                value={dialogTransactionType}
                                 labelId="demo-simple-select-standard-label"
-                                label="Transaction Type">
+                                label="Transaction Type"
+                                value={transactionForm.type}
+                                name='type'
+                                onChange={transactionInput}>
                                 <MenuItem value='DEPOSIT'>Deposit</MenuItem>
                                 <MenuItem value='WITHDRAWAL'>Withdraw</MenuItem>
                                 <MenuItem value='INTERNAL_TRANSFER'>Internal Transfer</MenuItem>
@@ -939,7 +1215,9 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="From Account Type">
+                                label="From Account Type"
+                                name='from_account_type'
+                                onChange={transactionInput}>
                                 <MenuItem value='live'>Live Accounts</MenuItem>
                                 <MenuItem value='ib'>IB Account</MenuItem>
                             </Select>
@@ -951,7 +1229,9 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transfer To</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="Transfer To">
+                                label="Transfer To"
+                                name='transfer_to'
+                                onChange={transactionInput}>
                                 <MenuItem value='own'>Own Account</MenuItem>
                                 <MenuItem value='clients'>Client's Account</MenuItem>
                             </Select>
@@ -963,8 +1243,10 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="From Account">
-                                <MenuItem value=''></MenuItem>
+                                label="From Account"
+                                name='account'
+                                onChange={transactionInput}>
+                                <MenuItem value='1'>121212</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -974,30 +1256,33 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="To Account">
-                                <MenuItem value=''></MenuItem>
+                                label="To Account"
+                                name='account_to'
+                                onChange={transactionInput}>
+                                <MenuItem value='2'>2332232</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
                     </div>
                     <br />
                     <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
                     </div>
                 </div>;
-            } else if (dialogTransactionType == 'CREDIT') {
+            } else if (transactionForm.type == 'CREDIT') {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
-                                onChange={(e) => setDialogTransactionType(e.target.value)}
-                                value={dialogTransactionType}
                                 labelId="demo-simple-select-standard-label"
-                                label="Transaction Type">
+                                label="Transaction Type"
+                                value={transactionForm.type}
+                                name='type'
+                                onChange={transactionInput}>
                                 <MenuItem value='DEPOSIT'>Deposit</MenuItem>
                                 <MenuItem value='WITHDRAWAL'>Withdraw</MenuItem>
                                 <MenuItem value='INTERNAL_TRANSFER'>Internal Transfer</MenuItem>
@@ -1011,7 +1296,9 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Credit Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="Credit Type">
+                                label="Credit Type"
+                                name='credit_type'
+                                onChange={transactionInput}>
                                 <MenuItem value='CREDIT_IN'>Credit In</MenuItem>
                                 <MenuItem value='CREDIT_OUT'>Credit Out</MenuItem>
                             </Select>
@@ -1023,18 +1310,20 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="From Account">
-                                <MenuItem value=''></MenuItem>
+                                label="From Account"
+                                name='account'
+                                onChange={transactionInput}>
+                                <MenuItem value='1'>121212</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
                     </div>
                     <br />
                     <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} />
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
                     </div>
                 </div>;
             }
@@ -1128,11 +1417,11 @@ const Profile = () => {
         } else if (dialogTitle == 'Change Password') {
             return <div>
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Main Password" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="Main Password" variant="standard" sx={{ width: '100%' }} name='main_password' onChange={input5} />
                 </div>
-                <br/>
+                <br />
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="View Password" variant="standard" sx={{ width: '100%' }} />
+                    <TextField id="standard-basic" label="View Password" variant="standard" sx={{ width: '100%' }} name='view_password' onChange={input5} />
                 </div>
             </div>;
         }
@@ -1141,67 +1430,68 @@ const Profile = () => {
     const manageDialogActionButton = () => {
         if (dialogTitle == 'Create MT5 Account') {
             return <div>
-                <Button variant="contained">Create</Button>
+                <Button variant="contained" className='btn-success' onClick={createMt5AccountSubmit}>Create</Button>
             </div>;
         } else if (dialogTitle == 'MT5 Access') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Update</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={Mt5AccountAccessSubmit}>Update</Button>
             </div>;
         } else if (dialogTitle == "Link Existing Account") {
             return <div>
-                <Button variant="contained">Link</Button>
+                <Button variant="contained" className='btn-success' onClick={linkAccountSubmit}>Link</Button>
             </div>;
         } else if (dialogTitle == 'Reset MT5 Password') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-danger font-color-white'>Reset</Button>
+                <Button variant="contained" className='btn-danger font-color-white' onClick={resetAccountPasswordSubmit}>Reset</Button>
             </div>;
         } else if (dialogTitle == 'Change Account leverage') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Change</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={changeLeverageSubmit}>Change</Button>
             </div>;
         } else if (dialogTitle == 'Control Panel Access') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Update</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={cpAccessSubmit}>Update</Button>
             </div>;
         } else if (dialogTitle == 'Add Account') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Add Account</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={bankAccountSubmit}>Add Account</Button>
             </div>;
         } else if (dialogTitle == 'Add New Note') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Add Note</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={noteSubmit}>Add Note</Button>
             </div>;
         } else if (dialogTitle == 'Add New Transaction') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Add Transaction</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={transactionSubmit}>Add Transaction</Button>
             </div>;
         } else if (dialogTitle == 'Link To IB') {
             return <div>
-                <Button variant="contained">Next</Button>
+                <Button variant="contained" className='btn-success' onClick={linkIBFormSubmit}>Next</Button>
             </div>;
         } else if (dialogTitle == 'Link Client') {
             return <div>
-                <Button variant="contained">Save</Button>
+                <Button variant="contained" className='btn-success' onClick={linkClientSubmit}>Save</Button>
             </div>;
         } else if (dialogTitle == 'Add Master Structure') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Add Structure</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={masterStructureSubmit}>Add Structure</Button>
             </div>;
         } else if (dialogTitle == 'ADD SHARED STRUCTURE') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={sharedStructureSubmit}>Add</Button>
             </div>;
         } else if (dialogTitle == 'Send Email') {
             return <div className='dialogMultipleActionButton'>
-                <Button variant="contained" className='btn-gradient'>Send</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={sendMailSubmit}>Send</Button>
             </div>;
         } else if (dialogTitle == 'Link to Campaign') {
             return <div className='dialogMultipleActionButton'>
@@ -1215,9 +1505,506 @@ const Profile = () => {
         } else if (dialogTitle == 'Change Password') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Submit</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={changeAccountPasswordSubmit}>Submit</Button>
             </div>;
         }
+    }
+
+    const input = (event) => {
+        const { name, value } = event.target;
+        setCreateMt5Form((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const createMt5AccountSubmit = () => {
+        console.log(createMt5Form);
+        if (createMt5Form.account_type == '') {
+            toast.error('Please select account type');
+        } else if (createMt5Form.account_option == '') {
+            toast.error('Please select account option');
+        } else {
+            toast.success('Mt5 account has been created successfully.');
+            setOpen(false);
+        }
+    };
+
+    const input1 = (event) => {
+        const { name, value } = event.target;
+        setMt5AccessForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const Mt5AccountAccessSubmit = () => {
+        console.log(Mt5AccessForm);
+        if (Mt5AccessForm.account_type == '') {
+            toast.error('Please select account type');
+        } else if (Mt5AccessForm.status == '') {
+            toast.error('Please select status');
+        } else {
+            toast.success('Mt5 account status has been updated successfully.');
+            setOpen(false);
+        }
+    };
+
+    const input2 = (event) => {
+        const { name, value } = event.target;
+        setLinkAccountForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const linkAccountSubmit = () => {
+        console.log(linkAccountForm);
+        if (linkAccountForm.account_number == '') {
+            toast.error('Please enter account number');
+        } else if (linkAccountForm.account_type == '') {
+            toast.error('Please select account type');
+        } else if (linkAccountForm.account_name == '') {
+            toast.error('Please select account name');
+        } else {
+            toast.success('Mt5 account has been successfully linked.');
+            setOpen(false);
+        }
+    };
+
+    const input3 = (event) => {
+        const { name, value } = event.target;
+        setResetMt5PasswordForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const resetAccountPasswordSubmit = () => {
+        console.log(linkAccountForm);
+        if (resetMt5PasswordForm.account == '') {
+            toast.error('Please select account');
+        } else {
+            toast.success('Mt5 account password has been successfully reset.');
+            setOpen(false);
+        }
+    };
+
+    const input4 = (event) => {
+        const { name, value } = event.target;
+        setChangeLeverageForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const changeLeverageSubmit = () => {
+        console.log(changeLeverageForm);
+        if (changeLeverageForm.account == '') {
+            toast.error('Please select account');
+        } else if (changeLeverageForm.leverage == '') {
+            toast.error('Please select leverage');
+        } else {
+            toast.success('Leverage has been successfully changed.');
+            setOpen(false);
+        }
+    };
+
+    const input5 = (event) => {
+        const { name, value } = event.target;
+        setChangeAccountPasswordForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const changeAccountPasswordSubmit = () => {
+        console.log(changeAccountPasswordForm);
+        if (changeAccountPasswordForm.main_password == '') {
+            toast.error('Please enter main password');
+        } else if (changeAccountPasswordForm.view_password == '') {
+            toast.error('Please enter view password');
+        } else {
+            toast.success('Account password has been successfully changed.');
+            setOpen(false);
+        }
+    };
+
+    const input6 = (event) => {
+        const { name, value } = event.target;
+        setmasterStructureForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const masterStructureSubmit = () => {
+        console.log(masterStructureForm);
+        if (masterStructureForm.name == '') {
+            toast.error('Please enter name');
+        } else if (masterStructureForm.forex_rebate == '') {
+            toast.error('Please enter forex rebate');
+        } else if (masterStructureForm.forex_commission == '') {
+            toast.error('Please enter forex commission');
+        } else if (masterStructureForm.bullion_rebate == '') {
+            toast.error('Please enter bullion rebate');
+        } else if (masterStructureForm.bullion_commission == '') {
+            toast.error('Please enter bullion commission');
+        } else if (masterStructureForm.indices_rebate == '') {
+            toast.error('Please enter indices rebate');
+        } else if (masterStructureForm.indices_commission == '') {
+            toast.error('Please enter indices commission');
+        } else if (masterStructureForm.energy_rebate == '') {
+            toast.error('Please enter energy rebate');
+        } else if (masterStructureForm.energy_commission == '') {
+            toast.error('Please enter energy commission');
+        } else if (masterStructureForm.crypto_rebate == '') {
+            toast.error('Please enter crypto rebate');
+        } else if (masterStructureForm.crypto_commission == '') {
+            toast.error('Please enter crypto commission');
+        } else {
+            toast.success('Master Structure has been created.');
+            setOpen(false);
+        }
+    };
+
+    const profileInput = (event) => {
+        const { name, value } = event.target;
+        setProfileForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const profileSubmit = () => {
+        console.log(profileForm);
+        if (profileForm.title == '') {
+            toast.error('Please select title');
+        } else if (profileForm.first_name == '') {
+            toast.error('Please enter first name');
+        } else if (profileForm.last_name == '') {
+            toast.error('Please enter last name');
+        } else if (profileForm.phone == '') {
+            toast.error('Please enter phone number');
+        } else if (profileForm.mobile == '') {
+            toast.error('Please enter mobile number');
+        } else if (profileForm.email == '') {
+            toast.error('Please enter email address');
+        } else if (profileForm.dob == '') {
+            toast.error('Please select date of birth');
+        } else if (profileForm.nationality == '') {
+            toast.error('Please select nationality');
+        } else if (profileForm.country_of_residence == '') {
+            toast.error('Please select country of residence');
+        } else if (profileForm.city == '') {
+            toast.error('Please enter city');
+        } else if (profileForm.address == '') {
+            toast.error('Please enter address');
+        } else if (profileForm.gender == '') {
+            toast.error('Please select gender');
+        } else if (profileForm.postal_code == '') {
+            toast.error('Please enter postal code');
+        } else if (profileForm.language == '') {
+            toast.error('Please select language');
+        } else if (profileForm.source == '') {
+            toast.error('Please enter source');
+        } else if (profileForm.us_citizen == '') {
+            toast.error('Please select us citizen');
+        } else if (profileForm.finacial_work == '') {
+            toast.error('Please select worked in financial');
+        } else if (profileForm.tax_number == '') {
+            toast.error('Please enter tax identification number');
+        } else if (profileForm.politically_exposed == '') {
+            toast.error('Please select politically exposed');
+        } else if (profileForm.id_type == '') {
+            toast.error('Please select id type');
+        } else if (profileForm.id_number == '') {
+            toast.error('Please enter id number');
+        } else if (profileForm.country_issuce == '') {
+            toast.error('Please enter country issuce');
+        } else if (profileForm.date_issue == '') {
+            toast.error('Please select issue date');
+        } else if (profileForm.date_expiry == '') {
+            toast.error('Please select expiry date');
+        } else {
+            toast.success('Client profile has been updated');
+        }
+    }
+
+    const employementInput = (event) => {
+        const { name, value } = event.target;
+        setEmploymentDetailsForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const employmentDetailsSubmit = () => {
+        console.log(employmentDetailsForm);
+
+        if (employmentDetailsForm.status == '') {
+            toast.error('Please select employment status');
+        } else if (employmentDetailsForm.industry == '') {
+            toast.error('Please select employment industry');
+        } else {
+            toast.success('Employment details information has been updated successfully.');
+        }
+    }
+
+    const sharedStructureSubmit = () => {
+        if (sharedStructureForm.name == '') {
+            toast.error('Please enter structure name');
+        } else if (sharedStructureForm.total_rebate == '') {
+            toast.error('Please enter total rebate');
+        } else if (sharedStructureForm.total_commission == '') {
+            toast.error('Please enter total commission');
+        } else if (sharedStructureForm.list.length > 0) {
+            var emptyIb = false;
+            sharedStructureForm.list.map((rowData, i) => {
+                if (rowData.value == '') {
+                    emptyIb = true;
+                    toast.error('Please enter IB');
+                }
+            });
+
+            if (!emptyIb) {
+                toast.success("Shared Structure has been added successfully");
+                setOpen(false);
+            }
+        } else {
+            toast.success("Shared Structure has been added successfully");
+            setOpen(false);
+        }
+    }
+
+    const sharedStructurAddNewIB = () => {
+        sharedStructureForm.list.push({
+            'id': '',
+            'name': '',
+            'value': ''
+        });
+        setSharedStructureForm({ ...sharedStructureForm });
+    }
+
+    const deleteStructureIB = (e, index) => {
+        console.log(index);
+        sharedStructureForm.list.splice(index, 1);
+        setSharedStructureForm({ ...sharedStructureForm });
+    }
+
+    const inputSteuctureIB = (e, index) => {
+        const { name, value } = e.target;
+        sharedStructureForm.list[index].value = value;
+        setSharedStructureForm({ ...sharedStructureForm });
+    }
+
+    const sharedStructurIBInput = (event) => {
+        const { name, value } = event.target;
+        setSharedStructureForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const linkClientInput = (event) => {
+        const { name, value } = event.target;
+        setLinkClientForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const linkClientSubmit = () => {
+        console.timeLog(linkClientForm);
+        if (linkClientForm.client == '') {
+            toast.error('Please select client');
+        } else if (linkClientForm.structure == '') {
+            toast.error('Please select structure');
+        } else {
+            toast.success('Client has been linked to structure');
+            setOpen(false);
+        }
+    }
+
+    const linkIBInput = (event) => {
+        const { name, value } = event.target;
+        setLinkIBForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const linkIBFormSubmit = () => {
+        console.log(linkIBForm);
+        if (linkIBForm.master_account == '') {
+            toast.error('Please enter master account id');
+        } else if (linkIBForm.customer_name == '') {
+            toast.error('Please enter customer name');
+        } else if (linkIBForm.structure == '') {
+            toast.error('Please select structure');
+        } else {
+            toast.success('IB has been linked to account number');
+            setOpen(false);
+        }
+    }
+
+    const sendMailInput = (event) => {
+        const { name, value } = event.target;
+        setsendMailForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const sendMailSubmit = () => {
+        console.log(sendMailForm);
+        if (sendMailForm.from == '') {
+            toast.error('Please select from e-mail address');
+        } else if (sendMailForm.to == '') {
+            toast.error('Please enter to e-mail address');
+        } else if (sendMailForm.subject == '') {
+            toast.error('Please enter subject');
+        } else if (sendMailForm.template_title == '') {
+            toast.error('Please enter template title');
+        } else if (sendMailForm.language == '') {
+            toast.error('Please select language');
+        } else if (sendMailForm.template == '') {
+            toast.error('Please enter template');
+        } else if (sendMailForm.body == '') {
+            toast.error('Please enter body');
+        } else {
+            toast.success('Mail has been sent successfully.');
+            setOpen(false);
+        }
+    }
+
+    const onContentStateChange = (event) => {
+        sendMailForm.body = draftToHtml(event);
+        setsendMailForm({ ...sendMailForm });
+    }
+
+    const input7 = (event) => {
+        const { name, value } = event.target;
+        setCpAccessForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const cpAccessSubmit = () => {
+        console.log(cpAccessForm);
+        if (cpAccessForm.status == '') {
+            toast.error('Please select control panel access');
+        } else {
+            toast.success('control panel access has been successfully updated');
+            setOpen(false);
+        }
+    }
+
+    const input8 = (event) => {
+        var { name, value } = event.target;
+        if (event.target.getAttribute) {
+            if (event.target.getAttribute('type') == 'checkbox') {
+                value = event.target.checked;
+            }
+        }
+
+        setNoteForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const noteSubmit = () => {
+        console.log(noteForm);
+
+        if (noteForm.notes == '') {
+            toast.error('Please enter note');
+        } else if (noteForm.call_status == '') {
+            toast.error('Please select call status');
+        } else if (noteForm.set_reminder == true && noteForm.date == '') {
+            toast.error('Please select date');
+        } else {
+            toast.success("Note has been successfully added.");
+            setOpen(false);
+        }
+    }
+
+    const bankInput = (event) => {
+        const { name, value } = event.target;
+        setBankAccountForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const bankAccountSubmit = () => {
+        console.log(bankAccountForm);
+
+        if (bankAccountForm.name == '') {
+            toast.error('Please enter beneficiary name');
+        } else if (bankAccountForm.bank_name == '') {
+            toast.error('Please enter beneficiary bank name');
+        } else if (bankAccountForm.bank_address == '') {
+            toast.error('Please enter beneficiary bank address');
+        } else if (bankAccountForm.iban_number == '') {
+            toast.error('Please enter IBAN Number');
+        } else if (bankAccountForm.account_number == '') {
+            toast.error('Please enter account number');
+        } else if (bankAccountForm.swift_code == '') {
+            toast.error('Please enter SWIFT Code');
+        } else if (bankAccountForm.currency_code == '') {
+            toast.error('Please enter currency code');
+        } else {
+            toast.success('Bank account has been successfully created.');
+            setOpen(false);
+        }
+    }
+
+    const transactionInput = (event) => {
+        const { name, value } = event.target;
+        setTransactionForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const transactionSubmit = () => {
+
     }
 
     return (
@@ -1292,8 +2079,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Title"
+                                                                    name='title'
                                                                 >
                                                                     <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                     <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -1304,22 +2092,22 @@ const Profile = () => {
                                                             </FormControl>
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="First Name" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="First Name" variant="standard" focused name='first_name' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Last Name" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Last Name" variant="standard" focused name='last_name' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Phone" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Phone" variant="standard" focused name='phone' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Mobile" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Mobile" variant="standard" focused name='mobile' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Email" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Email" variant="standard" focused name='email' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField type='date' id="standard-basic" label="Date of Birth" variant="standard" sx={{ width: '100%' }} focused />
+                                                            <TextField type='date' id="standard-basic" label="Date of Birth" variant="standard" sx={{ width: '100%' }} focused name='dob' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
                                                             <FormControl variant="standard" sx={{ width: '100%' }} focused>
@@ -1328,8 +2116,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Nationality"
+                                                                    name='nationality'
                                                                 >
                                                                     <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                     <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -1346,8 +2135,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Country of Residence"
+                                                                    name='country_of_residence'
                                                                 >
                                                                     <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                     <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -1358,13 +2148,13 @@ const Profile = () => {
                                                             </FormControl>
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="City" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="City" variant="standard" focused name='city' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Address" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Address" variant="standard" focused name='address' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Address Line 2" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Address Line 2" variant="standard" focused name='address_2' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
                                                             <FormControl variant="standard" sx={{ width: '100%' }} focused>
@@ -1373,8 +2163,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Gender"
+                                                                    name='gender'
                                                                 >
                                                                     <MenuItem value='male'>Male</MenuItem>
                                                                     <MenuItem value='female'>Female</MenuItem>
@@ -1383,7 +2174,7 @@ const Profile = () => {
                                                             </FormControl>
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Postal Code" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Postal Code" variant="standard" focused name='postal_code' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
                                                             <FormControl variant="standard" sx={{ width: '100%' }} focused>
@@ -1392,8 +2183,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Language"
+                                                                    name='language'
                                                                 >
                                                                     <MenuItem value='en-gb'>English</MenuItem>
                                                                     <MenuItem value='ar-ae'>عربي</MenuItem>
@@ -1401,7 +2193,7 @@ const Profile = () => {
                                                             </FormControl>
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Source" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Source" variant="standard" focused name='source' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
                                                             <FormControl variant="standard" sx={{ width: '100%' }} focused>
@@ -1410,8 +2202,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="US citizen ?"
+                                                                    name='us_citizen'
                                                                 >
                                                                     <MenuItem value='yes'>Yes</MenuItem>
                                                                     <MenuItem value='no'>No</MenuItem>
@@ -1425,8 +2218,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Worked in Financial?"
+                                                                    name='finacial_work'
                                                                 >
                                                                     <MenuItem value='yes'>Yes</MenuItem>
                                                                     <MenuItem value='no'>No</MenuItem>
@@ -1434,7 +2228,7 @@ const Profile = () => {
                                                             </FormControl>
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Tax Identification Number" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Tax Identification Number" variant="standard" focused name='tax_number' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
                                                             <FormControl variant="standard" sx={{ width: '100%' }} focused>
@@ -1443,8 +2237,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="Politically exposed ?"
+                                                                    name='politically_exposed'
                                                                 >
                                                                     <MenuItem value='yes'>Yes</MenuItem>
                                                                     <MenuItem value='no'>No</MenuItem>
@@ -1461,8 +2256,9 @@ const Profile = () => {
                                                                     labelId="demo-simple-select-standard-label"
                                                                     id="demo-simple-select-standard"
                                                                     // value={age}
-                                                                    // onChange={handleChange}
+                                                                    onChange={profileInput}
                                                                     label="ID Type"
+                                                                    name='id_type'
                                                                 >
                                                                     <MenuItem value='PASSPORT'>Passport</MenuItem>
                                                                     <MenuItem value='ID'>ID</MenuItem>
@@ -1470,20 +2266,20 @@ const Profile = () => {
                                                             </FormControl>
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="ID Number" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="ID Number" variant="standard" focused name='id_number' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField id="standard-basic" label="Country of Issue" variant="standard" focused />
+                                                            <TextField id="standard-basic" label="Country of Issue" variant="standard" focused name='country_issuce' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField type='date' id="standard-basic" label="Date of Issue" variant="standard" sx={{ width: '100%' }} focused />
+                                                            <TextField type='date' id="standard-basic" label="Date of Issue" variant="standard" sx={{ width: '100%' }} focused name='date_issue' onChange={profileInput} />
                                                         </div>
                                                         <div className='element'>
-                                                            <TextField type='date' id="standard-basic" label="Date of Expiry" variant="standard" sx={{ width: '100%' }} focused />
+                                                            <TextField type='date' id="standard-basic" label="Date of Expiry" variant="standard" sx={{ width: '100%' }} focused name='date_expiry' onChange={profileInput} />
                                                         </div>
                                                     </div>
                                                     <div className='btnActionSection'>
-                                                        <Button variant="contained">Update Profile</Button>
+                                                        <Button variant="contained" className='btn-success' onClick={profileSubmit}>Update Profile</Button>
                                                     </div>
                                                 </Paper>
                                             </Grid>
@@ -1562,8 +2358,9 @@ const Profile = () => {
                                                                             labelId="demo-simple-select-standard-label"
                                                                             id="demo-simple-select-standard"
                                                                             // value={age}
-                                                                            // // onChange={handleChange}
+                                                                            onChange={employementInput}
                                                                             label="Employment Status"
+                                                                            name='status'
                                                                         >
                                                                             <MenuItem value='Employed (full time)'>Employed (full time)</MenuItem>
                                                                             <MenuItem value='Self Employed'>Self Employed</MenuItem>
@@ -1583,8 +2380,9 @@ const Profile = () => {
                                                                             labelId="demo-simple-select-standard-label"
                                                                             id="demo-simple-select-standard"
                                                                             // value={age}
-                                                                            // // onChange={handleChange}
+                                                                            onChange={employementInput}
                                                                             label="Inudstry"
+                                                                            name='industry'
                                                                         >
                                                                             <MenuItem value='Aviation'>Aviation</MenuItem>
                                                                             <MenuItem value='Agricultural'>Agricultural</MenuItem>
@@ -1607,7 +2405,7 @@ const Profile = () => {
                                                                     </FormControl>
                                                                 </div>
                                                                 <div className='btnActionSection employment-details'>
-                                                                    <Button variant="contained">Update Information</Button>
+                                                                    <Button variant="contained" className='btn-success' onClick={employmentDetailsSubmit}>Update Information</Button>
                                                                 </div>
                                                             </Grid>
                                                         </Grid>

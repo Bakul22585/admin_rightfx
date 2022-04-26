@@ -1,9 +1,36 @@
 import { Button, Grid, Paper } from '@mui/material'
-import React from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateRole = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [form, setForm] = useState({
+        role: id,
+    });
+    toast.configure();
+
+    const updateRole = () => {
+        toast.success(`${id} role has been updated successfully.`);
+        navigate("/role_management");
+    }
+    const createRole = () => {
+        toast.success(`${form.role} role has been created successfully.`);
+        navigate("/role_management");
+    }
+    
+    const input = (event) => {
+        const { name, value } = event.target;
+        setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
     console.log('id', id);
     return (
         <div>
@@ -16,7 +43,7 @@ const CreateRole = () => {
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='create-role-content-section'>
                                         <div className='input-section'>
-                                            <input type='text' className='create-role-input' placeholder='Role Name' value={id}/>
+                                            <input type='text' className='create-role-input' placeholder='Role Name' name='role' value={form.role} onChange={input}/>
                                         </div>
                                         {/* <br/> */}
                                         <div className='permission-table'>
@@ -1200,7 +1227,8 @@ const CreateRole = () => {
                                             </div>
                                         </div>
                                         <div className='createRoleButton'>
-                                            <Button variant="contained" className='btn btn-success'>Create Role</Button>
+                                        {(id != undefined) ? <Button variant="contained" className='btn btn-success' onClick={updateRole}>Update Role</Button> : <Button variant="contained" className='btn btn-success' onClick={createRole}>Create Role</Button>}
+                                            
                                         </div>
                                     </div>
                                 </Paper>

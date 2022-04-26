@@ -338,8 +338,8 @@ const ClientList = () => {
                         {(row.kyc_status == "1") ?
                             <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -349,10 +349,10 @@ const ClientList = () => {
         }
     ];
 
-    const actionMenuPopup = (e, index) => {
+    const actionMenuPopup = (e, data) => {
         console.log(e.target.getAttribute('class'));
         console.log(e.target.classList.contains('reject'));
-        handleContextClose(index);
+        handleContextClose(data.sr_no);
         if (e.target.classList.contains('reject')) {
             // setDialogTitle('Reject');
             confirmAlert({
@@ -360,12 +360,12 @@ const ClientList = () => {
                   return (
                     <div className='custom-ui'>
                       <h1>Are you sure?</h1>
-                      <p>Do you want to reject this?</p>
+                      <p>Do you want to rejected this?</p>
                       <div className='confirmation-alert-action-button'>
                         <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
                         <Button variant="contained" className='btn-gradient btn-danger'
                             onClick={() => {
-                            this.handleClickDelete();
+                            changeStatus('rejected', data);
                             onClose();
                             }}
                         >
@@ -383,12 +383,12 @@ const ClientList = () => {
                   return (
                     <div className='custom-ui'>
                       <h1>Are you sure?</h1>
-                      <p>Do you want to approve this?</p>
+                      <p>Do you want to approved this?</p>
                       <div className='confirmation-alert-action-button'>
                         <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
                         <Button variant="contained" className='btn-gradient btn-success'
                             onClick={() => {
-                            this.handleClickDelete();
+                            changeStatus('approved', data);
                             onClose();
                             }}
                         >
@@ -401,6 +401,15 @@ const ClientList = () => {
               });
         }
     };
+
+    const changeStatus = (status, data) => {
+        console.log(status, data);
+        if (status == 'approved') {
+          toast.success('Client has been completed successfully.');
+        } else if (status == 'rejected') {
+          toast.success('Client has been rejected successfully.');
+        }
+      }
 
     return (
         <div>
@@ -479,7 +488,6 @@ const ClientList = () => {
                                                             <Select
                                                                 labelId="demo-simple-select-standard-label"
                                                                 id="demo-simple-select-standard"
-                                                                value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Client type"
                                                                 style={{width: '100%'}}
@@ -495,7 +503,6 @@ const ClientList = () => {
                                                             <Select
                                                                 labelId="demo-simple-select-standard-label"
                                                                 id="demo-simple-select-standard"
-                                                                value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Title"
                                                                 style={{width: '100%'}}
