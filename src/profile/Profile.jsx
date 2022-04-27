@@ -142,6 +142,7 @@ const Profile = () => {
     const [filterBy, setFilterBy] = useState('');
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState();
+
     const [profileForm, setProfileForm] = useState({
         title: '',
         first_name: '',
@@ -262,6 +263,7 @@ const Profile = () => {
         type: '',
         from_account_type: '',
         credit_type: '',
+        deposit_to: '',
         transfer_to: '',
         account: '',
         account_to: '',
@@ -269,6 +271,28 @@ const Profile = () => {
         amount: '',
         img: '',
         note: '',
+        currency_code: '',
+        isLoader: false,
+        transation_id: ''
+    });
+    const [linkCampaignForm, setLinkCampaignForm] = useState({
+        account: '',
+        campaign: '',
+    });
+    const [editSharedStructureForm, setEditSharedStructureForm] = useState({
+        name: '',
+        total_rebate: '',
+        total_commission: '',
+        list: [
+            {
+                'id': '',
+                'name': '',
+                'value': ''
+            }
+        ]
+    });
+    const [deleteStructureForm, setDeleteStructureForm] = useState({
+        structure: '',
     });
     toast.configure();
 
@@ -526,11 +550,31 @@ const Profile = () => {
                 amount: '',
                 img: '',
                 note: '',
+                currency_code: '',
+                isLoader: false,
+                deposit_to: '',
+                transation_id: ''
             });
         } else if (e.target.classList.contains('link_campaign')) {
             setDialogTitle('Link to Campaign');
+            setLinkCampaignForm({
+                account: '',
+                campaign: '',
+            });
         } else if (e.target.classList.contains('edit_structure')) {
-            setDialogTitle('Edit SHARED STRUCTURE');
+            setDialogTitle('EDIT SHARED STRUCTURE');
+            setEditSharedStructureForm({
+                name: '',
+                total_rebate: '',
+                total_commission: '',
+                list: [
+                    {
+                        'id': '',
+                        'name': '',
+                        'value': ''
+                    }
+                ]
+            });
         } else if (e.target.classList.contains('change_password')) {
             setDialogTitle('Change Password');
             setChangeAccountPasswordForm({
@@ -1003,44 +1047,44 @@ const Profile = () => {
                     <FormControlLabel className='declarationCheckbox'
                         control={
                             // <Checkbox checked={true} name="declaration" size="small"/>
-                            <Checkbox name="set_reminder" size="small" onChange={input8}/>
+                            <Checkbox name="set_reminder" size="small" onChange={input8} />
                         }
                         label="Set Reminder"
                     />
                 </div>
                 <br />
                 {(noteForm.set_reminder == true) ? <div>
-                    <TextField type='date' id="standard-textarea" label="Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input8} focused/>
-                </div>: ''}
+                    <TextField type='date' id="standard-textarea" label="Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input8} focused />
+                </div> : ''}
             </div>;
         } else if (dialogTitle == 'Add Account') {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Name" variant="standard" sx={{ width: '100%' }} name='name' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="Beneficiary Name" variant="standard" sx={{ width: '100%' }} name='name' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="Beneficiary Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Bank Address" variant="standard" sx={{ width: '100%' }} name='bank_address' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="Beneficiary Bank Address" variant="standard" sx={{ width: '100%' }} name='bank_address' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="IBAN Number" variant="standard" sx={{ width: '100%' }} name='iban_number' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="IBAN Number" variant="standard" sx={{ width: '100%' }} name='iban_number' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="SWIFT Code" variant="standard" sx={{ width: '100%' }} name='swift_code' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="SWIFT Code" variant="standard" sx={{ width: '100%' }} name='swift_code' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Currency Code" variant="standard" sx={{ width: '100%' }} name='currency_code' onChange={bankInput}/>
+                    <TextField id="standard-basic" label="Currency Code" variant="standard" sx={{ width: '100%' }} name='currency_code' onChange={bankInput} />
                 </div>
             </div>;
         } else if (dialogTitle == 'Add New Transaction') {
@@ -1082,20 +1126,17 @@ const Profile = () => {
                         </FormControl>
                     </div>
                     <br />
-                    <div>
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
+                            <InputLabel id="demo-simple-select-standard-label">Deposit To</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="Account"
-                                name='account'
+                                label="Deposit To"
+                                name='deposit_to'
                                 onChange={transactionInput}>
-                                <MenuItem value='1'>132211</MenuItem>
+                                <MenuItem value='Wallet'>Wallet</MenuItem>
                             </Select>
                         </FormControl>
-                    </div>
-                    <br />
-                    <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                             <Select
@@ -1103,24 +1144,40 @@ const Profile = () => {
                                 label="Payment Gateway"
                                 name='payment'
                                 onChange={transactionInput}>
-                                <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
-                                <MenuItem value='Crypto'>Crypto</MenuItem>
+                                <MenuItem value='Bank'>Bank</MenuItem>
+                                <MenuItem value='UPI'>UPI</MenuItem>
+                                <MenuItem value='USDT'>USDT</MenuItem>
+                                <MenuItem value='Cash'>Cash</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
                     <br />
+                    <div>
+                        <TextField id="standard-basic" label="Transation ID" variant="standard" sx={{ width: '100%' }} name='transation_id' onChange={transactionInput} />
+                    </div>
+                    <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                         <label htmlFor="contained-button-file" className='fileuploadButton'>
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" name='img'/>
+                            <Input accept="image/*" id="contained-button-file" multiple type="file" name='img' />
                             <Button variant="contained" component="span">
                                 <i className="material-icons">backup</i>Upload
                             </Button>
                         </label>
                     </div>
                     <br />
-                    <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
+                    <div className='margeField'>
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
+                        <FormControl variant="standard" sx={{ width: '100%' }}>
+                            <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-standard-label"
+                                label="Currency Code"
+                                name='currency_code'
+                                onChange={transactionInput}>
+                                <MenuItem value='USD'>USD</MenuItem>
+                            </Select>
+                        </FormControl>
                     </div>
                 </div>;
             } else if (transactionForm.type == 'WITHDRAWAL') {
@@ -1142,7 +1199,7 @@ const Profile = () => {
                         </FormControl>
                     </div>
                     <br />
-                    <div>
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
                             <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
                             <Select
@@ -1154,10 +1211,7 @@ const Profile = () => {
                                 <MenuItem value='ib'>IB Account</MenuItem>
                             </Select>
                         </FormControl>
-                    </div>
-                    <br />
-                    <div>
-                        <FormControl variant="standard" sx={{ width: '100%' }}>
+                        {/* <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
@@ -1166,10 +1220,10 @@ const Profile = () => {
                                 onChange={transactionInput}>
                                 <MenuItem value='1'>1212</MenuItem>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
                     </div>
                     <br />
-                    <div>
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                             <Select
@@ -1177,18 +1231,24 @@ const Profile = () => {
                                 label="Payment Gateway"
                                 name='payment'
                                 onChange={transactionInput}>
-                                <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
-                                <MenuItem value='Crypto'>Crypto</MenuItem>
+                                <MenuItem value='BANK'>BANK</MenuItem>
                             </Select>
                         </FormControl>
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
-                    </div>
-                    <br />
-                    <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
+                        <FormControl variant="standard" sx={{ width: '100%' }}>
+                            <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-standard-label"
+                                label="Currency Code"
+                                name='currency_code'
+                                onChange={transactionInput}>
+                                <MenuItem value='USD'>USD</MenuItem>
+                            </Select>
+                        </FormControl>
                     </div>
                 </div>;
             } else if (transactionForm.type == 'INTERNAL_TRANSFER') {
@@ -1210,7 +1270,7 @@ const Profile = () => {
                         </FormControl>
                     </div>
                     <br />
-                    <div>
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
                             <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
                             <Select
@@ -1222,9 +1282,6 @@ const Profile = () => {
                                 <MenuItem value='ib'>IB Account</MenuItem>
                             </Select>
                         </FormControl>
-                    </div>
-                    <br />
-                    <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Transfer To</InputLabel>
                             <Select
@@ -1238,7 +1295,7 @@ const Profile = () => {
                         </FormControl>
                     </div>
                     <br />
-                    <div>
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
                             <Select
@@ -1246,30 +1303,48 @@ const Profile = () => {
                                 label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
-                                <MenuItem value='1'>121212</MenuItem>
+                                <MenuItem value='Wallet'>Wallet</MenuItem>
+                                <MenuItem value='MT5'>MT5</MenuItem>
                             </Select>
                         </FormControl>
-                    </div>
-                    <br />
-                    <div>
-                        <FormControl variant="standard" sx={{ width: '100%' }}>
+                        {(transactionForm.account == 'MT5') ? <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
                                 label="To Account"
                                 name='account_to'
                                 onChange={transactionInput}>
-                                <MenuItem value='2'>2332232</MenuItem>
+                                <MenuItem value='Wallet'>Wallet</MenuItem>
+                            </Select>
+                        </FormControl> : <FormControl variant="standard" sx={{ width: '100%' }}>
+                            <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-standard-label"
+                                label="To Account"
+                                name='account_to'
+                                onChange={transactionInput}>
+                                <MenuItem value='Wallet'>Wallet</MenuItem>
+                                <MenuItem value='MT5'>MT5</MenuItem>
+                            </Select>
+                        </FormControl>}
+
+                    </div>
+                    <br />
+                    {(transactionForm.account_to == 'MT5') ? <div>
+                        <FormControl variant="standard" sx={{ width: '100%' }}>
+                            <InputLabel id="demo-simple-select-standard-label">MT5 Account ID</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-standard-label"
+                                label="MT5 Account ID"
+                                name='type'
+                                onChange={transactionInput}>
+                                <MenuItem value=''></MenuItem>
                             </Select>
                         </FormControl>
-                    </div>
-                    <br />
+                    </div> : (transactionForm.account_to != '') ? (transactionForm.account == 'MT5' && transactionForm.account_to == 'Wallet') ? <div><TextField id="standard-basic" label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} value='120454' disabled focused/></div> : <div><TextField id="standard-basic" label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput}/></div>  : ''}
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
-                    </div>
-                    <br />
-                    <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
                     </div>
                 </div>;
             } else if (transactionForm.type == 'CREDIT') {
@@ -1291,7 +1366,7 @@ const Profile = () => {
                         </FormControl>
                     </div>
                     <br />
-                    <div>
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
                             <InputLabel id="demo-simple-select-standard-label">Credit Type</InputLabel>
                             <Select
@@ -1303,9 +1378,6 @@ const Profile = () => {
                                 <MenuItem value='CREDIT_OUT'>Credit Out</MenuItem>
                             </Select>
                         </FormControl>
-                    </div>
-                    <br />
-                    <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
                             <Select
@@ -1319,12 +1391,10 @@ const Profile = () => {
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput}/>
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
                     </div>
                     <br />
-                    <div>
-                        <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput}/>
-                    </div>
                 </div>;
             }
         } else if (dialogTitle == 'Link to Campaign') {
@@ -1334,8 +1404,10 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Live Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Live Account">
-                            <MenuItem value=''></MenuItem>
+                            label="Live Account"
+                            name='account'
+                            onChange={campaignInput}>
+                            <MenuItem value='1'>12122</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -1345,20 +1417,22 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Campaign</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
-                            label="Campaign">
-                            <MenuItem value=''></MenuItem>
+                            label="Campaign"
+                            name='campaign'
+                            onChange={campaignInput}>
+                            <MenuItem value='2'>525252</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
             </div>;
-        } else if (dialogTitle == 'Edit SHARED STRUCTURE') {
+        } else if (dialogTitle == 'EDIT SHARED STRUCTURE') {
             return <div>
                 <div className='structureInputSection'>
                     <Grid container>
                         <Grid item md={4} lg={4} xl={4} className='label-center'>
                             <div className='structureNameSection'>
                                 <label>Structure Name</label>
-                                <input type='text' className='' placeholder='Structure Name' />
+                                <input type='text' className='' placeholder='Structure Name' name='name' onChange={inputEditSteuctureIB} />
                             </div>
                         </Grid>
                         <Grid item md={8} lg={8} xl={8}>
@@ -1382,10 +1456,10 @@ const Profile = () => {
                                     <label>Executive</label>
                                 </Grid>
                                 <Grid item md={3} lg={3} xl={3}>
-                                    <input type='text' className='' placeholder='Rebate' />
+                                    <input type='text' className='' placeholder='Rebate' name='total_rebate' onChange={inputEditSteuctureIB} />
                                 </Grid>
                                 <Grid item md={3} lg={3} xl={3}>
-                                    <input type='text' className='' placeholder='Commission' />
+                                    <input type='text' className='' placeholder='Commission' name='total_commission' onChange={inputEditSteuctureIB} />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -1393,7 +1467,21 @@ const Profile = () => {
                 </div>
                 <hr className='solid' />
                 <div className='structureInputSection'>
-                    <Grid container spacing={1}>
+                    {editSharedStructureForm.list.map((rowData, i) => <Grid container spacing={1}>
+                        <Grid item md={4} lg={4} xl={4}>
+                            <label>IB</label>
+                        </Grid>
+                        <Grid item md={4} lg={4} xl={4}>
+                            <input type='text' className='' style={{ width: '70%' }} value={rowData.value} onChange={(e) => inputEditSteuctureIB(e, i)} />
+                        </Grid>
+                        <Grid item md={4} lg={4} xl={4}>
+                            <Button variant="contained" className='btn-gradient'>Proceed</Button>
+                            <IconButton aria-label="delete" className='btn-danger' onClick={(e) => deleteEditStructureIB(e, i)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>)}
+                    {/* <Grid container spacing={1}>
                         <Grid item md={4} lg={4} xl={4}>
                             <label>IB</label>
                         </Grid>
@@ -1406,12 +1494,12 @@ const Profile = () => {
                                 <DeleteIcon />
                             </IconButton>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </div>
                 <hr className='solid' />
                 <div className='contentActionButton'>
-                    <Button variant="contained" className='btn-gradient'>Add another IB</Button>
-                    <Button variant="contained">Update For New Clients Only</Button>
+                    <Button variant="contained" className='btn-gradient' onClick={editSharedStructurAddNewIB}>Add another IB</Button>
+                    <Button variant="contained" onClick={editSharedStructureIBSave}>Update For New Clients Only</Button>
                 </div>
             </div>;
         } else if (dialogTitle == 'Change Password') {
@@ -1469,7 +1557,8 @@ const Profile = () => {
         } else if (dialogTitle == 'Add New Transaction') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success' onClick={transactionSubmit}>Add Transaction</Button>
+                {(transactionForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={transactionSubmit}>Add Transaction</Button>}
+
             </div>;
         } else if (dialogTitle == 'Link To IB') {
             return <div>
@@ -1496,9 +1585,9 @@ const Profile = () => {
         } else if (dialogTitle == 'Link to Campaign') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient'>Link</Button>
+                <Button variant="contained" className='btn-gradient btn-success' onClick={linkCampaignSubmit}>Link</Button>
             </div>;
-        } else if (dialogTitle == 'Edit SHARED STRUCTURE') {
+        } else if (dialogTitle == 'EDIT SHARED STRUCTURE') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
             </div>;
@@ -1804,6 +1893,47 @@ const Profile = () => {
         setSharedStructureForm({ ...sharedStructureForm });
     }
 
+    const editSharedStructurAddNewIB = () => {
+        editSharedStructureForm.list.push({
+            'id': '',
+            'name': '',
+            'value': ''
+        });
+        setEditSharedStructureForm({ ...editSharedStructureForm });
+    }
+
+    const editSharedStructureIBSave = () => {
+        if (editSharedStructureForm.list.length > 0) {
+            var emptyIb = false;
+            editSharedStructureForm.list.map((rowData, i) => {
+                if (rowData.value == '') {
+                    emptyIb = true;
+                    toast.error('Please enter IB');
+                }
+            });
+
+            if (!emptyIb) {
+                toast.success("Edit Shared Structure has been added successfully");
+                setOpen(false);
+            }
+        } else {
+            toast.success("Edit Shared Structure has been added successfully");
+            setOpen(false);
+        }
+    }
+
+    const deleteEditStructureIB = (e, index) => {
+        console.log(index);
+        editSharedStructureForm.list.splice(index, 1);
+        setEditSharedStructureForm({ ...editSharedStructureForm });
+    }
+
+    const inputEditSteuctureIB = (e, index) => {
+        const { name, value } = e.target;
+        editSharedStructureForm.list[index].value = value;
+        setEditSharedStructureForm({ ...editSharedStructureForm });
+    }
+
     const deleteStructureIB = (e, index) => {
         console.log(index);
         sharedStructureForm.list.splice(index, 1);
@@ -1995,6 +2125,24 @@ const Profile = () => {
 
     const transactionInput = (event) => {
         const { name, value } = event.target;
+        if (name == 'type') {
+            setTransactionForm({
+                type: '',
+                from_account_type: '',
+                credit_type: '',
+                transfer_to: '',
+                account: '',
+                account_to: '',
+                payment: '',
+                amount: '',
+                img: '',
+                note: '',
+                currency_code: '',
+                isLoader: false,
+                deposit_to: '',
+                transation_id: ''
+            });
+        }
         setTransactionForm((prevalue) => {
             return {
                 ...prevalue,
@@ -2003,9 +2151,166 @@ const Profile = () => {
         });
     }
 
-    const transactionSubmit = () => {
+    const transactionSubmit = async () => {
+        console.log(transactionForm);
 
+        if (transactionForm.type == '') {
+            toast.error('Please select transaction type');
+        } else if (transactionForm.type == 'DEPOSIT') {
+            if (transactionForm.deposit_to == '') {
+                toast.error('Please select deposit to');
+            } else if (transactionForm.payment == '') {
+                toast.error('Please select payment gateway');
+            } else if (transactionForm.transation_id == '') {
+                toast.error('Please enter transation id');
+            } else if (transactionForm.amount == '') {
+                toast.error('Please enter amount');
+            } else if (transactionForm.note == '') {
+                toast.error('Please enter note');
+            } else if (transactionForm.currency_code == '') {
+                toast.error('Please select currency code');
+            } else {
+                transactionForm.isLoader = true;
+                setTransactionForm({ ...transactionForm });
+                const param = new FormData();
+                param.append('action', 'add_deposit');
+                param.append('is_react', '1');
+                param.append('user_id', id);
+                param.append('deposit_to', transactionForm.deposit_to);
+                param.append('payment_method', transactionForm.payment);
+                param.append('transactionid', transactionForm.transation_id);
+                param.append('amount', transactionForm.amount);
+                param.append('currency', transactionForm.currency_code);
+                param.append('note', transactionForm.note);
+                await axios.post(`https://alphapixclients.com/forex/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                    transactionForm.isLoader = false;
+                    setTransactionForm({ ...transactionForm });
+                    if (res.data.status == 'error') {
+                        toast.error(res.data.message);
+                    } else {
+                        toast.success(res.data.message);
+                        setOpen(false);
+                    }
+                });
+                /* toast.success('Deposit has been successfully added.');
+                setOpen(false); */
+            }
+        } else if (transactionForm.type == 'WITHDRAWAL') {
+            if (transactionForm.from_account_type == '') {
+                toast.error('Please select from account type');
+            } else if (transactionForm.payment == '') {
+                toast.error('Please select payment gateway');
+            } else if (transactionForm.amount == '') {
+                toast.error('Please enter amount');
+            } else if (transactionForm.note == '') {
+                toast.error('Please enter note');
+            } else if (transactionForm.currency_code == '') {
+                toast.error('Please select currency code');
+            } else {
+                transactionForm.isLoader = true;
+                setTransactionForm({ ...transactionForm });
+                const param = new FormData();
+                param.append('action', 'add_withdraw');
+                param.append('is_react', '1');
+                param.append('user_id', id);
+                param.append('account_type', transactionForm.from_account_type);
+                param.append('payment_method', transactionForm.payment);
+                param.append('amount', transactionForm.amount);
+                param.append('currency', transactionForm.currency_code);
+                param.append('note', transactionForm.note);
+                await axios.post(`https://alphapixclients.com/forex/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                    // setLoader(false);
+                    transactionForm.isLoader = false;
+                    setTransactionForm({ ...transactionForm });
+                    if (res.data.status == 'error') {
+                        toast.error(res.data.message);
+                    } else {
+                        toast.success(res.data.message);
+                        setOpen(false);
+                    }
+                });
+            }
+        } else if (transactionForm.type == 'INTERNAL_TRANSFER') {
+            if (transactionForm.from_account_type == '') {
+                toast.error('Please select from account type');
+            } else if (transactionForm.transfer_to == '') {
+                toast.error('Please select transfer to');
+            } else if (transactionForm.account == '') {
+                toast.error('Please select from account');
+            } else if (transactionForm.account_to == '') {
+                toast.error('Please select to account');
+            } else if (transactionForm.amount == '') {
+                toast.error('Please enter amount');
+            } else if (transactionForm.note == '') {
+                toast.error('Please enter note');
+            } else {
+                toast.success('Internal transfer has been successfully added.');
+                setOpen(false);
+            }
+        } else if (transactionForm.type == 'CREDIT') {
+            if (transactionForm.credit_type == '') {
+                toast.error('Please select credit type');
+            } else if (transactionForm.account == '') {
+                toast.error('Please select account');
+            } else if (transactionForm.amount == '') {
+                toast.error('Please enter amount');
+            } else if (transactionForm.note == '') {
+                toast.error('Please enter note');
+            } else {
+                toast.success('Credit has been successfully added.');
+                setOpen(false);
+            }
+        }
     }
+
+    const campaignInput = (event) => {
+        const { name, value } = event.target;
+        setLinkCampaignForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const linkCampaignSubmit = () => {
+        console.log(linkCampaignForm);
+
+        if (linkCampaignForm.account == '') {
+            toast.error("Please select account");
+        } else if (linkCampaignForm.campaign == '') {
+            toast.error("Please select campaign");
+        } else {
+            toast.success("Campaign has been successfully linked.");
+            setOpen(false);
+        }
+    }
+
+    const input9 = (event) => {
+        var { name, value } = event.target;
+
+        setDeleteStructureForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const deleteStructureSubmit = () => {
+        if (deleteStructureForm.structure == "") {
+            toast.error('Please select structure');
+        } else {
+            toast.success('Structure has been successfully deleted');
+            setDeleteStructureForm({
+                structure: ''
+            });
+        }
+    }
+
+    useEffect(() => {
+        console.log('call get user details api');
+    }, []);
 
     return (
         <div>
@@ -2606,11 +2911,13 @@ const Profile = () => {
                                                                 <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
                                                                 <Select
                                                                     labelId="demo-simple-select-standard-label"
-                                                                    label="Structure">
-                                                                    <MenuItem value=''></MenuItem>
+                                                                    label="Structure"
+                                                                    name='structure'
+                                                                    onChange={input9}>
+                                                                    <MenuItem value='1'>Test</MenuItem>
                                                                 </Select>
                                                             </FormControl>
-                                                            <Button variant="contained" className='add_master_structure'>Structure Delete</Button>
+                                                            <Button variant="contained" className='add_master_structure btn-danger' onClick={deleteStructureSubmit}>Structure Delete</Button>
                                                         </div>
                                                         <div className='groun-button'>
                                                             <Button variant="contained" className='add_master_structure' onClick={openDialogbox}>Add Master Structure</Button>

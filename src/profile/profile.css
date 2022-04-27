@@ -224,3 +224,12 @@ hr.solid {
 text.highcharts-credits {
     display: none;
 }
+
+.add_master_structure.btn-danger {
+    color: white !important;
+}
+.btn-success:disabled {
+    font-size: 7px;
+    pointer-events: unset !important;
+    cursor: not-allowed !important;
+}

@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import logo1 from "../sidebar/logo1.png";
 import { useNavigate } from "react-router-dom"
+import axios from 'axios';
 
 // import logo from './logo2.png';
 // import ForgotPassword from './ForgotPassword';
@@ -45,6 +46,7 @@ export default function Login1(prop) {
     // console.log(prop.setLogin);
     const [isSubmit, setisSubmit] = useState(false);
     const [infoErrors, setInfoErrors] = useState({});
+    const [loader, setLoader] = useState(false);
     const [info, setinfo] = useState({
         email: "",
         password: "",
@@ -58,7 +60,7 @@ export default function Login1(prop) {
             };
         });
 
-        console.log(info);
+        // console.log(info);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -93,10 +95,21 @@ export default function Login1(prop) {
     toast.configure();
     useEffect(() => {
         if (Object.keys(infoErrors).length === 0 && isSubmit) {
-            notify1("Login successful");
-            localStorage.setItem('login', false);
-            prop.setLogin("false")
-            navigate("/dashboard");
+            setLoader(true);
+            const param = new FormData();
+            param.append('username', info.email);
+            param.append('password', info.password);
+            axios.post(`https://alphapixclients.com/forex/admin/ajaxfiles/login_check.php`, param).then((res) => {
+                setLoader(false);
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    notify1("Login successful");
+                    localStorage.setItem('login', false);
+                    prop.setLogin("false")
+                    navigate("/dashboard");
+                }
+            });
         }
     }, [infoErrors]);
 
@@ -137,7 +150,16 @@ export default function Login1(prop) {
                             </div>
 
                             <div className="text-center w-50 mx-auto">
-                                <ColorButton
+                                {(loader == true) ?<ColorButton
+                                    tabindex="0"
+                                    type="submit"
+                                    size="large"
+                                    className=" font-weight-bold w-100 my-2 p-3 btn-disabled-login"
+                                    disabled
+                                >
+                                    <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+                                    <span className="MuiTouchRipple-root"></span>
+                                </ColorButton> : <ColorButton
                                     tabindex="0"
                                     type="submit"
                                     size="large"
@@ -145,7 +167,8 @@ export default function Login1(prop) {
                                 >
                                     <span style={{ textTransform: "capitalize" }}>Log In</span>
                                     <span className="MuiTouchRipple-root"></span>
-                                </ColorButton>
+                                </ColorButton>}
+                                
                             </div>
                         </form>
                     </div>

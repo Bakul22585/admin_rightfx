@@ -278,7 +278,6 @@ const Withdraw = () => {
                     <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' onChange={input} />
                 </div>
                 <br/>
-                
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
@@ -287,8 +286,7 @@ const Withdraw = () => {
                             label="Payment Gateway"
                             name='payment_gateway'
                             onChange={input}>
-                            <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
-                            <MenuItem value='Crypto'>Crypto</MenuItem>
+                            <MenuItem value='BANK'>BANK</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -302,10 +300,10 @@ const Withdraw = () => {
                         </Button>}
                     </label> */}
                 </div>
-                <br />
+                {/* <br />
                 <div>
                     <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={input}/>
-                </div>
+                </div> */}
             </div>;
         } else if (dialogTitle == 'View') {
             return <div>
@@ -424,79 +422,6 @@ const Withdraw = () => {
                                         {manageDialogActionButton()}
                                     </DialogActions>
                                 </BootstrapDialog>
-                                {/* <Paper elevation={2} style={{ borderRadius: "10px" }}>
-                                    <div className="card-header font-weight-bold text-dark border-bottom py-2">
-                                        Filter Criteria
-                                    </div>
-                                    <CardContent className="py-3">
-                                        <Grid container spacing={2}>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Transaction Type
-                                                    </label>
-                                                    <Select
-                                                        value={age}
-                                                        onChange={handleChange}
-                                                        displayEmpty
-                                                        inputProps={{ "aria-label": "Without label" }}
-                                                        input={<BootstrapInput />}
-                                                    >
-                                                        <MenuItem value="All">All</MenuItem>
-
-                                                        <MenuItem value="deposit">Deposit</MenuItem>
-                                                        <MenuItem value="withdrawal">Withdrawal</MenuItem>
-                                                        <MenuItem value="internal_transfer">
-                                                            Internal Transfer
-                                                        </MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Trading Account
-                                                    </label>
-                                                    <Select
-                                                        value={age}
-                                                        onChange={handleChange}
-                                                        displayEmpty
-                                                        inputProps={{ "aria-label": "Without label" }}
-                                                        input={<BootstrapInput />}
-                                                    >
-                                                        <MenuItem value="All">All</MenuItem>
-                                                        <MenuItem value="deposit">19861</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Date From
-                                                    </label>
-                                                    <BootstrapInput type="date"></BootstrapInput>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Date To
-                                                    </label>
-                                                    <BootstrapInput type="date" ></BootstrapInput>
-                                                </FormControl>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={2}>
-                                            <Grid item sm={12} md={12}>
-                                                <div className="filter-submit">
-                                                    <ColorButton className=" d-block ml-auto mb-3 mr-3 ">
-                                                        Sumbit
-                                                    </ColorButton>
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Paper> */}
                             </Grid>
                         </Grid>
                     </div>

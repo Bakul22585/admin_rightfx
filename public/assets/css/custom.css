@@ -17633,3 +17633,13 @@ hr {
     left: -8px;
   }
 }
+
+.btn-disabled-login {
+  padding: 10px !important;
+}
+.btn-disabled-login i {
+  font-size: 26px;
+}
+/* .MuiButton-containedPrimary {
+  background-color: #2a3f73 !important;
+} */

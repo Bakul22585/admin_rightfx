@@ -207,7 +207,7 @@ const ClientList = () => {
 
     const gotoProfile = (e) => {
         console.log('goto profile page', e);
-        navigate("/profile/" + e.name);
+        navigate("/profile/" + e.user_id);
     }
 
     const input1 = (event) => {
