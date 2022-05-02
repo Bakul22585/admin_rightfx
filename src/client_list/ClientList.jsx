@@ -25,6 +25,7 @@ import Typography from '@mui/material/Typography';
 import CommonFilter from '../common/CommonFilter';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { Url } from '../global';
 
 const CssTextField = styled(TextField)({
 });
@@ -429,7 +430,7 @@ const ClientList = () => {
                                         <Button variant="contained">All</Button>
                                     </div>
                                     <br />
-                                    <CommonTable url='https://alphapixclients.com/forex/admin/datatable/users_list.php' column={depositColumn} sort='0' filter={filterData} />
+                                    <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
                                 </Paper>
 
                                 <BootstrapDialog

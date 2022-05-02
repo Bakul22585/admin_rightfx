@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import logo1 from "../sidebar/logo1.png";
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
+import { Url } from '../global';
 
 // import logo from './logo2.png';
 // import ForgotPassword from './ForgotPassword';
@@ -99,7 +100,7 @@ export default function Login1(prop) {
             const param = new FormData();
             param.append('username', info.email);
             param.append('password', info.password);
-            axios.post(`https://alphapixclients.com/forex/admin/ajaxfiles/login_check.php`, param).then((res) => {
+            axios.post(`${Url}/admin/ajaxfiles/login_check.php`, param).then((res) => {
                 setLoader(false);
                 if (res.data.status == 'error') {
                     toast.error(res.data.message);

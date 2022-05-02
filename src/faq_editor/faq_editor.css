@@ -6,3 +6,9 @@
     line-height: 1.2;
     font-family: cairo,sans-serif;
 }
+.status-active {
+    color: #3d9730;
+}
+.status-in-active {
+    color: #f83245;
+}

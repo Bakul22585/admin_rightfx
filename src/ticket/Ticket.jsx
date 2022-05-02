@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from '../common/CommonFilter';
 import CommonTable from '../common/CommonTable';
+import { Url } from '../global';
 
 const Ticket = () => {
 
@@ -78,7 +79,7 @@ const Ticket = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url='https://alphapixclients.com/forex/admin/datatable/ticket_list.php' column={column} sort='0' />
+                                                <CommonTable url={`${Url}/admin/datatable/ticket_list.php`} column={column} sort='0' />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

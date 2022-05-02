@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from '../common/CommonFilter';
 import CommonTable from '../common/CommonTable';
+import { Url } from '../global';
 
 const ActivityLog = () => {
 
@@ -50,7 +51,7 @@ const ActivityLog = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
+                                                <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

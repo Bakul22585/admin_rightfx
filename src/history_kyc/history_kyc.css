@@ -6,3 +6,30 @@
     line-height: 1.2;
     font-family: cairo,sans-serif;
 }
+.view-margeField {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    gap: 5px;
+}
+.view-margeField .element {
+    display: flex;
+    word-break: break-word;
+    flex-direction: column;
+}
+.view-margeField label:nth-child(1){
+    font-weight: 500;
+}
+.view-image-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+.view-image-section label:nth-child(1) {
+    font-weight: 500;
+}
+.view-image-section .element img {
+    width: 150px;
+    height: 150px;
+}
+.popup-loader .loader {
+    height: calc(100vh - 450px);
+}

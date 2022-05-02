@@ -6,3 +6,15 @@
     line-height: 1.2;
     font-family: cairo,sans-serif;
 }
+.checkbox-section {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.action-button-section {
+    display: flex;
+    justify-content: center;
+}
+.action-button-section button {
+    width: 30%;
+}

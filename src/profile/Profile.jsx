@@ -1,6 +1,8 @@
 import './profile.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
+import * as Highcharts from 'highcharts/highmaps';
+import HighchartsReact from 'highcharts-react-official';
 import { FormControl, Grid, MenuItem, Select, Menu, Tabs, Tab, Typography, InputLabel, FormControlLabel, Checkbox, Input } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -32,6 +34,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from 'draftjs-to-html';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import mapDataWorld from '@highcharts/map-collection/custom/world.geo.json';
+import Chart from "react-apexcharts";
+import { Url } from '../global';
+const WorldMap = require('react-world-map');
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -127,6 +135,296 @@ function getStyles(name, personName, theme) {
     };
 }
 
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+    "label + &": {
+        marginTop: theme.spacing(0),
+    },
+    "& .MuiInputBase-input": {
+        borderRadius: 9,
+        position: "relative",
+        backgroundColor: theme.palette.background.paper,
+        border: "1px solid #ced4da",
+        fontSize: 16,
+        padding: "8px 10px 8px 10px",
+        marginTop: 0,
+        transition: theme.transitions.create(["border-color", "box-shadow"]),
+        // Use the system font instead of the default Roboto font.
+
+        "&:hover": {
+            borderColor: "#1e64b4;",
+        },
+        "&:focus": {
+            borderRadius: 9,
+            borderColor: "#1e64b4;",
+            border: "2px solid #1e64b4;",
+        },
+    },
+}));
+
+var data: [string, number][] = [
+    ['fo', 0],
+    ['um', 1],
+    ['us', 2],
+    ['jp', 3],
+    ['sc', 4],
+    ['in', 500],
+    ['fr', 6],
+    ['fm', 7],
+    ['cn', 8],
+    ['pt', 9],
+    ['sw', 10],
+    ['sh', 11],
+    ['br', 12],
+    ['ki', 13],
+    ['ph', 14],
+    ['mx', 15],
+    ['es', 16],
+    ['bu', 17],
+    ['mv', 18],
+    ['sp', 19],
+    ['gb', 20],
+    ['gr', 21],
+    ['as', 22],
+    ['dk', 23],
+    ['gl', 24],
+    ['gu', 25],
+    ['mp', 26],
+    ['pr', 27],
+    ['vi', 28],
+    ['ca', 29],
+    ['st', 30],
+    ['cv', 31],
+    ['dm', 32],
+    ['nl', 33],
+    ['jm', 34],
+    ['ws', 35],
+    ['om', 36],
+    ['vc', 37],
+    ['tr', 38],
+    ['bd', 39],
+    ['lc', 40],
+    ['nr', 41],
+    ['no', 42],
+    ['kn', 43],
+    ['bh', 44],
+    ['to', 45],
+    ['fi', 46],
+    ['id', 47],
+    ['mu', 48],
+    ['se', 49],
+    ['tt', 50],
+    ['my', 51],
+    ['pa', 52],
+    ['pw', 53],
+    ['tv', 54],
+    ['mh', 55],
+    ['cl', 56],
+    ['th', 57],
+    ['gd', 58],
+    ['ee', 59],
+    ['ag', 60],
+    ['tw', 61],
+    ['bb', 62],
+    ['it', 63],
+    ['mt', 64],
+    ['vu', 65],
+    ['sg', 66],
+    ['cy', 67],
+    ['lk', 68],
+    ['km', 69],
+    ['fj', 70],
+    ['ru', 71],
+    ['va', 72],
+    ['sm', 73],
+    ['kz', 74],
+    ['az', 75],
+    ['tj', 76],
+    ['ls', 77],
+    ['uz', 78],
+    ['ma', 79],
+    ['co', 80],
+    ['tl', 81],
+    ['tz', 82],
+    ['ar', 83],
+    ['sa', 84],
+    ['pk', 85],
+    ['ye', 86],
+    ['ae', 87],
+    ['ke', 88],
+    ['pe', 89],
+    ['do', 90],
+    ['ht', 91],
+    ['pg', 92],
+    ['ao', 93],
+    ['kh', 94],
+    ['vn', 95],
+    ['mz', 96],
+    ['cr', 97],
+    ['bj', 98],
+    ['ng', 99],
+    ['ir', 100],
+    ['sv', 101],
+    ['sl', 102],
+    ['gw', 103],
+    ['hr', 104],
+    ['bz', 105],
+    ['za', 106],
+    ['cf', 107],
+    ['sd', 108],
+    ['cd', 109],
+    ['kw', 110],
+    ['de', 111],
+    ['be', 112],
+    ['ie', 113],
+    ['kp', 114],
+    ['kr', 115],
+    ['gy', 116],
+    ['hn', 117],
+    ['mm', 118],
+    ['ga', 119],
+    ['gq', 120],
+    ['ni', 121],
+    ['lv', 122],
+    ['ug', 123],
+    ['mw', 124],
+    ['am', 125],
+    ['sx', 126],
+    ['tm', 127],
+    ['zm', 128],
+    ['nc', 129],
+    ['mr', 130],
+    ['dz', 131],
+    ['lt', 132],
+    ['et', 133],
+    ['er', 134],
+    ['gh', 135],
+    ['si', 136],
+    ['gt', 137],
+    ['ba', 138],
+    ['jo', 139],
+    ['sy', 140],
+    ['mc', 141],
+    ['al', 142],
+    ['uy', 143],
+    ['cnm', 144],
+    ['mn', 145],
+    ['rw', 146],
+    ['so', 147],
+    ['bo', 148],
+    ['cm', 149],
+    ['cg', 150],
+    ['eh', 151],
+    ['rs', 152],
+    ['me', 153],
+    ['tg', 154],
+    ['la', 155],
+    ['af', 156],
+    ['ua', 157],
+    ['sk', 158],
+    ['jk', 159],
+    ['bg', 160],
+    ['qa', 161],
+    ['li', 162],
+    ['at', 163],
+    ['sz', 164],
+    ['hu', 165],
+    ['ro', 166],
+    ['ne', 167],
+    ['lu', 168],
+    ['ad', 169],
+    ['ci', 170],
+    ['lr', 171],
+    ['bn', 172],
+    ['iq', 173],
+    ['ge', 174],
+    ['gm', 175],
+    ['ch', 176],
+    ['td', 177],
+    ['kv', 178],
+    ['lb', 179],
+    ['dj', 180],
+    ['bi', 181],
+    ['sr', 182],
+    ['il', 183],
+    ['ml', 184],
+    ['sn', 185],
+    ['gn', 186],
+    ['zw', 187],
+    ['pl', 188],
+    ['mk', 189],
+    ['py', 190],
+    ['by', 191],
+    ['cz', 192],
+    ['bf', 193],
+    ['na', 194],
+    ['ly', 195],
+    ['tn', 196],
+    ['bt', 197],
+    ['md', 198],
+    ['ss', 199],
+    ['bw', 200],
+    ['bs', 201],
+    ['nz', 202],
+    ['cu', 203],
+    ['ec', 204],
+    ['au', 205],
+    ['ve', 206],
+    ['sb', 207],
+    ['mg', 208],
+    ['is', 209],
+    ['eg', 210],
+    ['kg', 211],
+    ['np', 212]
+];
+
+const options: Highcharts.Options = {
+    colors: ['rgba(227, 64, 117, 1)', 'rgba(227,64,117,0.2)', 'rgba(227,64,117,0.4)',
+        'rgba(227,64,117,0.5)', 'rgba(227,64,117,0.6)', 'rgba(227,64,117,0.8)', 'rgba(227,64,117,1)'],
+    title: {
+        text: ""
+    },
+    colorAxis: {
+        dataClasses: [{
+            to: 3,
+            color: 'rgba(227, 64, 117, 0.1)'
+        }, {
+            from: 3,
+            to: 10,
+            color: 'rgba(227,64,117,0.2)'
+        }, {
+            from: 10,
+            to: 30,
+            color: 'rgba(227,64,117,0.4)'
+        }, {
+            from: 30,
+            to: 100,
+            color: 'rgba(227,64,117,0.5)'
+        }, {
+            from: 100,
+            to: 300,
+            color: 'rgba(227,64,117,0.6)'
+        }, {
+            from: 300,
+            to: 1000,
+            color: 'rgba(227,64,117,0.8)'
+        }, {
+            from: 1000,
+            color: 'rgba(227, 64, 117, 1)'
+        }]
+    },
+    series: [{
+        type: 'map',
+        mapData: mapDataWorld,
+        data: data,
+    }],
+    mapNavigation: {
+        enabled: true,
+        buttonOptions: {
+            verticalAlign: "bottom"
+        }
+    },
+}
+
 const Profile = () => {
 
     const theme = useTheme();
@@ -137,11 +435,22 @@ const Profile = () => {
     const [dialogTitle, setDialogTitle] = useState('');
     const [dialogTransactionType, setDialogTransactionType] = useState('');
     const [openTableMenus, setOpenTableMenus] = useState([]);
-    const [filterData, setFilterData] = useState({});
+    // const [filterData, setFilterData] = useState({});
+    const [userData, setuserData] = useState({ isLoader: true, data: {} });
     const [filterSection, setFilterSection] = useState(false);
     const [filterBy, setFilterBy] = useState('');
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState();
+    const [option, setOption] = useState(true);
+    const [filterData, setFilterData] = useState(null);
+    const [change, setChange] = useState(false);
+    const [proofAdd, setProofAdd] = useState([]);
+    const [doc, setDoc] = useState({
+        proof: "",
+        id: "",
+        fontimg: "",
+        backimg: "",
+    });
 
     const [profileForm, setProfileForm] = useState({
         title: '',
@@ -273,7 +582,9 @@ const Profile = () => {
         note: '',
         currency_code: '',
         isLoader: false,
-        transation_id: ''
+        transation_id: '',
+        wallet_code: '',
+        mt5_account_id: ''
     });
     const [linkCampaignForm, setLinkCampaignForm] = useState({
         account: '',
@@ -553,7 +864,9 @@ const Profile = () => {
                 currency_code: '',
                 isLoader: false,
                 deposit_to: '',
-                transation_id: ''
+                transation_id: '',
+                wallet_code: '',
+                mt5_account_id: ''
             });
         } else if (e.target.classList.contains('link_campaign')) {
             setDialogTitle('Link to Campaign');
@@ -1330,20 +1643,34 @@ const Profile = () => {
 
                     </div>
                     <br />
-                    {(transactionForm.account_to == 'MT5') ? <div>
+                    <div className='margeField'>
+                        {(transactionForm.account_to == 'MT5') ?
+                            <FormControl variant="standard" sx={{ width: '100%' }}>
+                                <InputLabel id="demo-simple-select-standard-label">MT5 Account ID</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    label="MT5 Account ID"
+                                    name='mt5_account_id'
+                                    onChange={transactionInput}>
+                                    <MenuItem value='1'>121212</MenuItem>
+                                </Select>
+                            </FormControl>
+                            : (transactionForm.account_to != '') ? (transactionForm.account == 'MT5' && transactionForm.account_to == 'Wallet') ? <TextField className='disabled-input-wallet-code' label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} value={userData.data['wallet_code']} disabled focused /> : <TextField id="standard-basic" label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} focused /> : ''}
+
+                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                    </div>
+                    <br />
+                    <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">MT5 Account ID</InputLabel>
+                            <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
-                                label="MT5 Account ID"
-                                name='type'
+                                label="Currency Code"
+                                name='currency_code'
                                 onChange={transactionInput}>
-                                <MenuItem value=''></MenuItem>
+                                <MenuItem value='USD'>USD</MenuItem>
                             </Select>
                         </FormControl>
-                    </div> : (transactionForm.account_to != '') ? (transactionForm.account == 'MT5' && transactionForm.account_to == 'Wallet') ? <div><TextField id="standard-basic" label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} value='120454' disabled focused/></div> : <div><TextField id="standard-basic" label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput}/></div>  : ''}
-                    <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                         <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
                     </div>
                 </div>;
@@ -2140,8 +2467,17 @@ const Profile = () => {
                 currency_code: '',
                 isLoader: false,
                 deposit_to: '',
-                transation_id: ''
+                transation_id: '',
+                wallet_code: '',
+                mt5_account_id: ''
             });
+        }
+
+        if (name == 'account_to') {
+            if (transactionForm.account == 'MT5' && value == 'Wallet') {
+                transactionForm.wallet_code = userData.data['wallet_code'];
+                setTransactionForm({ ...transactionForm });
+            }
         }
         setTransactionForm((prevalue) => {
             return {
@@ -2149,6 +2485,8 @@ const Profile = () => {
                 [name]: value,
             };
         });
+
+
     }
 
     const transactionSubmit = async () => {
@@ -2175,14 +2513,14 @@ const Profile = () => {
                 const param = new FormData();
                 param.append('action', 'add_deposit');
                 param.append('is_react', '1');
-                param.append('user_id', id);
+                param.append('user_id', userData.data['user_id']);
                 param.append('deposit_to', transactionForm.deposit_to);
                 param.append('payment_method', transactionForm.payment);
                 param.append('transactionid', transactionForm.transation_id);
                 param.append('amount', transactionForm.amount);
                 param.append('currency', transactionForm.currency_code);
                 param.append('note', transactionForm.note);
-                await axios.post(`https://alphapixclients.com/forex/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
                     if (res.data.status == 'error') {
@@ -2212,13 +2550,13 @@ const Profile = () => {
                 const param = new FormData();
                 param.append('action', 'add_withdraw');
                 param.append('is_react', '1');
-                param.append('user_id', id);
+                param.append('user_id', userData.data['user_id']);
                 param.append('account_type', transactionForm.from_account_type);
                 param.append('payment_method', transactionForm.payment);
                 param.append('amount', transactionForm.amount);
                 param.append('currency', transactionForm.currency_code);
                 param.append('note', transactionForm.note);
-                await axios.post(`https://alphapixclients.com/forex/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
                     // setLoader(false);
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
@@ -2239,13 +2577,50 @@ const Profile = () => {
                 toast.error('Please select from account');
             } else if (transactionForm.account_to == '') {
                 toast.error('Please select to account');
+            } else if (transactionForm.account_to == 'MT5' && transactionForm.mt5_account_id == '') {
+                toast.error('Please select mt5 account id');
+            } else if (transactionForm.account_to == 'Wallet' && transactionForm.wallet_code == '') {
+                toast.error('Please enter wallet code');
             } else if (transactionForm.amount == '') {
                 toast.error('Please enter amount');
+            } else if (transactionForm.currency_code == '') {
+                toast.error('Please select currency code');
             } else if (transactionForm.note == '') {
                 toast.error('Please enter note');
             } else {
-                toast.success('Internal transfer has been successfully added.');
-                setOpen(false);
+                transactionForm.isLoader = true;
+                setTransactionForm({ ...transactionForm });
+                const param = new FormData();
+                param.append('action', 'add_internal_transfer');
+                param.append('is_react', '1');
+                param.append('user_id', userData.data['user_id']);
+                param.append('from_transfer', transactionForm.account);
+                param.append('to_transfer', transactionForm.account_to);
+                if (transactionForm.account_to == 'MT5') {
+                    param.append('wallet_id', '');
+                    param.append('mt5_account_id', transactionForm.mt5_account_id);
+                } else {
+                    param.append('wallet_id', transactionForm.wallet_code);
+                    param.append('mt5_account_id', '');
+                }
+                param.append('amount', transactionForm.amount);
+                param.append('currency', transactionForm.currency_code);
+                param.append('from_account_type', transactionForm.from_account_type);
+                param.append('transfer_to', transactionForm.transfer_to);
+                param.append('note', transactionForm.note);
+                await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                    // setLoader(false);
+                    transactionForm.isLoader = false;
+                    setTransactionForm({ ...transactionForm });
+                    if (res.data.status == 'error') {
+                        toast.error(res.data.message);
+                    } else {
+                        toast.success(res.data.message);
+                        setOpen(false);
+                    }
+                });
+                // toast.success('Internal transfer has been successfully added.');
+                // setOpen(false);
             }
         } else if (transactionForm.type == 'CREDIT') {
             if (transactionForm.credit_type == '') {
@@ -2308,652 +2683,1050 @@ const Profile = () => {
         }
     }
 
+    const getUserDetails = async () => {
+        const param = new FormData();
+        param.append('is_react', '1');
+        param.append('user_id', id);
+        userData.isLoader = true;
+        setuserData({ ...userData });
+        await axios.post(`${Url}/admin/ajaxfiles/fetch_user_details.php`, param).then((res) => {
+            userData.isLoader = false;
+            setuserData({ ...userData });
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                // console.log(res.data.data);
+                userData.data = res.data.data;
+                // setuserData({...res.data.data});
+                // console.log(userData);
+                setuserData({ ...userData });
+                console.log(userData);
+            }
+        });
+    };
+
     useEffect(() => {
-        console.log('call get user details api');
+        getUserDetails();
     }, []);
 
     return (
         <div>
             <div className="app-content--inner">
                 <div className="app-content--inner__wrapper mh-100-vh">
-                    <div style={{ opacity: 1 }}>
-                        <Grid container>
-                            <Grid item md={12} lg={12} xl={12}>
-                                <div className='client-detail-header'>
-                                    <div className='client-name'>
-                                        <label>{id}</label>
-                                        <p>CU96331414</p>
+                    {(userData.isLoader == true)
+                        ? <div className='loader'>
+                            <div className="clock">
+                                <div className="pointers"></div>
+                            </div>
+                        </div>
+                        : <div style={{ opacity: 1 }}>
+                            <Grid container>
+                                <Grid item md={12} lg={12} xl={12}>
+                                    <div className='client-detail-header'>
+                                        <div className='client-name'>
+                                            <label>{userData.data['user_first_name']} {userData.data['user_last_name']}</label>
+                                            <p className='margin-bottom-remove'>{userData.data['wallet_code']}</p>
+                                        </div>
+                                        <div className='header-highlight'>
+                                            <label>Created On</label>
+                                            <p>{userData.data['added_datetime']}</p>
+                                        </div>
+                                        <div className='header-highlight'>
+                                            <label>Total Accounts</label>
+                                            <p>0</p>
+                                        </div>
+                                        <div className='header-highlight'>
+                                            <label>Account Currency</label>
+                                            <p>USD</p>
+                                        </div>
+                                        <div className='header-highlight'>
+                                            <label>Balance</label>
+                                            <p>$ 0.00</p>
+                                        </div>
+                                        <div className='header-highlight'>
+                                            <label>Sales Agent</label>
+                                            <p>Not Assigned</p>
+                                        </div>
                                     </div>
-                                    <div className='header-highlight'>
-                                        <label>Created On</label>
-                                        <p>March 21st 2022, 4:13 pm</p>
-                                    </div>
-                                    <div className='header-highlight'>
-                                        <label>Total Accounts</label>
-                                        <p>0</p>
-                                    </div>
-                                    <div className='header-highlight'>
-                                        <label>Account Currency</label>
-                                        <p>USD</p>
-                                    </div>
-                                    <div className='header-highlight'>
-                                        <label>Balance</label>
-                                        <p>$ 0.00</p>
-                                    </div>
-                                    <div className='header-highlight'>
-                                        <label>Sales Agent</label>
-                                        <p>Not Assigned</p>
-                                    </div>
-                                </div>
-                                <br />
-                                {/* <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}> */}
-                                <Tabs
-                                    value={value}
-                                    onChange={handleChange}
-                                    variant="scrollable"
-                                    scrollButtons="auto"
-                                    aria-label="scrollable auto tabs example"
-                                    className='tabsBar'
-                                >
-                                    <Tab label="PROFILE PAGE" />
-                                    <Tab label="BANK DETAILS" />
-                                    <Tab label="DOCUMENTS" />
-                                    <Tab label="ACCOUNTS" />
-                                    <Tab label="ACTIVITIES" />
-                                    <Tab label="LOGS" />
-                                    <Tab label="TRANSACTIONS" />
-                                    <Tab label="REFERRALS" />
-                                    <Tab label="PARTNERSHIP" />
-                                    <Tab label="STATEMENT" />
-                                </Tabs>
-                                <SwipeableViews
-                                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                                    index={value}
-                                    onChangeIndex={handleChangeIndex}
-                                >
-                                    <TabPanel value={value} index={0} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={9} lg={9} xl={9}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <p className='header-title'>General Information</p>
-                                                    <div className='contentSection formSection'>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Title"
-                                                                    name='title'
-                                                                >
-                                                                    <MenuItem value='Mr.'>Mr.</MenuItem>
-                                                                    <MenuItem value='Mrs'>Mrs</MenuItem>
-                                                                    <MenuItem value='Miss'>Miss</MenuItem>
-                                                                    <MenuItem value='Ms'>Ms</MenuItem>
-                                                                    <MenuItem value='Dr'>Dr</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
+                                    <br />
+                                    {/* <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}> */}
+                                    <Tabs
+                                        value={value}
+                                        onChange={handleChange}
+                                        variant="scrollable"
+                                        scrollButtons="auto"
+                                        aria-label="scrollable auto tabs example"
+                                        className='tabsBar'
+                                    >
+                                        <Tab label="PROFILE PAGE" />
+                                        <Tab label="BANK DETAILS" />
+                                        <Tab label="DOCUMENTS" />
+                                        <Tab label="ACCOUNTS" />
+                                        <Tab label="ACTIVITIES" />
+                                        <Tab label="LOGS" />
+                                        <Tab label="TRANSACTIONS" />
+                                        <Tab label="REFERRALS" />
+                                        <Tab label="PARTNERSHIP" />
+                                        <Tab label="STATEMENT" />
+                                    </Tabs>
+                                    <SwipeableViews
+                                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                        index={value}
+                                        onChangeIndex={handleChangeIndex}
+                                    >
+                                        <TabPanel value={value} index={0} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={9} lg={9} xl={9}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <p className='header-title'>General Information</p>
+                                                        <div className='contentSection formSection'>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Title"
+                                                                        name='title'
+                                                                    >
+                                                                        <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                        <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                        <MenuItem value='Miss'>Miss</MenuItem>
+                                                                        <MenuItem value='Ms'>Ms</MenuItem>
+                                                                        <MenuItem value='Dr'>Dr</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="First Name" variant="standard" value={userData.data['user_first_name']} focused name='first_name' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Last Name" variant="standard" value={userData.data['user_last_name']} focused name='last_name' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Phone" variant="standard" focused name='phone' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Mobile" variant="standard" value={userData.data['user_phone']} focused name='mobile' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Email" variant="standard" value={userData.data['user_email']} focused name='email' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField type='date' id="standard-basic" label="Date of Birth" variant="standard" sx={{ width: '100%' }} focused name='dob' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Nationality</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Nationality"
+                                                                        name='nationality'
+                                                                    >
+                                                                        <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                        <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                        <MenuItem value='Miss'>Miss</MenuItem>
+                                                                        <MenuItem value='Ms'>Ms</MenuItem>
+                                                                        <MenuItem value='Dr'>Dr</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Country of Residence</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Country of Residence"
+                                                                        name='country_of_residence'
+                                                                    >
+                                                                        <MenuItem value='Mr.'>Mr.</MenuItem>
+                                                                        <MenuItem value='Mrs'>Mrs</MenuItem>
+                                                                        <MenuItem value='Miss'>Miss</MenuItem>
+                                                                        <MenuItem value='Ms'>Ms</MenuItem>
+                                                                        <MenuItem value='Dr'>Dr</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="City" variant="standard" focused name='city' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Address" variant="standard" focused name='address' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Address Line 2" variant="standard" focused name='address_2' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Gendere</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Gender"
+                                                                        name='gender'
+                                                                    >
+                                                                        <MenuItem value='male'>Male</MenuItem>
+                                                                        <MenuItem value='female'>Female</MenuItem>
+                                                                        <MenuItem value='other'>Other</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Postal Code" variant="standard" focused name='postal_code' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Language"
+                                                                        name='language'
+                                                                    >
+                                                                        <MenuItem value='en-gb'>English</MenuItem>
+                                                                        <MenuItem value='ar-ae'>عربي</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Source" variant="standard" focused name='source' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">US citizen ?</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="US citizen ?"
+                                                                        name='us_citizen'
+                                                                    >
+                                                                        <MenuItem value='yes'>Yes</MenuItem>
+                                                                        <MenuItem value='no'>No</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Worked in Financial?</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Worked in Financial?"
+                                                                        name='finacial_work'
+                                                                    >
+                                                                        <MenuItem value='yes'>Yes</MenuItem>
+                                                                        <MenuItem value='no'>No</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Tax Identification Number" variant="standard" focused name='tax_number' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Politically exposed ?</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="Politically exposed ?"
+                                                                        name='politically_exposed'
+                                                                    >
+                                                                        <MenuItem value='yes'>Yes</MenuItem>
+                                                                        <MenuItem value='no'>No</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
                                                         </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="First Name" variant="standard" focused name='first_name' onChange={profileInput} />
+                                                        <p className='newSection-title'>ID Details</p>
+                                                        <div className='contentSection formSection'>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel id="demo-simple-select-standard-label">ID Type</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        id="demo-simple-select-standard"
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        label="ID Type"
+                                                                        name='id_type'
+                                                                    >
+                                                                        <MenuItem value='PASSPORT'>Passport</MenuItem>
+                                                                        <MenuItem value='ID'>ID</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="ID Number" variant="standard" focused name='id_number' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField id="standard-basic" label="Country of Issue" variant="standard" focused name='country_issuce' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField type='date' id="standard-basic" label="Date of Issue" variant="standard" sx={{ width: '100%' }} focused name='date_issue' onChange={profileInput} />
+                                                            </div>
+                                                            <div className='element'>
+                                                                <TextField type='date' id="standard-basic" label="Date of Expiry" variant="standard" sx={{ width: '100%' }} focused name='date_expiry' onChange={profileInput} />
+                                                            </div>
                                                         </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Last Name" variant="standard" focused name='last_name' onChange={profileInput} />
+                                                        <div className='btnActionSection'>
+                                                            <Button variant="contained" className='btn-success' onClick={profileSubmit}>Update Profile</Button>
                                                         </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Phone" variant="standard" focused name='phone' onChange={profileInput} />
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item md={3} lg={3} xl={3}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                        <p className='header-title'>Quick Actions</p>
+                                                        <div className='contentSection'>
+                                                            <p className='group-header'>Trading Account</p>
+                                                            <div className='mt5btngroup'>
+                                                                <Button variant="contained" className='createMt5' onClick={openDialogbox}>Create MT5</Button>
+                                                                <Button variant="contained" className='mt5_access' onClick={openDialogbox}>MT5 Access</Button>
+                                                                <Button variant="contained" className='link_mt5' onClick={openDialogbox}>Link MT5</Button>
+                                                                <Button variant="contained" className='reset_mt5' onClick={openDialogbox}>Reset MT5</Button>
+                                                                <Button variant="contained" className='change_leverage' onClick={openDialogbox}>Change Leverage</Button>
+                                                                <Button variant="contained" className='change_password' onClick={openDialogbox}>Change Password</Button>
+                                                            </div>
+                                                            <br />
+                                                            <p className='group-header'>IB</p>
+                                                            <div className='mt5btngroup'>
+                                                                <Button variant="contained" className='add_master_structure' onClick={openDialogbox}>Add Master Structure</Button>
+                                                                <Button variant="contained" className='add_shared_structure' onClick={openDialogbox}>Add Shared Structure</Button>
+                                                                <Button variant="contained" className='link_client' onClick={openDialogbox} >Link Client</Button>
+                                                                <Button variant="contained" className='link_ib' onClick={openDialogbox}>Link To IB</Button>
+                                                                <Button variant="contained" className='unlink_ib' onClick={openDialogbox} >Unlink IB</Button>
+                                                            </div>
+                                                            <br />
+                                                            <p className='group-header'>Communication</p>
+                                                            <div className='mt5btngroup'>
+                                                                <Button variant="contained" className='send_email' onClick={openDialogbox}>Send Email</Button>
+                                                            </div>
+                                                            <br />
+                                                            <p className='group-header'>Client Portal</p>
+                                                            <div className='mt5btngroup'>
+                                                                <Button variant="contained" className='cp_access' onClick={openDialogbox}>CP Access</Button>
+                                                                <Button variant="contained" className='view_cp_password' onClick={openDialogbox} >View CP Password</Button>
+                                                            </div>
+                                                            <br />
+                                                            <p className='group-header'>Misc.</p>
+                                                            <div className='mt5btngroup'>
+                                                                <Button variant="contained" className='download_application' onClick={openDialogbox}>Download Application</Button>
+                                                                <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button>
+                                                                <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add Bank</Button>
+                                                                <Button variant="contained" className='add_transaction' onClick={openDialogbox}>Add Transaction</Button>
+                                                            </div>
                                                         </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Mobile" variant="standard" focused name='mobile' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Email" variant="standard" focused name='email' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField type='date' id="standard-basic" label="Date of Birth" variant="standard" sx={{ width: '100%' }} focused name='dob' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Nationality</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Nationality"
-                                                                    name='nationality'
-                                                                >
-                                                                    <MenuItem value='Mr.'>Mr.</MenuItem>
-                                                                    <MenuItem value='Mrs'>Mrs</MenuItem>
-                                                                    <MenuItem value='Miss'>Miss</MenuItem>
-                                                                    <MenuItem value='Ms'>Ms</MenuItem>
-                                                                    <MenuItem value='Dr'>Dr</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Country of Residence</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Country of Residence"
-                                                                    name='country_of_residence'
-                                                                >
-                                                                    <MenuItem value='Mr.'>Mr.</MenuItem>
-                                                                    <MenuItem value='Mrs'>Mrs</MenuItem>
-                                                                    <MenuItem value='Miss'>Miss</MenuItem>
-                                                                    <MenuItem value='Ms'>Ms</MenuItem>
-                                                                    <MenuItem value='Dr'>Dr</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="City" variant="standard" focused name='city' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Address" variant="standard" focused name='address' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Address Line 2" variant="standard" focused name='address_2' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Gendere</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Gender"
-                                                                    name='gender'
-                                                                >
-                                                                    <MenuItem value='male'>Male</MenuItem>
-                                                                    <MenuItem value='female'>Female</MenuItem>
-                                                                    <MenuItem value='other'>Other</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Postal Code" variant="standard" focused name='postal_code' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Language"
-                                                                    name='language'
-                                                                >
-                                                                    <MenuItem value='en-gb'>English</MenuItem>
-                                                                    <MenuItem value='ar-ae'>عربي</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Source" variant="standard" focused name='source' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">US citizen ?</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="US citizen ?"
-                                                                    name='us_citizen'
-                                                                >
-                                                                    <MenuItem value='yes'>Yes</MenuItem>
-                                                                    <MenuItem value='no'>No</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Worked in Financial?</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Worked in Financial?"
-                                                                    name='finacial_work'
-                                                                >
-                                                                    <MenuItem value='yes'>Yes</MenuItem>
-                                                                    <MenuItem value='no'>No</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Tax Identification Number" variant="standard" focused name='tax_number' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">Politically exposed ?</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="Politically exposed ?"
-                                                                    name='politically_exposed'
-                                                                >
-                                                                    <MenuItem value='yes'>Yes</MenuItem>
-                                                                    <MenuItem value='no'>No</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                    </div>
-                                                    <p className='newSection-title'>ID Details</p>
-                                                    <div className='contentSection formSection'>
-                                                        <div className='element'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                <InputLabel id="demo-simple-select-standard-label">ID Type</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    id="demo-simple-select-standard"
-                                                                    // value={age}
-                                                                    onChange={profileInput}
-                                                                    label="ID Type"
-                                                                    name='id_type'
-                                                                >
-                                                                    <MenuItem value='PASSPORT'>Passport</MenuItem>
-                                                                    <MenuItem value='ID'>ID</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="ID Number" variant="standard" focused name='id_number' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField id="standard-basic" label="Country of Issue" variant="standard" focused name='country_issuce' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField type='date' id="standard-basic" label="Date of Issue" variant="standard" sx={{ width: '100%' }} focused name='date_issue' onChange={profileInput} />
-                                                        </div>
-                                                        <div className='element'>
-                                                            <TextField type='date' id="standard-basic" label="Date of Expiry" variant="standard" sx={{ width: '100%' }} focused name='date_expiry' onChange={profileInput} />
-                                                        </div>
-                                                    </div>
-                                                    <div className='btnActionSection'>
-                                                        <Button variant="contained" className='btn-success' onClick={profileSubmit}>Update Profile</Button>
-                                                    </div>
-                                                </Paper>
+                                                    </Paper>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item md={3} lg={3} xl={3}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
-                                                    <p className='header-title'>Quick Actions</p>
-                                                    <div className='contentSection'>
-                                                        <p className='group-header'>Trading Account</p>
-                                                        <div className='mt5btngroup'>
-                                                            <Button variant="contained" className='createMt5' onClick={openDialogbox}>Create MT5</Button>
-                                                            <Button variant="contained" className='mt5_access' onClick={openDialogbox}>MT5 Access</Button>
-                                                            <Button variant="contained" className='link_mt5' onClick={openDialogbox}>Link MT5</Button>
-                                                            <Button variant="contained" className='reset_mt5' onClick={openDialogbox}>Reset MT5</Button>
-                                                            <Button variant="contained" className='change_leverage' onClick={openDialogbox}>Change Leverage</Button>
-                                                            <Button variant="contained" className='change_password' onClick={openDialogbox}>Change Password</Button>
-                                                        </div>
-                                                        <br />
-                                                        <p className='group-header'>IB</p>
-                                                        <div className='mt5btngroup'>
-                                                            <Button variant="contained" className='add_master_structure' onClick={openDialogbox}>Add Master Structure</Button>
-                                                            <Button variant="contained" className='add_shared_structure' onClick={openDialogbox}>Add Shared Structure</Button>
-                                                            <Button variant="contained" className='link_client' onClick={openDialogbox} >Link Client</Button>
-                                                            <Button variant="contained" className='link_ib' onClick={openDialogbox}>Link To IB</Button>
-                                                            <Button variant="contained" className='unlink_ib' onClick={openDialogbox} >Unlink IB</Button>
-                                                        </div>
-                                                        <br />
-                                                        <p className='group-header'>Communication</p>
-                                                        <div className='mt5btngroup'>
-                                                            <Button variant="contained" className='send_email' onClick={openDialogbox}>Send Email</Button>
-                                                        </div>
-                                                        <br />
-                                                        <p className='group-header'>Client Portal</p>
-                                                        <div className='mt5btngroup'>
-                                                            <Button variant="contained" className='cp_access' onClick={openDialogbox}>CP Access</Button>
-                                                            <Button variant="contained" className='view_cp_password' onClick={openDialogbox} >View CP Password</Button>
-                                                        </div>
-                                                        <br />
-                                                        <p className='group-header'>Misc.</p>
-                                                        <div className='mt5btngroup'>
-                                                            <Button variant="contained" className='download_application' onClick={openDialogbox}>Download Application</Button>
-                                                            <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button>
-                                                            <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add Bank</Button>
-                                                            <Button variant="contained" className='add_transaction' onClick={openDialogbox}>Add Transaction</Button>
-                                                        </div>
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                        <br />
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={6} lg={6} xl={6}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <p className='header-title'>Financial Information</p>
-                                                    <div className='contentSection'>
-                                                        <Grid container spacing={3} className='grid-handle'>
-                                                            <Grid item md={6} lg={6} xl={6}>
-                                                                <p className='subtitle'>Annual Income</p>
+                                            <br />
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={6} lg={6} xl={6}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <p className='header-title'>Financial Information</p>
+                                                        <div className='contentSection'>
+                                                            <Grid container spacing={3} className='grid-handle'>
+                                                                <Grid item md={6} lg={6} xl={6}>
+                                                                    <p className='subtitle'>Annual Income</p>
+                                                                </Grid>
+                                                                <Grid item md={6} lg={6} xl={6}>
+                                                                    <p className='subtitle'>Source of Funds</p>
+                                                                </Grid>
                                                             </Grid>
-                                                            <Grid item md={6} lg={6} xl={6}>
-                                                                <p className='subtitle'>Source of Funds</p>
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item md={6} lg={6} xl={6}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <p className='header-title'>Employment Details</p>
+                                                        <div className='contentSection'>
+                                                            <Grid container spacing={3} className='grid-handle'>
+                                                                <Grid item md={6} lg={6} xl={6}>
+                                                                    <div className='element' style={{ width: '100%' }}>
+                                                                        <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                            <InputLabel id="demo-simple-select-standard-label">Employment Status</InputLabel>
+                                                                            <Select
+                                                                                labelId="demo-simple-select-standard-label"
+                                                                                id="demo-simple-select-standard"
+                                                                                // value={age}
+                                                                                onChange={employementInput}
+                                                                                label="Employment Status"
+                                                                                name='status'
+                                                                            >
+                                                                                <MenuItem value='Employed (full time)'>Employed (full time)</MenuItem>
+                                                                                <MenuItem value='Self Employed'>Self Employed</MenuItem>
+                                                                                <MenuItem value='Employed (part time )'>Employed (part time )</MenuItem>
+                                                                                <MenuItem value='unemployed'>unemployed</MenuItem>
+                                                                                <MenuItem value='Student'>Student</MenuItem>
+                                                                                <MenuItem value='Retired'>Retired</MenuItem>
+                                                                            </Select>
+                                                                        </FormControl>
+                                                                    </div>
+                                                                </Grid>
+                                                                <Grid item md={6} lg={6} xl={6}>
+                                                                    <div className='element' style={{ width: '100%' }}>
+                                                                        <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                            <InputLabel id="demo-simple-select-standard-label">Inudstry</InputLabel>
+                                                                            <Select
+                                                                                labelId="demo-simple-select-standard-label"
+                                                                                id="demo-simple-select-standard"
+                                                                                // value={age}
+                                                                                onChange={employementInput}
+                                                                                label="Inudstry"
+                                                                                name='industry'
+                                                                            >
+                                                                                <MenuItem value='Aviation'>Aviation</MenuItem>
+                                                                                <MenuItem value='Agricultural'>Agricultural</MenuItem>
+                                                                                <MenuItem value='Financial industry'>Financial industry</MenuItem>
+                                                                                <MenuItem value='Marketing'>Marketing</MenuItem>
+                                                                                <MenuItem value='Retail industry'>Retail industry</MenuItem>
+                                                                                <MenuItem value='HR'>HR</MenuItem>
+                                                                                <MenuItem value='Management'>Management</MenuItem>
+                                                                                <MenuItem value='Healthcare'>Healthcare</MenuItem>
+                                                                                <MenuItem value='Administration'>Administration</MenuItem>
+                                                                                <MenuItem value='Academic'>Academic</MenuItem>
+                                                                                <MenuItem value='Engineering'>Engineering</MenuItem>
+                                                                                <MenuItem value='Civil Engineering'>Civil Engineering</MenuItem>
+                                                                                <MenuItem value='Architecture'>Architecture</MenuItem>
+                                                                                <MenuItem value='Media'>Media</MenuItem>
+                                                                                <MenuItem value='Chemical engineering'>Chemical engineering</MenuItem>
+                                                                                <MenuItem value='Power engineering'>Power engineering</MenuItem>
+                                                                                <MenuItem value='Other'>Other</MenuItem>
+                                                                            </Select>
+                                                                        </FormControl>
+                                                                    </div>
+                                                                    <div className='btnActionSection employment-details'>
+                                                                        <Button variant="contained" className='btn-success' onClick={employmentDetailsSubmit}>Update Information</Button>
+                                                                    </div>
+                                                                </Grid>
                                                             </Grid>
-                                                        </Grid>
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                            <Grid item md={6} lg={6} xl={6}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <p className='header-title'>Employment Details</p>
-                                                    <div className='contentSection'>
-                                                        <Grid container spacing={3} className='grid-handle'>
-                                                            <Grid item md={6} lg={6} xl={6}>
-                                                                <div className='element' style={{ width: '100%' }}>
-                                                                    <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                        <InputLabel id="demo-simple-select-standard-label">Employment Status</InputLabel>
-                                                                        <Select
-                                                                            labelId="demo-simple-select-standard-label"
-                                                                            id="demo-simple-select-standard"
-                                                                            // value={age}
-                                                                            onChange={employementInput}
-                                                                            label="Employment Status"
-                                                                            name='status'
-                                                                        >
-                                                                            <MenuItem value='Employed (full time)'>Employed (full time)</MenuItem>
-                                                                            <MenuItem value='Self Employed'>Self Employed</MenuItem>
-                                                                            <MenuItem value='Employed (part time )'>Employed (part time )</MenuItem>
-                                                                            <MenuItem value='unemployed'>unemployed</MenuItem>
-                                                                            <MenuItem value='Student'>Student</MenuItem>
-                                                                            <MenuItem value='Retired'>Retired</MenuItem>
-                                                                        </Select>
-                                                                    </FormControl>
-                                                                </div>
-                                                            </Grid>
-                                                            <Grid item md={6} lg={6} xl={6}>
-                                                                <div className='element' style={{ width: '100%' }}>
-                                                                    <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                        <InputLabel id="demo-simple-select-standard-label">Inudstry</InputLabel>
-                                                                        <Select
-                                                                            labelId="demo-simple-select-standard-label"
-                                                                            id="demo-simple-select-standard"
-                                                                            // value={age}
-                                                                            onChange={employementInput}
-                                                                            label="Inudstry"
-                                                                            name='industry'
-                                                                        >
-                                                                            <MenuItem value='Aviation'>Aviation</MenuItem>
-                                                                            <MenuItem value='Agricultural'>Agricultural</MenuItem>
-                                                                            <MenuItem value='Financial industry'>Financial industry</MenuItem>
-                                                                            <MenuItem value='Marketing'>Marketing</MenuItem>
-                                                                            <MenuItem value='Retail industry'>Retail industry</MenuItem>
-                                                                            <MenuItem value='HR'>HR</MenuItem>
-                                                                            <MenuItem value='Management'>Management</MenuItem>
-                                                                            <MenuItem value='Healthcare'>Healthcare</MenuItem>
-                                                                            <MenuItem value='Administration'>Administration</MenuItem>
-                                                                            <MenuItem value='Academic'>Academic</MenuItem>
-                                                                            <MenuItem value='Engineering'>Engineering</MenuItem>
-                                                                            <MenuItem value='Civil Engineering'>Civil Engineering</MenuItem>
-                                                                            <MenuItem value='Architecture'>Architecture</MenuItem>
-                                                                            <MenuItem value='Media'>Media</MenuItem>
-                                                                            <MenuItem value='Chemical engineering'>Chemical engineering</MenuItem>
-                                                                            <MenuItem value='Power engineering'>Power engineering</MenuItem>
-                                                                            <MenuItem value='Other'>Other</MenuItem>
-                                                                        </Select>
-                                                                    </FormControl>
-                                                                </div>
-                                                                <div className='btnActionSection employment-details'>
-                                                                    <Button variant="contained" className='btn-success' onClick={employmentDetailsSubmit}>Update Information</Button>
-                                                                </div>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                            <Grid item md={6} lg={6} xl={6}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <p className='header-title'>Declarations</p>
-                                                    <div className='contentSection'>
-                                                        <FormControlLabel className='declarationCheckbox'
-                                                            control={
-                                                                <Checkbox defaultChecked name="declaration" />
-                                                            }
-                                                            label="By clicking here I give my consent for Exiniti to contact me for marketing purposes. You can opt out at any time. For further details please see ourMarketing and Communication Policy Statement."
-                                                        />
-                                                        {/* <div className='element'>
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item md={6} lg={6} xl={6}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <p className='header-title'>Declarations</p>
+                                                        <div className='contentSection'>
+                                                            <FormControlLabel className='declarationCheckbox'
+                                                                control={
+                                                                    <Checkbox defaultChecked name="declaration" />
+                                                                }
+                                                                label="By clicking here I give my consent for Exiniti to contact me for marketing purposes. You can opt out at any time. For further details please see ourMarketing and Communication Policy Statement."
+                                                            />
+                                                            {/* <div className='element'>
                                                         </div> */}
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={1} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Bank Accounts</p>
-                                                        <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add New Bank Account</Button>
-                                                    </div>
-                                                    {/* <br/> */}
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/users_list.php' column={depositColumn} sort='0' filter={filterData} />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={2} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={6} lg={6} xl={6}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Upload New Document</p>
-                                                        {/* <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add New Bank Account</Button> */}
-                                                    </div>
-                                                    {/* <br/> */}
-                                                    <div className='documentDetailsTabSection'>
-                                                        <div className='documentSelectionSection'>
-                                                            <FormControl variant="standard" sx={{ width: '70%' }}>
-                                                                {/* <InputLabel id="demo-simple-select-standard-label">Client</InputLabel> */}
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    label="Client">
-                                                                    <MenuItem value='ID_PROOF'>Proof of ID</MenuItem>
-                                                                    <MenuItem value='ADDRESS_PROOF'>Proof of Address</MenuItem>
-                                                                    <MenuItem value='ADDITIONAL_DOCUMENTS'>Additional Documents</MenuItem>
-                                                                    <MenuItem value='AGREEMENTS_INTERNAL'>Agreements Internal</MenuItem>
-                                                                    <MenuItem value='WORLD_CHECK'>World Check</MenuItem>
-                                                                    <MenuItem value='APPLICATIONS'>Applications</MenuItem>
-                                                                    <MenuItem value='IB_STRUCTURE'>IB Structure</MenuItem>
-                                                                    <MenuItem value='AGREEMENT'>Agreement</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                            <FormControl variant="standard" sx={{ width: '30%' }}>
-                                                                {/* <InputLabel id="demo-simple-select-standard-label">Client</InputLabel> */}
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    label="Client">
-                                                                    <MenuItem value='ID'>ID</MenuItem>
-                                                                    <MenuItem value='PASSPORT'>PASSPORT</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
                                                         </div>
-                                                    </div>
-                                                </Paper>
+                                                    </Paper>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={3} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Accounts</p>
-                                                        <div className='groun-button'>
-                                                            <Button variant="contained" className='link_campaign' onClick={openDialogbox}>Link to Campaign</Button>
-                                                            <Button variant="contained" className='link_mt5' onClick={openDialogbox}>Link Account</Button>
-                                                            <Button variant="contained" className='createMt5' onClick={openDialogbox}>Create Account</Button>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={1} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Bank Accounts</p>
+                                                            <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add New Bank Account</Button>
                                                         </div>
-                                                    </div>
-                                                    {/* <br/> */}
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/users_list.php' column={depositColumn} sort='0' filter={filterData} />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={4} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Activities</p>
-                                                    </div>
-                                                    {/* <br/> */}
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={5} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Notes</p>
-                                                        <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button>
-                                                    </div>
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                        <br />
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Individual Stage History</p>
-                                                        {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
-                                                    </div>
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                        <br />
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>IB Stage History</p>
-                                                        {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
-                                                    </div>
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                        <br />
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Status History</p>
-                                                        {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
-                                                    </div>
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={6} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <p className='margin-0'>Transactions</p>
-                                                        <Button variant="contained" className='add_transaction' onClick={openDialogbox}>Add New Transaction</Button>
-                                                    </div>
-                                                    <div className='bankDetailsTabSection'>
-                                                        <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
-                                                    </div>
-                                                </Paper>
-                                            </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={7} dir={theme.direction}>
-                                        Item 8
-                                    </TabPanel>
-                                    <TabPanel value={value} index={8} dir={theme.direction}>
-                                        <Grid container spacing={3} className='grid-handle'>
-                                            <Grid item md={12} lg={12} xl={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
-                                                    <div className='headerSection header-title'>
-                                                        <div className='header-search-section'>
-                                                            <FormControl variant="standard" sx={{ width: '100%' }}>
-                                                                <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
-                                                                <Select
-                                                                    labelId="demo-simple-select-standard-label"
-                                                                    label="Structure"
-                                                                    name='structure'
-                                                                    onChange={input9}>
-                                                                    <MenuItem value='1'>Test</MenuItem>
-                                                                </Select>
-                                                            </FormControl>
-                                                            <Button variant="contained" className='add_master_structure btn-danger' onClick={deleteStructureSubmit}>Structure Delete</Button>
+                                                        {/* <br/> */}
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
                                                         </div>
-                                                        <div className='groun-button'>
-                                                            <Button variant="contained" className='add_master_structure' onClick={openDialogbox}>Add Master Structure</Button>
-                                                            <Button variant="contained" className='add_shared_structure' onClick={openDialogbox}>Add Shared Structure</Button>
-                                                            <Button variant="contained" className='edit_structure' onClick={openDialogbox}>Edit Structure</Button>
-                                                        </div>
-                                                    </div>
-                                                </Paper>
+                                                    </Paper>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </TabPanel>
-                                    <TabPanel value={value} index={9} dir={theme.direction}>
-                                        Item 10
-                                    </TabPanel>
-                                </SwipeableViews>
-                                {/* </Box> */}
-                            </Grid>
-                        </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={2} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle panding-left-right-3px'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Upload New Document</p>
+                                                            {/* <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add New Bank Account</Button> */}
+                                                        </div>
+                                                        {/* <br/> */}
+                                                        <div className='documentDetailsTabSection'>
+                                                            <div className=''>
+                                                                <Grid container spacing={1} className="ml-n1">
+                                                                    <Grid item sm={9} className="p-1">
+                                                                        <FormControl className="w-100">
+                                                                            {/* <InputLabel htmlFor="account_no">ACCOUNT NO</InputLabel> */}
+                                                                            <Select
+                                                                                value={doc.proof}
+                                                                                name="proof"
+                                                                                label="Proof of ID"
+                                                                                onChange={handleChange}
+                                                                                displayEmpty
+                                                                                inputProps={{ "aria-label": "Without label" }}
+                                                                                input={<BootstrapInput />}
+                                                                                className="mt-0 ml-0"
+                                                                            >
+                                                                                <MenuItem
+                                                                                    value=""
+                                                                                    onClick={() => {
+                                                                                        setOption(true);
+                                                                                        setChange(false);
+                                                                                    }}
+                                                                                >
+                                                                                    Proof of ID
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value="Proof of Address"
+                                                                                    onClick={() => {
+                                                                                        setOption(false);
+                                                                                        setChange(true);
+                                                                                    }}
+                                                                                >
+                                                                                    Proof of Address
+                                                                                </MenuItem>
 
-                        <BootstrapDialog
-                            onClose={handleClose}
-                            aria-labelledby="customized-dialog-title"
-                            open={open}
-                            className='modalWidth100'
-                        >
-                            <BootstrapDialogTitle id="customized-dialog-title" className='dialogTitle' onClose={handleClose}>
-                                {dialogTitle}
-                            </BootstrapDialogTitle>
-                            <DialogContent dividers>
-                                {manageContent()}
-                            </DialogContent>
-                            <DialogActions>
-                                {manageDialogActionButton()}
-                            </DialogActions>
-                        </BootstrapDialog>
-                    </div>
+                                                                                <MenuItem
+                                                                                    value="Addition Documents"
+                                                                                    onClick={() => {
+                                                                                        setOption(false);
+                                                                                        setChange(true);
+                                                                                    }}
+                                                                                >
+                                                                                    Addition Documents
+                                                                                </MenuItem>
+                                                                            </Select>
+                                                                        </FormControl>
+                                                                    </Grid>
+                                                                    <Grid item sm={3} className="p-1">
+                                                                        {option && (
+                                                                            <FormControl className="w-100">
+                                                                                <Select
+                                                                                    value={doc.id}
+                                                                                    name="id"
+                                                                                    label="ID"
+                                                                                    onChange={handleChange}
+                                                                                    inputProps={{ "aria-label": "Without label" }}
+                                                                                    input={<BootstrapInput />}
+                                                                                    className="mt-0 ml-0"
+                                                                                >
+                                                                                    <MenuItem value="ID">ID</MenuItem>
+                                                                                    <MenuItem value="Password">PASSWORD</MenuItem>
+                                                                                </Select>
+                                                                            </FormControl>
+                                                                        )}
+                                                                        {change && (
+                                                                            <Button
+                                                                                type="submit"
+                                                                                variant="contained"
+                                                                                size="medium"
+                                                                                className="w-100 p-0 h-100 !important d-flex align-items-stretch text-capitalize d-none"
+                                                                            >
+                                                                                {proofAdd.length < 3 ? (
+                                                                                    <Input
+                                                                                        accept="image/*"
+                                                                                        id="uploadDoc"
+                                                                                        type="file"
+                                                                                        name="fontimg"
+                                                                                        // value={doc.fontimg}
+                                                                                        onChange={
+                                                                                            (e) => {
+                                                                                                console.log(proofAdd, "proof")
+                                                                                                setProofAdd([
+                                                                                                    ...proofAdd,
+                                                                                                    e.target.files[0]
+                                                                                                    ,
+                                                                                                ])
+                                                                                                //   setProofAdd(
+                                                                                                //     proofAdd.concat(e.target.files)
+                                                                                                //   )
+                                                                                            }}
+                                                                                        style={{ display: "none" }}
+                                                                                    />
+                                                                                ) : (
+                                                                                    ""
+                                                                                )}{" "}
+                                                                                <label
+                                                                                    htmlFor="uploadDoc"
+                                                                                    className="w-100 h-100 d-flex align-items-center justify-content-center"
+                                                                                >
+                                                                                    <CloudUploadIcon className="m-2" />
+                                                                                    Browse
+                                                                                </label>
+                                                                            </Button>
+                                                                        )}
+                                                                    </Grid>
+                                                                </Grid>
+                                                                {change && (
+                                                                    <Grid container className="text-center my-4">
+                                                                        <Grid item sm={12}>
+                                                                            {proofAdd.map((proof, index) => {
+                                                                                return (
+                                                                                    <Paper
+                                                                                        elevation={1}
+                                                                                        className="d-flex p-3 justify-content-between align-items-center mb-2"
+                                                                                        style={{ borderRadius: "10px" }}
+                                                                                        key={index}
+                                                                                    >
+                                                                                        <span className="text-dark font-size-sm font-weight-bold">
+                                                                                            {proof.name}
+                                                                                        </span>
+                                                                                        <CloseOutlinedIcon
+                                                                                            className="fontimgclose"
+                                                                                            onClick={() => {
+                                                                                                // proofAdd.splice(index, 1);
+                                                                                                console.log(proofAdd, "asdASF");
+                                                                                                setProofAdd(
+                                                                                                    proofAdd.filter((v, i) => i !== index)
+                                                                                                );
+                                                                                            }}
+                                                                                        />
+                                                                                    </Paper>
+                                                                                );
+                                                                            })}
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                )}
+                                                                {option && (
+                                                                    <Grid
+                                                                        container
+                                                                        spacing={7}
+                                                                        className="mt-4 mb-2 justify-content-center"
+                                                                        style={{ marginLeft: "-28px" }}
+                                                                    >
+                                                                        <Grid
+                                                                            item
+                                                                            sm={6}
+                                                                            lg={4}
+                                                                            className="d-flex flex-column align-items-center upload-zone p-4"
+                                                                        >
+                                                                            <h6 className="mb-3 font-size-xs font-weight-bold">
+                                                                                FRONT SIDE*
+                                                                            </h6>
+                                                                            <div className="uploaderDropZone">
+                                                                                <Input
+                                                                                    accept="image/*"
+                                                                                    id="FILE_FRONT_SIDE"
+                                                                                    type="file"
+                                                                                    name="fontimg"
+                                                                                    // value={doc.fontimg}
+                                                                                    onChange={(e) =>
+                                                                                        setDoc((prevalue) => {
+                                                                                            return {
+                                                                                                ...prevalue,
+                                                                                                fontimg: e.target.files[0],
+                                                                                            };
+                                                                                        })
+                                                                                    }
+                                                                                    style={{ display: "none" }}
+                                                                                />{" "}
+                                                                                {!doc.fontimg ? (
+                                                                                    <label
+                                                                                        htmlFor="FILE_FRONT_SIDE"
+                                                                                        className="text-dark font-weight-bold font-size-xs"
+                                                                                    >
+                                                                                        UPLOAD
+                                                                                    </label>
+                                                                                ) : (
+                                                                                    <div className="received-file">
+                                                                                        <div className="w-100 h-100">
+                                                                                            {doc.fontimg.name}
+                                                                                        </div>
+                                                                                        <button
+                                                                                            className="bg-transparent p-0 border-0"
+                                                                                            onClick={() =>
+                                                                                                setDoc((prevalue) => {
+                                                                                                    return {
+                                                                                                        ...prevalue,
+                                                                                                        fontimg: "",
+                                                                                                    };
+                                                                                                })
+                                                                                            }
+                                                                                        >
+                                                                                            <CloseOutlinedIcon className="fontimgclose" />
+                                                                                        </button>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        </Grid>
+                                                                        <Grid
+                                                                            item
+                                                                            sm={6}
+                                                                            lg={4}
+                                                                            className="d-flex flex-column align-items-center upload-zone p-4"
+                                                                        >
+                                                                            <h6 className="mb-3 font-size-xs font-weight-bold">
+                                                                                BACK SIDE*
+                                                                            </h6>
+                                                                            <div className="uploaderDropZone">
+                                                                                <input
+                                                                                    accept="image/*"
+                                                                                    id="FILE_BACK_SIDE"
+                                                                                    type="file"
+                                                                                    name="backimg"
+                                                                                    // value={doc.backimg}
+                                                                                    onChange={(e) =>
+                                                                                        setDoc((prevalue) => {
+                                                                                            return {
+                                                                                                ...prevalue,
+                                                                                                backimg: e.target.files[0],
+                                                                                            };
+                                                                                        })
+                                                                                    }
+                                                                                    style={{ display: "none" }}
+                                                                                />
+
+                                                                                {!doc.backimg ? (
+                                                                                    <label
+                                                                                        htmlFor="FILE_BACK_SIDE"
+                                                                                        className="text-dark font-weight-bold font-size-xs"
+                                                                                    >
+                                                                                        UPLOAD
+                                                                                    </label>
+                                                                                ) : (
+                                                                                    <div className="received-file">
+                                                                                        <div className="w-100 h-100">
+                                                                                            {doc.backimg.name}
+                                                                                        </div>
+                                                                                        <button
+                                                                                            className="bg-transparent p-0 border-0"
+                                                                                            onClick={() =>
+                                                                                                setDoc((prevalue) => {
+                                                                                                    return {
+                                                                                                        ...prevalue,
+                                                                                                        backimg: "",
+                                                                                                    };
+                                                                                                })
+                                                                                            }
+                                                                                        >
+                                                                                            <CloseOutlinedIcon className="fontimgclose" />
+                                                                                        </button>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        </Grid>
+                                                                        <hr className="ml-2 mr-2"></hr>
+                                                                        <Grid item xs={12} className="py-0 pr-4 pl-4 pb-1">
+                                                                            <form noValidate className="autocomplete-off">
+                                                                                <h6 className="font-weight-bold mb-4 pb-1 d-flex">
+                                                                                    Fill in your Details for a seamless experience{" "}
+                                                                                    <small className="d-baseline">
+                                                                                        {" "}
+                                                                                        (Optional)
+                                                                                    </small>
+                                                                                </h6>
+                                                                                <Grid container spacing={1} className="ml-n1">
+                                                                                    <Grid item sm={6} className="p-1">
+                                                                                        <FormControl className="w-100">
+                                                                                            <label className="font-weight-bold font-size-sm d-flex justify-content-start">
+                                                                                                Document No
+                                                                                            </label>
+                                                                                            <BootstrapInput
+                                                                                                value={doc.documentNo}
+                                                                                                name="documentNo"
+                                                                                                onChange={handleChange}
+                                                                                                inputProps={{
+                                                                                                    "aria-label": "Without label",
+                                                                                                }}
+                                                                                            />
+                                                                                        </FormControl>
+                                                                                    </Grid>
+                                                                                    <Grid item sm={6} className="p-1">
+                                                                                        <FormControl className="w-100 mb-2">
+                                                                                            <label className="font-weight-bold font-size-sm d-flex justify-content-start">
+                                                                                                Country Of Issue
+                                                                                            </label>
+                                                                                            <Select
+                                                                                                value={doc.id}
+                                                                                                name="id"
+                                                                                                label="ID"
+                                                                                                onChange={handleChange}
+                                                                                                displayEmpty
+                                                                                                inputProps={{
+                                                                                                    "aria-label": "Without label",
+                                                                                                }}
+                                                                                                input={<BootstrapInput />}
+                                                                                                className="mt-0 ml-0"
+                                                                                            >
+                                                                                                <MenuItem value=""></MenuItem>
+                                                                                            </Select>
+                                                                                        </FormControl>
+                                                                                    </Grid>
+                                                                                    <Grid item sm={6} className="p-1">
+                                                                                        <FormControl className="w-100 mb-2">
+                                                                                            <label className="font-weight-bold font-size-sm d-flex justify-content-start">
+                                                                                                Date Of Issue
+                                                                                            </label>
+
+                                                                                            <BootstrapInput
+                                                                                                id="date"
+                                                                                                type="date"
+                                                                                                defaultValue=""
+                                                                                                sx={{ width: "100%" }}
+                                                                                                inputlabelprops={{
+                                                                                                    shrink: true,
+                                                                                                }}
+                                                                                                inputProps={{ max: "2022-04-13" }}
+                                                                                                onChange={(e) =>
+                                                                                                    setFilterData({
+                                                                                                        ...filterData,
+                                                                                                        deposit_from: e.target.value,
+                                                                                                    })
+                                                                                                }
+                                                                                            />
+                                                                                        </FormControl>
+                                                                                    </Grid>
+                                                                                    <Grid item sm={6} className="p-1">
+                                                                                        <FormControl className="w-100 mb-2">
+                                                                                            <label className="font-weight-bold font-size-sm d-flex justify-content-start">
+                                                                                                Date Of Expiry
+                                                                                            </label>
+
+                                                                                            <BootstrapInput
+                                                                                                id="date"
+                                                                                                type="date"
+                                                                                                defaultValue=""
+                                                                                                sx={{ width: "100%" }}
+                                                                                                inputlabelprops={{
+                                                                                                    shrink: true,
+                                                                                                }}
+                                                                                                onChange={(e) =>
+                                                                                                    setFilterData({
+                                                                                                        ...filterData,
+                                                                                                        deposit_from: e.target.value,
+                                                                                                    })
+                                                                                                }
+                                                                                            />
+                                                                                        </FormControl>
+                                                                                    </Grid>
+                                                                                </Grid>
+                                                                            </form>
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                )}
+
+                                                                <div className="text-dark font-size-xs d-flex justify-content-between align-items-center">
+                                                                    <i>
+                                                                        (Maximum size of document 5MB) Allow File Formats
+                                                                        *jpg, *png, *pdf
+                                                                    </i>
+                                                                    <Button
+                                                                        type="submit"
+                                                                        disabled={true}
+                                                                        variant="contained"
+                                                                        size="medium"
+                                                                        className="p-3 pr-4 pl-4 text-center text-capitalize"
+                                                                    >
+                                                                        Save
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={3} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Accounts</p>
+                                                            <div className='groun-button'>
+                                                                <Button variant="contained" className='link_campaign' onClick={openDialogbox}>Link to Campaign</Button>
+                                                                <Button variant="contained" className='link_mt5' onClick={openDialogbox}>Link Account</Button>
+                                                                <Button variant="contained" className='createMt5' onClick={openDialogbox}>Create Account</Button>
+                                                            </div>
+                                                        </div>
+                                                        {/* <br/> */}
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={4} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Activities</p>
+                                                        </div>
+                                                        {/* <br/> */}
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={5} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Notes</p>
+                                                            <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button>
+                                                        </div>
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Individual Stage History</p>
+                                                            {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
+                                                        </div>
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>IB Stage History</p>
+                                                            {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
+                                                        </div>
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Status History</p>
+                                                            {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
+                                                        </div>
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={6} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Transactions</p>
+                                                            <Button variant="contained" className='add_transaction' onClick={openDialogbox}>Add New Transaction</Button>
+                                                        </div>
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={7} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Referrals</p>
+                                                        </div>
+                                                        <div className='bankDetailsTabSection'>
+                                                        <HighchartsReact
+                                                            options={options}
+                                                            highcharts={Highcharts}
+                                                            constructorType={'mapChart'}
+                                                        />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={8} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <div className='header-search-section'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }}>
+                                                                    <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
+                                                                    <Select
+                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label="Structure"
+                                                                        name='structure'
+                                                                        onChange={input9}>
+                                                                        <MenuItem value='1'>Test</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                                <Button variant="contained" className='add_master_structure btn-danger' onClick={deleteStructureSubmit}>Structure Delete</Button>
+                                                            </div>
+                                                            <div className='groun-button'>
+                                                                <Button variant="contained" className='add_master_structure' onClick={openDialogbox}>Add Master Structure</Button>
+                                                                <Button variant="contained" className='add_shared_structure' onClick={openDialogbox}>Add Shared Structure</Button>
+                                                                <Button variant="contained" className='edit_structure' onClick={openDialogbox}>Edit Structure</Button>
+                                                            </div>
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                        <TabPanel value={value} index={9} dir={theme.direction}>
+                                            <Grid container spacing={3} className='grid-handle'>
+                                                <Grid item md={12} lg={12} xl={12}>
+                                                    <Paper elevation={2} style={{ borderRadius: "10px" }} className='paper-main-section'>
+                                                        <div className='headerSection header-title'>
+                                                            <p className='margin-0'>Statement</p>
+                                                        </div>
+                                                        {/* <br/> */}
+                                                        <div className='bankDetailsTabSection'>
+                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                        </div>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+                                        </TabPanel>
+                                    </SwipeableViews>
+                                    {/* </Box> */}
+                                </Grid>
+                            </Grid>
+
+                            <BootstrapDialog
+                                onClose={handleClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={open}
+                                className='modalWidth100'
+                            >
+                                <BootstrapDialogTitle id="customized-dialog-title" className='dialogTitle' onClose={handleClose}>
+                                    {dialogTitle}
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                    {manageContent()}
+                                </DialogContent>
+                                <DialogActions>
+                                    {manageDialogActionButton()}
+                                </DialogActions>
+                            </BootstrapDialog>
+                        </div>}
                 </div>
             </div>
         </div>

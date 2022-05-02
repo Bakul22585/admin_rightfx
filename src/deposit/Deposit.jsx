@@ -1,6 +1,6 @@
 import './deposit.css';
 import React, { useState, useEffect } from "react";
-import { FormControl, Grid, Input, InputLabel, Menu, MenuItem, Select, TextField } from "@mui/material";
+import { Autocomplete, FormControl, Grid, Input, InputLabel, Menu, MenuItem, Select, TextField } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -20,6 +20,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Url } from '../global';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -122,14 +123,20 @@ const Deposit = () => {
     const [dialogTitle, setDialogTitle] = useState('');
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState();
+    const [refresh, setRefresh] = useState(false);
+    const [accountOption, setAccountOption] = useState([]);
     const [depositForm, setDepositForm] = useState({
         live_account: '',
-        customer_name: '',
         account: '',
+        deposit_to: '',
+        customer_name: '',
         payment_gateway: '',
         amount: '',
         file: '',
-        note: ''
+        note: '',
+        currency_code: '',
+        isLoader: false,
+        transation_id: ''
     });
     toast.configure();
 
@@ -141,6 +148,7 @@ const Deposit = () => {
             },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.1,
         },
         {
@@ -151,6 +159,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 0.7,
+            wrap: true,
         },
         {
             name: 'DATE',
@@ -158,6 +167,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 1,
+            wrap: true,
         },
         {
             name: 'NAME',
@@ -165,6 +175,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 1,
+            wrap: true,
         },
         {
             name: 'WALLET CODE',
@@ -172,6 +183,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'PAYMENT METHOD',
@@ -179,6 +191,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'AMOUNT',
@@ -186,6 +199,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'PROOF',
@@ -193,6 +207,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'STATUS',
@@ -200,6 +215,7 @@ const Deposit = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'Action',
@@ -254,7 +270,8 @@ const Deposit = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success' onClick={depositFormSubmit}>Add</Button>
+                {(depositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={depositFormSubmit}>Add</Button>}
+                
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -269,25 +286,50 @@ const Deposit = () => {
         }
     }
 
-    const depositFormSubmit = () => {
-        
+    const depositFormSubmit = async() => {
+        console.log(depositForm);
         if (depositForm.live_account == '') {
-            toast.error('Please enter live account');
-        } else if (depositForm.customer_name == '') {
-            toast.error('Please enter customer name');
+            toast.error('Please select account type');
         } else if (depositForm.account == '') {
             toast.error('Please select account');
+        } else if (depositForm.customer_name == '') {
+            toast.error('Please enter customer name');
+        } else if (depositForm.deposit_to == '') {
+            toast.error('Please select deposit to');
         } else if (depositForm.payment_gateway == '') {
             toast.error('Please select payment gateway option');
+        } else if (depositForm.transation_id == "") {
+            toast.error('Please enter transaction id');
         } else if (depositForm.amount == '') {
             toast.error('Please enter amount');
-        } else if (depositForm.file == '') {
-            toast.error('Please select image');
+        } else if (depositForm.currency_code == '') {
+            toast.error('Please select currency code');
         } else if (depositForm.note == '') {
             toast.error('Please enter note');
         } else {
-            handleClose();
-            toast.success('Deposit has been added successfully.');
+            depositForm.isLoader = true;
+            setDepositForm({...depositForm});
+            const param = new FormData();
+            param.append('action', 'add_deposit');
+            param.append('is_react', '1');
+            param.append('user_id', depositForm.account);
+            param.append('deposit_to', depositForm.deposit_to);
+            param.append('payment_method', depositForm.payment_gateway);
+            param.append('transactionid', depositForm.transation_id);
+            param.append('amount', depositForm.amount);
+            param.append('currency', depositForm.currency_code);
+            param.append('note', depositForm.note);
+            await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                depositForm.isLoader = false;
+                setDepositForm({...depositForm});
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                    setOpen(false);
+                }
+            });
         }
     }
 
@@ -295,14 +337,46 @@ const Deposit = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Live Account" variant="standard" sx={{ width: '100%' }} name='live_account' value={depositForm.live_account} onChange={input} />
+                    {/* <TextField id="standard-basic" label="Live Account" variant="standard" sx={{ width: '100%' }} name='live_account' value={depositForm.live_account} onChange={input} /> */}
+                    <FormControl variant="standard" sx={{ width: '100%' }}>
+                        <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            label="Account"
+                            name='live_account'
+                            onChange={input}>
+                            <MenuItem value='live'>Live</MenuItem>
+                            <MenuItem value='demo'>Demo</MenuItem>
+                        </Select>
+                    </FormControl>
                 </div>
                 <br />
-                <div>
+                <div className='margeField'>
+                    <Autocomplete
+                        disablePortal
+                        options={accountOption}
+                        getOptionLabel={(option) => (option ? option.mt_live_account_id : "")}
+                        onInputChange={(event, newInputValue) => {
+                            fetchAccount(event, newInputValue);
+                        }}
+                        onChange={(event, newValue) => {
+                            // setValue(newValue);
+                            console.log(event, newValue);
+                            setDepositForm((prevalue) => {
+                                return {
+                                    ...prevalue,
+                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' '+ newValue['user_last_name'] : '',
+                                    'account': (newValue != null) ? newValue['user_id']: ''
+                                };
+                            });
+                        }}
+                        sx={{ width: '100%' }}
+                        renderInput={(params) => <TextField {...params} label="Account" variant="standard" />}
+                    />
                     <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' value={depositForm.customer_name} onChange={input} />
                 </div>
                 <br />
-                <div>
+                {/* <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
                         <Select
@@ -314,8 +388,18 @@ const Deposit = () => {
                         </Select>
                     </FormControl>
                 </div>
-                <br />
-                <div>
+                <br /> */}
+                <div className='margeField'>
+                    <FormControl variant="standard" sx={{ width: '100%' }}>
+                        <InputLabel id="demo-simple-select-standard-label">Deposit To</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            name='deposit_to'
+                            label="Deposit To"
+                            onChange={input}>
+                            <MenuItem value='Wallet'>Wallet</MenuItem>
+                        </Select>
+                    </FormControl>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                         <Select
@@ -323,10 +407,13 @@ const Deposit = () => {
                             name='payment_gateway'
                             label="Payment Gateway"
                             onChange={input}>
-                            <MenuItem value='Wire Transfer'>Wire Transfer</MenuItem>
-                            <MenuItem value='Crypto'>Crypto</MenuItem>
+                            <MenuItem value='BANK'>BANK</MenuItem>
                         </Select>
                     </FormControl>
+                </div>
+                <br />
+                <div>
+                    <TextField id="standard-basic" label="Transation ID" variant="standard" sx={{ width: '100%' }} name='transation_id' onChange={input} />
                 </div>
                 <br />
                 <div className='margeField'>
@@ -339,7 +426,17 @@ const Deposit = () => {
                     </label>
                 </div>
                 <br />
-                <div>
+                <div className='margeField'>
+                    <FormControl variant="standard" sx={{ width: '100%' }}>
+                        <InputLabel id="demo-simple-select-standard-label">Currenct Code</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            label="Currenct Code"
+                            name='currency_code'
+                            onChange={input}>
+                            <MenuItem value='USD'>USD</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' value={depositForm.note} onChange={input} />
                 </div>
             </div>;
@@ -370,12 +467,16 @@ const Deposit = () => {
         setDepositForm(
             {
                 live_account: '',
-                customer_name: '',
                 account: '',
+                customer_name: '',
                 payment_gateway: '',
                 amount: '',
                 file: '',
-                note: ''
+                note: '',
+                currency_code: '',
+                deposit_to: '',
+                isLoader: false,
+                transation_id: ''
             }
         );
         setDialogTitle('Add New Deposit');
@@ -504,6 +605,26 @@ const Deposit = () => {
         });
     };
 
+    const tableRefresh = () => {
+        var status = (refresh) ? false : true;
+        setRefresh(status);
+    }
+
+    const fetchAccount = async (event, search) => {
+        console.log(search);
+        const param = new FormData();
+        param.append('is_react', '1');
+        param.append('search', search);
+        param.append('type', depositForm.live_account);
+        await axios.post(`${Url}/admin/ajaxfiles/fetch_user_account.php`, param).then((res) => {
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                setAccountOption(res.data.data);
+            }
+        });
+    }
+
     return (
         <div>
             <div className="app-content--inner">
@@ -596,7 +717,7 @@ const Deposit = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url='https://alphapixclients.com/forex/admin/datatable/deposit_list.php' column={columns} sort='2' />
+                                                <CommonTable url={`${Url}/admin/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

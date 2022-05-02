@@ -6,3 +6,7 @@
     line-height: 1.2;
     font-family: cairo,sans-serif;
 }
+.image-center-section {
+    display: flex;
+    justify-content: center;
+}

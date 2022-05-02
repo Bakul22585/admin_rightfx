@@ -1,6 +1,6 @@
 import './withdraw.css';
 import React, { useState, useEffect } from "react";
-import { FormControl, Grid, Input, InputLabel, Menu, MenuItem, Select, TextField } from "@mui/material";
+import { Autocomplete, FormControl, Grid, Input, InputLabel, Menu, MenuItem, Select, TextField } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -16,6 +16,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
+import { Url } from '../global';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -116,13 +118,18 @@ const Withdraw = () => {
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [filterData, setFilterData] = useState({});
     const [dialogTitle, setDialogTitle] = useState('');
+    const [accountOption, setAccountOption] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     const [Form, setForm] = useState({
         account_type: '',
         account: '',
         customer_name: '',
         payment_gateway: '',
         amount: '',
-        note: ''
+        currency_code: '',
+        note: '',
+        user_id: '',
+        isLoader: false
     });
     toast.configure();
 
@@ -134,6 +141,7 @@ const Withdraw = () => {
             },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.1,
         },
         {
@@ -141,6 +149,7 @@ const Withdraw = () => {
             selector: row => { return <span title={row.date}>{row.date}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1,
         },
         {
@@ -148,6 +157,7 @@ const Withdraw = () => {
             selector: row => { return <span title={row.name}>{row.name}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1,
         },
         {
@@ -155,6 +165,7 @@ const Withdraw = () => {
             selector: row => { return <span title={row.wallet_code}>{row.wallet_code}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.5,
         },
         {
@@ -162,6 +173,7 @@ const Withdraw = () => {
             selector: row => { return <span title={row.method}>{row.method}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.5,
         },
         {
@@ -169,6 +181,7 @@ const Withdraw = () => {
             selector: row => { return <span title={row.amount}>{row.amount}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.5,
         },
         {
@@ -176,6 +189,7 @@ const Withdraw = () => {
             selector: row => { return <span title={row.remarks}>{row.remarks}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1,
         },
         {
@@ -183,6 +197,7 @@ const Withdraw = () => {
             selector: row => { return <span className={(row.status == "1") ? "status-text-approved" : (row.status == "2") ? "status-text-rejected" : "status-text-pending"} title={(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}>{(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.5,
         },
         {
@@ -210,8 +225,8 @@ const Withdraw = () => {
                         {(row.status == "1") ?
                             <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event,row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event,row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -238,7 +253,8 @@ const Withdraw = () => {
         if (dialogTitle == 'Add New Withdrawal') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add</Button>
+                {(Form.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add</Button>}
+                
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -270,15 +286,33 @@ const Withdraw = () => {
                     </FormControl>
                 </div>
                 <br />
-                <div>
-                    <TextField id="standard-basic" label="Account" variant="standard" sx={{ width: '100%' }} name='account' onChange={input}/>
+                <div className='margeField'>
+                    {/* <TextField id="standard-basic" label="Account" variant="standard" sx={{ width: '100%' }} name='account' onChange={input}/> */}
+                    <Autocomplete
+                        disablePortal
+                        options={accountOption}
+                        getOptionLabel={(option) => (option ? option.mt_live_account_id : "")}
+                        onInputChange={(event, newInputValue) => {
+                            fetchAccount(event, newInputValue);
+                        }}
+                        onChange={(event, newValue) => {
+                            // setValue(newValue);
+                            console.log(event, newValue);
+                            setForm((prevalue) => {
+                                return {
+                                    ...prevalue,
+                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' '+ newValue['user_last_name'] : '',
+                                    'account': (newValue != null) ? newValue['user_id']: ''
+                                };
+                            });
+                        }}
+                        sx={{ width: '100%' }}
+                        renderInput={(params) => <TextField {...params} label="Account" variant="standard" />}
+                    />
+                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} value={Form.customer_name} name='customer_name' onChange={input} />
                 </div>
-                <br/>
-                <div>
-                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' onChange={input} />
-                </div>
-                <br/>
-                <div>
+                <br />
+                <div className='margeField'>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                         <Select
@@ -289,16 +323,21 @@ const Withdraw = () => {
                             <MenuItem value='BANK'>BANK</MenuItem>
                         </Select>
                     </FormControl>
+                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={input} />
                 </div>
                 <br />
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={input}/>
-                    {/* <label htmlFor="contained-button-file" className='fileuploadButton'>
-                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile}/>
-                        {selectedFile ?  <img src={preview} className='deposit-upload-image-preview'/>  : <Button variant="contained" component="span">
-                            <i className="material-icons">backup</i>&nbsp;Upload
-                        </Button>}
-                    </label> */}
+                    <FormControl variant="standard" sx={{ width: '100%' }}>
+                        <InputLabel id="demo-simple-select-standard-label">Currenct Code</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            label="Currenct Code"
+                            name='currency_code'
+                            onChange={input}>
+                            <MenuItem value='USD'>USD</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <TextField id="standard-basic" label="Note" variant="standard" sx={{ width: '100%' }} name='note' onChange={input} />
                 </div>
                 {/* <br />
                 <div>
@@ -334,7 +373,10 @@ const Withdraw = () => {
             customer_name: '',
             payment_gateway: '',
             amount: '',
-            note: ''
+            currency_code: '',
+            note: '',
+            user_id: '',
+            isLoader: false
         });
         setDialogTitle('Add New Withdrawal');
         setOpen(true);
@@ -348,7 +390,7 @@ const Withdraw = () => {
         } else if (e.target.classList.contains('approve')) {
             setDialogTitle('Approve');
         }
-        
+
         setOpen(true);
     };
 
@@ -362,7 +404,23 @@ const Withdraw = () => {
         });
     };
 
-    const submitForm = () => {
+    const fetchAccount = async (event, search) => {
+        console.log(search);
+        const param = new FormData();
+        param.append('is_react', '1');
+        param.append('search', search);
+        param.append('type', Form.account_type);
+        await axios.post(`${Url}/admin/ajaxfiles/fetch_user_account.php`, param).then((res) => {
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                setAccountOption(res.data.data);
+            }
+        });
+    }
+
+    const submitForm = async() => {
+        console.log(Form);
         if (Form.account_type == '') {
             toast.error('Please select account type');
         } else if (Form.account == '') {
@@ -373,13 +431,43 @@ const Withdraw = () => {
             toast.error('Please select any one payment gateway');
         } else if (Form.amount == '') {
             toast.error('Please enter amount');
+        } else if (Form.currency_code == "") {
+            toast.error('Please select currency code');
         } else if (Form.note == '') {
             toast.error('Please enter note');
         } else {
-            handleClose();
-            toast.success('withdraw has been added successfully.');
+            Form.isLoader = true;
+            setForm({ ...Form });
+            const param = new FormData();
+            param.append('action', 'add_withdraw');
+            param.append('is_react', '1');
+            param.append('user_id', Form.account);
+            param.append('account_type', Form.account_type);
+            param.append('payment_method', Form.payment_gateway);
+            param.append('amount', Form.amount);
+            param.append('currency', Form.currency_code);
+            param.append('note', Form.note);
+            await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                // setLoader(false);
+                Form.isLoader = false;
+                setForm({ ...Form });
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                    setOpen(false);
+                }
+            });
+            /* handleClose();
+            toast.success('withdraw has been added successfully.'); */
         }
     };
+
+    const tableRefresh = () => {
+        var status = (refresh) ? false : true;
+        setRefresh(status);
+    }
 
     return (
         <div>
@@ -390,16 +478,17 @@ const Withdraw = () => {
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdrawal</p>
                                 <CommonFilter />
-                                <br/>
+                                <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={handleClickOpen}>Add</Button>
+                                        {/* <Button variant="contained" onClick={tableRefresh}>Refresh</Button> */}
                                     </div>
                                     <br />
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url='https://alphapixclients.com/forex/admin/datatable/withdraw_list.php' column={columns} sort='1' />
+                                                <CommonTable url={`${Url}/admin/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

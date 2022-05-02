@@ -1,11 +1,82 @@
 import './ib_withdraw.css';
-import React from "react";
-import { FormControl, Grid, MenuItem, Select } from "@mui/material";
+import React, { useState } from "react";
+import { CardContent, FormControl, Grid, MenuItem, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from '../common/CommonFilter';
+import CommonTable from '../common/CommonTable';
+import { Url } from '../global';
 
 const IBWithdraw = () => {
+
+    const [refresh, setRefresh] = useState(false);
+
+    const column = [
+        {
+            name: 'SR.NO',
+            selector: row => {
+                return <span>{row.sr_no}</span>
+            },
+            sortable: true,
+            wrap: true,
+            reorder: true,
+            grow: 0.1,
+        },
+        {
+            name: 'DATE',
+            selector: row => {
+                return <span title={row.date}>{row.date}</span>
+            },
+            sortable: true,
+            wrap: true,
+            reorder: true,
+            grow: 0.3,
+        },
+        {
+            name: 'NAME',
+            selector: row => { return <span title={row.name}>{row.name}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.5,
+        },
+        {
+            name: 'EMAIL',
+            selector: row => { return <span title={row.email}>{row.email}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+            wrap: true,
+        },
+        {
+            name: 'MT5 A/C NO.',
+            selector: row => { return <span title={row.mt5_acc_no}>{row.mt5_acc_no}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.3,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => { return <span title={row.amount}>{row.amount}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.3,
+        },
+        {
+            name: 'REMARKS',
+            selector: row => { return <span title={row.remarks}>{row.remarks}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.3,
+        },
+        {
+            name: 'STATUS',
+            selector: row => { return <span className={`status-${(row.status == '1')?'active' : 'in-active'}`}>{(row.status == '1')? 'Active' : 'In-Active'}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.3,
+        }
+    ];
 
     return (
         <div>
@@ -17,6 +88,15 @@ const IBWithdraw = () => {
                                 <p className='main-heading'>IB Withdraw</p>
                                 <CommonFilter />
                                 <br/>
+                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                                    <CardContent className="py-3">
+                                        <Grid container spacing={2}>
+                                            <Grid item sm={12} md={12} lg={12}>
+                                                <CommonTable url={`${Url}/admin/datatable/ib_withdraw_list.php`} column={column} sort='1' refresh={refresh}/>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Paper>
                             </Grid>
                         </Grid>
                     </div>

@@ -150,6 +150,7 @@ const CommonTable = (prop) => {
         clientSearch,
         prop.level,
         prop.filter,
+        prop.refresh,
     ]);
     // console.log(prop);
     return (

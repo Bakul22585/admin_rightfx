@@ -19,6 +19,7 @@ import CustomImageModal from '../common/CustomImageModal';
 import CommonTable from '../common/CommonTable';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Url } from '../global';
 
 const CssTextField = styled(TextField)({
 });
@@ -1012,19 +1013,19 @@ const Master = () => {
                                                         </div>
                                                         <div className='element'>
                                                             <label>Aadhar Card Front Image </label>
-                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/aadhar_front_1648558245_1109.png' />
+                                                            <CustomImageModal image={`${Url}/uploads/kyc/aadhar_front_1648558245_1109.png`} />
                                                         </div>
                                                         <div className='element'>
                                                             <label>Aadhar Card Back Image </label>
-                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/aadhar_front_1648477388_1106.png' />
+                                                            <CustomImageModal image={`${Url}/uploads/kyc/aadhar_front_1648477388_1106.png`} />
                                                         </div>
                                                         <div className='element'>
                                                             <label>Pan Card Image </label>
-                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/aadhar_back_1648446659_1106.png' />
+                                                            <CustomImageModal image={`${Url}/uploads/kyc/aadhar_back_1648446659_1106.png`} />
                                                         </div>
                                                         <div className='element'>
                                                             <label>Passbook Image </label>
-                                                            <CustomImageModal image='https://alphapixclients.com/forex/uploads/kyc/bank_passbook_1648477753_1106.png' />
+                                                            <CustomImageModal image={`${Url}/uploads/kyc/bank_passbook_1648477753_1106.png`} />
                                                         </div>
                                                     </div>
                                                     <div className='formActionSection'>
@@ -1104,7 +1105,7 @@ const Master = () => {
                                                 </LoadingButton>
                                             </div>
                                             <br />
-                                            <CommonTable url='https://alphapixclients.com/forex/datatable/my_client_list.php' column={myClientColumns} sort='6' level={clientLevel} setResData={setResData}/>
+                                            <CommonTable url={`${Url}/datatable/my_client_list.php`} column={myClientColumns} sort='6' level={clientLevel} setResData={setResData}/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1173,7 +1174,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/deposit_list.php' column={depositColumn} sort='2' filter={filterData}/>
+                                            <CommonTable url={`${Url}/admin/datatable/deposit_list.php`} column={depositColumn} sort='2' filter={filterData}/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1242,7 +1243,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/withdraw_list.php' column={withdrawColumn} sort='1' filter={filterData}/>
+                                            <CommonTable url={`${Url}/admin/datatable/withdraw_list.php`} column={withdrawColumn} sort='1' filter={filterData}/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1311,7 +1312,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/ib_withdraw_list.php' column={ibwithdrawColumn} sort='1' />
+                                            <CommonTable url={`${Url}/admin/datatable/ib_withdraw_list.php`} column={ibwithdrawColumn} sort='1' />
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1566,7 +1567,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/admin_partnership_commissions_list.php' column={partnershipCommisionColumn} sort='1' />
+                                            <CommonTable url={`${Url}/admin/datatable/admin_partnership_commissions_list.php`} column={partnershipCommisionColumn} sort='1' />
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1753,7 +1754,7 @@ const Master = () => {
                                                 highlightOnHover
                                                 pointerOnHover
                                             /> */}
-                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/ticket_list.php' column={ticketColumn} sort='5'/>
+                                            <CommonTable url={`${Url}/admin/datatable/ticket_list.php`} column={ticketColumn} sort='5'/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1778,7 +1779,7 @@ const Master = () => {
                                     </a>
                                     <Collapse in={openCollapse.activityLog} timeout="auto" unmountOnExit>
                                         <div className='Collapse-body-section'>
-                                            <CommonTable url='https://alphapixclients.com/forex/admin/datatable/activity_log_list.php' column={activityColumn} sort='2' />
+                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                         </div>
                                     </Collapse>
                                 </Paper>

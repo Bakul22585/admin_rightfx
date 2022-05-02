@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
 import CommonFilter from '../common/CommonFilter';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { Url } from '../global';
 
 const RoleManagement = () => {
 
@@ -49,7 +52,7 @@ const RoleManagement = () => {
                     </Button>
                     <Button
                         className='btn-close'
-                        onClick={(event) => handleContextClick(event, row.sr_no)}
+                        onClick={(event) => actionMenuPopup(event, row.sr_no)}
                         {...row}
                         style={{ color: 'rgb(144 145 139)' }}>
                         <i class="fa fa-times" aria-hidden="true"></i>
@@ -88,6 +91,29 @@ const RoleManagement = () => {
         navigate("/createRole/" + id);
     }
 
+    const actionMenuPopup = (e, index) => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className='custom-ui'>
+                        <h1>Are you sure?</h1>
+                        <p>Do you want to delete this?</p>
+                        <div className='confirmation-alert-action-button'>
+                            <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                            <Button variant="contained" className='btn-gradient btn-danger'
+                                onClick={() => {
+                                    onClose();
+                                }}
+                            >
+                                Yes, Delete it!
+                            </Button>
+                        </div>
+                    </div>
+                );
+            }
+        });
+    };
+
     return (
         <div>
             <div className="app-content--inner">
@@ -103,7 +129,7 @@ const RoleManagement = () => {
                                         <Button variant="contained" onClick={gotoRoleCreate}>Add Role</Button>
                                     </div>
                                     <br />
-                                    <CommonTable url='https://alphapixclients.com/forex/admin/datatable/role_list.php' column={column} sort='0' />
+                                    <CommonTable url={`${Url}/admin/datatable/role_list.php`} column={column} sort='0' />
                                 </Paper>
                             </Grid>
                         </Grid>

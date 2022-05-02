@@ -49,7 +49,7 @@ const CustomImageModal = (prop) => {
         }}
       >
         <Fade in={open}>
-          <Box sx={style} className='modalbody'>
+          <Box sx={style} className='modalbody image-popup'>
             {/* <img src={prop.image} /> */}
             <InnerImageZoom src={prop.image} zoomSrc={prop.image} />
           </Box>

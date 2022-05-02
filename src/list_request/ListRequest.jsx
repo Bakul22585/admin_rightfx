@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from '../common/CommonFilter';
 import CommonTable from '../common/CommonTable';
+import { Url } from '../global';
 
 const ListRequest = () => {
 
@@ -125,7 +126,7 @@ const ListRequest = () => {
                                 <CommonFilter />
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <CommonTable url='https://alphapixclients.com/forex/admin/datatable/partnership_request_list.php' column={column} sort='0' />
+                                    <CommonTable url={`${Url}/admin/datatable/partnership_request_list.php`} column={column} sort='0' />
                                 </Paper>
                             </Grid>
                         </Grid>
