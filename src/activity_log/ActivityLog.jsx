@@ -1,5 +1,5 @@
 import './activity_log.css';
-import React from "react";
+import React, { useState } from "react";
 import { CardContent, FormControl, Grid, MenuItem, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -8,6 +8,24 @@ import CommonTable from '../common/CommonTable';
 import { Url } from '../global';
 
 const ActivityLog = () => {
+
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'USER NAME',
+          'value': false,
+          'name': 'user_name'
+        },
+        {
+          'label': 'IP ADDRESS',
+          'value': false,
+          'name': 'ip_address'
+        },
+        {
+          'label': 'DATETIME',
+          'value': false,
+          'name': 'datetime'
+        }
+      ]);
 
     const activityColumn = [
         {
@@ -41,7 +59,7 @@ const ActivityLog = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Activity Log</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>

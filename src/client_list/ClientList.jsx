@@ -167,6 +167,53 @@ const ClientList = () => {
     const [sourceName, setSourceName] = useState([]);
     const [activeStep, setActiveStep] = useState(0);
     const [clientType, setClientType] = useState('');
+    const [searchBy, setSearchBy] = useState([
+        {
+            'label': 'MT5 ID',
+            'value': false,
+            'name': 'mt5_id'
+        },
+        {
+            'label': 'WALLET ID',
+            'value': false,
+            'name': 'wallet_id'
+        },
+        {
+            'label': 'GROUP LEVEL',
+            'value': false,
+            'name': 'group_level'
+        },
+        {
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
+        },
+        {
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'email'
+        },
+        {
+            'label': 'PHONE',
+            'value': false,
+            'name': 'phone'
+        },
+        {
+            'label': 'PASSWORD',
+            'value': false,
+            'name': 'password'
+        },
+        {
+            'label': 'KYC',
+            'value': false,
+            'name': 'kyc'
+        },
+        {
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
+        },
+    ]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -421,7 +468,7 @@ const ClientList = () => {
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Client List</p>
 
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>

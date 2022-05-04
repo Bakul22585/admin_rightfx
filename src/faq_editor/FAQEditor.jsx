@@ -4,6 +4,7 @@ import { Button, CardContent, Checkbox, FormControl, FormControlLabel, Grid, Inp
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonTable from '../common/CommonTable';
+import CommonFilter from '../common/CommonFilter';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -88,6 +89,23 @@ const FAQEditor = () => {
         isLoader: '',
         faqId: '',
     });
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'QUESTIONS',
+          'value': false,
+          'name': 'questions'
+        },
+        {
+          'label': 'ANSWER',
+          'value': false,
+          'name': 'answer'
+        },
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        }
+      ]);
     toast.configure();
 
     const column = [
@@ -384,6 +402,8 @@ const FAQEditor = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>FAQ Editor</p>
+                                <CommonFilter search={searchBy}/>
+                                <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
                                         <Button variant="contained" className='add-faq' onClick={handleClickOpen}>Add</Button>

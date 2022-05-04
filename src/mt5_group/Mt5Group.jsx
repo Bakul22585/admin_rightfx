@@ -71,6 +71,23 @@ const Mt5Group = () => {
         isLoader: '',
         groupId: '',
     });
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'GROUP NAME',
+          'value': false,
+          'name': 'group_name'
+        },
+        {
+          'label': 'MT5 GROUP NAME',
+          'value': false,
+          'name': 'mt5_group_name'
+        },
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        },
+      ]);
     toast.configure();
 
     const column = [
@@ -349,7 +366,7 @@ const Mt5Group = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>MT5 Groups</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>

@@ -125,6 +125,10 @@ const CommonTable = (prop) => {
                 param.append('withdrawal_status', prop.filter.withdraw_status);
             }
         }
+
+        if (prop.param) {
+            param.append('kyc_status', prop.param.kyc_status);
+        }
         param.append('order[0][column]', clientSort);
         param.append('order[0][dir]', clientDir);
         if (clientSearch.trim() != '') {

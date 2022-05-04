@@ -58,7 +58,7 @@ const App = () => {
           <div className="app-main">
             <Header setSidebar={setSidebar}  setLogin={setLogin}/>
             <div className="app-content">
-              <Routes basename='rightfx_admin'>
+              <Routes basename={'/rightfx_admin'}>
                 <Route exact path="/" element={<Dashboard />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
                 <Route exact path="/dashboard" element={<Dashboard />} />

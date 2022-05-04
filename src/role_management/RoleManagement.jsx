@@ -67,6 +67,18 @@ const RoleManagement = () => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const [openTableMenus, setOpenTableMenus] = useState([]);
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'ROLE NAME',
+          'value': false,
+          'name': 'role_name'
+        },
+        {
+          'label': 'DESCRIPTION',
+          'value': false,
+          'name': 'description'
+        },
+      ]);
 
     const handleContextClick = (event, index) => {
         console.log(event.currentTarget.getAttribute('id'), index);
@@ -122,7 +134,7 @@ const RoleManagement = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Role Management</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>

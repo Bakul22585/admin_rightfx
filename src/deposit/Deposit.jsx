@@ -138,6 +138,38 @@ const Deposit = () => {
         isLoader: false,
         transation_id: ''
     });
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'REFERENCE NO',
+          'value': false,
+          'name': 'reference_no'
+        },
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        },
+        {
+          'label': 'NAME',
+          'value': false,
+          'name': 'name'
+        },
+        {
+          'label': 'WALLET CODE',
+          'value': false,
+          'name': 'wallet_code'
+        },
+        {
+          'label': 'PAYMENT METHOD',
+          'value': false,
+          'name': 'payment_method'
+        },
+        {
+          'label': 'AMOUNT',
+          'value': false,
+          'name': 'amount'
+        },
+      ]);
     toast.configure();
 
     const columns = [
@@ -633,7 +665,7 @@ const Deposit = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Deposit</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br />
                                 {/* <Paper elevation={2} style={{ borderRadius: "10px" }}>
                                     <div className="card-header font-weight-bold text-dark border-bottom py-2">

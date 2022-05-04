@@ -1,5 +1,5 @@
 import './ticket.css';
-import React from "react";
+import React, { useState } from "react";
 import { CardContent, FormControl, Grid, MenuItem, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -8,6 +8,29 @@ import CommonTable from '../common/CommonTable';
 import { Url } from '../global';
 
 const Ticket = () => {
+
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'Ticket Title',
+          'value': false,
+          'name': 'ticket_title'
+        },
+        {
+          'label': 'Subject',
+          'value': false,
+          'name': 'subject'
+        },
+        {
+          'label': 'Message',
+          'value': false,
+          'name': 'message'
+        },
+        {
+          'label': 'Date',
+          'value': false,
+          'name': 'date'
+        }
+      ]);
 
     const column = [
         {
@@ -69,7 +92,7 @@ const Ticket = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Ticket</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>

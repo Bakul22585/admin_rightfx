@@ -212,6 +212,33 @@ const Leads = () => {
     isAssignSendsms: false,
     isAdminSendsms: false,
   });
+  const [searchBy, setSearchBy] = useState([
+    {
+      'label': 'CUSTOMER',
+      'value': false,
+      'name': 'customer'
+    },
+    {
+      'label': 'Interest',
+      'value': false,
+      'name': 'interest'
+    },
+    {
+      'label': 'Assign To',
+      'value': false,
+      'name': 'assign_to'
+    },
+    {
+      'label': 'Followup Date',
+      'value': false,
+      'name': 'followup_date'
+    },
+    {
+      'label': 'Source',
+      'value': false,
+      'name': 'source'
+    }
+  ]);
 
   toast.configure();
   const interest = ['Very Low', 'Low', 'Average', 'High', 'Very High'];
@@ -980,7 +1007,7 @@ const Leads = () => {
               <Grid item md={12} lg={12} xl={12}>
                 <p className='main-heading'>Leads List</p>
 
-                <CommonFilter />
+                <CommonFilter search={searchBy}/>
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                   <div className='actionGroupButton'>

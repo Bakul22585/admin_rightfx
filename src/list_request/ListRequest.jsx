@@ -11,7 +11,6 @@ const ListRequest = () => {
 
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [open, setOpen] = useState(false);
-
     const column = [
         {
             name: 'SR.NO',
@@ -101,6 +100,28 @@ const ListRequest = () => {
             allowOverflow: true
         }
     ];
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        },
+        {
+          'label': 'NAME',
+          'value': false,
+          'name': 'name'
+        },
+        {
+          'label': 'INVESTMENT TILL MONTHS',
+          'value': false,
+          'name': 'investment_till_months'
+        },
+        {
+          'label': 'AUTO WITHDRAWAL MONTHS',
+          'value': false,
+          'name': 'auto_withdrawal_months'
+        }
+      ]);
 
     const handleContextClick = (event, index) => {
         console.log(event.currentTarget.getAttribute('id'), index);
@@ -123,7 +144,7 @@ const ListRequest = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Partnership Request List</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CommonTable url={`${Url}/admin/datatable/partnership_request_list.php`} column={column} sort='0' />

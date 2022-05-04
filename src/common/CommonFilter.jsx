@@ -84,7 +84,7 @@ const source = [
     'Dedicated Link - IB',
 ];
 
-const CommonFilter = () => {
+const CommonFilter = (prop) => {
 
     const theme = useTheme();
     const [open, setOpen] = useState(false);
@@ -107,6 +107,7 @@ const CommonFilter = () => {
     const [sourceName, setSourceName] = useState([]);
     const [activeStep, setActiveStep] = useState(0);
     const [clientType, setClientType] = useState('');
+    const [propSearchElement, setPropSearchElement] = useState(prop.search);
 
     const input1 = (event) => {
         const { name, value } = event.target;
@@ -125,6 +126,21 @@ const CommonFilter = () => {
         setFilterBy(e.target.value);
     };
 
+    const dynamicCheckbox = (e) => {
+        
+        let checkbox = [];
+        propSearchElement.forEach(element => {
+            checkbox.push(<FormControlLabel
+                className='searchByCheckbox'
+                control={
+                    <Checkbox onChange={handleChange} name={element.name} />
+                }
+                label={element.label}
+            /> );
+        });
+        return checkbox;
+    }
+    console.log(propSearchElement);
     return (
         <div>
             <Grid container>
@@ -148,7 +164,8 @@ const CommonFilter = () => {
                                 {(filterSection) ? <div>
                                     <div className='SerachBySection'>
                                         <b class="mr-3">Search By : </b>
-                                        <FormControlLabel
+                                        {dynamicCheckbox()}
+                                        {/* <FormControlLabel
                                             className='searchByCheckbox'
                                             control={
                                                 <Checkbox checked={state.first_name} onChange={handleChange} name="first_name" />
@@ -189,7 +206,7 @@ const CommonFilter = () => {
                                                 <Checkbox checked={state.mt5_account} onChange={handleChange} name="mt5_account" />
                                             }
                                             label="MT5 Account"
-                                        />
+                                        /> */}
                                     </div>
                                     <div className='filterBy'>
                                         <b class="mb-2 d-block">Filter By :</b>

@@ -10,6 +10,38 @@ import { Url } from '../global';
 const IBWithdraw = () => {
 
     const [refresh, setRefresh] = useState(false);
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        },
+        {
+          'label': 'NAME',
+          'value': false,
+          'name': 'name'
+        },
+        {
+          'label': 'EMAIL',
+          'value': false,
+          'name': 'email'
+        },
+        {
+          'label': 'MT5 A/C NO.',
+          'value': false,
+          'name': 'mt5_acc_no'
+        },
+        {
+          'label': 'AMOUNT',
+          'value': false,
+          'name': 'amount'
+        },
+        {
+          'label': 'REMARKS',
+          'value': false,
+          'name': 'remarks'
+        },
+      ]);
 
     const column = [
         {
@@ -86,7 +118,7 @@ const IBWithdraw = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>IB Withdraw</p>
-                                <CommonFilter />
+                                <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
