@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Login from './login/Login';
 import Sidebar from './sidebar/Sidebar.jsx';
 import Header from './sidebar/Header.jsx';
@@ -33,9 +33,15 @@ import CreateRole from './role_management/CreateRole';
 import Leads from './leads/Leads';
 import Remainder from './remainder/Remainder';
 import CopyTrading from './copytrading/CopyTrading';
+function useScrollToTop() {
+  const { pathname } = useLocation();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+}
 const App = () => {
-
+  useScrollToTop();
   const ref = useRef();
   const [login, setLogin] = useState(localStorage.getItem('login'));
   const [sidebar, setSidebar] = useState(false);
@@ -58,9 +64,9 @@ const App = () => {
           <div className="app-main">
             <Header setSidebar={setSidebar}  setLogin={setLogin}/>
             <div className="app-content">
-              <Routes basename={'/rightfx_admin'}>
+              <Routes basename={'/build'}>
                 <Route exact path="/" element={<Dashboard />} />
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                <Route path="*" element={<Navigate to="dashboard" replace />} />
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/employees" element={<Employees />} />
                 <Route exact path="/role_management" element={<RoleManagement />} />

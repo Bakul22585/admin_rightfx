@@ -2,7 +2,7 @@
   "name": "admin_rightfx",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./rightfx_admin",
+  "homepage": "http://127.0.0.1:5501/build",
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
