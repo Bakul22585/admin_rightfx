@@ -60,10 +60,10 @@ const ListRequest = () => {
         },
         {
             name: 'STATUS',
-            selector: row => { return <span className={(row.status == "1") ? "status-text-approved" : (row.status == "2") ? "status-text-rejected" : "status-text-pending"} title={(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}>{(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}</span> },
+            selector: row => { return <span className={(row.status == "1") ? "status-text-approved" : (row.status == "2") ? "status-text-rejected" : "status-text-pending"} title={(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}>{(row.status == "1") ? <i className="material-icons">check_circle</i> : (row.status == "2") ? <i className="material-icons">cancel</i> : <i className="material-icons">new_releases</i>}</span> },
             sortable: true,
             reorder: true,
-            grow: 0.5,
+            grow: 0.1,
         },
         {
             name: 'Action',

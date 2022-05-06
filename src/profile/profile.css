@@ -351,3 +351,6 @@ text.highcharts-credits {
     color: black;
     border: 2px solid #1565c0;
 }
+.mt5btngroup button {
+    width: 46%;
+}

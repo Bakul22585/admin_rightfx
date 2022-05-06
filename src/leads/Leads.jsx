@@ -520,6 +520,7 @@ const Leads = () => {
       },
       sortable: true,
       reorder: true,
+      wrap: true,
       grow: 0.1,
     },
     {
@@ -530,6 +531,7 @@ const Leads = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+      wrap: true,
     },
     {
       name: 'Interest',
@@ -583,12 +585,14 @@ const Leads = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+      wrap: true,
     },
     {
       name: 'Source',
       selector: row => { return <span title={row.user_country}>{row.user_country}</span> },
       sortable: true,
       reorder: true,
+      wrap: true,
       grow: 1,
     },
     {
@@ -598,6 +602,7 @@ const Leads = () => {
       },
       sortable: true,
       reorder: true,
+      wrap: true,
       grow: 1,
     },
     {

@@ -295,6 +295,7 @@ const ClientList = () => {
             },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.1,
         },
         {
@@ -304,6 +305,7 @@ const ClientList = () => {
             },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.1,
         },
         {
@@ -311,6 +313,7 @@ const ClientList = () => {
             selector: row => { return <span title={row.group_level}>{row.group_level}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 0.5,
         },
         {
@@ -318,6 +321,7 @@ const ClientList = () => {
             selector: row => { return <a className='linkColor' title={row.name} onClick={(event) => gotoProfile(row)}>{row.name}</a> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1,
         },
         {
@@ -325,6 +329,7 @@ const ClientList = () => {
             selector: row => { return <span title={row.user_email}>{row.user_email}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1.5,
         },
         {
@@ -332,6 +337,7 @@ const ClientList = () => {
             selector: row => { return <span title={row.user_phone}>{row.user_phone}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1,
         },
         {
@@ -341,24 +347,27 @@ const ClientList = () => {
             },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1,
         },
         {
             name: 'KYC',
             selector: row => {
                 return <div>
-                    <span className={`status-text-${(row.kyc_status == "0") ? 'pending' : (row.kyc_status == "1") ? "approved" : "rejected"}`}>{(row.kyc_status == "0") ? 'Pending' : (row.kyc_status == "1") ? "Approved" : "Rejected"}</span>
+                    <span className={`status-text-${(row.kyc_status == "0") ? 'pending' : (row.kyc_status == "1") ? "approved" : "rejected"}`}>{(row.kyc_status == "0") ? <i className="material-icons">new_releases</i> : (row.kyc_status == "1") ? <i className="material-icons">check_circle</i> : <i className="material-icons">cancel</i>}</span>
                 </div>
             },
             sortable: true,
             reorder: true,
-            grow: 0.8,
+            wrap: true,
+            grow: 0.2,
         },
         {
             name: 'DATE',
             selector: row => { return <span title={row.date}>{row.date}</span> },
             sortable: true,
             reorder: true,
+            wrap: true,
             grow: 1.2,
         },
         {
