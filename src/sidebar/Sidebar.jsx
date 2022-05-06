@@ -70,9 +70,12 @@ const Sidebar = (prop) => {
             </span>
           </Button>
         </div>
-        <Button className="sidebar-open-close" onClick={handleSidebar}>
+        {(isSidebarOpen) ? <Button title="Collapse Sidebar" className="collapse-sidebar-open-close" onClick={handleSidebar}>
+          <i className="material-icons">adjust</i>
+        </Button> : <Button title="Expand Sidebar" className="sidebar-open-close" onClick={handleSidebar}>
           <i className="material-icons">sync_alt</i>
-        </Button>
+        </Button>}
+        
         <div className="app-sidebar--content">
           <div>
             <div className="sidebar-navigation">

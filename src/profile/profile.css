@@ -340,3 +340,14 @@ text.highcharts-credits {
 .grid-handle.panding-left-right-3px {
     padding: 0 3px;
 }
+.input-font-small {
+    width: 100%;
+}
+.input-font-small input, .select-font-small .MuiInputBase-input {
+    font-size: 12px;
+}
+.mt5btngroup .btn-hover-css:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #1565c0;
+}

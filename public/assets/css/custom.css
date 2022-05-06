@@ -17486,8 +17486,8 @@ body {
   margin-bottom: 5px;
 }
 .MuiInputBase-root.MuiInputBase-formControl {
-  color: var(--dark);
-  font-weight: 700;
+  /* color: var(--dark);
+  font-weight: 700; */
 }
 hr {
   border: 1px dashed #dedede;

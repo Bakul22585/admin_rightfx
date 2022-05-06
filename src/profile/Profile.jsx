@@ -144,7 +144,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
         position: "relative",
         backgroundColor: theme.palette.background.paper,
         border: "1px solid #ced4da",
-        fontSize: 16,
+        fontSize: "12px",
         padding: "8px 10px 8px 10px",
         marginTop: 0,
         transition: theme.transitions.create(["border-color", "box-shadow"]),
@@ -927,6 +927,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Account Type"
                             name='account_type'
                             onChange={input}>
@@ -941,6 +942,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account option</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Account option"
                             name='account_option'
                             onChange={input}>
@@ -956,6 +958,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Select MT5 Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Select MT5 Account"
                             name='account_type'
                             onChange={input1}>
@@ -970,6 +973,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Status"
                             name='status'
                             onChange={input1}>
@@ -982,7 +986,7 @@ const Profile = () => {
         } else if (dialogTitle == "Link Existing Account") {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={input2} />
+                    <TextField className='input-font-small' label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={input2} />
                 </div>
                 <br />
                 <div>
@@ -990,6 +994,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Account Type"
                             name='account_type'
                             onChange={input2}>
@@ -1004,6 +1009,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Account Name</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Account Name"
                             name='account_name'
                             onChange={input2}>
@@ -1020,6 +1026,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Select MT5 Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Select MT5 Account"
                             name='account'
                             onChange={input3}>
@@ -1035,6 +1042,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">MT5 Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="MT5 Account"
                             name='account'
                             onChange={input4}>
@@ -1048,6 +1056,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Leverage</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Leverage"
                             name='leverage'
                             onChange={input4}>
@@ -1198,6 +1207,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Client</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Client"
                             name='client'
                             onChange={linkClientInput}>
@@ -1211,6 +1221,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Structure"
                             name='structure'
                             onChange={linkClientInput}>
@@ -1222,8 +1233,8 @@ const Profile = () => {
         } else if (dialogTitle == 'Link To IB') {
             return <div>
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Master Account ID" variant="standard" sx={{ width: '50%' }} name='master_account' onChange={linkIBInput} />
-                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '50%' }} name='customer_name' onChange={linkIBInput} />
+                    <TextField className='input-font-small' label="Master Account ID" variant="standard" sx={{ width: '50%' }} name='master_account' onChange={linkIBInput} />
+                    <TextField className='input-font-small' label="Customer Name" variant="standard" sx={{ width: '50%' }} name='customer_name' onChange={linkIBInput} />
                 </div>
                 <br />
                 <div>
@@ -1231,6 +1242,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Structure"
                             name='structure'
                             onChange={linkIBInput}>
@@ -1247,6 +1259,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">FROM</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="FROM"
                             name='from'
                             onChange={sendMailInput}>
@@ -1256,15 +1269,15 @@ const Profile = () => {
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="To" variant="standard" sx={{ width: '100%' }} name='to' onChange={sendMailInput} />
+                    <TextField className='input-font-small' label="To" variant="standard" sx={{ width: '100%' }} name='to' onChange={sendMailInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Subject" variant="standard" sx={{ width: '100%' }} name='subject' onChange={sendMailInput} />
+                    <TextField className='input-font-small' label="Subject" variant="standard" sx={{ width: '100%' }} name='subject' onChange={sendMailInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Template Title" variant="standard" sx={{ width: '100%' }} name='template_title' onChange={sendMailInput} />
+                    <TextField className='input-font-small' label="Template Title" variant="standard" sx={{ width: '100%' }} name='template_title' onChange={sendMailInput} />
                 </div>
                 <br />
                 <div>
@@ -1272,6 +1285,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Language"
                             name='language'
                             onChange={sendMailInput}>
@@ -1286,6 +1300,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Template</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Template"
                             name='template'
                             onChange={sendMailInput}>
@@ -1312,6 +1327,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Status"
                             name='status'
                             onChange={input7}>
@@ -1334,6 +1350,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Call Status</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Call Status"
                             name='call_status'
                             onChange={input8}>
@@ -1373,31 +1390,31 @@ const Profile = () => {
         } else if (dialogTitle == 'Add Account') {
             return <div>
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Name" variant="standard" sx={{ width: '100%' }} name='name' onChange={bankInput} />
+                    <TextField className='input-font-small' label="Beneficiary Name" variant="standard" sx={{ width: '100%' }} name='name' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={bankInput} />
+                    <TextField className='input-font-small' label="Beneficiary Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Beneficiary Bank Address" variant="standard" sx={{ width: '100%' }} name='bank_address' onChange={bankInput} />
+                    <TextField className='input-font-small' label="Beneficiary Bank Address" variant="standard" sx={{ width: '100%' }} name='bank_address' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="IBAN Number" variant="standard" sx={{ width: '100%' }} name='iban_number' onChange={bankInput} />
+                    <TextField className='input-font-small' label="IBAN Number" variant="standard" sx={{ width: '100%' }} name='iban_number' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={bankInput} />
+                    <TextField className='input-font-small' label="Account Number" variant="standard" sx={{ width: '100%' }} name='account_number' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="SWIFT Code" variant="standard" sx={{ width: '100%' }} name='swift_code' onChange={bankInput} />
+                    <TextField className='input-font-small' label="SWIFT Code" variant="standard" sx={{ width: '100%' }} name='swift_code' onChange={bankInput} />
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Currency Code" variant="standard" sx={{ width: '100%' }} name='currency_code' onChange={bankInput} />
+                    <TextField className='input-font-small' label="Currency Code" variant="standard" sx={{ width: '100%' }} name='currency_code' onChange={bankInput} />
                 </div>
             </div>;
         } else if (dialogTitle == 'Add New Transaction') {
@@ -1408,6 +1425,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Transaction Type"
                                 name='type'
                                 value={transactionForm.type}
@@ -1427,6 +1445,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
@@ -1444,6 +1463,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Deposit To</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Deposit To"
                                 name='deposit_to'
                                 onChange={transactionInput}>
@@ -1454,6 +1474,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Payment Gateway"
                                 name='payment'
                                 onChange={transactionInput}>
@@ -1466,11 +1487,11 @@ const Profile = () => {
                     </div>
                     <br />
                     <div>
-                        <TextField id="standard-basic" label="Transation ID" variant="standard" sx={{ width: '100%' }} name='transation_id' onChange={transactionInput} />
+                        <TextField className='input-font-small' label="Transation ID" variant="standard" sx={{ width: '100%' }} name='transation_id' onChange={transactionInput} />
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                        <TextField className='input-font-small' label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                         <label htmlFor="contained-button-file" className='fileuploadButton'>
                             <Input accept="image/*" id="contained-button-file" multiple type="file" name='img' />
                             <Button variant="contained" component="span">
@@ -1485,6 +1506,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Currency Code"
                                 name='currency_code'
                                 onChange={transactionInput}>
@@ -1500,6 +1522,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
@@ -1517,6 +1540,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="From Account Type"
                                 name='from_account_type'
                                 onChange={transactionInput}>
@@ -1528,6 +1552,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
@@ -1541,13 +1566,14 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Payment Gateway"
                                 name='payment'
                                 onChange={transactionInput}>
                                 <MenuItem value='BANK'>BANK</MenuItem>
                             </Select>
                         </FormControl>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                        <TextField className='input-font-small' label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                     </div>
                     <br />
                     <div className='margeField'>
@@ -1556,6 +1582,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Currency Code"
                                 name='currency_code'
                                 onChange={transactionInput}>
@@ -1571,6 +1598,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
@@ -1588,6 +1616,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="From Account Type"
                                 name='from_account_type'
                                 onChange={transactionInput}>
@@ -1599,6 +1628,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transfer To</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Transfer To"
                                 name='transfer_to'
                                 onChange={transactionInput}>
@@ -1613,6 +1643,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
@@ -1624,6 +1655,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="To Account"
                                 name='account_to'
                                 onChange={transactionInput}>
@@ -1633,6 +1665,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="To Account"
                                 name='account_to'
                                 onChange={transactionInput}>
@@ -1649,15 +1682,16 @@ const Profile = () => {
                                 <InputLabel id="demo-simple-select-standard-label">MT5 Account ID</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-standard-label"
+                                    className='select-font-small'
                                     label="MT5 Account ID"
                                     name='mt5_account_id'
                                     onChange={transactionInput}>
                                     <MenuItem value='1'>121212</MenuItem>
                                 </Select>
                             </FormControl>
-                            : (transactionForm.account_to != '') ? (transactionForm.account == 'MT5' && transactionForm.account_to == 'Wallet') ? <TextField className='disabled-input-wallet-code' label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} value={userData.data['wallet_code']} disabled focused /> : <TextField id="standard-basic" label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} focused /> : ''}
+                            : (transactionForm.account_to != '') ? (transactionForm.account == 'MT5' && transactionForm.account_to == 'Wallet') ? <TextField className='disabled-input-wallet-code' label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} value={userData.data['wallet_code']} disabled focused /> : <TextField className='input-font-small' label="Wallet Code" variant="standard" sx={{ width: '100%' }} name='wallet_code' onChange={transactionInput} focused /> : ''}
 
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                        <TextField className='input-font-small' label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                     </div>
                     <br />
                     <div className='margeField'>
@@ -1665,6 +1699,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Currency Code"
                                 name='currency_code'
                                 onChange={transactionInput}>
@@ -1681,6 +1716,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
@@ -1698,6 +1734,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Credit Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="Credit Type"
                                 name='credit_type'
                                 onChange={transactionInput}>
@@ -1709,6 +1746,7 @@ const Profile = () => {
                             <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
                             <Select
                                 labelId="demo-simple-select-standard-label"
+                                className='select-font-small'
                                 label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
@@ -1718,7 +1756,7 @@ const Profile = () => {
                     </div>
                     <br />
                     <div className='margeField'>
-                        <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
+                        <TextField className='input-font-small' label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' onChange={transactionInput} />
                         <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
                     </div>
                     <br />
@@ -1731,6 +1769,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Live Account</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Live Account"
                             name='account'
                             onChange={campaignInput}>
@@ -1744,6 +1783,7 @@ const Profile = () => {
                         <InputLabel id="demo-simple-select-standard-label">Campaign</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
+                            className='select-font-small'
                             label="Campaign"
                             name='campaign'
                             onChange={campaignInput}>
@@ -1832,11 +1872,11 @@ const Profile = () => {
         } else if (dialogTitle == 'Change Password') {
             return <div>
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Main Password" variant="standard" sx={{ width: '100%' }} name='main_password' onChange={input5} />
+                    <TextField className='input-font-small' label="Main Password" variant="standard" sx={{ width: '100%' }} name='main_password' onChange={input5} />
                 </div>
                 <br />
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="View Password" variant="standard" sx={{ width: '100%' }} name='view_password' onChange={input5} />
+                    <TextField className='input-font-small' label="View Password" variant="standard" sx={{ width: '100%' }} name='view_password' onChange={input5} />
                 </div>
             </div>;
         }
@@ -2785,7 +2825,7 @@ const Profile = () => {
                                                                     <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Title"
@@ -2800,29 +2840,29 @@ const Profile = () => {
                                                                 </FormControl>
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="First Name" variant="standard" value={userData.data['user_first_name']} focused name='first_name' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="First Name" variant="standard" value={userData.data['user_first_name']} focused name='first_name' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Last Name" variant="standard" value={userData.data['user_last_name']} focused name='last_name' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Last Name" variant="standard" value={userData.data['user_last_name']} focused name='last_name' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Phone" variant="standard" focused name='phone' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Phone" variant="standard" focused name='phone' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Mobile" variant="standard" value={userData.data['user_phone']} focused name='mobile' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Mobile" variant="standard" value={userData.data['user_phone']} focused name='mobile' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Email" variant="standard" value={userData.data['user_email']} focused name='email' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Email" variant="standard" value={userData.data['user_email']} focused name='email' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField type='date' id="standard-basic" label="Date of Birth" variant="standard" sx={{ width: '100%' }} focused name='dob' onChange={profileInput} />
+                                                                <TextField type='date' className='input-font-small' label="Date of Birth" variant="standard" sx={{ width: '100%' }} focused name='dob' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
                                                                     <InputLabel id="demo-simple-select-standard-label">Nationality</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Nationality"
@@ -2841,7 +2881,7 @@ const Profile = () => {
                                                                     <InputLabel id="demo-simple-select-standard-label">Country of Residence</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Country of Residence"
@@ -2856,20 +2896,20 @@ const Profile = () => {
                                                                 </FormControl>
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="City" variant="standard" focused name='city' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="City" variant="standard" focused name='city' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Address" variant="standard" focused name='address' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Address" variant="standard" focused name='address' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Address Line 2" variant="standard" focused name='address_2' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Address Line 2" variant="standard" focused name='address_2' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
                                                                     <InputLabel id="demo-simple-select-standard-label">Gendere</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Gender"
@@ -2882,14 +2922,14 @@ const Profile = () => {
                                                                 </FormControl>
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Postal Code" variant="standard" focused name='postal_code' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Postal Code" variant="standard" focused name='postal_code' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
                                                                     <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Language"
@@ -2901,14 +2941,14 @@ const Profile = () => {
                                                                 </FormControl>
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Source" variant="standard" focused name='source' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Source" variant="standard" focused name='source' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
                                                                     <InputLabel id="demo-simple-select-standard-label">US citizen ?</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="US citizen ?"
@@ -2924,7 +2964,7 @@ const Profile = () => {
                                                                     <InputLabel id="demo-simple-select-standard-label">Worked in Financial?</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Worked in Financial?"
@@ -2936,14 +2976,14 @@ const Profile = () => {
                                                                 </FormControl>
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Tax Identification Number" variant="standard" focused name='tax_number' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Tax Identification Number" variant="standard" focused name='tax_number' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
                                                                     <InputLabel id="demo-simple-select-standard-label">Politically exposed ?</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="Politically exposed ?"
@@ -2962,7 +3002,7 @@ const Profile = () => {
                                                                     <InputLabel id="demo-simple-select-standard-label">ID Type</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
-                                                                        id="demo-simple-select-standard"
+                                                                        className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
                                                                         label="ID Type"
@@ -2974,16 +3014,16 @@ const Profile = () => {
                                                                 </FormControl>
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="ID Number" variant="standard" focused name='id_number' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="ID Number" variant="standard" focused name='id_number' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField id="standard-basic" label="Country of Issue" variant="standard" focused name='country_issuce' onChange={profileInput} />
+                                                                <TextField className='input-font-small' label="Country of Issue" variant="standard" focused name='country_issuce' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField type='date' id="standard-basic" label="Date of Issue" variant="standard" sx={{ width: '100%' }} focused name='date_issue' onChange={profileInput} />
+                                                                <TextField type='date' className='input-font-small' label="Date of Issue" variant="standard" sx={{ width: '100%' }} focused name='date_issue' onChange={profileInput} />
                                                             </div>
                                                             <div className='element'>
-                                                                <TextField type='date' id="standard-basic" label="Date of Expiry" variant="standard" sx={{ width: '100%' }} focused name='date_expiry' onChange={profileInput} />
+                                                                <TextField type='date' className='input-font-small' label="Date of Expiry" variant="standard" sx={{ width: '100%' }} focused name='date_expiry' onChange={profileInput} />
                                                             </div>
                                                         </div>
                                                         <div className='btnActionSection'>
@@ -2997,40 +3037,40 @@ const Profile = () => {
                                                         <div className='contentSection'>
                                                             <p className='group-header'>Trading Account</p>
                                                             <div className='mt5btngroup'>
-                                                                <Button variant="contained" className='createMt5' onClick={openDialogbox}>Create MT5</Button>
-                                                                <Button variant="contained" className='mt5_access' onClick={openDialogbox}>MT5 Access</Button>
-                                                                <Button variant="contained" className='link_mt5' onClick={openDialogbox}>Link MT5</Button>
-                                                                <Button variant="contained" className='reset_mt5' onClick={openDialogbox}>Reset MT5</Button>
-                                                                <Button variant="contained" className='change_leverage' onClick={openDialogbox}>Change Leverage</Button>
-                                                                <Button variant="contained" className='change_password' onClick={openDialogbox}>Change Password</Button>
+                                                                <Button variant="contained" className='createMt5 btn-hover-css' onClick={openDialogbox}>Create MT5</Button>
+                                                                <Button variant="contained" className='mt5_access btn-hover-css' onClick={openDialogbox}>MT5 Access</Button>
+                                                                <Button variant="contained" className='link_mt5 btn-hover-css' onClick={openDialogbox}>Link MT5</Button>
+                                                                <Button variant="contained" className='reset_mt5 btn-hover-css' onClick={openDialogbox}>Reset MT5</Button>
+                                                                <Button variant="contained" className='change_leverage btn-hover-css' onClick={openDialogbox}>Change Leverage</Button>
+                                                                <Button variant="contained" className='change_password btn-hover-css' onClick={openDialogbox}>Change Password</Button>
                                                             </div>
                                                             <br />
                                                             <p className='group-header'>IB</p>
                                                             <div className='mt5btngroup'>
-                                                                <Button variant="contained" className='add_master_structure' onClick={openDialogbox}>Add Master Structure</Button>
-                                                                <Button variant="contained" className='add_shared_structure' onClick={openDialogbox}>Add Shared Structure</Button>
-                                                                <Button variant="contained" className='link_client' onClick={openDialogbox} >Link Client</Button>
-                                                                <Button variant="contained" className='link_ib' onClick={openDialogbox}>Link To IB</Button>
-                                                                <Button variant="contained" className='unlink_ib' onClick={openDialogbox} >Unlink IB</Button>
+                                                                <Button variant="contained" className='add_master_structure btn-hover-css' onClick={openDialogbox}>Add Master Structure</Button>
+                                                                <Button variant="contained" className='add_shared_structure btn-hover-css' onClick={openDialogbox}>Add Shared Structure</Button>
+                                                                <Button variant="contained" className='link_client btn-hover-css' onClick={openDialogbox} >Link Client</Button>
+                                                                <Button variant="contained" className='link_ib btn-hover-css' onClick={openDialogbox}>Link To IB</Button>
+                                                                <Button variant="contained" className='unlink_ib btn-hover-css' onClick={openDialogbox} >Unlink IB</Button>
                                                             </div>
                                                             <br />
                                                             <p className='group-header'>Communication</p>
                                                             <div className='mt5btngroup'>
-                                                                <Button variant="contained" className='send_email' onClick={openDialogbox}>Send Email</Button>
+                                                                <Button variant="contained" className='send_email btn-hover-css' onClick={openDialogbox}>Send Email</Button>
                                                             </div>
                                                             <br />
                                                             <p className='group-header'>Client Portal</p>
                                                             <div className='mt5btngroup'>
-                                                                <Button variant="contained" className='cp_access' onClick={openDialogbox}>CP Access</Button>
-                                                                <Button variant="contained" className='view_cp_password' onClick={openDialogbox} >View CP Password</Button>
+                                                                <Button variant="contained" className='cp_access btn-hover-css' onClick={openDialogbox}>CP Access</Button>
+                                                                <Button variant="contained" className='view_cp_password btn-hover-css' onClick={openDialogbox} >View CP Password</Button>
                                                             </div>
                                                             <br />
                                                             <p className='group-header'>Misc.</p>
                                                             <div className='mt5btngroup'>
-                                                                <Button variant="contained" className='download_application' onClick={openDialogbox}>Download Application</Button>
-                                                                <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button>
-                                                                <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add Bank</Button>
-                                                                <Button variant="contained" className='add_transaction' onClick={openDialogbox}>Add Transaction</Button>
+                                                                <Button variant="contained" className='download_application btn-hover-css' onClick={openDialogbox}>Download Application</Button>
+                                                                <Button variant="contained" className='add_note btn-hover-css' onClick={openDialogbox}>Add Note</Button>
+                                                                <Button variant="contained" className='add_bank btn-hover-css' onClick={openDialogbox}>Add Bank</Button>
+                                                                <Button variant="contained" className='add_transaction btn-hover-css' onClick={openDialogbox}>Add Transaction</Button>
                                                             </div>
                                                         </div>
                                                     </Paper>
@@ -3064,7 +3104,7 @@ const Profile = () => {
                                                                             <InputLabel id="demo-simple-select-standard-label">Employment Status</InputLabel>
                                                                             <Select
                                                                                 labelId="demo-simple-select-standard-label"
-                                                                                id="demo-simple-select-standard"
+                                                                                className='select-font-small'
                                                                                 // value={age}
                                                                                 onChange={employementInput}
                                                                                 label="Employment Status"
@@ -3086,7 +3126,7 @@ const Profile = () => {
                                                                             <InputLabel id="demo-simple-select-standard-label">Inudstry</InputLabel>
                                                                             <Select
                                                                                 labelId="demo-simple-select-standard-label"
-                                                                                id="demo-simple-select-standard"
+                                                                                className='select-font-small'
                                                                                 // value={age}
                                                                                 onChange={employementInput}
                                                                                 label="Inudstry"
@@ -3672,6 +3712,7 @@ const Profile = () => {
                                                                     <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
                                                                     <Select
                                                                         labelId="demo-simple-select-standard-label"
+                                                                        className='select-font-small'
                                                                         label="Structure"
                                                                         name='structure'
                                                                         onChange={input9}>
