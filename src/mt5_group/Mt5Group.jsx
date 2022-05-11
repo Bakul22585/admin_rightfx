@@ -166,7 +166,7 @@ const Mt5Group = () => {
         param.append('is_react', '1');
         param.append('is_app', '1');
         param.append('group_id', id);
-        await axios.post(`${Url}/admin/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
+        await axios.post(`${Url}/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -317,7 +317,7 @@ const Mt5Group = () => {
             param.append('group_name', form.group_name);
             param.append('mt5_group_name', form.mt5_group_name);
             param.append('status', form.isActive ? 1 : 0);
-            await axios.post(`${Url}/admin/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
+            await axios.post(`${Url}/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
                 form.isLoader = false;
                 setForm({...form});
                 if (res.data.status == 'error') {
@@ -376,7 +376,7 @@ const Mt5Group = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/admin/datatable/mt5_group_list.php`} column={column} sort='4' refresh={refresh}/>
+                                                <CommonTable url={`${Url}/datatable/mt5_group_list.php`} column={column} sort='4' refresh={refresh} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

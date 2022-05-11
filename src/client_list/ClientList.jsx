@@ -155,6 +155,7 @@ const ClientList = () => {
     const [filterSection, setFilterSection] = useState(false);
     const [filterBy, setFilterBy] = useState('');
     const [clientSearch, setClientSearch] = useState('');
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [state, setState] = React.useState({
         first_name: false,
         last_name: false,
@@ -171,12 +172,12 @@ const ClientList = () => {
         {
             'label': 'MT5 ID',
             'value': false,
-            'name': 'mt5_id'
+            'name': 'mt5_acc_no'
         },
         {
             'label': 'WALLET ID',
             'value': false,
-            'name': 'wallet_id'
+            'name': 'wallet_code'
         },
         {
             'label': 'GROUP LEVEL',
@@ -191,17 +192,17 @@ const ClientList = () => {
         {
             'label': 'EMAIL',
             'value': false,
-            'name': 'email'
+            'name': 'user_email'
         },
         {
             'label': 'PHONE',
             'value': false,
-            'name': 'phone'
+            'name': 'user_phone'
         },
         {
             'label': 'PASSWORD',
             'value': false,
-            'name': 'password'
+            'name': 'user_password'
         },
         {
             'label': 'KYC',
@@ -211,7 +212,7 @@ const ClientList = () => {
         {
             'label': 'DATE',
             'value': false,
-            'name': 'date'
+            'name': 'user_added_datetime'
         },
     ]);
 
@@ -477,7 +478,7 @@ const ClientList = () => {
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Client List</p>
 
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
@@ -486,7 +487,7 @@ const ClientList = () => {
                                         <Button variant="contained">All</Button>
                                     </div>
                                     <br />
-                                    <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
+                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData}  search={searchBy} searchWord={searchKeyword}/>
                                 </Paper>
 
                                 <BootstrapDialog

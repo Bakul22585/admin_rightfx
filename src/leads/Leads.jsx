@@ -498,13 +498,13 @@ const Leads = () => {
           <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Follow Up History</p>
-              <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={column} sort='0' filter={filterData} />
+              <CommonTable url={`${Url}/datatable/users_list.php`} column={column} sort='0' filter={filterData} />
             </Paper>
           </Grid>
           <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Call History</p>
-              <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={callColumn} sort='0' filter={filterData} />
+              <CommonTable url={`${Url}/datatable/users_list.php`} column={callColumn} sort='0' filter={filterData} />
             </Paper>
           </Grid>
         </Grid>
@@ -1021,7 +1021,7 @@ const Leads = () => {
                     <Button variant="contained">All</Button> */}
                   </div>
                   <br />
-                  <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
+                  <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} search={searchBy} />
                 </Paper>
 
                 <BootstrapDialog

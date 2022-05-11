@@ -351,7 +351,7 @@ const Deposit = () => {
             param.append('amount', depositForm.amount);
             param.append('currency', depositForm.currency_code);
             param.append('note', depositForm.note);
-            await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+            await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
                 depositForm.isLoader = false;
                 setDepositForm({...depositForm});
                 if (res.data.status == 'error') {
@@ -648,7 +648,7 @@ const Deposit = () => {
         param.append('is_react', '1');
         param.append('search', search);
         param.append('type', depositForm.live_account);
-        await axios.post(`${Url}/admin/ajaxfiles/fetch_user_account.php`, param).then((res) => {
+        await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -749,7 +749,7 @@ const Deposit = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/admin/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh}/>
+                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

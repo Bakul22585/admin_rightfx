@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import TextField from "@mui/material/TextField";
 import styled, { keyframes } from 'styled-components';
+import { useNavigate } from "react-router-dom"
 
 const CssTextField = styled(TextField)({
 });
@@ -54,6 +55,7 @@ const customStyles = {
 const CommonTable = (prop) => {
 
     // const [info, setinfo] = useState({});
+    const navigate = useNavigate();
     const [clientData, setClientData] = useState([]);
     const [clientLoading, setClientLoading] = useState(false);
     const [clientTotalRows, setClientTotalRows] = useState(0);
@@ -96,8 +98,6 @@ const CommonTable = (prop) => {
     const fetchClient = async page => {
         setClientLoading(true);
         const param = new FormData();
-        param.append('user_id', 1);
-        param.append('auth_key', 'ea29cf-d34037-e0cdd1');
         param.append('is_app', 1);
         param.append('draw', 0);
         param.append('start', page);
@@ -126,6 +126,25 @@ const CommonTable = (prop) => {
             }
         }
 
+        if (prop.searchWord != "") {
+            // console.log(prop.search.filter((x) => x.value == true).length);
+            if (prop.search.filter((x) => x.value == true).length == 0) {
+                param.append('search[value]', prop.searchWord);
+            } else {
+                var columns = prop.search.filter((x) => x.value == true).map((x) => {
+                    return x.name;
+                }).join(',');
+                console.log('columns', columns);
+                param.append('columns', columns);
+                param.append('columnSearch', prop.searchWord);
+                /* prop.search.forEach(element => {
+                    if (element.value == true) {
+                        param.append(element.name, prop.searchWord);
+                    }
+                }); */
+            }
+        }
+
         if (prop.param) {
             param.append('kyc_status', prop.param.kyc_status);
         }
@@ -136,11 +155,19 @@ const CommonTable = (prop) => {
         }
 
         await axios.post(`${prop.url}`, param).then((res) => {
-            setClientData(res.data.aaData);
-            setClientTotalRows(res.data.iTotalRecords);
-            setClientLoading(false);
-            if (prop.setResData) {
-                prop.setResData(res.data);
+            console.log(res.data);
+            if (res.data['status']) {
+                if (res.data['status'] == 'error' && res.data['message'] == 'Session has been expired') {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+            } else {
+                setClientData(res.data.aaData);
+                setClientTotalRows(res.data.iTotalRecords);
+                setClientLoading(false);
+                if (prop.setResData) {
+                    prop.setResData(res.data);
+                }
             }
         });
     };
@@ -155,6 +182,8 @@ const CommonTable = (prop) => {
         prop.level,
         prop.filter,
         prop.refresh,
+        prop.searchWord,
+        prop.search,
     ]);
     // console.log(prop);
     return (

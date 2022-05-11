@@ -231,7 +231,7 @@ const PendingKYC = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}admin/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} param={param}/>
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} param={param} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

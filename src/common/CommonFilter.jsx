@@ -115,10 +115,8 @@ const CommonFilter = (prop) => {
     };
 
     const handleChange = (event) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked,
-        });
+        propSearchElement[propSearchElement.findIndex((x) => x.name == event.target.name)].value = event.target.checked;
+        setPropSearchElement([...propSearchElement]);
     };
 
     const filterByChange = (e) => {
@@ -140,7 +138,7 @@ const CommonFilter = (prop) => {
         });
         return checkbox;
     }
-    console.log(propSearchElement);
+    console.log(propSearchElement, prop.searchWord);
     return (
         <div>
             <Grid container>
@@ -155,8 +153,8 @@ const CommonFilter = (prop) => {
                                         sx={{ width: "100%" }}
                                         variant="standard"
                                         name="myclient_search"
-                                        // value={info.myclient_search}
-                                        onChange={input1}
+                                        // value={prop.searchWord}
+                                        onChange={(e) => prop.searchWord(e.target.value)}
                                     />
                                     <Button onClick={(event) => setFilterSection(!filterSection)}><i className="material-icons"> {(filterSection) ? 'menu' : 'filter_list'}</i></Button>
                                 </div>

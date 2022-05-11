@@ -39,7 +39,7 @@ const CreateRole = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>Create Role</p>
+                                <p className='main-heading'> {(id != undefined) ? 'Update':'Create'} Role</p>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='create-role-content-section'>
                                         <div className='input-section'>

@@ -346,6 +346,14 @@ const Sidebar = (prop) => {
                     </NavLink>
                 </li>
                 <li>
+                  <NavLink className="nav-link-simple " to="/plans" onClick={CloseSidebar}>
+                    <span className="material-icons" style={style}>
+                    fact_check
+                    </span>
+                    Plans
+                    </NavLink>
+                </li>
+                <li>
                   <NavLink className="nav-link-simple " to="/currency_rate" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     calculate

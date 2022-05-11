@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import Highcharts from 'highcharts';
 import * as ReactDom from 'react-dom';
 import * as Highcharts from 'highcharts/highmaps';
@@ -351,8 +351,15 @@ var ibSummaryOptions = {
     },
 };
 
-const Dashboard = () => {
+const Dashboard = (prop) => {
     const [selected, onSelect] = useState(null);
+
+    useEffect(() => {
+        if (localStorage.getItem('login') == "true") {
+            prop.setLogin("true");
+        }
+    }, [])
+    
     return (
         <div>
             <div className="app-content--inner">

@@ -1174,7 +1174,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url={`${Url}/admin/datatable/deposit_list.php`} column={depositColumn} sort='2' filter={filterData}/>
+                                            <CommonTable url={`${Url}/datatable/deposit_list.php`} column={depositColumn} sort='2' filter={filterData}/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1243,7 +1243,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url={`${Url}/admin/datatable/withdraw_list.php`} column={withdrawColumn} sort='1' filter={filterData}/>
+                                            <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={withdrawColumn} sort='1' filter={filterData}/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1312,7 +1312,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url={`${Url}/admin/datatable/ib_withdraw_list.php`} column={ibwithdrawColumn} sort='1' />
+                                            <CommonTable url={`${Url}/datatable/ib_withdraw_list.php`} column={ibwithdrawColumn} sort='1' />
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1567,7 +1567,7 @@ const Master = () => {
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <CommonTable url={`${Url}/admin/datatable/admin_partnership_commissions_list.php`} column={partnershipCommisionColumn} sort='1' />
+                                            <CommonTable url={`${Url}/datatable/admin_partnership_commissions_list.php`} column={partnershipCommisionColumn} sort='1' />
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1754,7 +1754,7 @@ const Master = () => {
                                                 highlightOnHover
                                                 pointerOnHover
                                             /> */}
-                                            <CommonTable url={`${Url}/admin/datatable/ticket_list.php`} column={ticketColumn} sort='5'/>
+                                            <CommonTable url={`${Url}/datatable/ticket_list.php`} column={ticketColumn} sort='5'/>
                                         </div>
                                     </Collapse>
                                 </Paper>
@@ -1779,7 +1779,7 @@ const Master = () => {
                                     </a>
                                     <Collapse in={openCollapse.activityLog} timeout="auto" unmountOnExit>
                                         <div className='Collapse-body-section'>
-                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                         </div>
                                     </Collapse>
                                 </Paper>

@@ -183,7 +183,7 @@ const FAQEditor = () => {
         param.append('action', 'edit_faq');
         param.append('is_react', '1');
         param.append('faq_id', id);
-        await axios.post(`${Url}/admin/ajaxfiles/faq_manage.php`, param).then((res) => {
+        await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -352,7 +352,7 @@ const FAQEditor = () => {
             param.append('answer', form.answer);
             param.append('display_order', form.order);
             param.append('status', form.isActive);
-            await axios.post(`${Url}/admin/ajaxfiles/faq_manage.php`, param).then((res) => {
+            await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
                 form.isLoader = false;
                 setForm({...form});
                 if (res.data.status == 'error') {
@@ -412,7 +412,7 @@ const FAQEditor = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/admin/datatable/faq_list.php`} column={column} sort='0' refresh={refresh}/>
+                                                <CommonTable url={`${Url}/datatable/faq_list.php`} column={column} sort='0' refresh={refresh} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

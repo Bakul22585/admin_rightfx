@@ -147,7 +147,7 @@ const ListRequest = () => {
                                 <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <CommonTable url={`${Url}/admin/datatable/partnership_request_list.php`} column={column} sort='0' />
+                                    <CommonTable url={`${Url}/datatable/partnership_request_list.php`} column={column} sort='0'  search={searchBy}/>
                                 </Paper>
                             </Grid>
                         </Grid>

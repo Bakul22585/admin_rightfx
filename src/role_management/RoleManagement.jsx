@@ -65,6 +65,7 @@ const RoleManagement = () => {
     ];
 
     const [open, setOpen] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState("");
     const navigate = useNavigate();
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [searchBy, setSearchBy] = useState([
@@ -125,7 +126,7 @@ const RoleManagement = () => {
             }
         });
     };
-
+    console.log(searchKeyword);
     return (
         <div>
             <div className="app-content--inner">
@@ -134,14 +135,14 @@ const RoleManagement = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Role Management</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={gotoRoleCreate}>Add Role</Button>
                                     </div>
                                     <br />
-                                    <CommonTable url={`${Url}/admin/datatable/role_list.php`} column={column} sort='0' />
+                                    <CommonTable url={`${Url}/datatable/role_list.php`} column={column} sort='0' search={searchBy} searchWord={searchKeyword}/>
                                 </Paper>
                             </Grid>
                         </Grid>

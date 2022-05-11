@@ -2560,7 +2560,7 @@ const Profile = () => {
                 param.append('amount', transactionForm.amount);
                 param.append('currency', transactionForm.currency_code);
                 param.append('note', transactionForm.note);
-                await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
                     if (res.data.status == 'error') {
@@ -2596,7 +2596,7 @@ const Profile = () => {
                 param.append('amount', transactionForm.amount);
                 param.append('currency', transactionForm.currency_code);
                 param.append('note', transactionForm.note);
-                await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
                     // setLoader(false);
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
@@ -2648,7 +2648,7 @@ const Profile = () => {
                 param.append('from_account_type', transactionForm.from_account_type);
                 param.append('transfer_to', transactionForm.transfer_to);
                 param.append('note', transactionForm.note);
-                await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+                await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
                     // setLoader(false);
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
@@ -2729,7 +2729,7 @@ const Profile = () => {
         param.append('user_id', id);
         userData.isLoader = true;
         setuserData({ ...userData });
-        await axios.post(`${Url}/admin/ajaxfiles/fetch_user_details.php`, param).then((res) => {
+        await axios.post(`${Url}/ajaxfiles/fetch_user_details.php`, param).then((res) => {
             userData.isLoader = false;
             setuserData({ ...userData });
             if (res.data.status == 'error') {
@@ -3187,7 +3187,7 @@ const Profile = () => {
                                                         </div>
                                                         {/* <br/> */}
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
+                                                            <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3591,7 +3591,7 @@ const Profile = () => {
                                                         </div>
                                                         {/* <br/> */}
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
+                                                            <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3606,7 +3606,7 @@ const Profile = () => {
                                                         </div>
                                                         {/* <br/> */}
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3621,7 +3621,7 @@ const Profile = () => {
                                                             <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button>
                                                         </div>
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3635,7 +3635,7 @@ const Profile = () => {
                                                             {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
                                                         </div>
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3649,7 +3649,7 @@ const Profile = () => {
                                                             {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
                                                         </div>
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3663,7 +3663,7 @@ const Profile = () => {
                                                             {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
                                                         </div>
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3678,7 +3678,7 @@ const Profile = () => {
                                                             <Button variant="contained" className='add_transaction' onClick={openDialogbox}>Add New Transaction</Button>
                                                         </div>
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3740,7 +3740,7 @@ const Profile = () => {
                                                         </div>
                                                         {/* <br/> */}
                                                         <div className='bankDetailsTabSection'>
-                                                            <CommonTable url={`${Url}/admin/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
+                                                            <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' />
                                                         </div>
                                                     </Paper>
                                                 </Grid>

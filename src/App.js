@@ -33,6 +33,7 @@ import CreateRole from './role_management/CreateRole';
 import Leads from './leads/Leads';
 import Remainder from './remainder/Remainder';
 import CopyTrading from './copytrading/CopyTrading';
+import Plans from './plans/Plans';
 function useScrollToTop() {
   const { pathname } = useLocation();
 
@@ -45,10 +46,6 @@ const App = () => {
   const ref = useRef();
   const [login, setLogin] = useState(localStorage.getItem('login'));
   const [sidebar, setSidebar] = useState(false);
-
-  useEffect(() => {
-    console.log("login", login);
-  }, [login]);
 
   if (login == "true") {
     return (
@@ -65,7 +62,7 @@ const App = () => {
             <Header setSidebar={setSidebar}  setLogin={setLogin}/>
             <div className="app-content">
               <Routes >
-                <Route exact path="/" element={<Dashboard />} />
+                <Route exact path="/" element={<Dashboard setLogin={setLogin}/>} />
                 <Route path="*" element={<Navigate to="dashboard" replace />} />
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/employees" element={<Employees />} />
@@ -99,6 +96,7 @@ const App = () => {
                 <Route exact path="/reminder" element={<Remainder />} />
                 <Route exact path="/copy_trading" element={<CopyTrading />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
+                <Route exact path="/plans" element={<Plans />} />
               </Routes>
               {/* <Footer /> */}
             </div>

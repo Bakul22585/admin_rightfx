@@ -100,7 +100,7 @@ export default function Login1(prop) {
             const param = new FormData();
             param.append('username', info.email);
             param.append('password', info.password);
-            axios.post(`${Url}/admin/ajaxfiles/login_check.php`, param).then((res) => {
+            axios.post(`${Url}/ajaxfiles/login_check.php`, param).then((res) => {
                 setLoader(false);
                 if (res.data.status == 'error') {
                     toast.error(res.data.message);

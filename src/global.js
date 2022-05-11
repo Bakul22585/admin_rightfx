@@ -1,4 +1,5 @@
-// const Url = 'http://localhost/forex/';
-const Url = 'https://alphapixclients.com/forex/';
+// const Url = 'https://alphapixclients.com/forex/admin';
+const Url = 'https://rightfxadmin.alphapixclients.com';
+// const Url = 'http://localhost/forex/admin';
 
 export { Url }

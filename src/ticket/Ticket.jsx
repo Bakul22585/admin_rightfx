@@ -102,7 +102,7 @@ const Ticket = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/admin/datatable/ticket_list.php`} column={column} sort='0' />
+                                                <CommonTable url={`${Url}/datatable/ticket_list.php`} column={column} sort='0'  search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

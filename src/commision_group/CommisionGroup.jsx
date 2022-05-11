@@ -31,34 +31,34 @@ const CommisionGroup = () => {
     });
     const [searchBy, setSearchBy] = useState([
         {
-            'label': 'REFERENCE NO',
+            'label': 'GROUP NAME',
             'value': false,
-            'name': 'reference_no'
+            'name': 'group_name'
         },
         {
-            'label': 'DATE',
+            'label': 'TYPE',
             'value': false,
-            'name': 'date'
+            'name': 'type'
         },
         {
-            'label': 'NAME',
+            'label': 'TOTAL LEVEL',
             'value': false,
-            'name': 'name'
+            'name': 'total_level'
         },
         {
-            'label': 'WALLET CODE',
+            'label': 'COMPANY GET',
             'value': false,
-            'name': 'wallet_code'
+            'name': 'company_code'
         },
         {
-            'label': 'PAYMENT METHOD',
+            'label': 'COMPANY PASSON',
             'value': false,
-            'name': 'payment_method'
+            'name': 'company_passon'
         },
         {
-            'label': 'AMOUNT',
+            'label': 'MAIN USER TRADER',
             'value': false,
-            'name': 'amount'
+            'name': 'main_user_trader'
         },
     ]);
 
@@ -74,9 +74,9 @@ const CommisionGroup = () => {
             grow: 0.1,
         },
         {
-            name: 'REFERENCE NO.',
+            name: 'GROUP NAME',
             selector: row => {
-                return <span title={row.refrence_no}>{row.refrence_no}</span>
+                return <span title={row.group_name}>{row.group_name}</span>
             },
             sortable: true,
             reorder: true,
@@ -84,56 +84,40 @@ const CommisionGroup = () => {
             wrap: true,
         },
         {
-            name: 'DATE',
-            selector: row => { return <span title={row.date}>{row.date}</span> },
+            name: 'TYPE',
+            selector: row => { return <span title={row.ib_type}>{row.ib_type}</span> },
             sortable: true,
             reorder: true,
             grow: 1,
             wrap: true,
         },
         {
-            name: 'NAME',
-            selector: row => { return <span title={row.name}>{row.name}</span> },
+            name: 'TOTAL LEVEL',
+            selector: row => { return <span title={row.total_level}>{row.total_level}</span> },
             sortable: true,
             reorder: true,
             grow: 1,
             wrap: true,
         },
         {
-            name: 'WALLET CODE',
-            selector: row => { return <span title={row.wallet_code}>{row.wallet_code}</span> },
+            name: 'COMPANY GET',
+            selector: row => { return <span title={row.ib_comapny_get}>{row.ib_comapny_get}</span> },
             sortable: true,
             reorder: true,
             grow: 0.5,
             wrap: true,
         },
         {
-            name: 'PAYMENT METHOD',
-            selector: row => { return <span title={row.method}>{row.method}</span> },
+            name: 'COMPANY PASSON',
+            selector: row => { return <span title={row.ib_company_passon}>{row.ib_company_passon}</span> },
             sortable: true,
             reorder: true,
             grow: 0.5,
             wrap: true,
         },
         {
-            name: 'AMOUNT',
-            selector: row => { return <span title={row.amount}>{row.amount}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.5,
-            wrap: true,
-        },
-        {
-            name: 'PROOF',
-            selector: row => { return (row.proof != "") ? <CustomImageModal image={row.proof} isIcon={true} className='tableImg' /> : "" },
-            sortable: true,
-            reorder: true,
-            grow: 0.5,
-            wrap: true,
-        },
-        {
-            name: 'STATUS',
-            selector: row => { return <span className={(row.status == "1") ? "status-text-approved" : (row.status == "2") ? "status-text-rejected" : "status-text-pending"} title={(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}>{(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}</span> },
+            name: 'MAIN USER TRADER',
+            selector: row => { return <span title={row.main_user_trader}>{row.main_user_trader}</span> },
             sortable: true,
             reorder: true,
             grow: 0.5,
@@ -161,11 +145,9 @@ const CommisionGroup = () => {
                         open={Boolean(openTableMenus[row.sr_no])}
                         onClose={(event) => handleContextClose(row.sr_no)}
                     >
-                        {(row.status == "1") ?
-                            <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                            : <div><MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                        <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
+                        <MenuItem className='edit' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons">edit_note</i>&nbsp;&nbsp;Edit</MenuItem>
+                        {/* <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem> */}
 
                     </Menu>
                 </div>
@@ -264,7 +246,7 @@ const CommisionGroup = () => {
                                         {/* <Button variant="contained" onClick={gotoRoleCreate}>Add Role</Button> */}
                                     </div>
                                     <br />
-                                    <CommonTable url={`${Url}/admin/datatable/ib_commision_group_list.php`} column={column} sort='0' />
+                                    <CommonTable url={`${Url}/datatable/ib_commision_group_list.php`} column={column} sort='0'  search={searchBy}/>
                                 </Paper>
                             </Grid>
                         </Grid>

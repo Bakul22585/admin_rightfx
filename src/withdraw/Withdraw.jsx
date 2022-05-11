@@ -442,7 +442,7 @@ const Withdraw = () => {
         param.append('is_react', '1');
         param.append('search', search);
         param.append('type', Form.account_type);
-        await axios.post(`${Url}/admin/ajaxfiles/fetch_user_account.php`, param).then((res) => {
+        await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -479,7 +479,7 @@ const Withdraw = () => {
             param.append('amount', Form.amount);
             param.append('currency', Form.currency_code);
             param.append('note', Form.note);
-            await axios.post(`${Url}/admin/ajaxfiles/user_manage.php`, param).then((res) => {
+            await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
                 // setLoader(false);
                 Form.isLoader = false;
                 setForm({ ...Form });
@@ -520,7 +520,7 @@ const Withdraw = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/admin/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh}/>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>
