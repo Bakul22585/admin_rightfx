@@ -247,7 +247,6 @@ const CommonFilter = (prop) => {
                                                     id="demo-multiple-chip"
                                                     multiple
                                                     value={personName}
-                                                    onChange={handleChange}
                                                     input={<OutlinedInput id="select-multiple-chip" label="Select Sales" />}
                                                     renderValue={(selected) => (
                                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -262,7 +261,7 @@ const CommonFilter = (prop) => {
                                                         <MenuItem
                                                             key={name}
                                                             value={name}
-                                                            style={getStyles(name, personName, theme)}
+                                                            // style={getStyles(name, personName, theme)}
                                                         >
                                                             {name}
                                                         </MenuItem>
@@ -276,7 +275,6 @@ const CommonFilter = (prop) => {
                                                         id="demo-multiple-chip"
                                                         multiple
                                                         value={personName}
-                                                        onChange={handleChange}
                                                         input={<OutlinedInput id="select-multiple-chip" label="Select Country" />}
                                                         renderValue={(selected) => (
                                                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -291,7 +289,7 @@ const CommonFilter = (prop) => {
                                                             <MenuItem
                                                                 key={name}
                                                                 value={name}
-                                                                style={getStyles(name, personName, theme)}
+                                                                // style={getStyles(name, personName, theme)}
                                                             >
                                                                 {name}
                                                             </MenuItem>
@@ -321,7 +319,6 @@ const CommonFilter = (prop) => {
                                                                 id="demo-multiple-chip"
                                                                 multiple
                                                                 value={personName}
-                                                                onChange={handleChange}
                                                                 input={<OutlinedInput id="select-multiple-chip" label="Select IB" />}
                                                                 renderValue={(selected) => (
                                                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -336,7 +333,7 @@ const CommonFilter = (prop) => {
                                                                     <MenuItem
                                                                         key={name}
                                                                         value={name}
-                                                                        style={getStyles(name, personName, theme)}
+                                                                        // style={getStyles(name, personName, theme)}
                                                                     >
                                                                         {name}
                                                                     </MenuItem>
@@ -350,7 +347,6 @@ const CommonFilter = (prop) => {
                                                                     id="demo-multiple-chip"
                                                                     multiple
                                                                     value={sourceName}
-                                                                    onChange={handleChange}
                                                                     input={<OutlinedInput id="select-multiple-chip" label="Select Source" />}
                                                                     renderValue={(selected) => (
                                                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -365,7 +361,7 @@ const CommonFilter = (prop) => {
                                                                         <MenuItem
                                                                             key={name}
                                                                             value={name}
-                                                                            style={getStyles(name, personName, theme)}
+                                                                            // style={getStyles(name, personName, theme)}
                                                                         >
                                                                             {name}
                                                                         </MenuItem>

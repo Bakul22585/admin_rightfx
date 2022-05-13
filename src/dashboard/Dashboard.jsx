@@ -402,7 +402,7 @@ const Dashboard = (prop) => {
                                         <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
                                             <CardContent className="py-3">
                                                 <div className='section-header'>
-                                                    <p className='section-title'>Remainders</p>
+                                                    <p className='section-title'>Reminders</p>
                                                     <p className='section-count'>4</p>
                                                 </div>
                                                 <Grid container spacing={2}>

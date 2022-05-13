@@ -17718,3 +17718,29 @@ hr {
     transform: rotate(var(--deg, 360deg));
   }
 }
+.MuiButton-containedPrimary, .lead .btn-export-style {
+  background-color: rgb(42 63 115) !important;
+}
+.MuiButton-containedPrimary:hover, .lead .btn-export-style:hover {
+  background-color: white !important;
+  border: 1px solid rgb(42 63 115) !important;
+  color: rgb(42 63 115) !important;
+}
+.MuiButton-containedPrimary.btn-success:hover {
+  background-color: white !important;
+  border: 1px solid rgb(27, 201, 67) !important;
+  color: rgb(27, 201, 67) !important;
+}
+.MuiButton-containedPrimary.Mui-disabled {
+  color: white !important;
+}
+.MuiInputBase-input {
+  font-size: 13px !important;
+}
+.MuiButton-containedPrimary.btn-danger {
+  color: red !important;
+  background-color: red !important;
+}
+.MuiButton-containedPrimary.btn-danger:hover {
+  border: none !important;
+}

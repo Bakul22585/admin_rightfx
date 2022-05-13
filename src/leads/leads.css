@@ -30,9 +30,45 @@
 }
 .btn-success {
     background: #3d9730 !important;
-    box-shadow: #3d9730 0px 0.25rem 0.55rem !important;
+    /* box-shadow: #3d9730 0px 0.25rem 0.55rem !important; */
     height: 35px !important;
 }
 .viewLead {
     color: #90918b;
+}
+.lead.actionGroupButton {
+    justify-content: space-between;
+}
+.lead.actionGroupButton .export-import-buttons {
+    display: flex;
+    gap: 5px;
+}
+.lead .btn-export-style {
+    color: #fff;
+    background-color: #1976d2;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    padding: 6px 16px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    position: relative;
+    box-sizing: border-box;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.02857em;
+    transition: all 0.2s ease-in-out 0s;
+}
+.lead .btn-export-style:hover {
+    background-color: #1565c0;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    transform: translateY(-2px);
+    color: white;
 }

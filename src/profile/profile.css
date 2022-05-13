@@ -354,3 +354,7 @@ text.highcharts-credits {
 .mt5btngroup button {
     width: 46%;
 }
+.cancelButton:hover {
+    border: none !important;
+    background-color: #e0e0e0 !important;
+}

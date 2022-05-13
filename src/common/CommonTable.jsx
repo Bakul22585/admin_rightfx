@@ -66,6 +66,7 @@ const CommonTable = (prop) => {
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState([]);
     const open = Boolean(anchorEl);
+    const cancelTokenSource = axios.CancelToken.source();
 
     const handleClientPageChange = page => {
         console.log("page", page);
@@ -153,8 +154,10 @@ const CommonTable = (prop) => {
         if (clientSearch.trim() != '') {
             param.append('search[value]', clientSearch.trim());
         }
-
-        await axios.post(`${prop.url}`, param).then((res) => {
+        // cancelTokenSource = axios.CancelToken.source();
+        await axios.post(`${prop.url}`, param,{
+            cancelToken: cancelTokenSource.token
+          }).then((res) => {
             console.log(res.data);
             if (res.data['status']) {
                 if (res.data['status'] == 'error' && res.data['message'] == 'Session has been expired') {
@@ -170,6 +173,8 @@ const CommonTable = (prop) => {
                 }
             }
         });
+        /* cancelTokenSource.cancel();
+        console.log("cancel token"); */
     };
 
     useEffect(() => {

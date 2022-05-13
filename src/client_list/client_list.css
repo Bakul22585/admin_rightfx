@@ -93,3 +93,6 @@
     color: #cfcf58;
     font-weight: 600;
 }
+.MuiInputBase-colorPrimary.table-dropdown .MuiSelect-select {
+    font-size: 13px;
+}

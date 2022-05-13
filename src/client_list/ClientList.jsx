@@ -30,7 +30,7 @@ import { Url } from '../global';
 const CssTextField = styled(TextField)({
 });
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+/* const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
         marginTop: theme.spacing(0),
     },
@@ -60,7 +60,39 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
             borderColor: "#80bdff",
         },
     },
-}));
+})); */
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+    "label + &": {
+      marginTop: theme.spacing(0),
+    },
+    "& .MuiInputBase-input": {
+      // borderRadius: 9,
+      position: "relative",
+      backgroundColor: theme.palette.background.paper,
+      // border: "1px solid #ced4da",
+      fontSize: 16,
+      padding: "8px 26px 8px 10px",
+      // transition: theme.transitions.create(["border-color", "box-shadow"]),
+      // Use the system font instead of the default Roboto font.
+      fontFamily: [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+      "&:focus": {
+        // borderRadius: 9,
+        borderColor: "#80bdff",
+      },
+    },
+  }));
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -352,6 +384,30 @@ const ClientList = () => {
             grow: 1,
         },
         {
+            name: 'SALES',
+            selector: row => {
+                return <div>
+                    <Select
+                        displayEmpty
+                        inputProps={{
+                            "aria-label": "Without label",
+                        }}
+                        className='table-dropdown'
+                        input={<BootstrapInput />}
+                        name='interest'
+                        onChange={(e) => changeSales(e, row)}
+                    >
+                        <MenuItem value="1">Demo</MenuItem>
+                        <MenuItem value="2">Test</MenuItem>
+                    </Select>
+                </div>
+            },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 1,
+        },
+        {
             name: 'KYC',
             selector: row => {
                 return <div>
@@ -415,59 +471,83 @@ const ClientList = () => {
             // setDialogTitle('Reject');
             confirmAlert({
                 customUI: ({ onClose }) => {
-                  return (
-                    <div className='custom-ui'>
-                      <h1>Are you sure?</h1>
-                      <p>Do you want to rejected this?</p>
-                      <div className='confirmation-alert-action-button'>
-                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                        <Button variant="contained" className='btn-gradient btn-danger'
-                            onClick={() => {
-                            changeStatus('rejected', data);
-                            onClose();
-                            }}
-                        >
-                            Yes, Reject it!
-                        </Button>
-                      </div>
-                    </div>
-                  );
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to rejected this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-danger'
+                                    onClick={() => {
+                                        changeStatus('rejected', data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Reject it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
                 }
-              });
+            });
         } else if (e.target.classList.contains('approve')) {
             // setDialogTitle('Approve');
             confirmAlert({
                 customUI: ({ onClose }) => {
-                  return (
-                    <div className='custom-ui'>
-                      <h1>Are you sure?</h1>
-                      <p>Do you want to approved this?</p>
-                      <div className='confirmation-alert-action-button'>
-                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                        <Button variant="contained" className='btn-gradient btn-success'
-                            onClick={() => {
-                            changeStatus('approved', data);
-                            onClose();
-                            }}
-                        >
-                            Yes, Approve it!
-                        </Button>
-                      </div>
-                    </div>
-                  );
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to approved this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-success'
+                                    onClick={() => {
+                                        changeStatus('approved', data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Approve it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
                 }
-              });
+            });
         }
     };
 
     const changeStatus = (status, data) => {
         console.log(status, data);
         if (status == 'approved') {
-          toast.success('Client has been completed successfully.');
+            toast.success('Client has been completed successfully.');
         } else if (status == 'rejected') {
-          toast.success('Client has been rejected successfully.');
+            toast.success('Client has been rejected successfully.');
         }
-      }
+    }
+
+    const changeSales = (e, data) => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className='custom-ui'>
+                        <h1>Are you sure?</h1>
+                        <p>Do you want to change sales person ?</p>
+                        <div className='confirmation-alert-action-button'>
+                            <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                            <Button variant="contained" className='btn-gradient btn-success'
+                                onClick={() => {
+                                    toast.success('Sales person has been successfully updated.');
+                                    onClose();
+                                }}
+                            >
+                                Yes, Apply it!
+                            </Button>
+                        </div>
+                    </div>
+                );
+            }
+        });
+    }
 
     return (
         <div>
@@ -478,7 +558,7 @@ const ClientList = () => {
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Client List</p>
 
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
@@ -487,7 +567,7 @@ const ClientList = () => {
                                         <Button variant="contained">All</Button>
                                     </div>
                                     <br />
-                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData}  search={searchBy} searchWord={searchKeyword}/>
+                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} search={searchBy} searchWord={searchKeyword} />
                                 </Paper>
 
                                 <BootstrapDialog
@@ -548,7 +628,7 @@ const ClientList = () => {
                                                                 id="demo-simple-select-standard"
                                                                 onChange={addNewClientType}
                                                                 label="Client type"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Individual'>Individual</MenuItem>
                                                                 <MenuItem value='Corporate'>Corporate</MenuItem>
@@ -563,7 +643,7 @@ const ClientList = () => {
                                                                 id="demo-simple-select-standard"
                                                                 onChange={addNewClientType}
                                                                 label="Title"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                 <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -584,9 +664,9 @@ const ClientList = () => {
                                                         <TextField id="standard-basic" className='w-100' label="Phone" variant="standard" />
                                                     </div>
                                                     <div className='elementSection'>
-                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" focused/>
+                                                        <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" focused />
                                                     </div>
-                                                    
+
                                                     <Box sx={{ mb: 2 }}>
                                                         <div className='btnStepperAction'>
                                                             <Button
@@ -594,7 +674,7 @@ const ClientList = () => {
                                                                 onClick={handleNext}
                                                                 sx={{ mt: 1, mr: 1 }}
                                                             >
-                                                               Next
+                                                                Next
                                                             </Button>
                                                         </div>
                                                     </Box>
@@ -614,7 +694,7 @@ const ClientList = () => {
                                                                 value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Client type"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Individual'>Individual</MenuItem>
                                                                 <MenuItem value='Corporate'>Corporate</MenuItem>
@@ -630,7 +710,7 @@ const ClientList = () => {
                                                                 value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Title"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                 <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -653,7 +733,7 @@ const ClientList = () => {
                                                     <div className='elementSection'>
                                                         <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
                                                     </div>
-                                                    
+
                                                     <Box sx={{ mb: 2 }}>
                                                         <div className='btnStepperAction'>
                                                             <Button
@@ -661,7 +741,7 @@ const ClientList = () => {
                                                                 onClick={handleNext}
                                                                 sx={{ mt: 1, mr: 1 }}
                                                             >
-                                                               Next
+                                                                Next
                                                             </Button>
                                                         </div>
                                                     </Box>
@@ -681,7 +761,7 @@ const ClientList = () => {
                                                                 value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Client type"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Individual'>Individual</MenuItem>
                                                                 <MenuItem value='Corporate'>Corporate</MenuItem>
@@ -697,7 +777,7 @@ const ClientList = () => {
                                                                 value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Title"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                 <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -720,7 +800,7 @@ const ClientList = () => {
                                                     <div className='elementSection'>
                                                         <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
                                                     </div>
-                                                    
+
                                                     <Box sx={{ mb: 2 }}>
                                                         <div className='btnStepperAction'>
                                                             <Button
@@ -728,7 +808,7 @@ const ClientList = () => {
                                                                 onClick={handleNext}
                                                                 sx={{ mt: 1, mr: 1 }}
                                                             >
-                                                               Next
+                                                                Next
                                                             </Button>
                                                         </div>
                                                     </Box>
@@ -748,7 +828,7 @@ const ClientList = () => {
                                                                 value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Client type"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Individual'>Individual</MenuItem>
                                                                 <MenuItem value='Corporate'>Corporate</MenuItem>
@@ -764,7 +844,7 @@ const ClientList = () => {
                                                                 value={clientType}
                                                                 onChange={addNewClientType}
                                                                 label="Title"
-                                                                style={{width: '100%'}}
+                                                                style={{ width: '100%' }}
                                                             >
                                                                 <MenuItem value='Mr.'>Mr.</MenuItem>
                                                                 <MenuItem value='Mrs'>Mrs</MenuItem>
@@ -787,7 +867,7 @@ const ClientList = () => {
                                                     <div className='elementSection'>
                                                         <TextField type='date' id="standard-basic" className='w-100' label="Date of birth" variant="standard" />
                                                     </div>
-                                                    
+
                                                     <Box sx={{ mb: 2 }}>
                                                         <div className='btnStepperAction'>
                                                             <Button
@@ -795,7 +875,7 @@ const ClientList = () => {
                                                                 onClick={handleNext}
                                                                 sx={{ mt: 1, mr: 1 }}
                                                             >
-                                                               Next
+                                                                Next
                                                             </Button>
                                                         </div>
                                                     </Box>

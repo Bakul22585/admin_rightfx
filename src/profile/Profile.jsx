@@ -924,11 +924,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
+                        <InputLabel >Account Type</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Account Type"
                             name='account_type'
                             onChange={input}>
                             <MenuItem value='live'>Live</MenuItem>
@@ -939,11 +938,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Account option</InputLabel>
+                        <InputLabel >Account option</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Account option"
                             name='account_option'
                             onChange={input}>
                             <MenuItem value='executive'>Executive</MenuItem>
@@ -955,11 +953,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Select MT5 Account</InputLabel>
+                        <InputLabel >Select MT5 Account</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Select MT5 Account"
                             name='account_type'
                             onChange={input1}>
                             <MenuItem value='live'>Live</MenuItem>
@@ -970,11 +967,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
+                        <InputLabel >Status</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Status"
                             name='status'
                             onChange={input1}>
                             <MenuItem value='true'>Activate</MenuItem>
@@ -991,11 +987,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
+                        <InputLabel >Account Type</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Account Type"
                             name='account_type'
                             onChange={input2}>
                             <MenuItem value='live'>Live</MenuItem>
@@ -1006,11 +1001,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Account Name</InputLabel>
+                        <InputLabel >Account Name</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Account Name"
                             name='account_name'
                             onChange={input2}>
                             <MenuItem value='0'>Executive</MenuItem>
@@ -1023,11 +1017,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Select MT5 Account</InputLabel>
+                        <InputLabel >Select MT5 Account</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Select MT5 Account"
                             name='account'
                             onChange={input3}>
                             <MenuItem value='60002830'>60002830 - individual-ib</MenuItem>
@@ -1039,11 +1032,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">MT5 Account</InputLabel>
+                        <InputLabel >MT5 Account</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="MT5 Account"
                             name='account'
                             onChange={input4}>
                             <MenuItem value='121212'>122121</MenuItem>
@@ -1053,11 +1045,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Leverage</InputLabel>
+                        <InputLabel >Leverage</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Leverage"
                             name='leverage'
                             onChange={input4}>
                             <MenuItem value='1:1'>1:1</MenuItem>
@@ -1204,11 +1195,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Client</InputLabel>
+                        <InputLabel >Client</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Client"
                             name='client'
                             onChange={linkClientInput}>
                             <MenuItem value='Mehul'>Mehul</MenuItem>
@@ -1218,11 +1208,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
+                        <InputLabel >Structure</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Structure"
                             name='structure'
                             onChange={linkClientInput}>
                             <MenuItem value='Test'>Test</MenuItem>
@@ -1239,11 +1228,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '50%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
+                        <InputLabel >Structure</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Structure"
                             name='structure'
                             onChange={linkIBInput}>
                             <MenuItem value='test'>Test</MenuItem>
@@ -1256,11 +1244,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">FROM</InputLabel>
+                        <InputLabel >FROM</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="FROM"
                             name='from'
                             onChange={sendMailInput}>
                             <MenuItem value='1'>admin@gmail.com</MenuItem>
@@ -1282,11 +1269,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
+                        <InputLabel >Language</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Language"
                             name='language'
                             onChange={sendMailInput}>
                             <MenuItem value='en-gb'>English</MenuItem>
@@ -1297,11 +1283,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Template</InputLabel>
+                        <InputLabel >Template</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Template"
                             name='template'
                             onChange={sendMailInput}>
                             <MenuItem value='1'>Test</MenuItem>
@@ -1324,11 +1309,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
+                        <InputLabel >Status</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Status"
                             name='status'
                             onChange={input7}>
                             <MenuItem value='true'>Active</MenuItem>
@@ -1347,11 +1331,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Call Status</InputLabel>
+                        <InputLabel >Call Status</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Call Status"
                             name='call_status'
                             onChange={input8}>
                             <MenuItem value='1'>1st Call Attempted</MenuItem>
@@ -1422,11 +1405,10 @@ const Profile = () => {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
+                            <InputLabel >Transaction Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Transaction Type"
                                 name='type'
                                 value={transactionForm.type}
                                 onChange={transactionInput}>
@@ -1442,11 +1424,10 @@ const Profile = () => {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
+                            <InputLabel >Transaction Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
                                 onChange={transactionInput}>
@@ -1460,22 +1441,20 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Deposit To</InputLabel>
+                            <InputLabel >Deposit To</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Deposit To"
                                 name='deposit_to'
                                 onChange={transactionInput}>
                                 <MenuItem value='Wallet'>Wallet</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
+                            <InputLabel >Payment Gateway</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Payment Gateway"
                                 name='payment'
                                 onChange={transactionInput}>
                                 <MenuItem value='Bank'>Bank</MenuItem>
@@ -1503,11 +1482,10 @@ const Profile = () => {
                     <div className='margeField'>
                         <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
+                            <InputLabel >Currency Code</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Currency Code"
                                 name='currency_code'
                                 onChange={transactionInput}>
                                 <MenuItem value='USD'>USD</MenuItem>
@@ -1519,11 +1497,10 @@ const Profile = () => {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
+                            <InputLabel >Transaction Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
                                 onChange={transactionInput}>
@@ -1537,11 +1514,10 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                            <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
+                            <InputLabel >From Account Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="From Account Type"
                                 name='from_account_type'
                                 onChange={transactionInput}>
                                 <MenuItem value='live'>Live Accounts</MenuItem>
@@ -1549,11 +1525,10 @@ const Profile = () => {
                             </Select>
                         </FormControl>
                         {/* <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
+                            <InputLabel >From Account</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
                                 <MenuItem value='1'>1212</MenuItem>
@@ -1563,11 +1538,10 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Payment Gateway</InputLabel>
+                            <InputLabel >Payment Gateway</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Payment Gateway"
                                 name='payment'
                                 onChange={transactionInput}>
                                 <MenuItem value='BANK'>BANK</MenuItem>
@@ -1579,11 +1553,10 @@ const Profile = () => {
                     <div className='margeField'>
                         <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={transactionInput} />
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
+                            <InputLabel >Currency Code</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Currency Code"
                                 name='currency_code'
                                 onChange={transactionInput}>
                                 <MenuItem value='USD'>USD</MenuItem>
@@ -1595,11 +1568,10 @@ const Profile = () => {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
+                            <InputLabel >Transaction Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
                                 onChange={transactionInput}>
@@ -1613,11 +1585,10 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                            <InputLabel id="demo-simple-select-standard-label">From Account Type</InputLabel>
+                            <InputLabel >From Account Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="From Account Type"
                                 name='from_account_type'
                                 onChange={transactionInput}>
                                 <MenuItem value='live'>Live Accounts</MenuItem>
@@ -1625,11 +1596,10 @@ const Profile = () => {
                             </Select>
                         </FormControl>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Transfer To</InputLabel>
+                            <InputLabel >Transfer To</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Transfer To"
                                 name='transfer_to'
                                 onChange={transactionInput}>
                                 <MenuItem value='own'>Own Account</MenuItem>
@@ -1640,11 +1610,10 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">From Account</InputLabel>
+                            <InputLabel >From Account</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
                                 <MenuItem value='Wallet'>Wallet</MenuItem>
@@ -1652,21 +1621,19 @@ const Profile = () => {
                             </Select>
                         </FormControl>
                         {(transactionForm.account == 'MT5') ? <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
+                            <InputLabel >To Account</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="To Account"
                                 name='account_to'
                                 onChange={transactionInput}>
                                 <MenuItem value='Wallet'>Wallet</MenuItem>
                             </Select>
                         </FormControl> : <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">To Account</InputLabel>
+                            <InputLabel >To Account</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="To Account"
                                 name='account_to'
                                 onChange={transactionInput}>
                                 <MenuItem value='Wallet'>Wallet</MenuItem>
@@ -1679,11 +1646,10 @@ const Profile = () => {
                     <div className='margeField'>
                         {(transactionForm.account_to == 'MT5') ?
                             <FormControl variant="standard" sx={{ width: '100%' }}>
-                                <InputLabel id="demo-simple-select-standard-label">MT5 Account ID</InputLabel>
+                                <InputLabel >MT5 Account ID</InputLabel>
                                 <Select
-                                    labelId="demo-simple-select-standard-label"
+                                    label
                                     className='select-font-small'
-                                    label="MT5 Account ID"
                                     name='mt5_account_id'
                                     onChange={transactionInput}>
                                     <MenuItem value='1'>121212</MenuItem>
@@ -1696,11 +1662,10 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Currency Code</InputLabel>
+                            <InputLabel >Currency Code</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Currency Code"
                                 name='currency_code'
                                 onChange={transactionInput}>
                                 <MenuItem value='USD'>USD</MenuItem>
@@ -1713,11 +1678,10 @@ const Profile = () => {
                 return <div>
                     <div>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Transaction Type</InputLabel>
+                            <InputLabel >Transaction Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Transaction Type"
                                 value={transactionForm.type}
                                 name='type'
                                 onChange={transactionInput}>
@@ -1731,11 +1695,10 @@ const Profile = () => {
                     <br />
                     <div className='margeField'>
                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                            <InputLabel id="demo-simple-select-standard-label">Credit Type</InputLabel>
+                            <InputLabel >Credit Type</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="Credit Type"
                                 name='credit_type'
                                 onChange={transactionInput}>
                                 <MenuItem value='CREDIT_IN'>Credit In</MenuItem>
@@ -1743,11 +1706,10 @@ const Profile = () => {
                             </Select>
                         </FormControl>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-standard-label">Account</InputLabel>
+                            <InputLabel >Account</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
+                                label
                                 className='select-font-small'
-                                label="From Account"
                                 name='account'
                                 onChange={transactionInput}>
                                 <MenuItem value='1'>121212</MenuItem>
@@ -1766,11 +1728,10 @@ const Profile = () => {
             return <div>
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Live Account</InputLabel>
+                        <InputLabel >Live Account</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Live Account"
                             name='account'
                             onChange={campaignInput}>
                             <MenuItem value='1'>12122</MenuItem>
@@ -1780,11 +1741,10 @@ const Profile = () => {
                 <br />
                 <div>
                     <FormControl variant="standard" sx={{ width: '100%' }}>
-                        <InputLabel id="demo-simple-select-standard-label">Campaign</InputLabel>
+                        <InputLabel >Campaign</InputLabel>
                         <Select
-                            labelId="demo-simple-select-standard-label"
+                            label
                             className='select-font-small'
-                            label="Campaign"
                             name='campaign'
                             onChange={campaignInput}>
                             <MenuItem value='2'>525252</MenuItem>
@@ -2822,13 +2782,12 @@ const Profile = () => {
                                                         <div className='contentSection formSection'>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Title</InputLabel>
+                                                                    <InputLabel >Title</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Title"
                                                                         name='title'
                                                                     >
                                                                         <MenuItem value='Mr.'>Mr.</MenuItem>
@@ -2859,13 +2818,12 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Nationality</InputLabel>
+                                                                    <InputLabel >Nationality</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Nationality"
                                                                         name='nationality'
                                                                     >
                                                                         <MenuItem value='Mr.'>Mr.</MenuItem>
@@ -2878,13 +2836,12 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Country of Residence</InputLabel>
+                                                                    <InputLabel >Country of Residence</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Country of Residence"
                                                                         name='country_of_residence'
                                                                     >
                                                                         <MenuItem value='Mr.'>Mr.</MenuItem>
@@ -2906,13 +2863,12 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Gendere</InputLabel>
+                                                                    <InputLabel >Gendere</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Gender"
                                                                         name='gender'
                                                                     >
                                                                         <MenuItem value='male'>Male</MenuItem>
@@ -2926,13 +2882,12 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Language</InputLabel>
+                                                                    <InputLabel >Language</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Language"
                                                                         name='language'
                                                                     >
                                                                         <MenuItem value='en-gb'>English</MenuItem>
@@ -2945,13 +2900,12 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">US citizen ?</InputLabel>
+                                                                    <InputLabel >US citizen ?</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="US citizen ?"
                                                                         name='us_citizen'
                                                                     >
                                                                         <MenuItem value='yes'>Yes</MenuItem>
@@ -2961,13 +2915,12 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Worked in Financial?</InputLabel>
+                                                                    <InputLabel >Worked in Financial?</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Worked in Financial?"
                                                                         name='finacial_work'
                                                                     >
                                                                         <MenuItem value='yes'>Yes</MenuItem>
@@ -2980,17 +2933,31 @@ const Profile = () => {
                                                             </div>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Politically exposed ?</InputLabel>
+                                                                    <InputLabel >Politically exposed ?</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="Politically exposed ?"
                                                                         name='politically_exposed'
                                                                     >
                                                                         <MenuItem value='yes'>Yes</MenuItem>
                                                                         <MenuItem value='no'>No</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <div className='element'>
+                                                                <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                                                                    <InputLabel >Sales Agent</InputLabel>
+                                                                    <Select
+                                                                        label
+                                                                        className='select-font-small'
+                                                                        // value={age}
+                                                                        onChange={profileInput}
+                                                                        name='sales_agent'
+                                                                    >
+                                                                        <MenuItem value='1'>Demo</MenuItem>
+                                                                        <MenuItem value='2'>Test</MenuItem>
                                                                     </Select>
                                                                 </FormControl>
                                                             </div>
@@ -2999,13 +2966,12 @@ const Profile = () => {
                                                         <div className='contentSection formSection'>
                                                             <div className='element'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                    <InputLabel id="demo-simple-select-standard-label">ID Type</InputLabel>
+                                                                    <InputLabel >ID Type</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
                                                                         // value={age}
                                                                         onChange={profileInput}
-                                                                        label="ID Type"
                                                                         name='id_type'
                                                                     >
                                                                         <MenuItem value='PASSPORT'>Passport</MenuItem>
@@ -3101,13 +3067,12 @@ const Profile = () => {
                                                                 <Grid item md={6} lg={6} xl={6}>
                                                                     <div className='element' style={{ width: '100%' }}>
                                                                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                            <InputLabel id="demo-simple-select-standard-label">Employment Status</InputLabel>
+                                                                            <InputLabel >Employment Status</InputLabel>
                                                                             <Select
-                                                                                labelId="demo-simple-select-standard-label"
+                                                                                label
                                                                                 className='select-font-small'
                                                                                 // value={age}
                                                                                 onChange={employementInput}
-                                                                                label="Employment Status"
                                                                                 name='status'
                                                                             >
                                                                                 <MenuItem value='Employed (full time)'>Employed (full time)</MenuItem>
@@ -3123,13 +3088,12 @@ const Profile = () => {
                                                                 <Grid item md={6} lg={6} xl={6}>
                                                                     <div className='element' style={{ width: '100%' }}>
                                                                         <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                                                                            <InputLabel id="demo-simple-select-standard-label">Inudstry</InputLabel>
+                                                                            <InputLabel >Inudstry</InputLabel>
                                                                             <Select
-                                                                                labelId="demo-simple-select-standard-label"
+                                                                                label
                                                                                 className='select-font-small'
                                                                                 // value={age}
                                                                                 onChange={employementInput}
-                                                                                label="Inudstry"
                                                                                 name='industry'
                                                                             >
                                                                                 <MenuItem value='Aviation'>Aviation</MenuItem>
@@ -3692,11 +3656,11 @@ const Profile = () => {
                                                             <p className='margin-0'>Referrals</p>
                                                         </div>
                                                         <div className='bankDetailsTabSection'>
-                                                        <HighchartsReact
-                                                            options={options}
-                                                            highcharts={Highcharts}
-                                                            constructorType={'mapChart'}
-                                                        />
+                                                            <HighchartsReact
+                                                                options={options}
+                                                                highcharts={Highcharts}
+                                                                constructorType={'mapChart'}
+                                                            />
                                                         </div>
                                                     </Paper>
                                                 </Grid>
@@ -3709,11 +3673,10 @@ const Profile = () => {
                                                         <div className='headerSection header-title'>
                                                             <div className='header-search-section'>
                                                                 <FormControl variant="standard" sx={{ width: '100%' }}>
-                                                                    <InputLabel id="demo-simple-select-standard-label">Structure</InputLabel>
+                                                                    <InputLabel >Structure</InputLabel>
                                                                     <Select
-                                                                        labelId="demo-simple-select-standard-label"
+                                                                        label
                                                                         className='select-font-small'
-                                                                        label="Structure"
                                                                         name='structure'
                                                                         onChange={input9}>
                                                                         <MenuItem value='1'>Test</MenuItem>

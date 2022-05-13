@@ -74,6 +74,7 @@ const HistoryKYC = () => {
     const [previewPancard, setPreviewPancard] = useState();
     const [selectedPassbookFile, setSelectedPassbookFile] = useState()
     const [previewPassbook, setPreviewPassbook] = useState();
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -816,7 +817,7 @@ const HistoryKYC = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>History KYC</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -826,7 +827,7 @@ const HistoryKYC = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} />
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

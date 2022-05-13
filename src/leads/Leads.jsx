@@ -1,7 +1,7 @@
 import './leads.css';
 import React, { useState } from "react";
 import { Theme, useTheme } from '@mui/material/styles';
-import { Autocomplete, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
+import { Autocomplete, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, Input, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonTable from '../common/CommonTable';
@@ -17,6 +17,7 @@ import CommonFilter from '../common/CommonFilter';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { Url } from '../global';
+import axios from 'axios';
 
 const CssTextField = styled(TextField)({
 });
@@ -121,7 +122,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     position: "relative",
     backgroundColor: theme.palette.background.paper,
     // border: "1px solid #ced4da",
-    fontSize: 16,
+    fontSize: 13,
     padding: "8px 26px 8px 10px",
     // transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
@@ -190,18 +191,27 @@ const Leads = () => {
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [filterData, setFilterData] = useState({});
   const [dialogTitle, setDialogTitle] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const [form, setForm] = useState({
-    customer: '',
-    source: '',
-    date: '',
-    time: '',
+    customer_name: '',
+    customer_mobile: '',
+    customer_email: '',
+    customer_address: '',
+    source_id: '',
+    source_desc: '',
     interest: '',
     assign: '',
+    date: '',
+    time: '',
     remark: '',
+    cp_access: '0',
+    create_demo_mt5: '0',
     isCustomerSendMail: true,
     isCustomerSendsms: true,
     isAssignSendsms: false,
     isAdminSendsms: false,
+    isLoader: false
   });
   const [newFollowupForm, setNewFollowupForm] = useState({
     date: '',
@@ -242,21 +252,31 @@ const Leads = () => {
 
   toast.configure();
   const interest = ['Very Low', 'Low', 'Average', 'High', 'Very High'];
+  var csvData = `Customer Name, Customer Mobile, Customer Email, Customer Address, Source, Source Description, Interest, Assign To Sales Executive, Follow Up Date, Follow Up Time, Remark
+  Demo, 1234567890, demo@gmail.com, 000 demo society demo Nager Near demo market demo., Web, test, Low, 7475717273, 11-05-2022, 01:51 PM, Test
+  Demo 1, 0987654321, demo1@gmail.com, 0 demo1 society demo1 Nager Near demo1 market demo1., Banner, test, High, 7475717273, 11-05-2022, 01:51 PM, Test`;
 
   const handleClickOpen = (e) => {
     setForm(
       {
-        customer: '',
-        source: '',
-        date: '',
-        time: '',
+        customer_name: '',
+        customer_mobile: '',
+        customer_email: '',
+        customer_address: '',
+        source_id: '',
+        source_desc: '',
         interest: '',
         assign: '',
+        date: '',
+        time: '',
         remark: '',
+        cp_access: '0',
+        create_demo_mt5: '0',
         isCustomerSendMail: true,
         isCustomerSendsms: true,
         isAssignSendsms: false,
         isAdminSendsms: false,
+        isLoader: false
       }
     );
     setDialogTitle('Add Lead');
@@ -282,7 +302,7 @@ const Leads = () => {
 
   const gotoProfile = (e) => {
     console.log('goto profile page', e);
-    navigate("/profile/" + e.name);
+    navigate("/profile/" + e.user_id);
   }
 
   const viewFollowup = (e) => {
@@ -305,7 +325,7 @@ const Leads = () => {
     if (dialogTitle == 'Add Lead') {
       return <div className='dialogMultipleActionButton'>
         <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-        <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add Lead</Button>
+        {(form.isLoader) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add Lead</Button>}
       </div>;
     }
   }
@@ -314,8 +334,18 @@ const Leads = () => {
 
     if (dialogTitle == 'Add Lead') {
       return <div>
+        <div className='margeTwoField element'>
+          <TextField type='text' label="Customer Name" variant="standard" sx={{ width: '100%' }} focused name='customer_name' onChange={input} />
+          <TextField type='text' label="Customer Mobile" variant="standard" sx={{ width: '100%' }} focused name='customer_mobile' onChange={input} />
+        </div>
+        <br />
+        <div className='margeTwoField element'>
+          <TextField type='text' label="Customer Email" variant="standard" sx={{ width: '100%' }} focused name='customer_email' onChange={input} />
+          <TextField type='text' label="Customer Address" multiline variant="standard" sx={{ width: '100%' }} focused name='customer_address' onChange={input} />
+        </div>
+        <br />
         <div className='element margeTwoField'>
-          <Autocomplete
+          {/* <Autocomplete
             options={nbaTeams}
             id="disable-close-on-select"
             Customer
@@ -330,55 +360,46 @@ const Leads = () => {
               console.log(_event, newTeam);
               setForm({ ...form, customer: newTeam.id });
             }}
-          />
+          /> */}
           <FormControl variant="standard" sx={{ width: '100%' }} focused>
             <InputLabel id="demo-simple-select-standard-label">Source</InputLabel>
             <Select
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
               onChange={input}
               label="Source"
-              name='source'
+              name='source_id'
             >
               <MenuItem value='1'>Newspaper Ads</MenuItem>
               <MenuItem value='2'>Banner Ads</MenuItem>
               <MenuItem value='3'>Billboards</MenuItem>
-              <MenuItem value='4'>Walk-In</MenuItem>
-              <MenuItem value='5'>Facebook Ads</MenuItem>
-              <MenuItem value='6'>Instagram Ads</MenuItem>
-              <MenuItem value='7'>Whatsapp ads</MenuItem>
-              <MenuItem value='8'>Website</MenuItem>
+              <MenuItem value='4'>Paper</MenuItem>
+              <MenuItem value='5'>Broker</MenuItem>
+              <MenuItem value='6'>Facebook Ads</MenuItem>
+              <MenuItem value='7'>Instagram Ads</MenuItem>
+              <MenuItem value='8'>Whatsapp ads</MenuItem>
+              <MenuItem value='9'>Website</MenuItem>
             </Select>
           </FormControl>
+          <TextField type='text' label="Source Description" multiline variant="standard" sx={{ width: '100%' }} focused name='source_desc' onChange={input} />
         </div>
         <br />
         <div className='margeTwoField element'>
-          <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused name='date' onChange={input} />
-          <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused name='time' onChange={input} />
-        </div>
-        <br />
-        <div className='element margeTwoField'>
           <FormControl variant="standard" sx={{ width: '100%' }} focused>
             <InputLabel id="demo-simple-select-standard-label">Interest</InputLabel>
             <Select
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
               onChange={input}
               label="Interest"
               name='interest'
             >
-              <MenuItem value="1">Very Low</MenuItem>
-              <MenuItem value="2">Low</MenuItem>
-              <MenuItem value="3">Average</MenuItem>
-              <MenuItem value="4">High</MenuItem>
-              <MenuItem value="5">Very High</MenuItem>
+              <MenuItem value="Very Low">Very Low</MenuItem>
+              <MenuItem value="Low">Low</MenuItem>
+              <MenuItem value="Average">Average</MenuItem>
+              <MenuItem value="High">High</MenuItem>
+              <MenuItem value="Very High">Very High</MenuItem>
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ width: '100%' }} focused>
             <InputLabel id="demo-simple-select-standard-label">Assign To Sales-Executive</InputLabel>
             <Select
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
               onChange={input}
               label="Assign To Sales-Executive"
               name='assign'
@@ -388,8 +409,41 @@ const Leads = () => {
           </FormControl>
         </div>
         <br />
+        <div className='element margeTwoField'>
+          <TextField type='date' label="Follow Up Date" variant="standard" sx={{ width: '100%' }} focused name='date' onChange={input} />
+          <TextField type='time' label="Follow Up Time" variant="standard" sx={{ width: '100%' }} focused name='time' onChange={input} />
+        </div>
+        <br />
         <div className='element'>
-          <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input} />
+          <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input} />
+        </div>
+        <br />
+        <div className='element margeTwoField'>
+          <FormControl variant="standard" sx={{ width: '100%' }} focused>
+            <InputLabel id="demo-simple-select-standard-label">CP Access</InputLabel>
+            <Select
+              onChange={input}
+              label="CP Access"
+              name='cp_access'
+              value={form.cp_access}
+            >
+              <MenuItem value="1">Yes</MenuItem>
+              <MenuItem value="0">No</MenuItem>
+            </Select>
+          </FormControl>
+          {(form.cp_access == '1') ? <FormControl variant="standard" sx={{ width: '100%' }} focused>
+            <InputLabel id="demo-simple-select-standard-label">Create Demo MT5</InputLabel>
+            <Select
+              onChange={input}
+              label="Create Demo MT5"
+              name='create_demo_mt5'
+              value={form.create_demo_mt5}
+            >
+              <MenuItem value="1">Yes</MenuItem>
+              <MenuItem value="0">No</MenuItem>
+            </Select>
+          </FormControl> : ''}
+
         </div>
         <br />
         <div className='element margeTwoField'>
@@ -453,16 +507,14 @@ const Leads = () => {
             <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Add New Follow Up</p>
               <div className='margeTwoField element'>
-                <TextField type='date' id="standard-basic" label="Follow Up Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input1} focused />
-                <TextField type='time' id="standard-basic" label="Follow Up Time" variant="standard" sx={{ width: '100%' }} name='time' onChange={input1} focused />
+                <TextField type='date' label="Follow Up Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input1} focused />
+                <TextField type='time' label="Follow Up Time" variant="standard" sx={{ width: '100%' }} name='time' onChange={input1} focused />
               </div>
               <br />
               <div className='element'>
                 <FormControl variant="standard" sx={{ width: '100%' }} focused>
                   <InputLabel id="demo-simple-select-standard-label">Interest</InputLabel>
                   <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
                     // value={age}
                     onChange={input1}
                     label="Interest"
@@ -478,7 +530,7 @@ const Leads = () => {
               </div>
               <br />
               <div className='element'>
-                <TextField id="standard-basic" label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input1} />
+                <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input1} />
               </div>
               <br />
               <div className='checkboxSection' style={{ width: '100%' }}>
@@ -522,16 +574,82 @@ const Leads = () => {
       reorder: true,
       wrap: true,
       grow: 0.1,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'CUSTOMER',
       selector: row => {
-        return <a className='linkColor' title={row.name} onClick={(event) => gotoProfile(row)}>{row.name}</a>
+        return <a className='linkColor' title={row.customer} onClick={(event) => gotoProfile(row)}>{row.customer}</a>
       },
       sortable: true,
       reorder: true,
       grow: 1,
       wrap: true,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Interest',
@@ -544,19 +662,53 @@ const Leads = () => {
             }}
             input={<BootstrapInput />}
             name='interest'
+            value={row.interest}
             onChange={(e) => changeInterestStatus(e, row)}
           >
-            <MenuItem value="1">Very Low</MenuItem>
-            <MenuItem value="2">Low</MenuItem>
-            <MenuItem value="3">Average</MenuItem>
-            <MenuItem value="4">High</MenuItem>
-            <MenuItem value="5">Very High</MenuItem>
+            <MenuItem value="Very Low">Very Low</MenuItem>
+            <MenuItem value="Low">Low</MenuItem>
+            <MenuItem value="Average">Average</MenuItem>
+            <MenuItem value="High">High</MenuItem>
+            <MenuItem value="Very High">Very High</MenuItem>
           </Select>
         </div>
       },
       sortable: true,
       reorder: true,
       grow: 1,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Assign To',
@@ -578,22 +730,121 @@ const Leads = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Followup Date',
-      selector: row => { return <span title={row.date}>{row.date}</span> },
+      selector: row => { return <span title={row.followup_date}>{row.followup_date}</span> },
       sortable: true,
       reorder: true,
       grow: 1,
       wrap: true,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Source',
-      selector: row => { return <span title={row.user_country}>{row.user_country}</span> },
+      selector: row => { return <span title={row.source}>{row.source}</span> },
       sortable: true,
       reorder: true,
       wrap: true,
       grow: 1,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Next Date',
@@ -604,17 +855,83 @@ const Leads = () => {
       reorder: true,
       wrap: true,
       grow: 1,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Followup',
       selector: row => {
         return <div>
-          <i className="material-icons viewLead" onClick={(e) => viewFollowup(row)}>visibility</i>
+          <i className="material-icons" onClick={(e) => viewFollowup(row)}>visibility</i>
         </div>
       },
       sortable: true,
       reorder: true,
       grow: 0.3,
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
     },
     {
       name: 'Action',
@@ -627,8 +944,7 @@ const Leads = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={(event) => handleContextClick(event, row.sr_no)}
-            {...row}
-            style={{ color: 'rgb(144 145 139)' }}
+            style={{ color: 'white' }}
           >
             <i className="material-icons">more_horiz</i>
           </Button>
@@ -647,7 +963,40 @@ const Leads = () => {
       ignoreRowClick: true,
       allowOverflow: true,
       grow: 0.5,
-    }
+      conditionalCellStyles: [
+        {
+            when: row => row.color == "f4510b",
+            style: {
+                backgroundColor: '#ffe6e6'
+            },
+        },
+        {
+            when: row => row.color == "ff8000",
+            style: {
+                backgroundColor: '#fff2e6'
+            },
+        },
+        {
+            when: row => row.color == "00d5d5",
+            style: {
+                backgroundColor: '#00d5d5',
+                color: 'white'
+            },
+        },
+        {
+            when: row => row.color == "0080ff",
+            style: {
+                backgroundColor: '#e6ffff'
+            },
+        },
+        {
+            when: row => row.color == "25138c",
+            style: {
+                backgroundColor: '#ebe9fc'
+            },
+        },
+      ]
+    } 
   ];
 
   const column = [
@@ -751,25 +1100,86 @@ const Leads = () => {
     },
   ];
 
-  const submitForm = () => {
-
-    if (form.customer == '') {
-      toast.error('Please select customer');
-    } else if (form.source == '') {
+  const submitForm = async() => {
+    console.log(form);
+    if (form.customer_name == '') {
+      toast.error('Please enter customer name');
+    } else if (form.customer_mobile == '') {
+      toast.error('Please enter customer mobile');
+    } else if (form.customer_email == '') {
+      toast.error('Please enter customer email');
+    } else if (form.customer_address == '') {
+      toast.error('Please enter customer address');
+    } else if (form.source_id == '') {
       toast.error('Please select source');
-    } else if (form.date == '') {
-      toast.error('Please select follow up date');
-    } else if (form.time == '') {
-      toast.error('Please select follow up time');
     } else if (form.interest == '') {
       toast.error('Please select interest');
     } else if (form.assign == '') {
       toast.error('Please select Assign To Sales-Executive');
+    } else if (form.date == '') {
+      toast.error('Please select follow up date');
+    } else if (form.time == '') {
+      toast.error('Please select follow up time');
     } else if (form.remark == '') {
       toast.error('Please enter remark');
     } else {
-      handleClose();
-      toast.success('Lead has been added successfully.');
+      form.isLoader = true;
+      setForm({ ...form });
+      const param = new FormData();
+      /* if (form.faqId == '') {
+        param.append('action', 'add_faq');
+      } else {
+        param.append('faq_id', form.faqId);
+        param.append('action', 'update_faq');
+      } */
+      
+      param.append('customer_name', form.customer_name);
+      param.append('customer_mobile', form.customer_mobile);
+      param.append('customer_email', form.customer_email);
+      param.append('customer_address', form.customer_address);
+      param.append('status_id', form.interest);
+      param.append('source_id', form.source_id);
+      param.append('source_desc', form.source_desc);
+      param.append('lead_assign_user_id', form.assign);
+      param.append('followup_date', form.date);
+      param.append('followup_time', form.time);
+      param.append('cp_access', form.cp_access);
+      param.append('demo_mt5', form.create_demo_mt5);
+      param.append('remarks', form.remark);
+      await axios.post(`${Url}/ajaxfiles/add_inquiry.php`, param).then((res) => {
+        form.isLoader = false;
+        setForm({ ...form });
+        if (res.data.status == 'error') {
+          toast.error(res.data.message);
+        } else {
+          setRefresh(!refresh);
+          toast.success(res.data.message);
+          setOpen(false);
+          setForm({
+            customer_name: '',
+            customer_mobile: '',
+            customer_email: '',
+            customer_address: '',
+            source_id: '',
+            source_desc: '',
+            interest: '',
+            assign: '',
+            date: '',
+            time: '',
+            remark: '',
+            cp_access: '0',
+            create_demo_mt5: '0',
+            isCustomerSendMail: true,
+            isCustomerSendsms: true,
+            isAssignSendsms: false,
+            isAdminSendsms: false,
+            isLoader: false
+          });
+        }
+      });
+
+      /* handleClose();
+      toast.success('Lead has been added successfully.'); */
     }
   }
 
@@ -992,15 +1402,25 @@ const Leads = () => {
     // setOpen(true);
   };
 
-  const changeLeadStatus = (status, data) => {
+  const changeLeadStatus = async(status, data) => {
     console.log(status, data);
+    const param = new FormData();
+    param.append('inquiry_id', data.inquiry_id);
     if (status == 'not_interested') {
-      toast.success('Lead has been not interested successfully.');
+      param.append('leads_status', 2);
     } else if (status == 'completed') {
-      toast.success('Lead has been completed successfully.');
+      param.append('leads_status', 1);
     } else if (status == 'rejected') {
-      toast.success('Lead has been rejected successfully.');
+      param.append('leads_status', 3);
     }
+    await axios.post(`${Url}/ajaxfiles/update_lead_status.php`, param).then((res) => {
+      if (res.data.status == 'error') {
+        toast.error(res.data.message);
+      } else {
+        setRefresh(!refresh);
+        toast.success(res.data.message);
+      }
+    });
   }
 
   return (
@@ -1012,16 +1432,28 @@ const Leads = () => {
               <Grid item md={12} lg={12} xl={12}>
                 <p className='main-heading'>Leads List</p>
 
-                <CommonFilter search={searchBy}/>
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                  <div className='actionGroupButton'>
+                  <div className='lead actionGroupButton'>
+                    <div className='export-import-buttons'>
+                      <a href={`data:text/csv;charset=utf-8,${escape(csvData)}`} className='btn-export-style' download="lead.csv">
+                        <i className="material-icons">cloud_download</i>&nbsp;Export
+                      </a>
+                      <label htmlFor="contained-button-file" className='fileuploadButton'>
+                        <input accept=".csv" id="contained-button-file" type="file" />
+                        <Button variant="contained" component="span">
+                          <i className="material-icons">backup</i>&nbsp;Import
+                        </Button>
+                      </label>
+                    </div>
                     <Button variant="contained" onClick={handleClickOpen} className='addLead'>Add</Button>
                     {/* <Button variant="contained">Add IB</Button>
                     <Button variant="contained">All</Button> */}
                   </div>
                   <br />
-                  <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} search={searchBy} />
+                  {/* <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} /> */}
+                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} />
                 </Paper>
 
                 <BootstrapDialog

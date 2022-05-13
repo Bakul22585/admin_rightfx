@@ -15,7 +15,7 @@ const style = {
 const Sidebar = (prop) => {
   // const { t } = useTranslation();
   const navigate = useNavigate();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [open, setOpen] = React.useState({
     operation: false,
     trading: false,
@@ -113,6 +113,31 @@ const Sidebar = (prop) => {
                   </NavLink>
                 </li>
                 <li>
+                  <a
+                    className={`leads ${open.leads ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <span className="material-icons" style={style}>
+                    list_alt
+                    </span>
+                    Lead
+                    <span className="sidebar-icon-indicator">
+
+                      {open.leads ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.leads} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/leads_list" onClick={CloseSidebar}>Leads List</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/reminder" onClick={CloseSidebar}>Reminder</NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/leads_list" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     view_list
@@ -127,7 +152,7 @@ const Sidebar = (prop) => {
                     </span>
                     Reminder
                     </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink className="nav-link-simple " to="/list_request" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
@@ -137,6 +162,31 @@ const Sidebar = (prop) => {
                   </NavLink>
                 </li>
                 <li>
+                  <a
+                    className={`kyc ${open.kyc ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <span className="material-icons" style={style}>
+                    admin_panel_settings
+                    </span>
+                    KYC
+                    <span className="sidebar-icon-indicator">
+
+                      {open.kyc ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.kyc} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/pending_kyc" onClick={CloseSidebar}>Pending</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/history_kyc" onClick={CloseSidebar}>History</NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/pending_kyc" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     pending_actions
@@ -151,7 +201,7 @@ const Sidebar = (prop) => {
                     </span>
                     History KYC
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <a
                     className={`ibManagement ${open.ibManagement ? "active" : ""}`}

@@ -16,6 +16,7 @@ const PendingKYC = () => {
     const [open, setOpen] = useState(false);
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [param, setParam] = useState({
         'kyc_status': 'pending_rejected'
     });
@@ -221,7 +222,7 @@ const PendingKYC = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Pending KYC</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -231,7 +232,7 @@ const PendingKYC = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} param={param} search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} param={param} search={searchBy} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>
