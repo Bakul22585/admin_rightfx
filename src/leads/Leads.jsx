@@ -193,6 +193,7 @@ const Leads = () => {
   const [dialogTitle, setDialogTitle] = useState('');
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [param, setParam] = useState({});
   const [form, setForm] = useState({
     customer_name: '',
     customer_mobile: '',
@@ -218,9 +219,22 @@ const Leads = () => {
     time: '',
     interest: '',
     remark: '',
+    inquiry_id: '',
+    lead_assign_user_id: '',
     isCustomerSendsms: true,
     isAssignSendsms: false,
     isAdminSendsms: false,
+    isLoader: false,
+  });
+  const [leadDetails, setLeadDetails] = useState({
+    customer_name: '',
+    customer_mobile: '',
+    customer_email: '',
+    source_id: '',
+    followup: '',
+    lead_added: '',
+    lead_added_by: '',
+    reference: ''
   });
   const [searchBy, setSearchBy] = useState([
     {
@@ -312,11 +326,25 @@ const Leads = () => {
       time: '',
       interest: '',
       remark: '',
+      inquiry_id: e.inquiry_id,
+      lead_assign_user_id: e.lead_assign_user_id,
       isCustomerSendsms: true,
       isAssignSendsms: false,
       isAdminSendsms: false,
+      isLoader: false,
     });
-    setDialogTitle('View Lead (' + e.name + ')');
+    setLeadDetails({
+      customer_name: e.customer,
+      customer_mobile: e.customer_mobile,
+      customer_email: e.customer_email,
+      source_id: e.source,
+      followup: e.followup_date,
+      lead_added: e.added_datetime,
+      lead_added_by: 'Test',
+      reference: ''
+    });
+    setParam({...param,'inquiry_id': e.inquiry_id});
+    setDialogTitle('View Lead (' + e.customer + ')');
     setMaxWidth('lg');
     setOpen(true);
   }
@@ -445,7 +473,7 @@ const Leads = () => {
           </FormControl> : ''}
 
         </div>
-        <br />
+        {/* <br />
         <div className='element margeTwoField'>
           <div className='checkboxSection' style={{ width: '100%' }}>
             <label>Do you want to send project details to Customer?</label>
@@ -459,7 +487,7 @@ const Leads = () => {
               <FormControlLabel control={<Checkbox size="small" name='isAdminSendsms' onChange={input} />} label="Admin" />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>;
     } else if (dialogTitle.substring(0, 9) == 'View Lead') {
       return <div>
@@ -470,35 +498,35 @@ const Leads = () => {
               <div className='popup-content-section'>
                 <div className='user-details'>
                   <label>Customer Name:</label>
-                  <p>yogeshbhai</p>
+                  <p>{leadDetails.customer_name}</p>
                 </div>
                 <div className='user-details'>
                   <label>Source:</label>
-                  <p>Walk-In</p>
+                  <p>{leadDetails.source_id}</p>
                 </div>
                 <div className='user-details'>
                   <label>Customer Mobile:</label>
-                  <p>9824386783</p>
+                  <p>{leadDetails.customer_mobile}</p>
                 </div>
                 <div className='user-details'>
                   <label>Customer Email:</label>
-                  <p>9824386783</p>
+                  <p>{leadDetails.customer_email}</p>
                 </div>
                 <div className='user-details'>
                   <label>Lead Added By:</label>
-                  <p>Nirav bhai Sutariya</p>
+                  <p>{leadDetails.lead_added_by}</p>
                 </div>
                 <div className='user-details'>
                   <label>Lead Added:</label>
-                  <p>2022-03-31 18:42:17</p>
+                  <p>{leadDetails.lead_added}</p>
                 </div>
                 <div className='user-details'>
                   <label>Current Followup:</label>
-                  <p>5 Apr 2022</p>
+                  <p>{leadDetails.followup}</p>
                 </div>
                 <div className='user-details'>
                   <label>Reference:</label>
-                  <p></p>
+                  <p>{leadDetails.reference}</p>
                 </div>
               </div>
             </Paper>
@@ -507,8 +535,8 @@ const Leads = () => {
             <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Add New Follow Up</p>
               <div className='margeTwoField element'>
-                <TextField type='date' label="Follow Up Date" variant="standard" sx={{ width: '100%' }} name='date' onChange={input1} focused />
-                <TextField type='time' label="Follow Up Time" variant="standard" sx={{ width: '100%' }} name='time' onChange={input1} focused />
+                <TextField type='date' label="Follow Up Date" variant="standard" sx={{ width: '100%' }} name='date' value={newFollowupForm.date} onChange={input1} focused />
+                <TextField type='time' label="Follow Up Time" variant="standard" sx={{ width: '100%' }} name='time' value={newFollowupForm.time} onChange={input1} focused />
               </div>
               <br />
               <div className='element'>
@@ -519,21 +547,22 @@ const Leads = () => {
                     onChange={input1}
                     label="Interest"
                     name='interest'
+                    value={newFollowupForm.interest}
                   >
-                    <MenuItem value="1">Very Low</MenuItem>
-                    <MenuItem value="2">Low</MenuItem>
-                    <MenuItem value="3">Average</MenuItem>
-                    <MenuItem value="4">High</MenuItem>
-                    <MenuItem value="5">Very High</MenuItem>
+                    <MenuItem value="Very Low">Very Low</MenuItem>
+                    <MenuItem value="Low">Low</MenuItem>
+                    <MenuItem value="Average">Average</MenuItem>
+                    <MenuItem value="High">High</MenuItem>
+                    <MenuItem value="Very High">Very High</MenuItem>
                   </Select>
                 </FormControl>
               </div>
               <br />
               <div className='element'>
-                <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input1} />
+                <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' value={newFollowupForm.remark} onChange={input1} />
               </div>
               <br />
-              <div className='checkboxSection' style={{ width: '100%' }}>
+              {/* <div className='checkboxSection' style={{ width: '100%' }}>
                 <label>Please select user type to send SMS.</label>
                 <div className='checkbox-group'>
                   <FormControlLabel control={<Checkbox defaultChecked size="small" name='isCustomerSendsms' onChange={input1} />} label="Client" />
@@ -541,24 +570,24 @@ const Leads = () => {
                   <FormControlLabel control={<Checkbox size="small" name='isAdminSendsms' onChange={input1} />} label="Admin" />
                 </div>
               </div>
-              <br />
+              <br /> */}
               <div className='popup-add-lead-section'>
-                <Button className='btn btn-success' onClick={addNewFollowup}>Add</Button>
+                {(newFollowupForm.isLoader) ? <Button className='btn btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button className='btn btn-success' onClick={addNewFollowup}>Add</Button>}
               </div>
             </Paper>
           </Grid>
           <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Follow Up History</p>
-              <CommonTable url={`${Url}/datatable/users_list.php`} column={column} sort='0' filter={filterData} />
+              <CommonTable url={`${Url}/datatable/fetch_inquiey_master.php`} column={column} sort='0' filter={filterData} refresh={refresh} param={param}/>
             </Paper>
           </Grid>
-          <Grid item md={12} lg={12} xl={12} sm={12}>
+          {/* <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Call History</p>
               <CommonTable url={`${Url}/datatable/users_list.php`} column={callColumn} sort='0' filter={filterData} />
             </Paper>
-          </Grid>
+          </Grid> */}
         </Grid>
       </div>;
     }
@@ -570,41 +599,39 @@ const Leads = () => {
       selector: row => {
         return <span>{row.sr_no}</span>
       },
-      sortable: true,
       reorder: true,
       wrap: true,
       grow: 0.1,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -619,35 +646,34 @@ const Leads = () => {
       wrap: true,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -673,40 +699,38 @@ const Leads = () => {
           </Select>
         </div>
       },
-      sortable: true,
       reorder: true,
       grow: 1,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -727,40 +751,38 @@ const Leads = () => {
           </Select>
         </div>
       },
-      sortable: true,
       reorder: true,
       grow: 1,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -773,35 +795,34 @@ const Leads = () => {
       wrap: true,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -814,35 +835,34 @@ const Leads = () => {
       grow: 1,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -851,41 +871,78 @@ const Leads = () => {
       selector: row => {
         return <input type='date' className="table-date-picker-border-0" name='next_date' onChange={(e) => changeFollowupDate(e, row)} />
       },
-      sortable: true,
       reorder: true,
       wrap: true,
       grow: 1,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
+        },
+      ]
+    },
+    {
+      name: 'STATUS',
+      selector: row => { return <span title={row.leads_status}>{row.leads_status}</span> },
+      reorder: true,
+      wrap: true,
+      grow: 1,
+      conditionalCellStyles: [
+        {
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
+        },
+        {
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
+        },
+        {
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
+        },
+        {
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
+        },
+        {
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -896,40 +953,38 @@ const Leads = () => {
           <i className="material-icons" onClick={(e) => viewFollowup(row)}>visibility</i>
         </div>
       },
-      sortable: true,
       reorder: true,
       grow: 0.3,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
     },
@@ -944,7 +999,7 @@ const Leads = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={(event) => handleContextClick(event, row.sr_no)}
-            style={{ color: 'white' }}
+            style={{ color: 'black' }}
           >
             <i className="material-icons">more_horiz</i>
           </Button>
@@ -965,38 +1020,37 @@ const Leads = () => {
       grow: 0.5,
       conditionalCellStyles: [
         {
-            when: row => row.color == "f4510b",
-            style: {
-                backgroundColor: '#ffe6e6'
-            },
+          when: row => row.color == "f4510b",
+          style: {
+            backgroundColor: '#ffe6e6'
+          },
         },
         {
-            when: row => row.color == "ff8000",
-            style: {
-                backgroundColor: '#fff2e6'
-            },
+          when: row => row.color == "ff8000",
+          style: {
+            backgroundColor: '#fff2e6'
+          },
         },
         {
-            when: row => row.color == "00d5d5",
-            style: {
-                backgroundColor: '#00d5d5',
-                color: 'white'
-            },
+          when: row => row.color == "00d5d5",
+          style: {
+            backgroundColor: '#00d5d5'
+          },
         },
         {
-            when: row => row.color == "0080ff",
-            style: {
-                backgroundColor: '#e6ffff'
-            },
+          when: row => row.color == "0080ff",
+          style: {
+            backgroundColor: '#e6ffff'
+          },
         },
         {
-            when: row => row.color == "25138c",
-            style: {
-                backgroundColor: '#ebe9fc'
-            },
+          when: row => row.color == "25138c",
+          style: {
+            backgroundColor: '#ebe9fc'
+          },
         },
       ]
-    } 
+    }
   ];
 
   const column = [
@@ -1005,27 +1059,26 @@ const Leads = () => {
       selector: row => {
         return <span>{row.sr_no}</span>
       },
-      sortable: true,
       reorder: true,
       grow: 0.1,
     },
     {
       name: 'Interest',
-      selector: row => { return <span title={row.kyc_status}>{row.kyc_status}</span> },
+      selector: row => { return <span title={row.followup_status}>{row.followup_status}</span> },
       sortable: true,
       reorder: true,
       grow: 1,
     },
     {
       name: 'Followup Date',
-      selector: row => { return <span title={row.date}>{row.date}</span> },
+      selector: row => { return <span title={row.followup_date}>{row.followup_date}</span> },
       sortable: true,
       reorder: true,
       grow: 1,
     },
     {
       name: 'Remarks',
-      selector: row => { return <span title={row.user_visible_password}>{row.user_visible_password}</span> },
+      selector: row => { return <span title={row.remarks}>{row.remarks}</span> },
       sortable: true,
       reorder: true,
       grow: 1,
@@ -1045,7 +1098,6 @@ const Leads = () => {
           </Select>
         </div>
       },
-      sortable: true,
       reorder: true,
       grow: 1,
     },
@@ -1100,7 +1152,7 @@ const Leads = () => {
     },
   ];
 
-  const submitForm = async() => {
+  const submitForm = async () => {
     console.log(form);
     if (form.customer_name == '') {
       toast.error('Please enter customer name');
@@ -1132,7 +1184,7 @@ const Leads = () => {
         param.append('faq_id', form.faqId);
         param.append('action', 'update_faq');
       } */
-      
+
       param.append('customer_name', form.customer_name);
       param.append('customer_mobile', form.customer_mobile);
       param.append('customer_email', form.customer_email);
@@ -1303,8 +1355,10 @@ const Leads = () => {
     toast.success('Assign sales executive has been updated successfully.');
   }
 
-  const addNewFollowup = () => {
+  const addNewFollowup = async () => {
     console.log(newFollowupForm);
+    const param = new FormData();
+    param.append('inquiry_id', newFollowupForm.inquiry_id);
     if (newFollowupForm.date == '') {
       toast.error('Please select followup date');
     } else if (newFollowupForm.time == '') {
@@ -1314,16 +1368,36 @@ const Leads = () => {
     } else if (newFollowupForm.remark == '') {
       toast.error('Please enter followup remark');
     } else {
-      toast.success('Followup hsa been added successfully.');
-      setNewFollowupForm({
-        date: '',
-        time: '',
-        interest: '',
-        remark: '',
-        isCustomerSendsms: true,
-        isAssignSendsms: false,
-        isAdminSendsms: false,
+      newFollowupForm.isLoader = true;
+      setNewFollowupForm({ ...newFollowupForm });
+      param.append('status_id', newFollowupForm.interest);
+      param.append('lead_assign_user_id', newFollowupForm.lead_assign_user_id);
+      param.append('remarks', newFollowupForm.remark);
+      param.append('followup_date', newFollowupForm.date);
+      param.append('followup_time', newFollowupForm.time);
+      await axios.post(`${Url}/ajaxfiles/add_followup.php`, param).then((res) => {
+        newFollowupForm.isLoader = false;
+        setNewFollowupForm({ ...newFollowupForm });
+        if (res.data.status == 'error') {
+          toast.error(res.data.message);
+        } else {
+          setRefresh(!refresh);
+          toast.success(res.data.message);
+          setNewFollowupForm({
+            date: '',
+            time: '',
+            interest: '',
+            remark: '',
+            inquiry_id: '',
+            lead_assign_user_id: '',
+            isCustomerSendsms: true,
+            isAssignSendsms: false,
+            isAdminSendsms: false,
+            isLoader: false,
+          });
+        }
       });
+      // toast.success('Followup hsa been added successfully.');
     }
   }
 
@@ -1402,7 +1476,7 @@ const Leads = () => {
     // setOpen(true);
   };
 
-  const changeLeadStatus = async(status, data) => {
+  const changeLeadStatus = async (status, data) => {
     console.log(status, data);
     const param = new FormData();
     param.append('inquiry_id', data.inquiry_id);

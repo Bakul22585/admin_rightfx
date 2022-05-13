@@ -126,8 +126,8 @@ const CommonTable = (prop) => {
                 param.append('withdrawal_status', prop.filter.withdraw_status);
             }
         }
-
-        if (prop.searchWord != "") {
+        console.log("searchWord",prop.searchWord);
+        if (prop.searchWord != "" && prop.searchWord != undefined) {
             // console.log(prop.search.filter((x) => x.value == true).length);
             if (prop.search.filter((x) => x.value == true).length == 0) {
                 param.append('search[value]', prop.searchWord);
@@ -147,7 +147,10 @@ const CommonTable = (prop) => {
         }
 
         if (prop.param) {
-            param.append('kyc_status', prop.param.kyc_status);
+            // param.append('kyc_status', prop.param.kyc_status);
+            for (const key in prop.param) {
+                param.append(key, prop.param[`${key}`]);
+            }
         }
         param.append('order[0][column]', clientSort);
         param.append('order[0][dir]', clientDir);
@@ -190,7 +193,7 @@ const CommonTable = (prop) => {
         prop.searchWord,
         prop.search,
     ]);
-    // console.log(prop);
+    console.log("common table",prop);
     return (
         <div>
             <div className='tableSearchField'>

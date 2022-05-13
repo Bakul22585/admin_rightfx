@@ -15,11 +15,13 @@
 .popup-content-section {
     display: flex;
     flex-wrap: wrap;
+    gap: 5px;
 }
 .user-details {
     /* width: 30%; */
     width: 140px;
     font-size: 14px;
+    word-break: break-word;
 }
 .user-details label {
     font-weight: 600;
