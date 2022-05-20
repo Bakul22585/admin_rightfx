@@ -1,11 +1,34 @@
 import './notification.css';
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, CardContent, FormControl, Grid, MenuItem, Paper, Select, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from '../common/CommonFilter';
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Url } from "../global";
+import axios from "axios";
 const Notification = () => {
+    useEffect(()=>{
+        fatchdata()
+    },[])
+
+       const fatchdata=async()=>{
+        const param = new FormData();
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
+        param.append("draw", 1);
+        param.append("start", 1);
+        param.append("length", 10);
+        param.append("action", "list_notifications");
+        await axios.post(`${Url}/datatable/notification_list.php`, param).then((res) => {
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            // setPreview(res.data.popup_image);
+          }
+        });
+       }
 
     return (
         <div>

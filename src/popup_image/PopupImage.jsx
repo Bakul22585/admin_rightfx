@@ -10,15 +10,14 @@ import {
   Paper,
   Select,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from "../global";
 
 import axios from "axios";
 const PopupImage = () => {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
@@ -131,7 +130,7 @@ const PopupImage = () => {
                         <br />
                         <div className="popsavebuttton">
                           {loader == true ? (
-                            <Button variant="contained" className="btn-success">
+                            <Button  disabled className="popdisableimage" >
                               <svg class="spinner" viewBox="0 0 50 50">
                                 <circle
                                   class="path"
