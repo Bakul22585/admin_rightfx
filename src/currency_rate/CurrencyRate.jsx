@@ -29,8 +29,8 @@ const CurrencyRate = () => {
 
     const fatchimage = async() => {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "currency_rate");
         await axios.post(`${Url}/ajaxfiles/common_api.php`, param).then((res) => {
           if (res.data.status == "error") {
@@ -53,8 +53,8 @@ toast.error("Deposit rate is requied")
     }else{
         setLoader(true)
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "update_rate");
         param.append("deposit_rate", data.deposit_rate);
         param.append("withdrawal_rate", data.withdrawal_rate);
