@@ -5,11 +5,42 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import InnerImageZoom from "react-inner-image-zoom";
-import { Button, Grid, Input, Paper } from "@mui/material";
-import TopButton from "../../customComponet/TopButton";
+import { Button, Grid, Input, InputBase, MenuItem, Paper, Select } from "@mui/material";
 import './ticket.css';
-import { BootstrapInput, ColorButton } from "../../customComponet/CustomElement";
-import { Url } from "../../../global";
+import { Url } from "../global";
+import { styled } from "@mui/material/styles";
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  "label + &": {
+    marginTop: theme.spacing(0),
+  },
+  "& .MuiInputBase-input": {
+    // borderRadius: 9,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    // border: "1px solid #ced4da",
+    fontSize: 20,
+    padding: "8px 26px 8px 10px",
+    // transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      // borderRadius: 9,
+      borderColor: "#80bdff",
+    },
+  },
+}));
 
 const ViewTicket = () => {
 
@@ -20,6 +51,7 @@ const ViewTicket = () => {
   const [form, setForm] = useState({
     message: "",
     file: "",
+    status: "Open",
     isLoader: false
   });
   const [viewTicketData, setViewTicketData] = useState({
@@ -54,13 +86,12 @@ const ViewTicket = () => {
 
   const fetchViewTicketDetails = async () => {
     const param = new FormData();
-    /* param.append("is_app", '1');
-    param.append("user_id", '1106');
-    param.append("auth_key", '300966-0f2f55-7e7d62'); */
-    param.append("action", 'view_support_ticket');
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append("action", 'view_support_ticket');
     param.append("ticket_id", id);
     await axios
-      .post(`${Url}/ajaxfiles/common_api.php`, param)
+      .post(`${Url}/ajaxfiles/view_ticket.php`, param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
           navigate("/");
@@ -85,13 +116,13 @@ const ViewTicket = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      /* param.append("is_app", '1');
-      param.append("user_id", '1106');
-      param.append("auth_key", '300966-0f2f55-7e7d62'); */
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
       param.append("ticketChatID", id);
       param.append("ticketTitle", viewTicketData.data.tickettitle);
       param.append("subject", viewTicketData.data.subject);
       param.append("ticketBody", form.message);
+      param.append("ticketstatus", form.status);
       if (form.file != "") {
         param.append("attachment", form.file);
       }
@@ -111,6 +142,7 @@ const ViewTicket = () => {
             setForm({
               message: "",
               file: "",
+              status: "Open",
               isLoader: false
             });
             fetchViewTicketDetails();
@@ -128,7 +160,7 @@ const ViewTicket = () => {
               <Grid item sm={12}></Grid>
               <Grid item xl={1}></Grid>
               <Grid item xl={10} md={12} lg={12}>
-                <TopButton />
+                {/* <TopButton /> */}
                 <Grid container>
                   <Grid item md={12}>
                     <Paper
@@ -318,8 +350,9 @@ const ViewTicket = () => {
                       <hr />
                       <div className="action-section">
                         <div className="input-section">
-                          <BootstrapInput
+                          <input
                             name="title"
+                            className="send-message-text-element"
                             value={form.message}
                             onChange={(e) => {
                               setForm({
@@ -332,20 +365,35 @@ const ViewTicket = () => {
                             inputProps={{
                               "aria-label": "Without label",
                             }}
-                            sx={{ width: '100%' }}
                           />
-                          {(form.isLoader) ? <ColorButton className="send-message-disabled-button" disabled><svg class="spinner" viewBox="0 0 50 50">
+                          {(form.isLoader) ? <Button className="send-message-disabled-button" disabled><svg class="spinner" viewBox="0 0 50 50">
                             <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                          </svg></ColorButton> : <ColorButton className="send-message" onClick={sendMessage}><i className="material-icons">send</i> &nbsp;Send</ColorButton>}
-                          {(form.isLoader) ? <ColorButton className="send-message-disabled-button" disabled><svg class="spinner" viewBox="0 0 50 50">
+                          </svg></Button> : <Button variant="contained" className="send-message" onClick={sendMessage}><i className="material-icons">send</i> &nbsp;Send</Button>}
+                          {(form.isLoader) ? <Button className="send-message-disabled-button" disabled><svg class="spinner" viewBox="0 0 50 50">
                             <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                          </svg></ColorButton> : <label htmlFor="contained-button-file" className='ticket-file-upload'>
+                          </svg></Button> : <label htmlFor="contained-button-file" className='ticket-file-upload'>
                             <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile} />
                             {selectedFile ? <img src={preview} className='deposit-upload-image-preview' /> : <Button className="site-button-color" variant="contained" component="span">
                               <i className="material-icons">backup</i>&nbsp;Upload
                             </Button>}
                           </label>}
-
+                          <Select
+                            value={form.status}
+                            displayEmpty
+                            inputProps={{
+                              "aria-label": "Without label",
+                            }}
+                            className='table-dropdown'
+                            input={<BootstrapInput />}
+                            name='interest'
+                            onChange={(e) => setForm({
+                                ...form,
+                                status: e.target.value,
+                              })}
+                          >
+                            <MenuItem value="Open">Open</MenuItem>
+                            <MenuItem value="Close">Close</MenuItem>
+                          </Select>
                         </div>
                       </div>
                     </Paper>

@@ -34,6 +34,7 @@ import Leads from './leads/Leads';
 import Remainder from './remainder/Remainder';
 import CopyTrading from './copytrading/CopyTrading';
 import Plans from './plans/Plans';
+import ViewTicket from './ticket/ViewTicket';
 function useScrollToTop() {
   const { pathname } = useLocation();
 
@@ -97,6 +98,7 @@ const App = () => {
                 <Route exact path="/copy_trading" element={<CopyTrading />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
                 <Route exact path="/plans" element={<Plans />} />
+                <Route exact path="/view_ticket/:id" element={<ViewTicket />} />
               </Routes>
               {/* <Footer /> */}
             </div>
