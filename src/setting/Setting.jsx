@@ -1,11 +1,170 @@
 import './setting.css';
-import React from "react";
-import { Button, CardContent, Checkbox, FormControl, FormControlLabel, Grid, MenuItem, Paper, Select, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Button, CardContent, Checkbox, FormControl, FormControlLabel, Grid, Input, MenuItem, Paper, Select, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom"
+import { Url } from '../global';
+import axios from "axios";
 
 const Setting = () => {
 
+    const navigate = useNavigate();
+    const [upiSelectedFile, setUpiSelectedFile] = useState();
+    const [upiPreview, setUpiPreview] = useState();
+    const [usdtSelectedFile, setUsdtSelectedFile] = useState();
+    const [usdtPreview, setUsdtPreview] = useState();
+    const [form, setForm] = useState({
+        is_deposit_active: 0,
+        is_withdrawal_active: 0,
+        is_transfer_active: 0,
+        transfer_wallet_to_wallet_charges: "0",
+        bank_ac_name: "0",
+        bank_ac_number: "0",
+        bank_name: "0",
+        bank_ifsc_code: "0",
+        upi_qr_code: "",
+        usdt_trc_20_qr_code: "",
+        isloader: false,
+    });
+    toast.configure();
+
+    const input = (event) => {
+        var { name, value } = event.target;
+        console.log(name, event.target.checked);
+        if (event.target.getAttribute) {
+            if (event.target.getAttribute('type') == 'checkbox') {
+                console.log(event.target.checked);
+                value = event.target.checked;
+            }
+        }
+        console.log(event.target);
+
+        setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const getSetting = async () => {
+        const param = new FormData();
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
+        param.append("action", "get_settings");
+        await axios.post(Url + "/ajaxfiles/common_api.php", param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                navigate("/");
+            }
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                setForm({
+                    is_deposit_active: (res.data.settings_list.is_deposit_active == "0") ? false: true,
+                    is_withdrawal_active: (res.data.settings_list.is_withdrawal_active == "0")? false: true,
+                    is_transfer_active: (res.data.settings_list.is_transfer_active == "0") ? false : true,
+                    transfer_wallet_to_wallet_charges: res.data.settings_list.transfer_wallet_to_wallet_charges,
+                    bank_ac_name: res.data.settings_list.bank_ac_name,
+                    bank_ac_number: res.data.settings_list.bank_ac_number,
+                    bank_name: res.data.settings_list.bank_name,
+                    bank_ifsc_code: res.data.settings_list.bank_ifsc_code,
+                    upi_qr_code: res.data.settings_list.upi_qr_code,
+                    usdt_trc_20_qr_code: res.data.settings_list.usdt_trc_20_qr_code,
+                    isloader: false,
+                });
+                console.log(form);
+            }
+        });
+    }
+
+    const saveSetting = async () => {
+        console.log('submit', form);
+        form.isloader = true;
+        setForm({ ...form });
+        const param = new FormData();
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
+        param.append("action", "update_settings");
+        param.append("is_deposit_active", (form.is_deposit_active == true) ? "1" : "0");
+        param.append("is_withdrawal_active", (form.is_withdrawal_active == true) ? "1" : "0");
+        param.append("is_transfer_active", (form.is_transfer_active == true) ? "1" : "0");
+        param.append("transfer_wallet_to_wallet_charges", form.transfer_wallet_to_wallet_charges);
+        param.append("bank_ac_name", form.bank_ac_name);
+        param.append("bank_ac_number", form.bank_ac_name);
+        param.append("bank_name", form.bank_name);
+        param.append("bank_ifsc_code", form.bank_ifsc_code);
+        if (upiSelectedFile) {
+            param.append("upi_qr_code", form.upi_qr_code);
+        }
+        if (usdtSelectedFile) {
+            param.append("usdt_trc_20_qr_code", form.usdt_trc_20_qr_code);
+        }
+        await axios.post(Url + "/ajaxfiles/settings_manage.php", param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                navigate("/");
+            }
+            form.isloader = false;
+            setForm({ ...form });
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+            }
+        });
+    }
+
+    const onSelectFile = (e, flag) => {
+        if (flag == 'upi') {
+            if (!e.target.files || e.target.files.length === 0) {
+                setUpiSelectedFile(undefined)
+                return
+            }
+            setForm({ ...form, upi_qr_code: e.target.files[0] });
+            setUpiSelectedFile(e.target.files[0])
+        }
+
+        if (flag == 'usdt') {
+            if (!e.target.files || e.target.files.length === 0) {
+                setUsdtSelectedFile(undefined)
+                return
+            }
+            setForm({ ...form, usdt_trc_20_qr_code: e.target.files[0] });
+            setUsdtSelectedFile(e.target.files[0])
+        }
+    }
+
+    useEffect(() => {
+        if (!upiSelectedFile) {
+            setUpiPreview(undefined)
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(upiSelectedFile)
+        setUpiPreview(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [upiSelectedFile])
+
+    useEffect(() => {
+        if (!usdtSelectedFile) {
+            setUsdtPreview(undefined)
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(usdtSelectedFile)
+        setUsdtPreview(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [usdtSelectedFile])
+
+    useEffect(() => {
+        getSetting();
+    }, [])
+
+    console.log('upiSelectedFile', upiSelectedFile);
     return (
         <div>
             <div className="app-content--inner">
@@ -26,42 +185,63 @@ const Setting = () => {
                                                 <div className='checkbox-section'>
                                                     <FormControlLabel
                                                         control={
-                                                            <Checkbox defaultChecked name="deposit_status" />
+                                                            <Checkbox checked={form.is_deposit_active} name="is_deposit_active" onChange={input} />
                                                         }
                                                         label="Deposit Status"
                                                     />
                                                     <FormControlLabel
                                                         control={
-                                                            <Checkbox defaultChecked name="withdrawal_status" />
+                                                            <Checkbox checked={form.is_withdrawal_active} name="is_withdrawal_active" onChange={input} />
                                                         }
                                                         label="Withdrawal Status"
                                                     />
                                                     <FormControlLabel
                                                         control={
-                                                            <Checkbox defaultChecked name="transafer_status" />
+                                                            <Checkbox checked={form.is_transfer_active} name="is_transfer_active" onChange={input} />
                                                         }
                                                         label="Transafer Status"
                                                     />
                                                 </div>
-                                                <br/>
+                                                <br />
                                                 <div className='input-section'>
-                                                    <TextField label="Wallet to Wallet Transfer Charges ($)" variant="standard" sx={{ width: '100%' }} name='wallet_transfer_changes' />
-                                                    <TextField label="Bank Account Name" variant="standard" sx={{ width: '100%' }} name='bank_ac_name' />
-                                                    <TextField label="Bank Account Number" variant="standard" sx={{ width: '100%' }} name='bank_acc_number' />
+                                                    <TextField label="Wallet to Wallet Transfer Charges ($)" variant="standard" sx={{ width: '100%' }} name='transfer_wallet_to_wallet_charges' onChange={input} value={form.transfer_wallet_to_wallet_charges} />
+                                                    <TextField label="Bank Account Name" variant="standard" sx={{ width: '100%' }} name='bank_ac_name' onChange={input} value={form.bank_ac_name} />
+                                                    <TextField label="Bank Account Number" variant="standard" sx={{ width: '100%' }} name='bank_ac_number' onChange={input} value={form.bank_ac_number} />
                                                 </div>
-                                                <br/>
+                                                <br />
                                                 <div className='input-section'>
-                                                    <TextField label="Bank Name" variant="standard" sx={{ width: '100%' }} name='wallet_transfer_changes' />
-                                                    <TextField label="Bank IFSC Code" variant="standard" sx={{ width: '100%' }} name='bank_ac_name' />
+                                                    <TextField label="Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={input} value={form.bank_name} />
+                                                    <TextField label="Bank IFSC Code" variant="standard" sx={{ width: '100%' }} name='bank_ifsc_code' onChange={input} value={form.bank_ifsc_code} />
                                                 </div>
-                                                <br/>
+                                                <br />
                                                 <div className='input-section qr-code-section'>
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" />
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" />
+                                                    <label htmlFor="upi-contained-button-file" className='fileuploadButton'>
+                                                        <Input accept="image/*" id="upi-contained-button-file" multiple type="file" onChange={(e) => onSelectFile(e, 'upi')} />
+                                                        {(upiSelectedFile != undefined || form.upi_qr_code != "")
+                                                            ? (upiSelectedFile) ? <img src={upiPreview} className='deposit-upload-image-preview' /> : <img src={form.upi_qr_code} className='deposit-upload-image-preview' />
+                                                            : <Button variant="contained" component="span">
+                                                                <i className="material-icons">backup</i>&nbsp;Upload
+                                                            </Button>}
+                                                    </label>
+                                                    <label htmlFor="usdt-contained-button-file" className='fileuploadButton'>
+                                                        <Input accept="image/*" id="usdt-contained-button-file" multiple type="file" onChange={(e) => onSelectFile(e, 'usdt')} />
+                                                        {(usdtSelectedFile != undefined || form.usdt_trc_20_qr_code != "")
+                                                            ? (usdtSelectedFile) ? <img src={usdtPreview} className='deposit-upload-image-preview' /> : <img src={form.usdt_trc_20_qr_code} className='deposit-upload-image-preview' />
+                                                            : <Button variant="contained" component="span">
+                                                                <i className="material-icons">backup</i>&nbsp;Upload
+                                                            </Button>}
+                                                    </label>
                                                 </div>
-                                                <br/>
+                                                <br />
                                                 <div className='action-button-section'>
-                                                    <Button variant="contained" className='btn-success'>Update</Button>
+                                                    {(form.isloader)
+                                                        ? <Button variant="contained" className='btn-success' disabled>
+                                                            <svg class="spinner" viewBox="0 0 50 50">
+                                                                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                                                            </svg>
+                                                        </Button>
+                                                        : <Button variant="contained" className='btn-success' onClick={saveSetting}>Update</Button>}
+
                                                 </div>
                                             </Grid>
                                         </Grid>
