@@ -86,8 +86,8 @@ const ViewTicket = () => {
 
   const fetchViewTicketDetails = async () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     // param.append("action", 'view_support_ticket');
     param.append("ticket_id", id);
     await axios
@@ -116,8 +116,8 @@ const ViewTicket = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append("ticketChatID", id);
       param.append("ticketTitle", viewTicketData.data.tickettitle);
       param.append("subject", viewTicketData.data.subject);

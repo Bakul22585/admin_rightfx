@@ -44,8 +44,8 @@ const PopupImage = () => {
   toast.configure();
   const fatchimage = async () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    /* param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1); */
     param.append("action", "popup_image");
     await axios.post(`${Url}/ajaxfiles/common_api.php`, param).then((res) => {
       if (res.data.status == "error") {
@@ -66,8 +66,8 @@ const PopupImage = () => {
     } else {
       setLoader(true);
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      /* param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1); */
       param.append("popup_image", selectedFile);
       await axios
         .post(`${Url}/ajaxfiles/update_image.php`, param)

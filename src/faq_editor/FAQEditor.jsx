@@ -204,6 +204,22 @@ const FAQEditor = () => {
         });
     }
 
+    const deleteFaq = async(id) => {
+        const param = new FormData();
+        param.append('action', 'delete_faq');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('faq_id', id);
+        await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+                setRefresh(!refresh);
+            }
+        });
+    }
+
     const [openTableMenus, setOpenTableMenus] = useState([]);
 
     const handleContextClick = (event, index) => {
@@ -225,6 +241,7 @@ const FAQEditor = () => {
                             <Button variant="contained" className='btn-gradient btn-danger'
                                 onClick={() => {
                                     onClose();
+                                    deleteFaq(index);
                                 }}
                             >
                                 Yes, Delete it!
@@ -353,7 +370,7 @@ const FAQEditor = () => {
             param.append('question', form.question);
             param.append('answer', form.answer);
             param.append('display_order', form.order);
-            param.append('status', form.isActive);
+            param.append('status', (form.isActive) ? "1" : "0");
             await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
                 form.isLoader = false;
                 setForm({...form});

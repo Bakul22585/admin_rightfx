@@ -52,8 +52,8 @@ const Setting = () => {
 
     const getSetting = async () => {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        /* param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1); */
         param.append("action", "get_settings");
         await axios.post(Url + "/ajaxfiles/common_api.php", param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -85,8 +85,8 @@ const Setting = () => {
         form.isloader = true;
         setForm({ ...form });
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        /* param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1); */
         param.append("action", "update_settings");
         param.append("is_deposit_active", (form.is_deposit_active == true) ? "1" : "0");
         param.append("is_withdrawal_active", (form.is_withdrawal_active == true) ? "1" : "0");
