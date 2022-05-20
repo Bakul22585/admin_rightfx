@@ -1,11 +1,25 @@
 import './currency_rate.css';
-import React from "react";
+import React, { useState } from "react";
 import { Button, CardContent, FormControl, Grid, MenuItem, Paper, Select, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 
 const CurrencyRate = () => {
-
+    const [data,setData]=useState({
+        deposit_rate:"",
+        withdrawal_rate:""
+    })
+    const onChange=(event)=>{
+        const { name, value } = event.target;
+        setData((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            }})
+    }
+const onSubmit=()=>{
+    
+}
     return (
         <div>
             <div className="app-content--inner">
@@ -20,15 +34,15 @@ const CurrencyRate = () => {
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
                                                 <div className='input-section'>
-                                                    <TextField label="Deposit Rate" variant="standard" sx={{ width: '100%' }} name='deposit_rate' />
+                                                    <TextField label="Deposit Rate" variant="standard" sx={{ width: '100%' }} name='deposit_rate' type='number' onChange={onChange}/>
                                                 </div>
                                                 <br/>
                                                 <div className='input-section'>
-                                                    <TextField label="Withdrawal Rate" variant="standard" sx={{ width: '100%' }} name='withdrawal_rate' />
+                                                    <TextField label="Withdrawal Rate" variant="standard" sx={{ width: '100%' }} name='withdrawal_rate' type='number' onChange={onChange} />
                                                 </div>
                                                 <br/>
                                                 <div className='action-button-section'>
-                                                    <Button variant="contained" className='btn-success'>Update</Button>
+                                                    <Button variant="contained" className='btn-success' onClick={onSubmit}>Update</Button>
                                                 </div>
                                             </Grid>
                                         </Grid>

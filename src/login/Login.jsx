@@ -79,7 +79,7 @@ export default function Login1(prop) {
             console.log(values.email);
             notify("Email format is invaild ");
             errors.email = "Email format is invaild";
-        }
+        }else
         if (!values.password) {
             errors.password = " password is requied";
             notify("Password is requied");

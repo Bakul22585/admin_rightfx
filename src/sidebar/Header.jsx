@@ -14,7 +14,8 @@ import { List, ListItem, Menu } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom"
 import { Logout } from "@mui/icons-material";
-// import { styled } from "@mui/material/styles";
+import axios from 'axios';
+import { Url } from '../global';// import { styled } from "@mui/material/styles";
 // import i18next, { use } from "i18next";
 // import { useTranslation } from "react-i18next";
 // import cookies from "js-cookie";
@@ -161,10 +162,13 @@ const Header = (prop) => {
     }
   };
 
-  const Logout = () => {
-    localStorage.setItem("login", true);
-    prop.setLogin("true");
-    navigate("/login");
+  const Logout = async() => {
+    await axios.post(Url + '/ajaxfiles/logout.php').then((res) => {
+      localStorage.setItem("login", true);
+      prop.setLogin("true");
+      navigate("/login");
+    })
+   
   }
 
   const MyAccount = () => {
