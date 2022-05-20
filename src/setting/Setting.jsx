@@ -45,7 +45,19 @@ const Setting = () => {
                                                 </div>
                                                 <br/>
                                                 <div className='input-section'>
-                                                    <TextField label="Wallet to Wallet Transfer Charges ($)" variant="standard" sx={{ width: '100%' }} name='rate' />
+                                                    <TextField label="Wallet to Wallet Transfer Charges ($)" variant="standard" sx={{ width: '100%' }} name='wallet_transfer_changes' />
+                                                    <TextField label="Bank Account Name" variant="standard" sx={{ width: '100%' }} name='bank_ac_name' />
+                                                    <TextField label="Bank Account Number" variant="standard" sx={{ width: '100%' }} name='bank_acc_number' />
+                                                </div>
+                                                <br/>
+                                                <div className='input-section'>
+                                                    <TextField label="Bank Name" variant="standard" sx={{ width: '100%' }} name='wallet_transfer_changes' />
+                                                    <TextField label="Bank IFSC Code" variant="standard" sx={{ width: '100%' }} name='bank_ac_name' />
+                                                </div>
+                                                <br/>
+                                                <div className='input-section qr-code-section'>
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" />
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" />
                                                 </div>
                                                 <br/>
                                                 <div className='action-button-section'>

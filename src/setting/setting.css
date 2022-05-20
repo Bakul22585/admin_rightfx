@@ -18,3 +18,14 @@
 .action-button-section button {
     width: 30%;
 }
+.input-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+.input-section.qr-code-section {
+    justify-content: space-evenly;
+}
+.input-section.qr-code-section img {
+    width: 200px;
+}
