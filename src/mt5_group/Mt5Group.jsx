@@ -163,8 +163,8 @@ const Mt5Group = () => {
     const editGroupDetails = async(e, id) => {
         const param = new FormData();
         param.append('action', 'edit_mt5_group');
-        param.append('is_react', '1');
-        param.append('is_app', '1');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
         param.append('group_id', id);
         await axios.post(`${Url}/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
             if (res.data.status == 'error') {
@@ -313,7 +313,8 @@ const Mt5Group = () => {
                 param.append('group_id', form.groupId);
                 param.append('action', 'update_mt5_group');
             }
-            param.append('is_app', '1');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
             param.append('group_name', form.group_name);
             param.append('mt5_group_name', form.mt5_group_name);
             param.append('status', form.isActive ? 1 : 0);

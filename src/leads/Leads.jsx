@@ -1184,7 +1184,8 @@ const Leads = () => {
         param.append('faq_id', form.faqId);
         param.append('action', 'update_faq');
       } */
-
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('customer_name', form.customer_name);
       param.append('customer_mobile', form.customer_mobile);
       param.append('customer_email', form.customer_email);
@@ -1370,6 +1371,8 @@ const Leads = () => {
     } else {
       newFollowupForm.isLoader = true;
       setNewFollowupForm({ ...newFollowupForm });
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('status_id', newFollowupForm.interest);
       param.append('lead_assign_user_id', newFollowupForm.lead_assign_user_id);
       param.append('remarks', newFollowupForm.remark);
@@ -1487,6 +1490,8 @@ const Leads = () => {
     } else if (status == 'rejected') {
       param.append('leads_status', 3);
     }
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     await axios.post(`${Url}/ajaxfiles/update_lead_status.php`, param).then((res) => {
       if (res.data.status == 'error') {
         toast.error(res.data.message);

@@ -439,7 +439,8 @@ const Withdraw = () => {
     const fetchAccount = async (event, search) => {
         console.log(search);
         const param = new FormData();
-        param.append('is_react', '1');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
         param.append('search', search);
         param.append('type', Form.account_type);
         await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
@@ -472,7 +473,8 @@ const Withdraw = () => {
             setForm({ ...Form });
             const param = new FormData();
             param.append('action', 'add_withdraw');
-            param.append('is_react', '1');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
             param.append('user_id', Form.account);
             param.append('account_type', Form.account_type);
             param.append('payment_method', Form.payment_gateway);

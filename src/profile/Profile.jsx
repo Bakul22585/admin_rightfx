@@ -2512,7 +2512,8 @@ const Profile = () => {
                 setTransactionForm({ ...transactionForm });
                 const param = new FormData();
                 param.append('action', 'add_deposit');
-                param.append('is_react', '1');
+                /* param.append('is_app', 1);
+                param.append('AADMIN_LOGIN_ID', 1); */
                 param.append('user_id', userData.data['user_id']);
                 param.append('deposit_to', transactionForm.deposit_to);
                 param.append('payment_method', transactionForm.payment);
@@ -2549,7 +2550,8 @@ const Profile = () => {
                 setTransactionForm({ ...transactionForm });
                 const param = new FormData();
                 param.append('action', 'add_withdraw');
-                param.append('is_react', '1');
+                /* param.append('is_app', 1);
+                param.append('AADMIN_LOGIN_ID', 1); */
                 param.append('user_id', userData.data['user_id']);
                 param.append('account_type', transactionForm.from_account_type);
                 param.append('payment_method', transactionForm.payment);
@@ -2592,7 +2594,8 @@ const Profile = () => {
                 setTransactionForm({ ...transactionForm });
                 const param = new FormData();
                 param.append('action', 'add_internal_transfer');
-                param.append('is_react', '1');
+                /* param.append('is_app', 1);
+                param.append('AADMIN_LOGIN_ID', 1); */
                 param.append('user_id', userData.data['user_id']);
                 param.append('from_transfer', transactionForm.account);
                 param.append('to_transfer', transactionForm.account_to);
@@ -2685,7 +2688,8 @@ const Profile = () => {
 
     const getUserDetails = async () => {
         const param = new FormData();
-        param.append('is_react', '1');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
         param.append('user_id', id);
         userData.isLoader = true;
         setuserData({ ...userData });

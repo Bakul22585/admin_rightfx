@@ -125,7 +125,8 @@ const GenerateIncome = () => {
             form.isLoader = true;
             setForm({ ...form });
             const param = new FormData();
-            param.append('is_app', '1');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
             param.append('verify_password', form.password);
             console.log(`${Url}admin/ajaxfiles/${(dialogTitle == 'Generate Partnership Income') ? 'generate_partnership_income' : 'generate_copy_trading_income'}.php`);
             await axios.post(`${Url}admin/ajaxfiles/${(dialogTitle == 'Generate Partnership Income') ? 'generate_partnership_income' : 'generate_copy_trading_income'}.php`, param).then((res) => {

@@ -343,7 +343,8 @@ const Deposit = () => {
             setDepositForm({...depositForm});
             const param = new FormData();
             param.append('action', 'add_deposit');
-            param.append('is_react', '1');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
             param.append('user_id', depositForm.account);
             param.append('deposit_to', depositForm.deposit_to);
             param.append('payment_method', depositForm.payment_gateway);
@@ -645,7 +646,8 @@ const Deposit = () => {
     const fetchAccount = async (event, search) => {
         console.log(search);
         const param = new FormData();
-        param.append('is_react', '1');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
         param.append('search', search);
         param.append('type', depositForm.live_account);
         await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {

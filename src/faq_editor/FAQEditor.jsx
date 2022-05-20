@@ -181,7 +181,8 @@ const FAQEditor = () => {
     const editFaqDetails = async(e, id) => {
         const param = new FormData();
         param.append('action', 'edit_faq');
-        param.append('is_react', '1');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
         param.append('faq_id', id);
         await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
             if (res.data.status == 'error') {
@@ -347,7 +348,8 @@ const FAQEditor = () => {
                 param.append('faq_id', form.faqId);
                 param.append('action', 'update_faq');
             }
-            param.append('is_react', '1');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
             param.append('question', form.question);
             param.append('answer', form.answer);
             param.append('display_order', form.order);
