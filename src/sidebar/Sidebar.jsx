@@ -346,7 +346,7 @@ const Sidebar = (prop) => {
                   <Collapse in={open.platforms} timeout="auto" unmountOnExit>
                     <ul>
                       <li>
-                        <NavLink to="/Platforms/destop" onClick={CloseSidebar}>IB Commisions</NavLink>
+                        <NavLink to="/ib_commisions" onClick={CloseSidebar}>IB Commisions</NavLink>
                       </li>
                       <li>
                         <NavLink to="/Platforms/android" onClick={CloseSidebar}>Partnership Commisions</NavLink>

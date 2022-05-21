@@ -35,6 +35,7 @@ import Remainder from './remainder/Remainder';
 import CopyTrading from './copytrading/CopyTrading';
 import Plans from './plans/Plans';
 import ViewTicket from './ticket/ViewTicket';
+import IBCommisions from './admin_accounts/ib_commisions/IBCommisions'
 function useScrollToTop() {
   const { pathname } = useLocation();
 
@@ -95,6 +96,7 @@ const App = () => {
                 <Route exact path="/createRole" element={<CreateRole />} />
                 <Route exact path="/leads_list" element={<Leads />} />
                 <Route exact path="/reminder" element={<Remainder />} />
+                <Route exact path="/ib_commisions" element={<IBCommisions/>} />
                 <Route exact path="/copy_trading" element={<CopyTrading />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
                 <Route exact path="/plans" element={<Plans />} />
