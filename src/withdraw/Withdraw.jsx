@@ -317,7 +317,7 @@ const Withdraw = () => {
         } else if (dialogTitle == 'Update Withdrawal Request') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                {(Form.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>}
+                {(viewWithdrawForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>}
 
             </div>;
         }
@@ -618,7 +618,7 @@ const Withdraw = () => {
             toast.error('Please select status');
         } else {
             viewWithdrawForm.isLoader = true;
-            setForm({ ...viewWithdrawForm });
+            setviewWithdrawForm({ ...viewWithdrawForm });
             const param = new FormData();
             param.append('action', 'view_update_withdrawal');
             /* param.append('is_app', 1);
@@ -633,7 +633,7 @@ const Withdraw = () => {
                     navigate("/");
                 }
                 viewWithdrawForm.isLoader = false;
-                setForm({ ...viewWithdrawForm });
+                setviewWithdrawForm({ ...viewWithdrawForm });
                 if (res.data.status == 'error') {
                     toast.error(res.data.message);
                 } else {

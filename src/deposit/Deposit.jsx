@@ -172,6 +172,18 @@ const Deposit = () => {
           'name': 'amount'
         },
       ]);
+      const [viewDepositForm, setviewDepositForm] = useState({
+        date: '',
+        name: '',
+        email: '',
+        phone: '',
+        deposit_method: '',
+        amount: '',
+        remark: '',
+        status: '',
+        deposit_id: '',
+        isLoader: false
+    });
     toast.configure();
 
     const columns = [
@@ -257,27 +269,27 @@ const Deposit = () => {
             cell: row => {
                 return <div>
                     <Button
-                        id={`actionButton_${row.sr_no}`}
-                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        id={`actionButton_${row.deposit_id}`}
+                        aria-controls={open ? `basic-menu-${row.deposit_id}` : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
-                        onClick={(event) => handleContextClick(event, row.sr_no)}
+                        onClick={(event) => handleContextClick(event, row.deposit_id)}
                         {...row}
                         style={{ color: 'rgb(144 145 139)' }}
                     >
                         <i className="material-icons">more_horiz</i>
                     </Button>
                     <Menu
-                        id={`basic-menu-${row.sr_no}`}
-                        anchorEl={openTableMenus[row.sr_no]}
-                        open={Boolean(openTableMenus[row.sr_no])}
-                        onClose={(event) => handleContextClose(row.sr_no)}
+                        id={`basic-menu-${row.deposit_id}`}
+                        anchorEl={openTableMenus[row.deposit_id]}
+                        open={Boolean(openTableMenus[row.deposit_id])}
+                        onClose={(event) => handleContextClose(row.deposit_id)}
                     >
                         {(row.status == "1") ?
-                            <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                            : <div><MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                            <MenuItem className='view' {...row} onClick={(event) => viewDeposit(row.deposit_id)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
+                            : <div><MenuItem className='view' {...row} onClick={(event) => viewDeposit(row.deposit_id)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.deposit_id)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.deposit_id)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -316,6 +328,12 @@ const Deposit = () => {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
                 <Button variant="contained" className='btn-gradient btn-success'>Approve</Button>
+            </div>;
+        } else if (dialogTitle == 'Update Deposit Request') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                {(viewDepositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>}
+
             </div>;
         }
     }
@@ -372,11 +390,46 @@ const Deposit = () => {
         }
     }
 
+    const submitUpdate = async() => {
+        console.log(depositForm);
+        if (viewDepositForm.amount == '') {
+            toast.error('Please enter amount');
+        } else if (viewDepositForm.remark == '') {
+            toast.error('Please enter remark');
+        } else {
+            viewDepositForm.isLoader = true;
+            setviewDepositForm({...viewDepositForm});
+            const param = new FormData();
+            param.append('action', 'view_update_deposit');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
+            param.append('deposit_id', viewDepositForm.deposit_id);
+            param.append('amount', viewDepositForm.amount);
+            param.append('deposit_remarks', viewDepositForm.remark);
+            param.append('deposit_status', viewDepositForm.status);
+            await axios.post(`${Url}/ajaxfiles/deposit_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                viewDepositForm.isLoader = false;
+                setviewDepositForm({...viewDepositForm});
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                    setOpen(false);
+                }
+            });
+        }
+    }
+
     const manageContent = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div>
                 <div>
-                    {/* <TextField id="standard-basic" label="Live Account" variant="standard" sx={{ width: '100%' }} name='live_account' value={depositForm.live_account} onChange={input} /> */}
+                    {/* <TextField label="Live Account" variant="standard" sx={{ width: '100%' }} name='live_account' value={depositForm.live_account} onChange={input} /> */}
                     <FormControl variant="standard" sx={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-standard-label">Account Type</InputLabel>
                         <Select
@@ -412,7 +465,7 @@ const Deposit = () => {
                         sx={{ width: '100%' }}
                         renderInput={(params) => <TextField {...params} label="Account" variant="standard" />}
                     />
-                    <TextField id="standard-basic" label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' value={depositForm.customer_name} onChange={input} />
+                    <TextField label="Customer Name" variant="standard" sx={{ width: '100%' }} name='customer_name' value={depositForm.customer_name} onChange={input} />
                 </div>
                 <br />
                 {/* <div>
@@ -452,11 +505,11 @@ const Deposit = () => {
                 </div>
                 <br />
                 <div>
-                    <TextField id="standard-basic" label="Transation ID" variant="standard" sx={{ width: '100%' }} name='transation_id' onChange={input} />
+                    <TextField label="Transation ID" variant="standard" sx={{ width: '100%' }} name='transation_id' onChange={input} />
                 </div>
                 <br />
                 <div className='margeField'>
-                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={depositForm.amount} onChange={input} />
+                    <TextField label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={depositForm.amount} onChange={input} />
                     <label htmlFor="contained-button-file" className='fileuploadButton'>
                         <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile} />
                         {selectedFile ? <img src={preview} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span">
@@ -492,6 +545,36 @@ const Deposit = () => {
             return <div>
                 <div className='deposit-action-popup-text'>
                     <label>Are you want to sure approve this deposit ?</label>
+                </div>
+            </div>;
+        } else if (dialogTitle == "Update Deposit Request") {
+            return <div>
+                <div className='update-withdraw-request-section'>
+                    <TextField label="Date" variant="standard" sx={{ width: '100%' }} name='date' value={viewDepositForm.date} onChange={input1} focused disabled/>
+                    <TextField label="Name" variant="standard" sx={{ width: '100%' }} name='name' value={viewDepositForm.name} onChange={input1} focused disabled/>
+                    <TextField label="Email" variant="standard" sx={{ width: '100%' }} name='email' value={viewDepositForm.email} onChange={input1} focused disabled/>
+                </div>
+                <br/>
+                <div className='update-withdraw-request-section'>
+                    <TextField label="Phone" variant="standard" sx={{ width: '100%' }} name='phone' value={viewDepositForm.phone} onChange={input1} focused disabled/>
+                    <TextField label="Method" variant="standard" sx={{ width: '100%' }} name='deposit_method' value={viewDepositForm.deposit_method} onChange={input1} focused disabled/>
+                    <TextField label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={viewDepositForm.amount} onChange={input1} focused/>
+                </div>
+                <br/>
+                <div className='update-withdraw-request-section'>
+                    <TextField label="Remark" variant="standard" sx={{ width: '100%' }} name='remark' value={viewDepositForm.remark} onChange={input1} focused/>
+                    {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
+                    <FormControl variant="standard" sx={{ width: '100%' }} focused disabled>
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                            value={viewDepositForm.status}
+                            name='status'
+                            onChange={input1}>
+                            <MenuItem value='0'>Pending</MenuItem>
+                            <MenuItem value='1'>Approve</MenuItem>
+                            <MenuItem value='2'>Reject</MenuItem>
+                        </Select>
+                    </FormControl>
                 </div>
             </div>;
         }
@@ -538,7 +621,7 @@ const Deposit = () => {
                                 <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
                                 <Button variant="contained" className='btn-gradient btn-danger'
                                     onClick={() => {
-                                        handleClickReject();
+                                        handleAction(index, 'rejected');
                                         onClose();
                                     }}
                                 >
@@ -549,20 +632,6 @@ const Deposit = () => {
                     );
                 }
             });
-            /* confirmAlert({
-                title: 'Reject',
-                message: 'Are you sure to do this ?',
-                buttons: [
-                  {
-                    label: 'Yes',
-                    onClick: () => alert('Click Yes')
-                  },
-                  {
-                    label: 'No',
-                    onClick: () => alert('Click No')
-                  }
-                ]
-              }); */
         } else if (e.target.classList.contains('approve')) {
             setDialogTitle('Approve');
             confirmAlert({
@@ -575,7 +644,7 @@ const Deposit = () => {
                                 <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
                                 <Button variant="contained" className='btn-gradient btn-success'
                                     onClick={() => {
-                                        handleClickapprove();
+                                        handleAction(index, 'approve');
                                         onClose();
                                     }}
                                 >
@@ -586,31 +655,66 @@ const Deposit = () => {
                     );
                 }
             });
-            /* confirmAlert({
-                title: 'Approve',
-                message: 'Are you sure to do this ?',
-                buttons: [
-                  {
-                    label: 'Yes',
-                    onClick: () => alert('Click Yes')
-                  },
-                  {
-                    label: 'No',
-                    onClick: () => alert('Click No')
-                  }
-                ]
-              }); */
         }
 
         // setOpen(true);
     };
 
-    const handleClickapprove = () => {
-        toast.success('Deposit has been approved successfully.');
+    const handleAction = async(id, flag) => {
+        const param = new FormData();
+        if (flag == "approve") {
+            param.append('action', 'approve_deposite');
+        } else {
+            param.append('action', 'reject_deposite');
+        }
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('deposit_id', id);
+        await axios.post(`${Url}/ajaxfiles/deposit_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+                setRefresh(!refresh);
+            }
+        });
     }
 
-    const handleClickReject = () => {
-        toast.success('Deposit has been rejected successfully.');
+    const viewDeposit = async(id) => {
+        const param = new FormData();
+        param.append('action', 'view_deposit');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('deposit_id', id);
+        await axios.post(`${Url}/ajaxfiles/deposit_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            handleContextClose(id);
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                setviewDepositForm({
+                    date: res.data.deposit_data.deposit_datetime,
+                    name: res.data.deposit_data.name,
+                    email: res.data.deposit_data.user_email,
+                    phone: res.data.deposit_data.user_phone,
+                    deposit_method: res.data.deposit_data.deposit_method,
+                    amount: res.data.deposit_data.deposit_amount,
+                    remark: res.data.deposit_data.deposit_remarks,
+                    status: res.data.deposit_data.deposit_status,
+                    deposit_id: id,
+                    isLoader: false
+                });
+                setDialogTitle('Update Deposit Request');
+                setOpen(true);
+            }
+        });
     }
 
     useEffect(() => {
@@ -668,6 +772,16 @@ const Deposit = () => {
             }
         });
     }
+
+    const input1 = (event) => {
+        const { name, value } = event.target;
+        setviewDepositForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
 
     return (
         <div>

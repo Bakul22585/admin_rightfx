@@ -194,7 +194,7 @@ const CommonTable = (prop) => {
         prop.searchWord,
         prop.search,
     ]);
-    console.log("common table",prop);
+    // console.log("common table",prop);
     return (
         <div>
             <div className='tableSearchField'>

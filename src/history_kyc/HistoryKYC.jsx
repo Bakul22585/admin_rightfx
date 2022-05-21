@@ -99,31 +99,31 @@ const HistoryKYC = () => {
     });
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'EMAIL',
-          'value': false,
-          'name': 'email'
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'email'
         },
         {
-          'label': 'AADHAR NUMBER',
-          'value': false,
-          'name': 'aadhar_number'
+            'label': 'AADHAR NUMBER',
+            'value': false,
+            'name': 'aadhar_number'
         },
         {
-          'label': 'BANK ACCOUNT NO',
-          'value': false,
-          'name': 'bank_account_no'
+            'label': 'BANK ACCOUNT NO',
+            'value': false,
+            'name': 'bank_account_no'
         }
-      ]);
+    ]);
     toast.configure();
 
     const column = [
@@ -235,6 +235,8 @@ const HistoryKYC = () => {
     };
 
     const editkycDetails = async (e, data, status) => {
+        form.isLoader = true;
+        setForm({...form});
         const param = new FormData();
         if (status == 'View KYC Details') {
             param.append('action', 'view_kyc');
@@ -243,7 +245,7 @@ const HistoryKYC = () => {
         }
         /* param.append('is_app', 1);
         param.append('AADMIN_LOGIN_ID', 1); */
-        param.append('user_id', data.user_id);
+        // param.append('user_id', data.user_id);
         param.append('kyc_id', data.kyc_id);
         await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -261,10 +263,10 @@ const HistoryKYC = () => {
                         name: res.data.kyc_data.name,
                         email: res.data.kyc_data.email,
                         aadhar_card_number: res.data.kyc_data.aadhar_card_number,
-                        aadhar_front_img: res.data.kyc_data.aadhar_front_img,
-                        aadhar_back_img: res.data.kyc_data.aadhar_back_img,
-                        pan_card_img: res.data.kyc_data.pancard_img,
-                        passbook_img: res.data.kyc_data.passbook_img,
+                        aadhar_front_img: res.data.kyc_data.aadhar_card_front_image,
+                        aadhar_back_img: res.data.kyc_data.aadhar_card_back_image,
+                        pan_card_img: res.data.kyc_data.pancard_image,
+                        passbook_img: res.data.kyc_data.bank_passbook_image,
                         account_number: res.data.kyc_data.bank_account_number,
                         bank_name: res.data.kyc_data.bank_name,
                         bank_holder_name: res.data.kyc_data.bank_holder_name,
@@ -275,6 +277,7 @@ const HistoryKYC = () => {
                         kyc_id: data.kyc_id
                     };
                 });
+                console.log(form);
             }
         });
     }
@@ -399,11 +402,16 @@ const HistoryKYC = () => {
         if (dialogTitle == 'View KYC Details') {
             if (form.isLoader == true) {
                 return <div className='popup-loader'>
-                    <div className='loader'>
-                        <div className="clock">
-                            <div className="pointers"></div>
-                        </div>
-                    </div>
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle
+                            class="path"
+                            cx="25"
+                            cy="25"
+                            r="20"
+                            fill="none"
+                            stroke-width="5"
+                        ></circle>
+                    </svg>
                 </div>
             } else {
                 return <div>
@@ -445,19 +453,19 @@ const HistoryKYC = () => {
                     <div className='view-image-section'>
                         {(form.aadhar_front_img != "") ? <div className='element'>
                             <label>Aadhar Card Front Img :</label>
-                            <CustomImageModal image={`${form.aadhar_front_img}`} />
+                            {(form.aadhar_front_img != "")?<CustomImageModal image={`${form.aadhar_front_img}`} /> : ""}
                         </div> : ''}
                         {(form.aadhar_back_img != '') ? <div className='element'>
                             <label>Aadhar Card Back Img :</label>
-                            <CustomImageModal image={`${form.aadhar_back_img}`} />
+                            {(form.aadhar_back_img != "") ? <CustomImageModal image={`${form.aadhar_back_img}`} /> : ""}
                         </div> : ''}
                         {(form.pan_card_img != '') ? <div className='element'>
                             <label>Pan Card Img :</label>
-                            <CustomImageModal image={`${form.pan_card_img}`} />
+                            {(form.pan_card_img != "") ? <CustomImageModal image={`${form.pan_card_img}`} /> : ""}
                         </div> : ''}
                         {(form.passbook_img != '') ? <div className='element'>
                             <label>Passbook Img :</label>
-                            <CustomImageModal image={`${form.passbook_img}`} />
+                            {(form.passbook_img != "")? <CustomImageModal image={`${form.passbook_img}`} /> : ""}
                         </div> : ''}
                     </div>
                     {/* <br />
@@ -481,47 +489,51 @@ const HistoryKYC = () => {
         } else if (dialogTitle == 'Edit KYC Details') {
             if (form.isLoader == true) {
                 return <div className='popup-loader'>
-                    <div className='loader'>
-                        <div className="clock">
-                            <div className="pointers"></div>
-                        </div>
-                    </div>
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle
+                            class="path"
+                            cx="25"
+                            cy="25"
+                            r="20"
+                            fill="none"
+                            stroke-width="5"
+                        ></circle>
+                    </svg>
                 </div>
             } else {
                 return <div>
                     <div className='view-margeField'>
+                        {/* <div className='element'>
+                            <TextField label="First Name" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.first_name} name='first_name' disabled />
+                        </div> */}
                         <div className='element'>
-                            <TextField label="First Name" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.first_name} name='first_name' disabled/>
+                            <TextField label="Name" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.name} name='name' disabled />
                         </div>
                         <div className='element'>
-                            <TextField label="Last Name" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.last_name} name='last_name' disabled/>
+                            <TextField label="Email" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.email} name='email' disabled />
                         </div>
                         <div className='element'>
-                            <TextField label="Email" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.email} name='email' disabled/>
+                            <TextField label="Aadhar Card Number" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.aadhar_card_number} name='aadhar_card_number' />
                         </div>
                         <div className='element'>
-                            <TextField label="Aadhar Card Number" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.aadhar_card_number} name='aadhar_card_number'/>
+                            <TextField label="Bank Account Number" variant="standard" sx={{ width: '100%' }} onChange={input} name='account_number' value={form.account_number} />
                         </div>
                         <div className='element'>
-                            <TextField label="Bank Account Number" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_account_number' value={form.bank_account_number}/>
+                            <TextField label="Bank Name" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_name' value={form.bank_name} />
                         </div>
                         <div className='element'>
-                            <TextField label="Bank Name" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_name' value={form.bank_name}/>
+                            <TextField label="Bank Holder Name" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_holder_name' value={form.bank_holder_name} />
                         </div>
                         <div className='element'>
-                            <TextField label="Bank Holder Name" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_holder_name' value={form.bank_holder_name}/>
+                            <TextField label="Bank IFSC Code" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_ifsc_code' value={form.bank_ifsc_code} />
                         </div>
                         <div className='element'>
-                            <TextField label="Bank IFSC Code" variant="standard" sx={{ width: '100%' }} onChange={input} name='bank_ifsc_code' value={form.bank_ifsc_code}/>
-                        </div>
-                        <div className='element'>
-                            <TextField label="Remark" variant="standard" sx={{ width: '100%' }} onChange={input} name='remark' value={form.remark}/>
+                            <TextField label="Remark" variant="standard" sx={{ width: '100%' }} onChange={input} name='remark' value={form.remark} />
                         </div>
                         <div className='element'>
                             <FormControl variant="standard" sx={{ width: '100%' }}>
                                 <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
                                 <Select
-                                    labelId="demo-simple-select-standard-label"
                                     label="Status"
                                     name='status'
                                     onChange={input}>
@@ -538,9 +550,9 @@ const HistoryKYC = () => {
                             <label>Aadhar Card Front Img :</label>
                             <label htmlFor="contained-button-file" className='fileuploadButton'>
                                 <Input accept="image/*" id="contained-button-file" type="file" onChange={(e) => onSelectFile(e, 'aadhar_front')} />
-                                {selectedAadharCardFrontFile 
-                                    ? <img src={previewAadharCardFront} className='deposit-upload-image-preview' /> 
-                                    : (form.aadhar_front_img != "") ? <img src={form.aadhar_front_img} className='deposit-upload-image-preview' /> :<Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>
+                                {selectedAadharCardFrontFile
+                                    ? <img src={previewAadharCardFront} className='deposit-upload-image-preview' />
+                                    : (form.aadhar_front_img != "") ? <img src={form.aadhar_front_img} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>
                                 }
                             </label>
                         </div>
@@ -548,26 +560,26 @@ const HistoryKYC = () => {
                             <label>Aadhar Card Back Img :</label>
                             <label htmlFor="contained-button-file_back" className='fileuploadButton'>
                                 <Input accept="image/*" id="contained-button-file_back" type="file" onChange={(e) => onSelectFile(e, 'aadhar_back')} />
-                                {selectedAadharCardBackFile 
-                                    ? <img src={previewAadharCardBack} className='deposit-upload-image-preview' /> 
-                                    : (form.aadhar_back_img != '') ? <img src={form.aadhar_back_img} className='deposit-upload-image-preview' />  : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
+                                {selectedAadharCardBackFile
+                                    ? <img src={previewAadharCardBack} className='deposit-upload-image-preview' />
+                                    : (form.aadhar_back_img != '') ? <img src={form.aadhar_back_img} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
                             </label>
                         </div>
                         <div className='element'>
                             <label>Pan Card Img :</label>
                             <label htmlFor="contained-button-file_pan" className='fileuploadButton'>
                                 <Input accept="image/*" id="contained-button-file_pan" type="file" onChange={(e) => onSelectFile(e, 'pan_card')} />
-                                {selectedPanCardFile 
-                                    ? <img src={previewPancard} className='deposit-upload-image-preview' /> 
-                                    : (form.pan_card_img != "") ? <img src={form.pan_card_img} className='deposit-upload-image-preview' />  : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
+                                {selectedPanCardFile
+                                    ? <img src={previewPancard} className='deposit-upload-image-preview' />
+                                    : (form.pan_card_img != "") ? <img src={form.pan_card_img} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
                             </label>
                         </div>
                         <div className='element'>
                             <label>Passbook Img :</label>
                             <label htmlFor="contained-button-file_passbook" className='fileuploadButton'>
                                 <Input accept="image/*" id="contained-button-file_passbook" type="file" onChange={(e) => onSelectFile(e, 'passbook')} />
-                                {selectedPassbookFile 
-                                    ? <img src={previewPassbook} className='deposit-upload-image-preview' /> 
+                                {selectedPassbookFile
+                                    ? <img src={previewPassbook} className='deposit-upload-image-preview' />
                                     : (form.passbook_img != "") ? <img src={form.passbook_img} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
                             </label>
                         </div>
@@ -642,7 +654,7 @@ const HistoryKYC = () => {
 
     const formSubmit = async () => {
         console.log(form);
-        if (form.aadhar_card_number == '') {
+        /* if (form.aadhar_card_number == '') {
             toast.error('Please enter aadhar card number');
         } else if (form.account_number == '') {
             toast.error('Please enter bank account number');
@@ -652,6 +664,9 @@ const HistoryKYC = () => {
             toast.error('Please enter bank holder name');
         } else if (form.bank_ifsc_code == '') {
             toast.error('Please enter bank ifsc code');
+        } else  */
+        if (form.remark == "") {
+            toast.error('Please enter remark');
         } else if (form.status == '') {
             toast.error('Please select status');
         } else {
@@ -670,7 +685,7 @@ const HistoryKYC = () => {
             param.append('feedback_remarks', form.remark);
             param.append('kyc_id', form.kyc_id);
             param.append('user_id', form.user_id);
-            
+
             await axios.post(`${Url}admin/ajaxfiles/kyc_manage.php`, param).then((res) => {
                 if (res.data.message == "Session has been expired") {
                     localStorage.setItem("login", true);
@@ -727,12 +742,46 @@ const HistoryKYC = () => {
         });
     };
 
-    const changeStatus = (status, data) => {
+    const changeStatus = async(status, data) => {
         console.log(status, data);
         if (status == 'approved') {
-            toast.success('KYC has been successfully completed.');
+            const param = new FormData();
+            param.append('action', 'approve_kyc');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
+            param.append('kyc_id', data.kyc_id);
+
+            await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                }
+            });
         } else if (status == 'rejected') {
-            toast.success('KYC has been successfully rejected.');
+            const param = new FormData();
+            param.append('action', 'reject_kyc');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
+            param.append('kyc_id', data.kyc_id);
+
+            await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                }
+            });
         }
     }
 
@@ -741,7 +790,7 @@ const HistoryKYC = () => {
         if (!selectedAadharCardFrontFile) {
             setPreviewAadharCardFront(undefined)
             return
-        } 
+        }
         const objectUrl = URL.createObjectURL(selectedAadharCardFrontFile)
         setPreviewAadharCardFront(objectUrl)
 
@@ -779,7 +828,7 @@ const HistoryKYC = () => {
         if (!selectedPassbookFile) {
             setPreviewPassbook(undefined)
             return
-        } 
+        }
         const objectUrl = URL.createObjectURL(selectedPassbookFile)
         setPreviewPassbook(objectUrl)
 
@@ -794,28 +843,28 @@ const HistoryKYC = () => {
                 setPreviewAadharCardFront(undefined)
                 return
             }
-            
+
             setSelectedAadharCardFrontFile(e.target.files[0])
         } else if (flag == "aadhar_back") {
             if (!e.target.files || e.target.files.length === 0) {
                 setPreviewAadharCardBack(undefined)
                 return
             }
-            
+
             setSelectedAadharCardBackFile(e.target.files[0])
         } else if (flag == "pan_card") {
             if (!e.target.files || e.target.files.length === 0) {
                 setPreviewPancard(undefined)
                 return
             }
-            
+
             setSelectedPanCardFile(e.target.files[0])
         } else if (flag == "passbook") {
             if (!e.target.files || e.target.files.length === 0) {
                 setPreviewPassbook(undefined)
                 return
             }
-            
+
             setSelectedPassbookFile(e.target.files[0])
         }
     }
@@ -838,7 +887,7 @@ const HistoryKYC = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword}/>
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

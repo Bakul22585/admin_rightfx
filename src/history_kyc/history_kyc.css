@@ -8,8 +8,8 @@
 }
 .view-margeField {
     display: grid;
-    grid-template-columns: 33% 33% 33%;
-    gap: 5px;
+    grid-template-columns: 32% 32% 32%;
+    gap: 10px;
 }
 .view-margeField .element {
     display: flex;
@@ -41,4 +41,9 @@
 }
 .deposit-upload-image-preview {
     cursor: pointer;
+}
+.popup-loader {
+    display: flex;
+    justify-content: center;
+    height: 25px;
 }

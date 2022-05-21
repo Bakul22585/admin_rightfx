@@ -138,7 +138,7 @@ const CommonFilter = (prop) => {
         });
         return checkbox;
     }
-    console.log(propSearchElement, prop.searchWord);
+    // console.log(propSearchElement, prop.searchWord);
     return (
         <div>
             <Grid container>
