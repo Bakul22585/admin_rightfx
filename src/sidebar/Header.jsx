@@ -163,7 +163,10 @@ const Header = (prop) => {
   };
 
   const Logout = async() => {
-    await axios.post(Url + '/ajaxfiles/logout.php').then((res) => {
+    const param = new FormData();
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1)
+    await axios.post(Url + '/ajaxfiles/logout.php',param).then((res) => {
       localStorage.setItem("login", true);
       prop.setLogin("true");
       navigate("/login");
