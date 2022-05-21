@@ -1,5 +1,5 @@
 import './deposit_history.css';
-import React from "react";
+import React, { useState } from "react";
 import { FormControl, Grid, MenuItem, Select } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -7,6 +7,13 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { ColorButton } from "../common/CustomElement";
 import { Button } from "@mui/material";
+import CommonTable from '../common/CommonTable';
+import { useNavigate } from 'react-router-dom';
+import CustomImageModal from '../common/CustomImageModal';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Url } from '../global';
+import CommonFilter from '../common/CommonFilter';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
@@ -41,20 +48,121 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const DepositHistory = () => {
-    // const [age, setAge] = React.useState('');
 
-    /* const handleChange = (event: SelectChangeEvent) => {
-        console.log(event);
-        setAge(event.target.value);
-    }; */
+    const navigate = useNavigate();
+    const [refresh, setRefresh] = useState(false);
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'REFERENCE NO',
+          'value': false,
+          'name': 'reference_no'
+        },
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        },
+        {
+          'label': 'NAME',
+          'value': false,
+          'name': 'name'
+        },
+        {
+          'label': 'WALLET CODE',
+          'value': false,
+          'name': 'wallet_code'
+        },
+        {
+          'label': 'PAYMENT METHOD',
+          'value': false,
+          'name': 'payment_method'
+        },
+        {
+          'label': 'AMOUNT',
+          'value': false,
+          'name': 'amount'
+        },
+      ]);
+    toast.configure();
 
-    const [value, setValue] = React.useState(new Date());
-
-    const [age, setAge] = React.useState("");
-    const handleChange = (event) => {
-        setAge(event.target.value);
-        console.log(event.target.value);
-    };
+    const columns = [
+        {
+            name: 'SR.NO',
+            selector: row => {
+                return <span>{row.sr_no}</span>
+            },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.1,
+        },
+        {
+            name: 'REFERENCE NO.',
+            selector: row => {
+                return <span title={row.refrence_no}>{row.refrence_no}</span>
+            },
+            sortable: true,
+            reorder: true,
+            grow: 0.7,
+            wrap: true,
+        },
+        {
+            name: 'DATE',
+            selector: row => { return <span title={row.date}>{row.date}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 1,
+            wrap: true,
+        },
+        {
+            name: 'NAME',
+            selector: row => { return <span title={row.name}>{row.name}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 1,
+            wrap: true,
+        },
+        {
+            name: 'WALLET CODE',
+            selector: row => { return <span title={row.wallet_code}>{row.wallet_code}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+            wrap: true,
+        },
+        {
+            name: 'PAYMENT METHOD',
+            selector: row => { return <span title={row.method}>{row.method}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+            wrap: true,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => { return <span title={row.amount}>{row.amount}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+            wrap: true,
+        },
+        {
+            name: 'PROOF',
+            selector: row => { return (row.proof != "") ? <CustomImageModal image={row.proof} isIcon={true} className='tableImg' /> : "" },
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+            wrap: true,
+        },
+        {
+            name: 'STATUS',
+            selector: row => { return <span className={(row.status == "1") ? "status-text-approved" : (row.status == "2") ? "status-text-rejected" : "status-text-pending"} title={(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}>{(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+            wrap: true,
+        }
+    ];
 
     return (
         <div>
@@ -63,8 +171,10 @@ const DepositHistory = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>Deposit History</p>
-                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                <p className='main-heading'>Deposit Report</p>
+                                <CommonFilter search={searchBy}/>
+                                <br />
+                                {/* <Paper elevation={2} style={{ borderRadius: "10px" }}>
                                     <div className="card-header font-weight-bold text-dark border-bottom py-2">
                                         Filter Criteria
                                     </div>
@@ -133,6 +243,16 @@ const DepositHistory = () => {
                                                         Sumbit
                                                     </ColorButton>
                                                 </div>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Paper> */}
+
+                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                                    <CardContent className="py-3">
+                                        <Grid container spacing={2}>
+                                            <Grid item sm={12} md={12} lg={12}>
+                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

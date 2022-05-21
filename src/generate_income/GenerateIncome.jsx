@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Url } from '../global';
 import { Box } from '@mui/system';
 import LockIcon from '@mui/icons-material/Lock';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -56,6 +57,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 const GenerateIncome = () => {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
@@ -130,6 +132,10 @@ const GenerateIncome = () => {
             param.append('verify_password', form.password);
             console.log(`${Url}admin/ajaxfiles/${(dialogTitle == 'Generate Partnership Income') ? 'generate_partnership_income' : 'generate_copy_trading_income'}.php`);
             await axios.post(`${Url}admin/ajaxfiles/${(dialogTitle == 'Generate Partnership Income') ? 'generate_partnership_income' : 'generate_copy_trading_income'}.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
                 form.isLoader = false;
                 setForm({ ...form });
                 if (res.data.status == 'error') {

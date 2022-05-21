@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from '../global';
 import CustomImageModal from '../common/CustomImageModal';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -60,6 +61,7 @@ const ITEM_PADDING_TOP = 8;
 
 const HistoryKYC = () => {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
@@ -243,27 +245,31 @@ const HistoryKYC = () => {
         param.append('AADMIN_LOGIN_ID', 1); */
         param.append('user_id', data.user_id);
         param.append('kyc_id', data.kyc_id);
-        await axios.post(`${Url}admin/ajaxfiles/kyc_manage.php`, param).then((res) => {
+        await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
                 setForm((prevalue) => {
                     return {
                         ...prevalue,
-                        first_name: res.data.first_name,
-                        last_name: res.data.last_name,
-                        name: res.data.first_name + ' ' + res.data.last_name,
-                        email: res.data.email,
-                        aadhar_card_number: res.data.aadhar_card_number,
-                        aadhar_front_img: res.data.aadhar_front_img,
-                        aadhar_back_img: res.data.aadhar_back_img,
-                        pan_card_img: res.data.pancard_img,
-                        passbook_img: res.data.passbook_img,
-                        account_number: res.data.bank_account_number,
-                        bank_name: res.data.bank_name,
-                        bank_holder_name: res.data.bank_holder_name,
-                        bank_ifsc_code: res.data.bank_ifsc_code,
-                        remark: res.data.remark,
+                        first_name: res.data.kyc_data.first_name,
+                        last_name: res.data.kyc_data.last_name,
+                        name: res.data.kyc_data.name,
+                        email: res.data.kyc_data.email,
+                        aadhar_card_number: res.data.kyc_data.aadhar_card_number,
+                        aadhar_front_img: res.data.kyc_data.aadhar_front_img,
+                        aadhar_back_img: res.data.kyc_data.aadhar_back_img,
+                        pan_card_img: res.data.kyc_data.pancard_img,
+                        passbook_img: res.data.kyc_data.passbook_img,
+                        account_number: res.data.kyc_data.bank_account_number,
+                        bank_name: res.data.kyc_data.bank_name,
+                        bank_holder_name: res.data.kyc_data.bank_holder_name,
+                        bank_ifsc_code: res.data.kyc_data.bank_ifsc_code,
+                        remark: res.data.kyc_data.feedback_remarks,
                         isLoader: false,
                         user_id: data.user_id,
                         kyc_id: data.kyc_id
@@ -666,6 +672,10 @@ const HistoryKYC = () => {
             param.append('user_id', form.user_id);
             
             await axios.post(`${Url}admin/ajaxfiles/kyc_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
                 form.isLoader = false;
                 setForm({ ...form });
                 if (res.data.status == 'error') {

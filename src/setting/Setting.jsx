@@ -57,6 +57,7 @@ const Setting = () => {
         param.append("action", "get_settings");
         await axios.post(Url + "/ajaxfiles/common_api.php", param).then((res) => {
             if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
                 navigate("/");
             }
             if (res.data.status == "error") {
@@ -104,6 +105,7 @@ const Setting = () => {
         }
         await axios.post(Url + "/ajaxfiles/settings_manage.php", param).then((res) => {
             if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
                 navigate("/");
             }
             form.isloader = false;

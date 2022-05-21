@@ -16,7 +16,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { Url } from "../global";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const PopupImage = () => {
+
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
@@ -47,6 +50,10 @@ const PopupImage = () => {
     param.append("AADMIN_LOGIN_ID", 1); */
     param.append("action", "popup_image");
     await axios.post(`${Url}/ajaxfiles/common_api.php`, param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+    }
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
@@ -71,6 +78,10 @@ const PopupImage = () => {
       await axios
         .post(`${Url}/ajaxfiles/update_image.php`, param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+        }
           if (res.data.status == "error") {
             toast.error(res.data.message);
             setLoader(false);

@@ -94,8 +94,9 @@ const ViewTicket = () => {
       .post(`${Url}/ajaxfiles/view_ticket.php`, param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
           navigate("/");
-        }
+      }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -130,8 +131,9 @@ const ViewTicket = () => {
         .post(`${Url}/ajaxfiles/replay_ticket.php`, param)
         .then((res) => {
           if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
             navigate("/");
-          }
+        }
           form.isLoader = false;
           setForm({ ...form });
           if (res.data.status == "error") {

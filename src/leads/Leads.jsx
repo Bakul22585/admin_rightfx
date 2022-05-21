@@ -1200,6 +1200,10 @@ const Leads = () => {
       param.append('demo_mt5', form.create_demo_mt5);
       param.append('remarks', form.remark);
       await axios.post(`${Url}/ajaxfiles/add_inquiry.php`, param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+      }
         form.isLoader = false;
         setForm({ ...form });
         if (res.data.status == 'error') {
@@ -1379,6 +1383,10 @@ const Leads = () => {
       param.append('followup_date', newFollowupForm.date);
       param.append('followup_time', newFollowupForm.time);
       await axios.post(`${Url}/ajaxfiles/add_followup.php`, param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+      }
         newFollowupForm.isLoader = false;
         setNewFollowupForm({ ...newFollowupForm });
         if (res.data.status == 'error') {
@@ -1493,6 +1501,10 @@ const Leads = () => {
     /* param.append('is_app', 1);
     param.append('AADMIN_LOGIN_ID', 1); */
     await axios.post(`${Url}/ajaxfiles/update_lead_status.php`, param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+    }
       if (res.data.status == 'error') {
         toast.error(res.data.message);
       } else {

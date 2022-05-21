@@ -7,8 +7,11 @@ import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from "../global";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const CurrencyRate = () => {
+
+    const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
     const [data,setData]=useState({
         deposit_rate:"",
@@ -33,6 +36,10 @@ const CurrencyRate = () => {
         // param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "currency_rate");
         await axios.post(`${Url}/ajaxfiles/common_api.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
           if (res.data.status == "error") {
             toast.error(res.data.message);
           }else{
@@ -59,6 +66,10 @@ toast.error("Deposit rate is requied")
         param.append("deposit_rate", data.deposit_rate);
         param.append("withdrawal_rate", data.withdrawal_rate);
         await axios.post(`${Url}/ajaxfiles/currency_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
           if (res.data.status == "error") {
             toast.error(res.data.message);
             setLoader(false)

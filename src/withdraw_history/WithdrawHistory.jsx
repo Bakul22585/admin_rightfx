@@ -1,5 +1,5 @@
 import './withdraw_history.css';
-import React from "react";
+import React, { useState } from "react";
 import { FormControl, Grid, MenuItem, Select } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -7,6 +7,12 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { ColorButton } from "../common/CustomElement";
 import { Button } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import CommonFilter from '../common/CommonFilter';
+import CommonTable from '../common/CommonTable';
+import { Url } from '../global';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
@@ -41,20 +47,111 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const WithdrawHistory = () => {
-    // const [age, setAge] = React.useState('');
 
-    /* const handleChange = (event: SelectChangeEvent) => {
-        console.log(event);
-        setAge(event.target.value);
-    }; */
+    const navigate = useNavigate();
+    const [refresh, setRefresh] = useState(false);
+    const [searchBy, setSearchBy] = useState([
+        {
+          'label': 'DATE',
+          'value': false,
+          'name': 'date'
+        },
+        {
+          'label': 'NAME',
+          'value': false,
+          'name': 'name'
+        },
+        {
+          'label': 'ACCOUNT NO',
+          'value': false,
+          'name': 'account_no'
+        },
+        {
+          'label': 'PAYMENT METHOD',
+          'value': false,
+          'name': 'payment_method'
+        },
+        {
+          'label': 'AMOUNT',
+          'value': false,
+          'name': 'amount'
+        },
+        {
+          'label': 'REMARKS',
+          'value': false,
+          'name': 'remarks'
+        },
+      ]);
+    toast.configure();
 
-    const [value, setValue] = React.useState(new Date());
-
-    const [age, setAge] = React.useState("");
-    const handleChange = (event) => {
-        setAge(event.target.value);
-        console.log(event.target.value);
-    };
+    const columns = [
+        {
+            name: 'SR.NO',
+            selector: row => {
+                return <span>{row.sr_no}</span>
+            },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.1,
+        },
+        {
+            name: 'DATE',
+            selector: row => { return <span title={row.date}>{row.date}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 1,
+        },
+        {
+            name: 'NAME',
+            selector: row => { return <span title={row.name}>{row.name}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 1,
+        },
+        {
+            name: 'ACCOUNT NO',
+            selector: row => { return <span title={row.wallet_code}>{row.wallet_code}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.5,
+        },
+        {
+            name: 'PAYMENT METHOD',
+            selector: row => { return <span title={row.method}>{row.method}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.5,
+        },
+        {
+            name: 'AMOUNT',
+            selector: row => { return <span title={row.amount}>{row.amount}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.5,
+        },
+        {
+            name: 'REMARKS',
+            selector: row => { return <span title={row.remarks}>{row.remarks}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 1,
+        },
+        {
+            name: 'STATUS',
+            selector: row => { return <span className={(row.status == "1") ? "status-text-approved" : (row.status == "2") ? "status-text-rejected" : "status-text-pending"} title={(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}>{(row.status == "1") ? "Approved" : (row.status == "2") ? "Rejected" : "Pending"}</span> },
+            sortable: true,
+            reorder: true,
+            wrap: true,
+            grow: 0.5,
+        }
+    ];
 
     return (
         <div>
@@ -64,75 +161,13 @@ const WithdrawHistory = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdraw History</p>
-                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
-                                    <div className="card-header font-weight-bold text-dark border-bottom py-2">
-                                        Filter Criteria
-                                    </div>
+                                <CommonFilter search={searchBy}/>
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Transaction Type
-                                                    </label>
-                                                    <Select
-                                                        value={age}
-                                                        onChange={handleChange}
-                                                        displayEmpty
-                                                        inputProps={{ "aria-label": "Without label" }}
-                                                        input={<BootstrapInput />}
-                                                    >
-                                                        <MenuItem value="All">All</MenuItem>
-
-                                                        <MenuItem value="deposit">Deposit</MenuItem>
-                                                        <MenuItem value="withdrawal">Withdrawal</MenuItem>
-                                                        <MenuItem value="internal_transfer">
-                                                            Internal Transfer
-                                                        </MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Trading Account
-                                                    </label>
-                                                    <Select
-                                                        value={age}
-                                                        onChange={handleChange}
-                                                        displayEmpty
-                                                        inputProps={{ "aria-label": "Without label" }}
-                                                        input={<BootstrapInput />}
-                                                    >
-                                                        <MenuItem value="All">All</MenuItem>
-                                                        <MenuItem value="deposit">19861</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Date From
-                                                    </label>
-                                                    <BootstrapInput type="date"></BootstrapInput>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item sm={6} md={3}>
-                                                <FormControl fullWidth={true}>
-                                                    <label className="small font-weight-bold text-dark">
-                                                        Date To
-                                                    </label>
-                                                    <BootstrapInput type="date" ></BootstrapInput>
-                                                </FormControl>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={2}>
-                                            <Grid item sm={12} md={12}>
-                                                <div className="filter-submit">
-                                                    <ColorButton className=" d-block ml-auto mb-3 mr-3 ">
-                                                        Sumbit
-                                                    </ColorButton>
-                                                </div>
+                                            <Grid item sm={12} md={12} lg={12}>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

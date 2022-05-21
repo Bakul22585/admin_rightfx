@@ -15,6 +15,7 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from '../global';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -76,6 +77,7 @@ function getStyles(name, personName, theme) {
 
 const FAQEditor = () => {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
@@ -185,6 +187,10 @@ const FAQEditor = () => {
         param.append('AADMIN_LOGIN_ID', 1); */
         param.append('faq_id', id);
         await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -211,6 +217,10 @@ const FAQEditor = () => {
         param.append('AADMIN_LOGIN_ID', 1); */
         param.append('faq_id', id);
         await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -372,6 +382,10 @@ const FAQEditor = () => {
             param.append('display_order', form.order);
             param.append('status', (form.isActive) ? "1" : "0");
             await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
                 form.isLoader = false;
                 setForm({...form});
                 if (res.data.status == 'error') {

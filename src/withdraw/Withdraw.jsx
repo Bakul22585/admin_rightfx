@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import { Url } from '../global';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -112,6 +113,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 const Withdraw = () => {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
@@ -444,6 +446,10 @@ const Withdraw = () => {
         param.append('search', search);
         param.append('type', Form.account_type);
         await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -482,6 +488,10 @@ const Withdraw = () => {
             param.append('currency', Form.currency_code);
             param.append('note', Form.note);
             await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
                 // setLoader(false);
                 Form.isLoader = false;
                 setForm({ ...Form });

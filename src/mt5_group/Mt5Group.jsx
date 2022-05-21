@@ -15,6 +15,7 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from '../global';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -59,6 +60,7 @@ const ITEM_PADDING_TOP = 8;
 
 const Mt5Group = () => {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
@@ -167,6 +169,10 @@ const Mt5Group = () => {
         param.append('AADMIN_LOGIN_ID', 1); */
         param.append('group_id', id);
         await axios.post(`${Url}/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {
@@ -185,6 +191,26 @@ const Mt5Group = () => {
         });
     }
 
+    const deleteMt5Group = async(id) => {
+        const param = new FormData();
+        param.append('action', 'delete_mt5_group');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('group_id', id);
+        await axios.post(`${Url}/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+                setRefresh(!refresh);
+            }
+        });
+    }
+
     const actionMenuPopup = (e, index) => {
         confirmAlert({
             customUI: ({ onClose }) => {
@@ -197,6 +223,7 @@ const Mt5Group = () => {
                             <Button variant="contained" className='btn-gradient btn-danger'
                                 onClick={() => {
                                     onClose();
+                                    deleteMt5Group(index);
                                 }}
                             >
                                 Yes, Delete it!
@@ -281,7 +308,7 @@ const Mt5Group = () => {
         if (dialogTitle == 'Add MT5 Groups' || dialogTitle == 'Edit MT5 Groups') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                {(form.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={formSubmit}>Add</Button>}
+                {(form.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={formSubmit}>{(dialogTitle == 'Add MT5 Groups') ? 'Add': 'Update'}</Button>}
                 
             </div>;
         } else if (dialogTitle == 'Reject') {
@@ -307,7 +334,7 @@ const Mt5Group = () => {
             form.isLoader = true;
             setForm({...form});
             const param = new FormData();
-            if (form.faqId == '') {
+            if (dialogTitle == 'Add MT5 Groups') {
                 param.append('action', 'add_mt5_group');
             } else {
                 param.append('group_id', form.groupId);
@@ -319,6 +346,10 @@ const Mt5Group = () => {
             param.append('mt5_group_name', form.mt5_group_name);
             param.append('status', form.isActive ? 1 : 0);
             await axios.post(`${Url}/ajaxfiles/mt5_group_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
                 form.isLoader = false;
                 setForm({...form});
                 if (res.data.status == 'error') {

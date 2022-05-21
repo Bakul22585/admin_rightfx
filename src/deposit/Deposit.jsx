@@ -21,6 +21,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from '../global';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -115,6 +116,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 const Deposit = () => {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
@@ -353,6 +355,10 @@ const Deposit = () => {
             param.append('currency', depositForm.currency_code);
             param.append('note', depositForm.note);
             await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
                 depositForm.isLoader = false;
                 setDepositForm({...depositForm});
                 if (res.data.status == 'error') {
@@ -651,6 +657,10 @@ const Deposit = () => {
         param.append('search', search);
         param.append('type', depositForm.live_account);
         await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             if (res.data.status == 'error') {
                 toast.error(res.data.message);
             } else {

@@ -292,10 +292,10 @@ const Sidebar = (prop) => {
                   <Collapse in={open.trading} timeout="auto" unmountOnExit>
                     <ul>
                       <li>
-                        <NavLink to="/account_list" onClick={CloseSidebar}>Deposit</NavLink>
+                        <NavLink to="/deposit_report" onClick={CloseSidebar}>Deposit</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/manage_bonuses" onClick={CloseSidebar}>Withdraw</NavLink>
+                        <NavLink to="/withdraw_report" onClick={CloseSidebar}>Withdraw</NavLink>
                       </li>
                       <li>
                         <NavLink to="/open_real_account" onClick={CloseSidebar}>MT5 Bonus</NavLink>

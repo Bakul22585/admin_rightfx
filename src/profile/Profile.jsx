@@ -2522,6 +2522,10 @@ const Profile = () => {
                 param.append('currency', transactionForm.currency_code);
                 param.append('note', transactionForm.note);
                 await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
+                    if (res.data.message == "Session has been expired") {
+                        localStorage.setItem("login", true);
+                        navigate("/");
+                    }
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
                     if (res.data.status == 'error') {
@@ -2559,6 +2563,10 @@ const Profile = () => {
                 param.append('currency', transactionForm.currency_code);
                 param.append('note', transactionForm.note);
                 await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
+                    if (res.data.message == "Session has been expired") {
+                        localStorage.setItem("login", true);
+                        navigate("/");
+                    }
                     // setLoader(false);
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
@@ -2612,6 +2620,10 @@ const Profile = () => {
                 param.append('transfer_to', transactionForm.transfer_to);
                 param.append('note', transactionForm.note);
                 await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
+                    if (res.data.message == "Session has been expired") {
+                        localStorage.setItem("login", true);
+                        navigate("/");
+                    }
                     // setLoader(false);
                     transactionForm.isLoader = false;
                     setTransactionForm({ ...transactionForm });
@@ -2694,6 +2706,10 @@ const Profile = () => {
         userData.isLoader = true;
         setuserData({ ...userData });
         await axios.post(`${Url}/ajaxfiles/fetch_user_details.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
             userData.isLoader = false;
             setuserData({ ...userData });
             if (res.data.status == 'error') {
