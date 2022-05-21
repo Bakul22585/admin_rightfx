@@ -19,6 +19,8 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import { Url } from '../global';
 import { useNavigate } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -133,38 +135,50 @@ const Withdraw = () => {
         user_id: '',
         isLoader: false
     });
+    const [viewWithdrawForm, setviewWithdrawForm] = useState({
+        date: '',
+        name: '',
+        email: '',
+        phone: '',
+        withdraw_method: '',
+        amount: '',
+        remark: '',
+        status: '',
+        withdrawal_id: '',
+        isLoader: false
+    });
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'ACCOUNT NO',
-          'value': false,
-          'name': 'account_no'
+            'label': 'ACCOUNT NO',
+            'value': false,
+            'name': 'account_no'
         },
         {
-          'label': 'PAYMENT METHOD',
-          'value': false,
-          'name': 'payment_method'
+            'label': 'PAYMENT METHOD',
+            'value': false,
+            'name': 'payment_method'
         },
         {
-          'label': 'AMOUNT',
-          'value': false,
-          'name': 'amount'
+            'label': 'AMOUNT',
+            'value': false,
+            'name': 'amount'
         },
         {
-          'label': 'REMARKS',
-          'value': false,
-          'name': 'remarks'
+            'label': 'REMARKS',
+            'value': false,
+            'name': 'remarks'
         },
-      ]);
+    ]);
     toast.configure();
 
     const columns = [
@@ -240,27 +254,27 @@ const Withdraw = () => {
             cell: row => {
                 return <div>
                     <Button
-                        id={`actionButton_${row.sr_no}`}
-                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        id={`actionButton_${row.withdrawal_id}`}
+                        aria-controls={open ? `basic-menu-${row.withdrawal_id}` : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
-                        onClick={(event) => handleContextClick(event, row.sr_no)}
+                        onClick={(event) => handleContextClick(event, row.withdrawal_id)}
                         {...row}
                         style={{ color: 'rgb(144 145 139)' }}
                     >
                         <i className="material-icons">more_horiz</i>
                     </Button>
                     <Menu
-                        id={`basic-menu-${row.sr_no}`}
-                        anchorEl={openTableMenus[row.sr_no]}
-                        open={Boolean(openTableMenus[row.sr_no])}
-                        onClose={(event) => handleContextClose(row.sr_no)}
+                        id={`basic-menu-${row.withdrawal_id}`}
+                        anchorEl={openTableMenus[row.withdrawal_id]}
+                        open={Boolean(openTableMenus[row.withdrawal_id])}
+                        onClose={(event) => handleContextClose(row.withdrawal_id)}
                     >
                         {(row.status == "1") ?
-                            <MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                            : <div><MenuItem className='view' {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                            <MenuItem className='view' {...row} onClick={(event) => viewWithdrawl(row.withdrawal_id)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
+                            : <div><MenuItem className='view' {...row} onClick={(event) => viewWithdrawl(row.withdrawal_id)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.withdrawal_id)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
+                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.withdrawal_id)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
 
                     </Menu>
                 </div>
@@ -288,7 +302,7 @@ const Withdraw = () => {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
                 {(Form.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add</Button>}
-                
+
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -299,6 +313,12 @@ const Withdraw = () => {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
                 <Button variant="contained" className='btn-gradient btn-success'>Approve</Button>
+            </div>;
+        } else if (dialogTitle == 'Update Withdrawal Request') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                {(Form.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>}
+
             </div>;
         }
     }
@@ -335,8 +355,8 @@ const Withdraw = () => {
                             setForm((prevalue) => {
                                 return {
                                     ...prevalue,
-                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' '+ newValue['user_last_name'] : '',
-                                    'account': (newValue != null) ? newValue['user_id']: ''
+                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' ' + newValue['user_last_name'] : '',
+                                    'account': (newValue != null) ? newValue['user_id'] : ''
                                 };
                             });
                         }}
@@ -378,8 +398,35 @@ const Withdraw = () => {
                     <TextField id="standard-textarea" label="Notes" multiline variant="standard" sx={{ width: '100%' }} name='note' onChange={input}/>
                 </div> */}
             </div>;
-        } else if (dialogTitle == 'View') {
+        } else if (dialogTitle == 'Update Withdrawal Request') {
             return <div>
+                <div className='update-withdraw-request-section'>
+                    <TextField id="standard-basic" label="Date" variant="standard" sx={{ width: '100%' }} name='date' value={viewWithdrawForm.date} onChange={input1} focused disabled/>
+                    <TextField id="standard-basic" label="Name" variant="standard" sx={{ width: '100%' }} name='name' value={viewWithdrawForm.name} onChange={input1} focused disabled/>
+                    <TextField id="standard-basic" label="Email" variant="standard" sx={{ width: '100%' }} name='email' value={viewWithdrawForm.email} onChange={input1} focused disabled/>
+                </div>
+                <br/>
+                <div className='update-withdraw-request-section'>
+                    <TextField id="standard-basic" label="Phone" variant="standard" sx={{ width: '100%' }} name='phone' value={viewWithdrawForm.phone} onChange={input1} focused disabled/>
+                    <TextField id="standard-basic" label="Method" variant="standard" sx={{ width: '100%' }} name='withdraw_method' value={viewWithdrawForm.withdraw_method} onChange={input1} focused disabled/>
+                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={viewWithdrawForm.amount} onChange={input1} focused/>
+                </div>
+                <br/>
+                <div className='update-withdraw-request-section'>
+                    <TextField id="standard-basic" label="Remark" variant="standard" sx={{ width: '100%' }} name='remark' value={viewWithdrawForm.remark} onChange={input1} focused/>
+                    {/* <TextField id="standard-basic" label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewWithdrawForm.status} onChange={input1} focused/> */}
+                    <FormControl variant="standard" sx={{ width: '100%' }} focused>
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                            value={viewWithdrawForm.status}
+                            name='status'
+                            onChange={input1}>
+                            <MenuItem value='0'>Pending</MenuItem>
+                            <MenuItem value='1'>Approve</MenuItem>
+                            <MenuItem value='2'>Reject</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div>
@@ -419,18 +466,71 @@ const Withdraw = () => {
     const actionMenuPopup = (e, index) => {
         console.log(e.target.getAttribute('class'));
         console.log(e.target.classList.contains('reject'));
+        handleContextClose(index);
         if (e.target.classList.contains('reject')) {
             setDialogTitle('Reject');
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to reject this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-danger'
+                                    onClick={() => {
+                                        handleAction(index, 'reject_withdrawal');
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Reject it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
         } else if (e.target.classList.contains('approve')) {
             setDialogTitle('Approve');
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to approve this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-success'
+                                    onClick={() => {
+                                        handleAction(index, 'approve');
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Approve it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
         }
 
-        setOpen(true);
+        // setOpen(true);
     };
 
     const input = (event) => {
         const { name, value } = event.target;
         setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    };
+
+    const input1 = (event) => {
+        const { name, value } = event.target;
+        setviewWithdrawForm((prevalue) => {
             return {
                 ...prevalue,
                 [name]: value,
@@ -458,7 +558,7 @@ const Withdraw = () => {
         });
     }
 
-    const submitForm = async() => {
+    const submitForm = async () => {
         console.log(Form);
         if (Form.account_type == '') {
             toast.error('Please select account type');
@@ -508,9 +608,101 @@ const Withdraw = () => {
         }
     };
 
-    const tableRefresh = () => {
-        var status = (refresh) ? false : true;
-        setRefresh(status);
+    const submitUpdate = async () => {
+        console.log(viewWithdrawForm);
+        if (viewWithdrawForm.amount == '') {
+            toast.error('Please enter amount');
+        } else if (viewWithdrawForm.remark == '') {
+            toast.error('Please enter remark');
+        } else if (viewWithdrawForm.status == '') {
+            toast.error('Please select status');
+        } else {
+            viewWithdrawForm.isLoader = true;
+            setForm({ ...viewWithdrawForm });
+            const param = new FormData();
+            param.append('action', 'view_update_withdrawal');
+            /* param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); */
+            param.append('withdrawal_id', viewWithdrawForm.withdrawal_id);
+            param.append('withdrawal_status', viewWithdrawForm.status);
+            param.append('withdrawal_remarks', viewWithdrawForm.remark);
+            param.append('amount', viewWithdrawForm.amount);
+            await axios.post(`${Url}/ajaxfiles/withdrawal_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                viewWithdrawForm.isLoader = false;
+                setForm({ ...viewWithdrawForm });
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                    setOpen(false);
+                }
+            });
+            /* handleClose();
+            toast.success('withdraw has been added successfully.'); */
+        }
+    };
+
+    const handleAction = async (id, flag) => {
+        const param = new FormData();
+        if (flag == 'approve') {
+            param.append('action', 'approve_withdrawal');
+        } else {
+            param.append('action', 'reject_withdrawal');
+        }
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('withdrawal_id', id);
+        await axios.post(`${Url}/ajaxfiles/withdrawal_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+                setRefresh(!refresh);
+            }
+        });
+    }
+
+    const viewWithdrawl = async(id) => {
+        handleContextClose(id);
+        const param = new FormData();
+        param.append('action', 'view_withdrawal');
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('withdrawal_id', id);
+        await axios.post(`${Url}/ajaxfiles/withdrawal_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                setviewWithdrawForm({
+                    date: res.data.withdrawal_data.withdrawal_datetime,
+                    name: res.data.withdrawal_data.name,
+                    email: res.data.withdrawal_data.user_email,
+                    phone: res.data.withdrawal_data.user_phone,
+                    withdraw_method: res.data.withdrawal_data.withdrawal_method,
+                    amount: res.data.withdrawal_data.withdrawal_amount,
+                    remark: res.data.withdrawal_data.withdrawal_remarks,
+                    status: res.data.withdrawal_data.withdrawal_status,
+                    user_id: '',
+                    withdrawal_id: id,
+                    isLoader: false
+                });
+                setDialogTitle('Update Withdrawal Request');
+                setOpen(true);
+            }
+        });
     }
 
     return (
@@ -521,7 +713,7 @@ const Withdraw = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdrawal</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} />
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
@@ -532,7 +724,7 @@ const Withdraw = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

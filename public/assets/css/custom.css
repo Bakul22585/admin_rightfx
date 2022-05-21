@@ -17802,3 +17802,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.MuiTextField-root .Mui-focused, .MuiFormControl-root .Mui-focused {
+  color: #212121 !important;
+}
+.MuiTextField-root .MuiInput-underline::after, .MuiFormControl-root .MuiInput-underline::after {
+  border-bottom: 2px solid #cccccc !important;
+}
