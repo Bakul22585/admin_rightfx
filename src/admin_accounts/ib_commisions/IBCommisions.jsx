@@ -9,6 +9,7 @@ import { ColorButton } from "../../common/CustomElement";
 import { Button } from "@mui/material";
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
+import './ibcommisions.css'
 import CommonFilter from '../../common/CommonFilter';
 import CommonTable from '../../common/CommonTable';
 import CustomImageModal from '../../common/CustomImageModal';
@@ -190,7 +191,7 @@ const IBCommisions = () => {
             },
             sortable: true,
             reorder: true,
-            grow: 0.7,
+            grow: 0.3,
             wrap: true,
         },
         {
@@ -198,7 +199,7 @@ const IBCommisions = () => {
             selector: row => { return <span title={row.ib_group_id}>{row.ib_group_id}</span> },
             sortable: true,
             reorder: true,
-            grow: 1,
+            grow: 0.2,
             wrap: true,
         },
         {
@@ -206,7 +207,7 @@ const IBCommisions = () => {
             selector: row => { return <span title={row.trade_no}>{row.trade_no}</span> },
             sortable: true,
             reorder: true,
-            grow: 1,
+            grow: 0.2,
             wrap: true,
         },
         {
@@ -214,7 +215,7 @@ const IBCommisions = () => {
             selector: row => { return <span title={row.trade_symbol}>{row.trade_symbol}</span> },
             sortable: true,
             reorder: true,
-            grow: 0.5,
+            grow: 0.1,
             wrap: true,
         },
         {
@@ -222,12 +223,20 @@ const IBCommisions = () => {
             selector: row => { return <span title={row.trade_type}>{row.trade_type}</span> },
             sortable: true,
             reorder: true,
-            grow: 0.5,
+            grow: 0.1,
             wrap: true,
         },
         {
             name: 'TRADE CLOSE PRICE',
             selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 0.2,
+            wrap: true,
+        },
+        {
+            name: 'ADDED DATETIME',
+            selector: row => { return <span title={row.added_datetime}>{row.added_datetime}</span> },
             sortable: true,
             reorder: true,
             grow: 0.5,
@@ -245,18 +254,16 @@ const IBCommisions = () => {
             selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
             sortable: true,
             reorder: true,
-            grow: 0.5,
+            grow: 0.2,
             wrap: true,
         },{
-            name: 'TRADE VOLUME',
-            selector: row => { return <span title={row.trade_volume}>{row.trade_volume}</span> },
+            name: 'IB COMISSION AMOUNT',
+            selector: row => { return <span title={row.ib_comission_amount}>{row.ib_comission_amount}</span> },
             sortable: true,
             reorder: true,
-            grow: 0.5,
+            grow: 0.2,
             wrap: true,
         },
-
-        
     ];
 
     const handleContextClick = (event, index) => {
@@ -276,8 +283,8 @@ const IBCommisions = () => {
         if (dialogTitle == 'Add New Deposit') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                {(depositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={depositFormSubmit}>Add</Button>}
-                
+                {/* {(depositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={depositFormSubmit}>Add</Button>}
+                 */}
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -718,10 +725,10 @@ const IBCommisions = () => {
                                 </Paper>
                                 <br /> */}
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <div className='actionGroupButton'>
+                                    {/* <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={handleClickOpen}>Add</Button>
                                     </div>
-                                    <br />
+                                    <br /> */}
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>

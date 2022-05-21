@@ -1,0 +1,4 @@
+.setBoxs{
+    display: flex;
+    flex-wrap: wrap;
+}

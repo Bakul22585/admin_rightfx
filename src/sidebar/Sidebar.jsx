@@ -298,34 +298,34 @@ const Sidebar = (prop) => {
                         <NavLink to="/withdraw_report" onClick={CloseSidebar}>Withdraw</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>MT5 Bonus</NavLink>
+                        <NavLink to="/mt5_bonus" onClick={CloseSidebar}>MT5 Bonus</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Position</NavLink>
+                        <NavLink to="/position" onClick={CloseSidebar}>Position</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Trade History</NavLink>
+                        <NavLink to="/trade_history" onClick={CloseSidebar}>Trade History</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Trade History Total</NavLink>
+                        <NavLink to="/trade_history_total" onClick={CloseSidebar}>Trade History Total</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Copy Open Trades</NavLink>
+                        <NavLink to="/copy_open_trades" onClick={CloseSidebar}>Copy Open Trades</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>IB Commision</NavLink>
+                        <NavLink to="/id_commision" onClick={CloseSidebar}>IB Commision</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Partnership Main Commision</NavLink>
+                        <NavLink to="/partnership_main_commision" onClick={CloseSidebar}>Partnership Main Commision</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Partnership Level Commision</NavLink>
+                        <NavLink to="/partnership_level_commision" onClick={CloseSidebar}>Partnership Level Commision</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>Partnership Pending Commision</NavLink>
+                        <NavLink to="/partnership_pending_commision" onClick={CloseSidebar}>Partnership Pending Commision</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/open_real_account" onClick={CloseSidebar}>User Profit & Loss</NavLink>
+                        <NavLink to="/user_profit_and_loss" onClick={CloseSidebar}>User Profit & Loss</NavLink>
                       </li>
                     </ul>
                   </Collapse>
@@ -355,7 +355,7 @@ const Sidebar = (prop) => {
                         <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Copy Trading Commisions</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Trade Statistics</NavLink>
+                        <NavLink to="/trade_statistics" onClick={CloseSidebar}>Trade Statistics</NavLink>
                       </li>
                       <li>
                         <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Accounts</NavLink>
