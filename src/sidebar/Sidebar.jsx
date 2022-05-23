@@ -313,17 +313,9 @@ const Sidebar = (prop) => {
                         <NavLink to="/copy_open_trades" onClick={CloseSidebar}>Copy Open Trades</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/id_commision" onClick={CloseSidebar}>IB Commision</NavLink>
+                        <NavLink to="/ib_commision_report" onClick={CloseSidebar}>IB Commision</NavLink>
                       </li>
-                      <li>
-                        <NavLink to="/partnership_main_commision" onClick={CloseSidebar}>Partnership Main Commision</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/partnership_level_commision" onClick={CloseSidebar}>Partnership Level Commision</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/partnership_pending_commision" onClick={CloseSidebar}>Partnership Pending Commision</NavLink>
-                      </li>
+                      
                       <li>
                         <NavLink to="/user_profit_and_loss" onClick={CloseSidebar}>User Profit & Loss</NavLink>
                       </li>

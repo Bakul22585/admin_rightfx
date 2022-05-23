@@ -16,6 +16,7 @@ import { Url } from "../global";
 
 const CopyOpenTrades = () => {
   const [refresh, setRefresh] = useState(false);
+  const [resData,setResData]=useState({})
   const [searchBy, setSearchBy] = useState([
     {
       label: "DATE",
@@ -144,7 +145,51 @@ const CopyOpenTrades = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-                <p className="main-heading">Copy Trading Open Position Report</p>
+              <p className="main-heading">Copy Trading Open Position Report</p>
+
+              <div className="setBoxs">
+                  {" "}
+                  <div className="row1 boxSection">
+                    <div className="card padding-9 animate fadeLeft boxsize">
+                      <div className="row">
+                        <div className="col s12 m12 text-align-center">
+                          <h5 className="mb-0">{resData.total_mt_balance}</h5>
+                          <p className="no-margin">MT Balance</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row1 boxSection">
+                    <div className="card padding-9 animate fadeLeft boxsize">
+                      <div className="row">
+                        <div className="col s12 m12 text-align-center">
+                          <h5 className="mb-0">{resData.total_profit} </h5>
+                          <p className="no-margin">MT Profit</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row1 boxSection">
+                    <div className="card padding-9 animate fadeLeft boxsize">
+                      <div className="row">
+                        <div className="col s12 m12 text-align-center">
+                          <h5 className="mb-0">{resData.total_equity}</h5>
+                          <p className="no-margin">MT Equity</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row1 boxSection">
+                    <div className="card padding-9 animate fadeLeft boxsize">
+                      <div className="row">
+                        <div className="col s12 m12 text-align-center">
+                          <h5 className="mb-0">{resData.total_volume_value} </h5>
+                          <p className="no-margin">MT Volume</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <CommonFilter search={searchBy} />
                 <br />
                 <Paper
@@ -161,6 +206,7 @@ const CopyOpenTrades = () => {
                           sort="1"
                           refresh={refresh}
                           search={searchBy}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

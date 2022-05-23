@@ -35,13 +35,15 @@ import Remainder from './remainder/Remainder';
 import CopyTrading from './copytrading/CopyTrading';
 import Plans from './plans/Plans';
 import ViewTicket from './ticket/ViewTicket';
-
+import MT5Bonus from './report/MT5Bonus'
 import IBCommisions from './admin_accounts/ib_commisions/IBCommisions'
 import TradeStatistics from './admin_accounts/trade_statistics/TradeStatistics';
 import PositionReport from './report/PositionReport';
 import TradeHistory from './report/TradeHistory'
 import CopyOpenTrades from './report/CopyOpenTrades';
 import TradeHistoryTotal from './report/TradeHistoryTotal';
+import IBCommisionReport from './report/IBCommisionReport';
+import UserProfitAndLoss from './report/UserProfitAndLoss';
 function useScrollToTop() {
   const { pathname } = useLocation();
 
@@ -110,16 +112,14 @@ const App = () => {
                 <Route exact path="/deposit_report" element={<DepositHistory />} />
                 <Route exact path="/withdraw_report" element={<WithdrawHistory />} />
                 <Route exact path="/trade_statistics" element={<TradeStatistics />} />
-                <Route exact path="/mt5_bonus" element={<TradeStatistics />} />
+                <Route exact path="/mt5_bonus" element={<MT5Bonus/>} />
                 <Route exact path="/position" element={<PositionReport />} />
                 <Route exact path="/trade_history" element={<TradeHistory/>} />
                 <Route exact path="/trade_history_total" element={<TradeHistoryTotal/>} />
                 <Route exact path="/copy_open_trades" element={<CopyOpenTrades/>} />
-                <Route exact path="/partnership_main_commision" element={<TradeStatistics />} />
-                <Route exact path="/partnership_level_commision" element={<TradeStatistics />} />
-                <Route exact path="/partnership_pending_commision" element={<TradeStatistics />} />
-                <Route exact path="/user_profit_and_loss" element={<TradeStatistics />} />
-                <Route exact path="/id_commision" element={<TradeStatistics />} />
+           
+                <Route exact path="/user_profit_and_loss" element={<UserProfitAndLoss/>} />
+                <Route exact path="/ib_commision_report" element={<IBCommisionReport/>} />
               </Routes>
               {/* <Footer /> */}
             </div>

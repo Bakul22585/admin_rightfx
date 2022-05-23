@@ -123,3 +123,9 @@
     align-items: baseline;
     padding: 14px 16px;
 }
+.extra-field-element {
+    padding: 15px;
+}
+.extra-field-element p {
+    margin-bottom: 5px;
+}

@@ -38,18 +38,9 @@ const PositionReport = () => {
       name: "amount",
     },
   ]);
-  const[data,setData]=useState({});
+  const [resData,setResData]=useState({})
 
-  useEffect(() => {
-    const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
-    axios
-      .post(`${Url}/datatable/position_list.php`, param)
-      .then((res) => {
-        setData(res.data);
-      });
-  }, []);
+
   const column = [
     {
       name: "LOGIN",
@@ -170,13 +161,14 @@ const PositionReport = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
+              <p className="main-heading">Position Report</p>
                 <div className="setBoxs">
                   {" "}
                   <div className="row1 boxSection">
                     <div className="card padding-9 animate fadeLeft boxsize">
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{data.mt_balance}</h5>
+                          <h5 className="mb-0">{resData.mt_balance}</h5>
                           <p className="no-margin">MT Balance</p>
                         </div>
                       </div>
@@ -186,7 +178,7 @@ const PositionReport = () => {
                     <div className="card padding-9 animate fadeLeft boxsize">
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{data.mt_credit} </h5>
+                          <h5 className="mb-0">{resData.mt_credit} </h5>
                           <p className="no-margin">MT Credit</p>
                         </div>
                       </div>
@@ -196,7 +188,7 @@ const PositionReport = () => {
                     <div className="card padding-9 animate fadeLeft boxsize">
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{data.mt_equity}</h5>
+                          <h5 className="mb-0">{resData.mt_equity}</h5>
                           <p className="no-margin">MT Equity</p>
                         </div>
                       </div>
@@ -206,7 +198,7 @@ const PositionReport = () => {
                     <div className="card padding-9 animate fadeLeft boxsize">
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{data.mt_free_margin} </h5>
+                          <h5 className="mb-0">{resData.mt_free_margin} </h5>
                           <p className="no-margin">MT Free Margin</p>
                         </div>
                       </div>
@@ -217,7 +209,7 @@ const PositionReport = () => {
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
                           <h5 className="mb-0">
-                            {data.total_earnings}{" "}
+                            {resData.total_earnings}{" "}
                           </h5>
                           <p className="no-margin">
                             Total Earning
@@ -228,7 +220,6 @@ const PositionReport = () => {
                   </div>{" "}
                 
                 </div>
-                <p className="main-heading">Position Report</p>
                 <CommonFilter search={searchBy} />
                 <br />
                 <Paper
@@ -245,6 +236,7 @@ const PositionReport = () => {
                           sort="1"
                           refresh={refresh}
                           search={searchBy}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>
