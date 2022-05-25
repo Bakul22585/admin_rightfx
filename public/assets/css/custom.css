@@ -17767,7 +17767,7 @@ hr {
 }
 
 .spinner .path {
-  stroke: #2a3f73;
+  stroke: black;
   stroke-linecap: round;
   animation: dash 1.5s ease-in-out infinite;
 }

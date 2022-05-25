@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Highcharts from "highcharts/highmaps";
 import HighchartsReact from "highcharts-react-official";
+import CreateIcon from "@mui/icons-material/Create";
 import {
   FormControl,
   Grid,
@@ -52,6 +53,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import mapDataWorld from "@highcharts/map-collection/custom/world.geo.json";
 import Chart from "react-apexcharts";
 import { Url } from "../global";
+import KycDocument from "./KycDocument";
 const WorldMap = require("react-world-map");
 
 interface TabPanelProps {
@@ -462,18 +464,14 @@ const Profile = () => {
   const { id } = useParams();
   const [value, setValue] = useState(0);
   const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogTransactionType, setDialogTransactionType] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
   // const [filterData, setFilterData] = useState({});
   const [userData, setuserData] = useState({ isLoader: true, data: {} });
-  const [filterSection, setFilterSection] = useState(false);
-  const [filterBy, setFilterBy] = useState("");
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState();
-  const [option, setOption] = useState(true);
   const [filterData, setFilterData] = useState(null);
-  const [change, setChange] = useState(false);
-  const [proofAdd, setProofAdd] = useState([]);
+  const [mt5AccountList, setMt5AccountList] = useState([]);
+  const [countryData, setCountryData] = useState({
+    data: [],
+  });
   const [doc, setDoc] = useState({
     proof: "",
     id: "",
@@ -502,14 +500,19 @@ const Profile = () => {
     tax_number: "",
     politically_exposed: "",
     sales_agent: "",
+    login_block: "",
+    user_status: "",
   });
   const [createMt5Form, setCreateMt5Form] = useState({
     account_type: "",
     account_option: "",
+    isLoader: false,
   });
+  const [createLiveType, setCreateLiveType] = useState([]);
   const [Mt5AccessForm, setMt5AccessForm] = useState({
     account_type: "",
     status: "",
+    isLoader:false
   });
   const [linkAccountForm, setLinkAccountForm] = useState({
     account_number: "",
@@ -519,13 +522,18 @@ const Profile = () => {
   const [resetMt5PasswordForm, setResetMt5PasswordForm] = useState({
     account: "",
   });
+  const [leverageForm, setLeverageForm] = useState([]);
   const [changeLeverageForm, setChangeLeverageForm] = useState({
     account: "",
     leverage: "",
+    isLoader: false,
   });
   const [changeAccountPasswordForm, setChangeAccountPasswordForm] = useState({
-    main_password: "",
-    view_password: "",
+    mt5_id: "",
+    new_password: "",
+    confirm_password:"",
+    password_type:"",
+    isLoader:"",
   });
   const [masterStructureForm, setmasterStructureForm] = useState({
     name: "",
@@ -591,6 +599,7 @@ const Profile = () => {
     account_number: "",
     swift_code: "",
     currency_code: "",
+    isLoader: false,
   });
   const [transactionForm, setTransactionForm] = useState({
     type: "",
@@ -633,42 +642,29 @@ const Profile = () => {
 
   const depositColumn = [
     {
+      name: "Sr.No",
+      selector: (row) => {
+        return <span title={row.sr_no}>{row.sr_no}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
       name: "Bank Name",
       selector: (row) => {
-        return <span title={row.mt5_id}>{row.mt5_id}</span>;
+        return <span title={row.bank_name}>{row.bank_name}</span>;
       },
       sortable: true,
       reorder: true,
-      grow: 0.1,
+      grow: 1,
     },
     {
-      name: "Swift",
-      selector: (row) => {
-        return <span title={row.wallet_code}>{row.wallet_code}</span>;
-      },
-      sortable: true,
-      reorder: true,
-      grow: 0.1,
-    },
-    {
-      name: "Bank Address",
-      selector: (row) => {
-        return <span title={row.group_level}>{row.group_level}</span>;
-      },
-      sortable: true,
-      reorder: true,
-      grow: 0.5,
-    },
-    {
-      name: "IBAN",
+      name: "IBAN/IFSC",
       selector: (row) => {
         return (
-          <a
-            className="linkColor"
-            title={row.name}
-            onClick={(event) => gotoProfile(row)}
-          >
-            {row.name}
+          <a className="linkColor" title={row.bank_ifsc}>
+            {row.bank_ifsc}
           </a>
         );
       },
@@ -676,32 +672,22 @@ const Profile = () => {
       reorder: true,
       grow: 1,
     },
+
     {
       name: "Account Number",
       selector: (row) => {
-        return <span title={row.user_email}>{row.user_email}</span>;
+        return (
+          <span title={row.bank_account_number}>{row.bank_account_number}</span>
+        );
       },
       sortable: true,
       reorder: true,
       grow: 1.5,
     },
     {
-      name: "CURRENCY",
-      selector: (row) => {
-        return <span title={row.user_phone}>{row.user_phone}</span>;
-      },
-      sortable: true,
-      reorder: true,
-      grow: 1,
-    },
-    {
       name: "BENEFICiary Name",
       selector: (row) => {
-        return (
-          <span title={row.user_visible_password}>
-            {row.user_visible_password}
-          </span>
-        );
+        return <span title={row.bank_name}>{row.bank_name}</span>;
       },
       sortable: true,
       reorder: true,
@@ -709,68 +695,27 @@ const Profile = () => {
     },
     {
       name: "Action",
-      button: true,
-      cell: (row) => {
+      selector: (row) => {
         return (
-          <div>
+          <>
             <Button
-              id={`actionButton_${row.sr_no}`}
-              aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.sr_no)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
+              className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
+              // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
             >
-              <i className="material-icons">more_horiz</i>
+              <DeleteIcon sx={{ color: "red" }} />
             </Button>
-            <Menu
-              id={`basic-menu-${row.sr_no}`}
-              anchorEl={openTableMenus[row.sr_no]}
-              open={Boolean(openTableMenus[row.sr_no])}
-              onClose={(event) => handleContextClose(row.sr_no)}
+            <Button
+              className="cursor-pointer mx-3 p-0 p-md-2 rounded-circle text-muted add_bank"
+              onClick={() => openDialogbox(row)}
             >
-              {row.kyc_status == "1" ? (
-                <MenuItem
-                  {...row}
-                  onClick={(event) => handleContextClose(row.sr_no)}
-                >
-                  <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                </MenuItem>
-              ) : (
-                <div>
-                  <MenuItem
-                    {...row}
-                    onClick={(event) => handleContextClose(row.sr_no)}
-                  >
-                    <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                  </MenuItem>
-                  <MenuItem
-                    {...row}
-                    onClick={(event) => handleContextClose(row.sr_no)}
-                  >
-                    <i className="material-icons font-color-approved">
-                      thumb_up
-                    </i>
-                    &nbsp;&nbsp;Approved
-                  </MenuItem>
-                  <MenuItem
-                    {...row}
-                    onClick={(event) => handleContextClose(row.sr_no)}
-                  >
-                    <i className="material-icons font-color-rejected">
-                      thumb_down
-                    </i>
-                    &nbsp;&nbsp;Rejected
-                  </MenuItem>
-                </div>
-              )}
-            </Menu>
-          </div>
+              <CreateIcon sx={{ color: "#3D9730" }} />
+            </Button>
+          </>
         );
       },
-      ignoreRowClick: true,
-      allowOverflow: true,
+      sortable: true,
+      reorder: true,
+      grow: 1,
     },
   ];
 
@@ -797,9 +742,34 @@ const Profile = () => {
       grow: 1,
     },
   ];
+  const getAccountList = () => {
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("user_id", id);
+    param.append("AADMIN_LOGIN_ID", 1);
+    param.append("action", "get_mt5_account_list");
+
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        setMt5AccountList(res.data.data);
+      });
+  };
+
+  const getMt5LivePackages = () => {
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+    axios
+      .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
+      .then((res) => {
+        setCreateLiveType(res.data.data);
+      });
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log("newValue", newValue);
   };
 
   const handleChangeIndex = (index) => {
@@ -815,12 +785,14 @@ const Profile = () => {
       setCreateMt5Form({
         account_type: "",
         account_option: "",
+        isLoader: false,
       });
     } else if (e.target.classList.contains("mt5_access")) {
       setDialogTitle("MT5 Access");
       setMt5AccessForm({
         account_type: "",
         status: "",
+        isLoader:false
       });
     } else if (e.target.classList.contains("link_mt5")) {
       setDialogTitle("Link Existing Account");
@@ -839,6 +811,7 @@ const Profile = () => {
       setChangeLeverageForm({
         account: "",
         leverage: "",
+        isLoader: false,
       });
     } else if (e.target.classList.contains("add_master_structure")) {
       setDialogTitle("Add Master Structure");
@@ -917,11 +890,8 @@ const Profile = () => {
       setBankAccountForm({
         name: "",
         bank_name: "",
-        bank_address: "",
         iban_number: "",
         account_number: "",
-        swift_code: "",
-        currency_code: "",
       });
     } else if (e.target.classList.contains("add_transaction")) {
       setDialogTitle("Add New Transaction");
@@ -966,8 +936,11 @@ const Profile = () => {
     } else if (e.target.classList.contains("change_password")) {
       setDialogTitle("Change Password");
       setChangeAccountPasswordForm({
-        main_password: "",
-        view_password: "",
+        mt5_id: "",
+        new_password: "",
+        confirm_password:"",
+        password_type:"",
+        isLoader:"",
       });
     }
     setOpen(true);
@@ -1007,8 +980,8 @@ const Profile = () => {
                 name="account_type"
                 onChange={input}
               >
-                <MenuItem value="live">Live</MenuItem>
-                <MenuItem value="demo">Demo</MenuItem>
+                <MenuItem value="1">Live</MenuItem>
+                <MenuItem value="0">Demo</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -1022,9 +995,56 @@ const Profile = () => {
                 name="account_option"
                 onChange={input}
               >
-                <MenuItem value="executive">Executive</MenuItem>
+                {createMt5Form.account_type == "1" ? (
+                  createLiveType.map((item) => {
+                    return (
+                      <MenuItem value={item.ib_group_level_id}>
+                        {item.ib_group_name}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem value="1">DEMO</MenuItem>
+                )}
               </Select>
             </FormControl>
+          </div>
+          {createMt5Form.account_type == "0" ? (
+            <div className="padingtopmy5create">
+              <TextField
+                className="input-font-small"
+                label="MT5 Balance"
+                type="number"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="mt5_balance"
+                onChange={input}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+          <div className="padingtopmy5create">
+            <TextField
+              className="input-font-small"
+              type="password"
+              label="Password"
+              variant="standard"
+              onChange={input}
+              sx={{ width: "100%" }}
+              name="password"
+            />
+          </div>
+          <div className="padingtopmy5create">
+            <TextField
+              className="input-font-small"
+              type="password"
+              label="Confirm Password"
+              variant="standard"
+              onChange={input}
+              sx={{ width: "100%" }}
+              name="confirm_password"
+            />
           </div>
         </div>
       );
@@ -1040,8 +1060,10 @@ const Profile = () => {
                 name="account_type"
                 onChange={input1}
               >
-                <MenuItem value="live">Live</MenuItem>
-                <MenuItem value="demo">Demo</MenuItem>
+              {mt5AccountList.map((item)=>{
+                return  <MenuItem value={item.mt5_acc_no}>{item.mt5_acc_no}</MenuItem>
+              })
+              }
               </Select>
             </FormControl>
           </div>
@@ -1055,8 +1077,8 @@ const Profile = () => {
                 name="status"
                 onChange={input1}
               >
-                <MenuItem value="true">Activate</MenuItem>
-                <MenuItem value="false">Deactivate</MenuItem>
+                <MenuItem value="1">Activate</MenuItem>
+                <MenuItem value="0">Deactivate</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -1137,7 +1159,13 @@ const Profile = () => {
                 name="account"
                 onChange={input4}
               >
-                <MenuItem value="121212">122121</MenuItem>
+                {mt5AccountList.map((item) => {
+                  return (
+                    <MenuItem value={item.mt5_acc_no}>
+                      {item.mt5_acc_no}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </div>
@@ -1151,13 +1179,13 @@ const Profile = () => {
                 name="leverage"
                 onChange={input4}
               >
-                <MenuItem value="1:1">1:1</MenuItem>
-                <MenuItem value="1:30">1:30</MenuItem>
-                <MenuItem value="1:50">1:50</MenuItem>
-                <MenuItem value="1:100">1:100</MenuItem>
-                <MenuItem value="1:200">1:200</MenuItem>
-                <MenuItem value="1:300">1:300</MenuItem>
-                <MenuItem value="1:400">1:400</MenuItem>
+                {leverageForm.map((item) => {
+                  return (
+                    <MenuItem value={item.leverage_value}>
+                      {item.leverage_data}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </div>
@@ -1678,21 +1706,12 @@ const Profile = () => {
             />
           </div>
           <br />
+
           <div>
             <TextField
               className="input-font-small"
-              label="Beneficiary Bank Address"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="bank_address"
-              onChange={bankInput}
-            />
-          </div>
-          <br />
-          <div>
-            <TextField
-              className="input-font-small"
-              label="IBAN Number"
+              type="number"
+              label="IBAN/IFSC CODE"
               variant="standard"
               sx={{ width: "100%" }}
               name="iban_number"
@@ -1704,6 +1723,7 @@ const Profile = () => {
             <TextField
               className="input-font-small"
               label="Account Number"
+              type="number"
               variant="standard"
               sx={{ width: "100%" }}
               name="account_number"
@@ -1711,27 +1731,6 @@ const Profile = () => {
             />
           </div>
           <br />
-          <div>
-            <TextField
-              className="input-font-small"
-              label="SWIFT Code"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="swift_code"
-              onChange={bankInput}
-            />
-          </div>
-          <br />
-          <div>
-            <TextField
-              className="input-font-small"
-              label="Currency Code"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="currency_code"
-              onChange={bankInput}
-            />
-          </div>
         </div>
       );
     } else if (dialogTitle == "Add New Transaction") {
@@ -2356,24 +2355,58 @@ const Profile = () => {
     } else if (dialogTitle == "Change Password") {
       return (
         <div>
-          <div className="margeField">
+          <div>
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>MT5 Account</InputLabel>
+              <Select
+                label
+                className="select-font-small"
+                name="mt5_id"
+                onChange={input5}
+              >
+                {mt5AccountList.map((item) => {
+                  return (
+                    <MenuItem value={item.mt5_acc_no}>
+                      {item.mt5_acc_no}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="padingtopmy5create">
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>Password Type</InputLabel>
+              <Select
+                label
+                className="select-font-small"
+                name="password_type"
+                onChange={input5}
+              >
+                <MenuItem value="main">Main Password</MenuItem>
+                <MenuItem value="investor">View Password</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
-              label="Main Password"
+              label="Password"
+              type="password"
               variant="standard"
               sx={{ width: "100%" }}
-              name="main_password"
+              name="new_password"
               onChange={input5}
             />
           </div>
-          <br />
-          <div className="margeField">
+          <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
-              label="View Password"
+              type="password"
+              label="Confirm Password"
               variant="standard"
               sx={{ width: "100%" }}
-              name="view_password"
+              name="confirm_password"
               onChange={input5}
             />
           </div>
@@ -2386,13 +2419,33 @@ const Profile = () => {
     if (dialogTitle == "Create MT5 Account") {
       return (
         <div>
-          <Button
-            variant="contained"
-            className="btn-success"
-            onClick={createMt5AccountSubmit}
-          >
-            Create
-          </Button>
+          {createMt5Form.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-success"
+              onClick={createMt5AccountSubmit}
+            >
+              Create
+            </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "MT5 Access") {
@@ -2405,13 +2458,34 @@ const Profile = () => {
           >
             Cancel
           </Button>
-          <Button
+          
+          {Mt5AccessForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
             variant="contained"
             className="btn-gradient btn-success"
             onClick={Mt5AccountAccessSubmit}
           >
             Update
           </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "Link Existing Account") {
@@ -2455,13 +2529,34 @@ const Profile = () => {
           >
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            className="btn-gradient btn-success"
-            onClick={changeLeverageSubmit}
-          >
-            Change
-          </Button>
+
+          {changeLeverageForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success addbankloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success createMt5Formloder"
+              onClick={changeLeverageSubmit}
+            >
+              Change
+            </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "Control Panel Access") {
@@ -2485,7 +2580,7 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Add Account") {
       return (
-        <div className="dialogMultipleActionButton">
+        <div className="  ">
           <Button
             variant="contained"
             className="cancelButton"
@@ -2493,13 +2588,34 @@ const Profile = () => {
           >
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            className="btn-gradient btn-success"
-            onClick={bankAccountSubmit}
-          >
-            Add Account
-          </Button>
+
+          {bankAccountForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success addbankloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={bankAccountSubmit}
+            >
+              Add Account
+            </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "Add New Note") {
@@ -2665,13 +2781,34 @@ const Profile = () => {
           >
             Cancel
           </Button>
-          <Button
+          
+          {changeAccountPasswordForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
             variant="contained"
             className="btn-gradient btn-success"
             onClick={changeAccountPasswordSubmit}
           >
             Submit
           </Button>
+          )}
         </div>
       );
     }
@@ -2685,17 +2822,62 @@ const Profile = () => {
         [name]: value,
       };
     });
+    if (event.target.value == "1") {
+      // const param = new FormData();
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
+      // axios
+      //   .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
+      //   .then((res) => {
+      //     setCreateLiveType(res.data.data);
+      //   });
+    }
   };
 
   const createMt5AccountSubmit = () => {
+    setCreateMt5Form((prevalue) => {
+      return { ...prevalue, isLoader: true };
+    });
     console.log(createMt5Form);
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
     } else if (createMt5Form.account_option == "") {
       toast.error("Please select account option");
+    } else if (
+      createMt5Form.mt5_balance == "" &&
+      createMt5Form.account_type == "0"
+    ) {
+      toast.error("Please select account option");
+    } else if (createMt5Form.password == "") {
+      toast.error("Please enter password");
+    } else if (createMt5Form.confirm_password == "") {
+      toast.error("Please enter confirm password");
+    } else if (createMt5Form.confirm_password != createMt5Form.password) {
+      toast.error("Confirm password must be the same as password");
     } else {
-      toast.success("Mt5 account has been created successfully.");
-      setOpen(false);
+      if (createMt5Form.account_type == "0") {
+        param.append("mt5_balance", createMt5Form.mt5_balance);
+      }
+      param.append("user_id", id);
+      param.append("password", createMt5Form.password);
+      param.append("confirm_password", createMt5Form.confirm_password);
+      param.append("ib_group_id", createMt5Form.account_option);
+      param.append("account_type", createMt5Form.account_type);
+      param.append("action", "create_mt5_account");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
     }
   };
 
@@ -2711,13 +2893,42 @@ const Profile = () => {
 
   const Mt5AccountAccessSubmit = () => {
     console.log(Mt5AccessForm);
+    setMt5AccessForm((preValue)=>{
+return{
+  ...preValue,
+  isLoader:true
+}
+    })
     if (Mt5AccessForm.account_type == "") {
       toast.error("Please select account type");
     } else if (Mt5AccessForm.status == "") {
       toast.error("Please select status");
     } else {
-      toast.success("Mt5 account status has been updated successfully.");
-      setOpen(false);
+      const param = new FormData();
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("mt5_id", Mt5AccessForm.account_type);
+      param.append("mt5_access_type", Mt5AccessForm.status);
+      param.append("action", "mt5_access");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.status == 'error') {
+            toast.error(res.data.message);
+            setMt5AccessForm((preValue)=>{
+              return{
+                ...preValue,
+                isLoader:false
+              }
+                  })
+        } else {
+            toast.success(res.data.message)
+            setOpen(false);
+        }
+        });
+      
+    
     }
   };
 
@@ -2777,13 +2988,35 @@ const Profile = () => {
 
   const changeLeverageSubmit = () => {
     console.log(changeLeverageForm);
+    setChangeLeverageForm((preValue) => {
+      return {
+        ...preValue,
+        isLoader: true,
+      };
+    });
     if (changeLeverageForm.account == "") {
       toast.error("Please select account");
     } else if (changeLeverageForm.leverage == "") {
       toast.error("Please select leverage");
     } else {
-      toast.success("Leverage has been successfully changed.");
-      setOpen(false);
+      const param = new FormData();
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("action", "change_mt5_leverage");
+      param.append("mt5_id", changeLeverageForm.account);
+      param.append("new_leverage", changeLeverageForm.leverage);
+
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
     }
   };
 
@@ -2798,14 +3031,47 @@ const Profile = () => {
   };
 
   const changeAccountPasswordSubmit = () => {
+    setChangeAccountPasswordForm((preValue)=>{
+    return{
+      ...preValue,
+      isLoader:true,
+    }
+    })
     console.log(changeAccountPasswordForm);
-    if (changeAccountPasswordForm.main_password == "") {
-      toast.error("Please enter main password");
-    } else if (changeAccountPasswordForm.view_password == "") {
-      toast.error("Please enter view password");
-    } else {
-      toast.success("Account password has been successfully changed.");
-      setOpen(false);
+    if (changeAccountPasswordForm.mt5_id == "") {
+      toast.error("Please Select MT5 Account");
+    } else if (changeAccountPasswordForm.password_type == "") {
+      toast.error("Please Select Password Type");
+    } else if (changeAccountPasswordForm.new_password == "") {
+      toast.error("Please enter Password");
+    }else if (changeAccountPasswordForm.confirm_password == "") {
+      toast.error("Please enter Confirm password");
+    }else if (changeAccountPasswordForm.new_password !== changeAccountPasswordForm.confirm_password) {
+      toast.error("Confirm password must be the same as password");
+    }else {
+      const param = new FormData();
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("mt5_id", changeAccountPasswordForm.mt5_id );
+      param.append("password_type", changeAccountPasswordForm.password_type );
+      param.append("new_password", changeAccountPasswordForm.new_password );
+      param.append("confirm_password", changeAccountPasswordForm.confirm_password );
+      param.append("action", "change_mt5_password");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+          if (res.data.status == 'error') {
+            toast.error(res.data.message);
+            setChangeAccountPasswordForm((preValue)=>{
+              return{
+                ...preValue,
+                isLoader:false,
+              }})
+        } else {
+           toast.success(res.data.message)
+           setOpen(false);
+        }
+        });
     }
   };
 
@@ -2858,7 +3124,20 @@ const Profile = () => {
       };
     });
   };
-
+  useEffect(() => {
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+    axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        countryData.data = res.data.aaData;
+        setCountryData({ ...countryData });
+        console.log("countryData", countryData);
+      }
+    });
+  }, []);
   const profileSubmit = async () => {
     console.log(profileForm);
     if (profileForm.title == "") {
@@ -2897,15 +3176,18 @@ const Profile = () => {
       toast.error("Please enter tax identification number");
     } else if (profileForm.politically_exposed == "") {
       toast.error("Please select politically exposed");
-    }else if (profileForm.sales_agent == "") {
-        toast.error("Please select sales agent");
-      }else {
-       
+    } else if (profileForm.sales_agent == "") {
+      toast.error("Please select sales agent");
+    } else if (profileForm.login_block == "") {
+      toast.error("Please select Login Block");
+    } else if (profileForm.user_status == "") {
+      toast.error("Please select user_status");
+    } else {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);  
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
-      param.append("user_id", id);
+      param.append("3r_id", id);
       param.append("manager_id", profileForm.sales_agent);
       param.append("user_title", profileForm.title);
       param.append("user_first_name ", profileForm.first_name);
@@ -2926,18 +3208,16 @@ const Profile = () => {
       param.append("worked_in_financial ", profileForm.finacial_work);
       param.append("tax_identification_number ", profileForm.tax_number);
       param.append("politically_exposed ", profileForm.politically_exposed);
-      // param.append('user_status ', profileForm.);
-      // param.append('login_block ', profileForm.);
+      param.append("user_status ", profileForm.user_status);
+      param.append("login_block ", profileForm.login_block);
       axios
         .post(`${Url}/ajaxfiles/update_user_profile.php`, param)
         .then((res) => {
-            if (res.data.status == 'error'){
-                toast.error(res.data.message)
-            }else
-            {
-                toast.success(res.data.message)
-
-            }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+          }
         });
       toast.success("Client profile has been updated");
     }
@@ -3175,7 +3455,6 @@ const Profile = () => {
         value = event.target.checked;
       }
     }
-
     setNoteForm((prevalue) => {
       return {
         ...prevalue,
@@ -3183,7 +3462,6 @@ const Profile = () => {
       };
     });
   };
-
   const noteSubmit = () => {
     console.log(noteForm);
 
@@ -3209,26 +3487,83 @@ const Profile = () => {
     });
   };
 
-  const bankAccountSubmit = () => {
+  const bankAccountSubmit = async (prop) => {
     console.log(bankAccountForm);
-
-    if (bankAccountForm.name == "") {
-      toast.error("Please enter beneficiary name");
-    } else if (bankAccountForm.bank_name == "") {
-      toast.error("Please enter beneficiary bank name");
-    } else if (bankAccountForm.bank_address == "") {
-      toast.error("Please enter beneficiary bank address");
-    } else if (bankAccountForm.iban_number == "") {
-      toast.error("Please enter IBAN Number");
-    } else if (bankAccountForm.account_number == "") {
-      toast.error("Please enter account number");
-    } else if (bankAccountForm.swift_code == "") {
-      toast.error("Please enter SWIFT Code");
-    } else if (bankAccountForm.currency_code == "") {
-      toast.error("Please enter currency code");
+    if (prop) {
+      setBankAccountForm((preValue) => {
+        return {
+          ...preValue,
+          isLoader: true,
+        };
+      });
+      if (bankAccountForm.name == "") {
+        toast.error("Please enter beneficiary name");
+      } else if (bankAccountForm.bank_name == "") {
+        toast.error("Please enter beneficiary bank name");
+      } else if (bankAccountForm.iban_number == "") {
+        toast.error("Please enter IBAN Number");
+      } else if (bankAccountForm.account_number == "") {
+        toast.error("Please enter account number");
+      } else {
+        const param = new FormData();
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
+        param.append("action", "add_user_bank");
+        param.append("user_id", id);
+        param.append("user_id", id);
+        param.append("bank_name", bankAccountForm.name);
+        param.append("bank_ifsc", bankAccountForm.iban_number);
+        param.append("bank_account_number", bankAccountForm.account_number);
+        param.append("bank_account_name", bankAccountForm.bank_name);
+        param.append("user_bank_id", "");
+        await axios
+          .post(Url + "/ajaxfiles/update_user_profile.php", param)
+          .then((res) => {
+            if (res.data.status == "error") {
+              toast.error(res.data.message);
+            } else {
+              toast.success(res.data.message);
+              setOpen(false);
+            }
+          });
+      }
     } else {
-      toast.success("Bank account has been successfully created.");
-      setOpen(false);
+      setBankAccountForm((preValue) => {
+        return {
+          ...preValue,
+          isLoader: true,
+        };
+      });
+      if (bankAccountForm.name == "") {
+        toast.error("Please enter beneficiary name");
+      } else if (bankAccountForm.bank_name == "") {
+        toast.error("Please enter beneficiary bank name");
+      } else if (bankAccountForm.iban_number == "") {
+        toast.error("Please enter IBAN Number");
+      } else if (bankAccountForm.account_number == "") {
+        toast.error("Please enter account number");
+      } else {
+        const param = new FormData();
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
+        param.append("action", "add_user_bank");
+        param.append("user_id", id);
+        param.append("bank_name", bankAccountForm.name);
+        param.append("bank_ifsc", bankAccountForm.iban_number);
+        param.append("bank_account_number", bankAccountForm.account_number);
+        param.append("bank_account_name", bankAccountForm.bank_name);
+        param.append("user_bank_id", "");
+        await axios
+          .post(Url + "/ajaxfiles/update_user_profile.php", param)
+          .then((res) => {
+            if (res.data.status == "error") {
+              toast.error(res.data.message);
+            } else {
+              toast.success(res.data.message);
+              setOpen(false);
+            }
+          });
+      }
     }
   };
 
@@ -3519,8 +3854,67 @@ const Profile = () => {
       });
   };
 
+  const getProfilePageData = async () => {
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    param.append("action", "get_general_information");
+    await axios
+      .post(`${Url}/ajaxfiles/update_user_profile.php`, param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        userData.isLoader = false;
+        setuserData({ ...userData });
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          setProfileForm({
+            title: res.data.data.user_title,
+            first_name: res.data.data.user_first_name,
+            last_name: res.data.data.user_last_name,
+            phone: res.data.data.user_phone,
+            email: res.data.data.user_email,
+            dob: res.data.data.user_dob,
+            nationality: res.data.data.user_nationality,
+            country_of_residence: res.data.data.user_country,
+            city: res.data.data.user_city,
+            address: res.data.data.user_address_1,
+            address_2: res.data.data.user_address_2,
+            gender: res.data.data.user_gender,
+            postal_code: res.data.data.user_postcode,
+            language: res.data.data.user_language,
+            source: res.data.data.user_source,
+            us_citizen: res.data.data.us_citizen,
+            finacial_work: res.data.data.worked_in_financial,
+            tax_number: res.data.data.tax_identification_number,
+            politically_exposed: res.data.data.politically_exposed,
+            sales_agent: res.data.data.manager_id,
+            login_block: res.data.data.login_block,
+            user_status: res.data.data.user_status,
+          });
+        }
+      });
+  };
+
   useEffect(() => {
+    getProfilePageData();
     getUserDetails();
+    getMt5LivePackages();
+    getAccountList();
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    param.append("action", "get_leverages");
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        setLeverageForm(res.data.leverages);
+      });
   }, []);
 
   return (
@@ -3578,8 +3972,14 @@ const Profile = () => {
                     aria-label="scrollable auto tabs example"
                     className="tabsBar"
                   >
-                    <Tab label="PROFILE PAGE" />
-                    <Tab label="BANK DETAILS" />
+                    <Tab
+                      label="PROFILE PAGE"
+                      onClick={() => console.log("working tab")}
+                    />
+                    <Tab
+                      label="BANK DETAILS"
+                      onClick={() => console.log("working tab")}
+                    />
                     <Tab label="DOCUMENTS" />
                     <Tab label="ACCOUNTS" />
                     <Tab label="ACTIVITIES" />
@@ -3662,7 +4062,6 @@ const Profile = () => {
                                   onChange={profileInput}
                                 />
                               </div>
-                          
                               <div className="element">
                                 <TextField
                                   className="input-font-small"
@@ -3703,11 +4102,13 @@ const Profile = () => {
                                     onChange={profileInput}
                                     name="nationality"
                                   >
-                                    <MenuItem value="Mr.">Mr.</MenuItem>
-                                    <MenuItem value="Mrs">Mrs</MenuItem>
-                                    <MenuItem value="Miss">Miss</MenuItem>
-                                    <MenuItem value="Ms">Ms</MenuItem>
-                                    <MenuItem value="Dr">Dr</MenuItem>
+                                    {countryData.data.map((item) => {
+                                      return (
+                                        <MenuItem value={item.id}>
+                                          {item.nicename}
+                                        </MenuItem>
+                                      );
+                                    })}
                                   </Select>
                                 </FormControl>
                               </div>
@@ -3726,11 +4127,13 @@ const Profile = () => {
                                     onChange={profileInput}
                                     name="country_of_residence"
                                   >
-                                    <MenuItem value="Mr.">Mr.</MenuItem>
-                                    <MenuItem value="Mrs">Mrs</MenuItem>
-                                    <MenuItem value="Miss">Miss</MenuItem>
-                                    <MenuItem value="Ms">Ms</MenuItem>
-                                    <MenuItem value="Dr">Dr</MenuItem>
+                                    {countryData.data.map((item) => {
+                                      return (
+                                        <MenuItem value={item.id}>
+                                          {item.nicename}
+                                        </MenuItem>
+                                      );
+                                    })}
                                   </Select>
                                 </FormControl>
                               </div>
@@ -3920,8 +4323,48 @@ const Profile = () => {
                                   </Select>
                                 </FormControl>
                               </div>
+                              <div className="element">
+                                <FormControl
+                                  variant="standard"
+                                  sx={{ width: "100%" }}
+                                  focused
+                                >
+                                  <InputLabel>Login Block</InputLabel>
+                                  <Select
+                                    label
+                                    className="select-font-small"
+                                    // value={age}
+                                    value={profileForm.login_block}
+                                    onChange={profileInput}
+                                    name="login_block"
+                                  >
+                                    <MenuItem value="0">No</MenuItem>
+                                    <MenuItem value="1">Yes</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </div>{" "}
+                              <div className="element">
+                                <FormControl
+                                  variant="standard"
+                                  sx={{ width: "100%" }}
+                                  focused
+                                >
+                                  <InputLabel>User Status </InputLabel>
+                                  <Select
+                                    label
+                                    className="select-font-small"
+                                    // value={age}
+                                    value={profileForm.user_status}
+                                    onChange={profileInput}
+                                    name="user_status"
+                                  >
+                                    <MenuItem value="0">No</MenuItem>
+                                    <MenuItem value="1">Yes</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </div>
                             </div>
-                         
+
                             <div className="btnActionSection">
                               <Button
                                 variant="contained"
@@ -4289,9 +4732,10 @@ const Profile = () => {
                             {/* <br/> */}
                             <div className="bankDetailsTabSection">
                               <CommonTable
-                                url={`${Url}/datatable/users_list.php`}
+                                url={`${Url}/datatable/get_bank_list.php`}
                                 column={depositColumn}
                                 sort="0"
+                                userId={id}
                                 filter={filterData}
                               />
                             </div>
@@ -4306,22 +4750,20 @@ const Profile = () => {
                         className="grid-handle panding-left-right-3px"
                       >
                         <Grid item md={12} lg={12} xl={12}>
-                          <Paper
+                          <KycDocument />
+                          {/* <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
                             className="paper-main-section"
                           >
                             <div className="headerSection header-title">
                               <p className="margin-0">Upload New Document</p>
-                              {/* <Button variant="contained" className='add_bank' onClick={openDialogbox}>Add New Bank Account</Button> */}
                             </div>
-                            {/* <br/> */}
                             <div className="documentDetailsTabSection">
                               <div className="">
                                 <Grid container spacing={1} className="ml-n1">
                                   <Grid item sm={9} className="p-1">
                                     <FormControl className="w-100">
-                                      {/* <InputLabel htmlFor="account_no">ACCOUNT NO</InputLabel> */}
                                       <Select
                                         value={doc.proof}
                                         name="proof"
@@ -4399,16 +4841,13 @@ const Profile = () => {
                                             id="uploadDoc"
                                             type="file"
                                             name="fontimg"
-                                            // value={doc.fontimg}
                                             onChange={(e) => {
                                               console.log(proofAdd, "proof");
                                               setProofAdd([
                                                 ...proofAdd,
                                                 e.target.files[0],
                                               ]);
-                                              //   setProofAdd(
-                                              //     proofAdd.concat(e.target.files)
-                                              //   )
+                                            
                                             }}
                                             style={{ display: "none" }}
                                           />
@@ -4709,7 +5148,7 @@ const Profile = () => {
                                 </div>
                               </div>
                             </div>
-                          </Paper>
+                          </Paper> */}
                         </Grid>
                       </Grid>
                     </TabPanel>

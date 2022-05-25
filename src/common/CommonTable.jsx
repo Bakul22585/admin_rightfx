@@ -127,6 +127,9 @@ const CommonTable = (prop) => {
                 param.append('withdrawal_status', prop.filter.withdraw_status);
             }
         }
+        if(prop.userId){
+            param.append('user_id', prop.userId);
+        }
         console.log("searchWord",prop.searchWord);
         if (prop.searchWord != "" && prop.searchWord != undefined) {
             // console.log(prop.search.filter((x) => x.value == true).length);

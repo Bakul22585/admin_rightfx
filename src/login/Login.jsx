@@ -6,12 +6,8 @@ import logo1 from "../sidebar/logo1.png";
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
 import { Url } from '../global';
-
-// import logo from './logo2.png';
-// import ForgotPassword from './ForgotPassword';
 import { Link, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-//import CssTextField from './CssTextField';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const ColorButton = styled(Button)(({ theme }) => ({

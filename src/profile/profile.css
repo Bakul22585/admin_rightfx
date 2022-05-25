@@ -358,3 +358,76 @@ text.highcharts-credits {
     border: none !important;
     background-color: #e0e0e0 !important;
 }
+
+.uploaderDropZone>label {
+    margin: 0;
+    width: 100%;
+    height: 151px;
+    border: 2px dashed #cfd9e0;
+    color: #cfd9e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .uploaderDropZone {
+    width: 150px;
+    height: 50px;
+  }
+  .uploaderDropZone>.received-file {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    box-shadow: 2px 2px 5px rgb(0 0 0 / 10%);
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+  }
+  .uploaderDropZone>.received-file>button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    cursor: pointer;
+  }
+  .fontimgclose{
+    background-color: #B71C1C;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+        font-size: 17px !important;
+  }
+  .uploadmr{
+    margin-top: 119px;
+  }
+  .deposit-upload-image-preview1{
+    width: 151px;
+    height: 151px;
+  }
+  .kyc-status-section h5 {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+  }
+  
+  .padingtop5{
+    padding-top: 3rem!important;
+  }
+  .uploaded-proof-view-section {
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .uploaded-proof-view-section .uploaded-proof-element {
+    display: flex;
+    flex-direction: column;
+  }
+
+.addbankloder{
+    padding: 0px 80px !important;
+}
+.padingtopmy5create{
+    padding-top: 17px;
+}
+.createMt5Formloder{
+    padding: 0px 45px !important;
+}
