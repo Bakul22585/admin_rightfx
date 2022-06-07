@@ -122,7 +122,7 @@ const CommonFilter = (prop) => {
   const [clientType, setClientType] = useState("");
   const [propSearchElement, setPropSearchElement] = useState(prop.search);
   const[listManagers,setListManagers]=useState([])
-
+const [checkStatus,setcheckStatus]=useState("");
   const input1 = (event) => {
     const { name, value } = event.target;
     setClientSearch(value);
@@ -262,15 +262,15 @@ useEffect(()=>{
                         >
                           <MenuItem value="">None</MenuItem>
                           <MenuItem value="Date">Date</MenuItem>
-                          {prop.salesAgent ?  <MenuItem value="Sales">Sales</MenuItem>:""}
                          
-                          {/* <MenuItem value="Country">Country</MenuItem> */}
+                          {prop.salesAgent ?  <MenuItem value="Sales">Sales</MenuItem>:""}
+                         {prop.setcheckStatus ? <MenuItem value="Status">Status</MenuItem>:"" }
+                         
                           {/* <MenuItem value="Account Type">Account Type</MenuItem> */}
                           {/* <MenuItem value="IB">IB</MenuItem> */}
-                          {/* <MenuItem value="Source">Source</MenuItem> */}
+                          {/*<MenuItem value="Source">Source</MenuItem>*/}
                         </Select>
                       </FormControl>
-
                       {filterBy == "Date" ? (
                         <>
                           <FormControl>
@@ -397,7 +397,8 @@ useEffect(()=>{
                             <MenuItem value="Corporate">Corporate</MenuItem>
                           </Select>
                         </FormControl>
-                      ) : filterBy == "IB" ? (
+                      )
+                      : filterBy == "IB" ? (
                         <FormControl
                           sx={{ m: 1, width: 300 }}
                           className="multipleSelect"
@@ -487,9 +488,35 @@ useEffect(()=>{
                             ))}
                           </Select>
                         </FormControl>
-                      ) : (
-                        ""
-                      )}
+                      )  :""}
+                      {
+                         filterBy == "Status" ? (
+                          <FormControl
+                          sx={{ m: 1, width: 300 }}
+                          className="multipleSelect"
+                        >
+                         <InputLabel id="demo-multiple-chip-label">
+                         Status
+                          </InputLabel>
+                          <Select
+                            value={checkStatus}
+                            onChange={(e)=>{
+                              console.log("e.target.value",e.target.value)
+                              setcheckStatus(e.target.value)
+                              prop.setcheckStatus(e.target.value)
+                            }}
+                            input={<BootstrapInput />}
+                            sx={{ width: "200px" }}
+                          >
+                            <MenuItem >Select Option</MenuItem>
+                            <MenuItem value="0">Pending</MenuItem>
+                            <MenuItem value="1">Completed</MenuItem>
+                            <MenuItem value="2">Rejected</MenuItem>
+                          </Select>
+                        </FormControl>
+                       
+                      ) :""
+                      }
                     </div>
                   </div>
                 ) : (

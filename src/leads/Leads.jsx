@@ -154,6 +154,8 @@ const nbaTeams = [
 
 const Leads = () => {
   const theme = useTheme();
+  const [checkStatus,setcheckStatus]=useState("");
+
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('md');
@@ -212,14 +214,15 @@ const Leads = () => {
   });
   const[cpData,setCpData]=useState({
     cp_access:"",
-        demo_mt5:""
+        demo_mt5:"",
+        isLoader:""
   })
  
   const [searchBy, setSearchBy] = useState([
     {
       'label': 'CUSTOMER',
       'value': false,
-      'name': 'customer'
+      'name': 'customer_name'
     },
     {
       'label': 'Interest',
@@ -232,14 +235,13 @@ const Leads = () => {
       'name': 'assign_to'
     },
     {
-      'label': 'Followup Date',
-      'value': false,
-      'name': 'followup_date'
-    },
-    {
       'label': 'Source',
       'value': false,
       'name': 'source'
+    }, {
+      'label': 'Remark',
+      'value': false,
+      'name': 'remarks'
     }
   ]);
 
@@ -356,7 +358,7 @@ useEffect(()=>{
       reference: ''
     });
     setParam({...param,'inquiry_id': e.inquiry_id});
-    setDialogTitle('View Lead (' + e.customer + ')');
+    setDialogTitle('View Lead (' + e.customer_name + ')');
     setMaxWidth('lg');
     setOpen(true);
   }
@@ -371,7 +373,29 @@ useEffect(()=>{
     {
       return(<div className='dialogMultipleActionButton'>  
       <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-<Button variant="contained" className='btn-gradient btn-success' onClick={completeLead}>Complete Lead</Button>
+      {cpData.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success addbankloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button variant="contained" className='btn-gradient btn-success' onClick={completeLead}>Complete Lead</Button>
+          )}
+		  
+
 </div>
 )
     }
@@ -386,10 +410,16 @@ useEffect(()=>{
       toast.error("Enter Password")
     }else{
       const param = new FormData();
+      setCpData((preValue)=>{
+return {
+  ...preValue,
+  isLoader:true,
+}
+      })
       param.append("is_app", 1);
       param.append("AADMIN_LOGIN_ID", 1);
       param.append("cp_access", cpData.cp_access);
-      param.append("leads_status", cpData.cp_access);
+      param.append("leads_status", "1");
       param.append("inquiry_id", cpData.inquiry_id);
       if(cpData.cp_access =="1"){
         param.append("demo_mt5", cpData.demo_mt5);
@@ -402,9 +432,22 @@ useEffect(()=>{
         .post(Url + "/ajaxfiles/update_lead_status.php", param)
         .then((res) => {
           if (res.data.status == 'error') {
+            setCpData((preValue)=>{
+              return {
+                ...preValue,
+                isLoader:false,
+              }
+                    })
             toast.error(res.data.message);
         } else {
+          setCpData((preValue)=>{
+            return {
+              ...preValue,
+              isLoader:false,
+            }
+                  })
             toast.success(res.data.message)
+            setOpen(false);
         }
         });
     }
@@ -743,7 +786,7 @@ return(
     {
       name: 'CUSTOMER',
       selector: row => {
-        return <a className='linkColor' title={row.customer} onClick={(event) => gotoProfile(row)}>{row.customer}</a>
+        return <a className='linkColor' title={row.customer_name} onClick={(event) => gotoProfile(row)}>{row.customer_name}</a>
       },
       sortable: true,
       reorder: true,
@@ -1061,7 +1104,8 @@ return(
       name: 'Action',
       button: true,
       cell: row => {
-        return <div>
+        return<> {row.leads_status=="Completed" ? "":
+        <div>
           <Button
             id={`actionButton_${row.sr_no}`}
             aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
@@ -1095,6 +1139,8 @@ return(
            
           </Menu>
         </div>
+        }</>
+        
       },
       ignoreRowClick: true,
       allowOverflow: true,
@@ -1656,7 +1702,7 @@ console.log("listManagers",listManagers)
               <Grid item md={12} lg={12} xl={12}>
                 <p className='main-heading'>Leads List</p>
 
-                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setFilterDate}/>
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setFilterDate}   setcheckStatus={setcheckStatus}/>
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                   <div className='lead actionGroupButton'>
@@ -1677,7 +1723,7 @@ console.log("listManagers",listManagers)
                   </div>
                   <br />
                   {/* <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} /> */}
-                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={filterDate}/>
+                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={filterDate}  checkStatus={checkStatus}/>
                 </Paper>
 
                 <BootstrapDialog

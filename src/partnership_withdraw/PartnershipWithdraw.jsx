@@ -90,7 +90,7 @@ const PartnershipWithdraw = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>Partnership Withdraw</p>
+                                <p className='main-heading'>IB Withdraw</p>
                                 <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
