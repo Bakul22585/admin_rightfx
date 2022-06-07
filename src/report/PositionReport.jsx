@@ -43,7 +43,6 @@ const PositionReport = () => {
     start_date: '',
     end_date: ''
 });
-
   const column = [
     {
       name: "LOGIN",

@@ -100,7 +100,7 @@ const CommonTable = (prop) => {
         setClientLoading(true);
         const param = new FormData();
         param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1);  
+        param.append('AADMIN_LOGIN_ID', 1); 
         param.append('draw', 0);
         param.append('start', page);
         param.append('length', clientPerPage);

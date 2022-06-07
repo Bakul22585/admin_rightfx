@@ -452,8 +452,16 @@ const ClientList = () => {
                         {(row.kyc_status == "1") ?
                             <MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem {...row} onClick={(event) => handleContextClose(row.sr_no)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
-                                <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem></div>}
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">edit_note</i>&nbsp;&nbsp;Edit User</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">manage_accounts</i>&nbsp;&nbsp;Change Sponser</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">thumb_up</i>&nbsp;&nbsp;MT5 Bonus</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">add_circle_outline</i>&nbsp;&nbsp;Deposit</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons ">download_for_offline</i>&nbsp;&nbsp;Withdraw</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">currency_exchange</i>&nbsp;&nbsp;Transfer</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">password</i>&nbsp;&nbsp;Change Password</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">password</i>&nbsp;&nbsp;Change MT5 Password</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">login</i>&nbsp;&nbsp;Login As</MenuItem>
+                                <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">settings</i>&nbsp;&nbsp;Settings</MenuItem></div>}
 
                     </Menu>
                 </div>

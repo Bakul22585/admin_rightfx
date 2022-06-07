@@ -12,3 +12,17 @@
 .row .col.s12 {
     width: 100%;
 }
+.view-commission-content-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.view-commission-content-section .view-content-element h6 {
+    margin-bottom: 0px;
+}
+.view-commission-content-section .view-content-element {
+    width: 260px;
+}
+.commission-delete-icon {
+    color: red;
+}
