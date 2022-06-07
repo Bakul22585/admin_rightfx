@@ -23,8 +23,9 @@
   <link rel="stylesheet"
     data-href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&amp;display=swap"
     data-optimized-fonts="true">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-  crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://rouninmedia.github.io/axe/axe.js"></script>
   <!-- <link rel="preload" href="./rightfx_login_files/2.css" as="style">
   <link rel="stylesheet" href="./rightfx_login_files/2.css" data-n-g=""> -->
@@ -52,22 +53,56 @@
     // When the single page app is loaded further down in this file,
     // the correct url will be waiting in the browser's history for
     // the single page app to route accordingly.
-    (function(l) {
-      if (l.search[1] === '/' ) {
-        var decoded = l.search.slice(1).split('&').map(function(s) { 
+    (function (l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function (s) {
           return s.replace(/~and~/g, '&')
         }).join('?');
         window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + decoded + l.hash
+          l.pathname.slice(0, -1) + decoded + l.hash
         );
       }
     }(window.location))
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" data-react-helmet="true"></script>
+
+  <script>
+    var websocketurl1 = "https://gainwellconsultant.com:2053";
+
+    client = io.connect(websocketurl1, {
+      secure: true,
+      reconnection: true,
+      rejectUnauthorized: false,
+      reconnectionDelay: 1,
+      reconnectionDelayMax: 30000,
+      reconnectionAttempts: 300,
+      forceNew: true
+    }, {
+      forceNew: true
+    }, {
+      pingInterval: 2000,
+      pingTimeout: 15000
+    }, {
+      transports: ['websocket'],
+      upgrade: true
+    });
+
+    client.on('connect', function (data) {
+      console.log("data websocket", data)
+    });
+    client.on('playSound1', function () {
+      console.log('play sound');
+      var audio = document.getElementById("audio");
+      audio.play();
+    })
   </script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <audio id="audio" allow="autoplay" src="%PUBLIC_URL%/assets/audio/Antique_Phone.mp3"></audio>
+
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

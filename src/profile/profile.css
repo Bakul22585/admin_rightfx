@@ -179,7 +179,7 @@
 
 .structureNameSection {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
 }
 
 .structureNameSection label,
@@ -430,4 +430,57 @@ text.highcharts-credits {
 }
 .createMt5Formloder{
     padding: 0px 45px !important;
+}
+.text-color-green {
+    color: green;
+}
+.text-color-yellow {
+    color: #b1b122;
+}
+.text-color-red {
+    color: red;
+}
+.display-element {
+    display: flex;
+    gap: 0px;
+    align-items: baseline;
+    width: 47%;
+    flex-direction: column;
+}
+.main-content-display {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+.display-element h6 {
+    margin-bottom: 0px;
+}
+.display-element h6:after {
+    content: " :";
+}
+.divider {
+    border-bottom: 1px solid black;
+    width: 100%;
+    margin: 10px 0;
+}
+.main-content-input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+.main-content-input > div, .main-content-input > div > div {
+    width: 100%;
+}
+.main-content-input div:last-child {
+    display: flex;
+    justify-content: end;
+}
+.main-content-input div:last-child > button{
+    margin-top: 5px;
+}
+.main-content-input label {
+    margin: 0px !important;
 }

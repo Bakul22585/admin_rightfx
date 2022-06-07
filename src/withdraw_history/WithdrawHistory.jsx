@@ -47,7 +47,10 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const WithdrawHistory = () => {
-
+    const [param, setParam] = useState({
+        start_date: '',
+        end_date: ''
+    });
     const navigate = useNavigate();
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
@@ -161,13 +164,13 @@ const WithdrawHistory = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdraw History</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} setParam={setParam}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

@@ -15,7 +15,7 @@ import ListRequest from './list_request/ListRequest';
 import PendingKYC from './pending_kyc/PendingKYC';
 import HistoryKYC from './history_kyc/HistoryKYC';
 import CommisionGroup from './commision_group/CommisionGroup';
-import GenerateIncome from './generate_income/GenerateIncome';
+// import GenerateIncome from './generate_income/GenerateIncome';
 import Mt5Group from './mt5_group/Mt5Group';
 import Setting from './setting/Setting';
 import PopupImage from './popup_image/PopupImage';
@@ -44,6 +44,8 @@ import CopyOpenTrades from './report/CopyOpenTrades';
 import TradeHistoryTotal from './report/TradeHistoryTotal';
 import IBCommisionReport from './report/IBCommisionReport';
 import UserProfitAndLoss from './report/UserProfitAndLoss';
+import BasicReport from './report/BasicReport';
+import BasicIbReport from './report/BasicIbReport';
 function useScrollToTop() {
   const { pathname } = useLocation();
 
@@ -82,7 +84,7 @@ const App = () => {
                 <Route exact path="/pending_kyc" element={<PendingKYC />} />
                 <Route exact path="/history_kyc" element={<HistoryKYC />} />
                 <Route exact path="/commision_group" element={<CommisionGroup />} />
-                <Route exact path="/generate_income" element={<GenerateIncome />} />
+                {/* <Route exact path="/generate_income" element={<GenerateIncome />} /> */}
                 <Route exact path="/mt5_group" element={<Mt5Group />} />
                 <Route exact path="/setting" element={<Setting />} />
                 <Route exact path="/popup_image" element={<PopupImage />} />
@@ -97,7 +99,7 @@ const App = () => {
                 <Route exact path="/withdrawal" element={<Withdraw />} />
                 <Route exact path="/master/:id" element={<Master />} />
                 <Route exact path="/profile/:id" element={<Profile />} />
-                <Route exact path="/deposit_history" element={<DepositHistory />} />
+                {/* <Route exact path="/deposit_history" element={<DepositHistory />} /> */}
                 <Route exact path="/withdraw_history" element={<WithdrawHistory />} />
                 <Route exact path="/myAccount" element={<Myaccount />} />
                 <Route exact path="/createRole/:id" element={<CreateRole />} />
@@ -117,9 +119,12 @@ const App = () => {
                 <Route exact path="/trade_history" element={<TradeHistory/>} />
                 <Route exact path="/trade_history_total" element={<TradeHistoryTotal/>} />
                 <Route exact path="/copy_open_trades" element={<CopyOpenTrades/>} />
-           
+                <Route exact path="/basic_report" element={<BasicReport/>} />
                 <Route exact path="/user_profit_and_loss" element={<UserProfitAndLoss/>} />
                 <Route exact path="/ib_commision_report" element={<IBCommisionReport/>} />
+                <Route exact path="/basic_ib_report" element={<BasicIbReport/>} />
+
+                
               </Routes>
               {/* <Footer /> */}
             </div>

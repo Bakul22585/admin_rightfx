@@ -221,9 +221,9 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/commision_group" onClick={CloseSidebar}>Commision Group</NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/generate_income" onClick={CloseSidebar}>Generate Income</NavLink>
-                      </li>
+                      </li> */}
                     </ul>
                   </Collapse>
                 </li>
@@ -291,6 +291,12 @@ const Sidebar = (prop) => {
                   </a>
                   <Collapse in={open.trading} timeout="auto" unmountOnExit>
                     <ul>
+                    <li>
+                        <NavLink to="/basic_report" onClick={CloseSidebar}>All In One Report</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/basic_ib_report" onClick={CloseSidebar}>All In One Ib Report</NavLink>
+                      </li>
                       <li>
                         <NavLink to="/deposit_report" onClick={CloseSidebar}>Deposit</NavLink>
                       </li>
@@ -315,7 +321,6 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/ib_commision_report" onClick={CloseSidebar}>IB Commision</NavLink>
                       </li>
-                      
                       <li>
                         <NavLink to="/user_profit_and_loss" onClick={CloseSidebar}>User Profit & Loss</NavLink>
                       </li>

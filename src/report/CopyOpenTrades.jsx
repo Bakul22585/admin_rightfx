@@ -17,6 +17,10 @@ import { Url } from "../global";
 const CopyOpenTrades = () => {
   const [refresh, setRefresh] = useState(false);
   const [resData,setResData]=useState({})
+  const [param, setParam] = useState({
+    start_date: '',
+    end_date: ''
+});
   const [searchBy, setSearchBy] = useState([
     {
       label: "DATE",
@@ -190,7 +194,7 @@ const CopyOpenTrades = () => {
                     </div>
                   </div>
                 </div>
-                <CommonFilter search={searchBy} />
+                <CommonFilter search={searchBy} setParam={setParam}/>
                 <br />
                 <Paper
                   elevation={2}
@@ -205,6 +209,7 @@ const CopyOpenTrades = () => {
                           column={column}
                           sort="1"
                           refresh={refresh}
+                          param={param}
                           search={searchBy}
                           setResData={setResData}
                         />

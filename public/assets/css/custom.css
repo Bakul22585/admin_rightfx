@@ -11917,8 +11917,7 @@ a.card-img-wrapper:hover .img-wrapper-overlay {
 }
 .loginCard .card1 {
   padding: 40px 20px;
-  background-image: linear-gradient(#427e39 20%, rgb(61 151 48));
-  background-image: linear-gradient(#223460 20%, rgb(42 63 115));
+  background-image: linear-gradient(#2a3f73 20%, rgb(61 151 48));
   border-radius: 20px;
   width: 100%;
   height: auto;

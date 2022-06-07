@@ -10,6 +10,10 @@ const IBCommisionReport = () => {
 
     const [refresh, setRefresh] = useState(false);
     const [resData,setResData]=useState({})
+    const [param, setParam] = useState({
+      start_date: '',
+      end_date: ''
+  });
     const [searchBy, setSearchBy] = useState([
         {
           'label': 'DATE',
@@ -136,13 +140,13 @@ const IBCommisionReport = () => {
                   </div>
                   
                 </div>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} setParam={setParam}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/user_ib_commission_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} setResData={setResData}/>
+                                                <CommonTable url={`${Url}/datatable/user_ib_commission_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} setResData={setResData} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

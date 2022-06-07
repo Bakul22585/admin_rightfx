@@ -443,8 +443,8 @@ const CopyTrading = () => {
       toast.error("Email format is invaild ");
     } else {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);  
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);  
       param.append("copy_master_name", form.name);
       param.append("copy_master_email", form.email);
       param.append("copy_master_phone", form.phone);

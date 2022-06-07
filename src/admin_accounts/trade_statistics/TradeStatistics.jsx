@@ -8,8 +8,8 @@ const TradeStatistics = () => {
   const [data, setData] = useState({});
   useEffect(() => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     axios
       .post(`${Url}/ajaxfiles/trading_statistics_manage.php`, param)
       .then((res) => {

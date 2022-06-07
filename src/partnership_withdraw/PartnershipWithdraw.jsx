@@ -32,7 +32,6 @@ const PartnershipWithdraw = () => {
           'name': 'amount'
         },
       ]);
-
     const column = [
         {
             name: 'SR.NO',
@@ -84,7 +83,6 @@ const PartnershipWithdraw = () => {
             grow: 0.3,
         }
     ];
-
     return (
         <div>
             <div className="app-content--inner">

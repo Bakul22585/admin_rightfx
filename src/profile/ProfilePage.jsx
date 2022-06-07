@@ -93,8 +93,8 @@ const ProfilePage = () => {
       toast.error("Please select sales agent");
     } else {
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
       param.append("3r_id", id);
       param.append("manager_id", profileForm.sales_agent);

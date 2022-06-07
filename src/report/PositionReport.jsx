@@ -39,7 +39,10 @@ const PositionReport = () => {
     },
   ]);
   const [resData,setResData]=useState({})
-
+  const [param, setParam] = useState({
+    start_date: '',
+    end_date: ''
+});
 
   const column = [
     {
@@ -220,7 +223,7 @@ const PositionReport = () => {
                   </div>{" "}
                 
                 </div>
-                <CommonFilter search={searchBy} />
+                <CommonFilter search={searchBy}  setParam={setParam}/>
                 <br />
                 <Paper
                   elevation={2}
@@ -237,6 +240,7 @@ const PositionReport = () => {
                           refresh={refresh}
                           search={searchBy}
                           setResData={setResData}
+                         param={param}
                         />
                       </Grid>
                     </Grid>

@@ -7,7 +7,10 @@ import CommonTable from '../common/CommonTable';
 import { Url } from '../global';
 
 const UserProfitAndLoss = () => {
-
+    const [param, setParam] = useState({
+        start_date: '',
+        end_date: ''
+    });
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
@@ -70,13 +73,13 @@ const UserProfitAndLoss = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Users Profit and Loss Report</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} setParam={setParam}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/user_wise_filter_report.php`} column={column} sort='1' refresh={refresh} search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/user_wise_filter_report.php`} column={column} sort='1' refresh={refresh} search={searchBy} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

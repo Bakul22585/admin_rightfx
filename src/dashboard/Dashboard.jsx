@@ -14,6 +14,8 @@ import { Button } from "@mui/material";
 import mapDataWorld from '@highcharts/map-collection/custom/world.geo.json';
 import Chart from "react-apexcharts";
 import CommonFilter from '../common/CommonFilter';
+import { Url } from '../global';
+import axios from 'axios';
 const WorldMap = require('react-world-map');
 
 var data: [string, number][] = [
@@ -353,18 +355,36 @@ var ibSummaryOptions = {
 
 const Dashboard = (prop) => {
     const [selected, onSelect] = useState(null);
-
+    const [fullData,setFullData]=useState({})
+    const[pageLoader,setPageLoader]=useState(true)
     useEffect(() => {
         if (localStorage.getItem('login') == "true") {
             prop.setLogin("true");
         }
+        const param = new FormData();
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
+        axios
+          .post(Url + "/ajaxfiles/dashboard.php", param)
+          .then((res) => {
+              console.log("asd",res.data)
+            setFullData(res.data);
+            setPageLoader(false)
+          });
     }, [])
-    
+    console.log("fullData",fullData.deposit_requests)
+
     return (
         <div>
             <div className="app-content--inner">
                 <div className="app-content--inner__wrapper mh-100-vh">
-                    <div style={{ opacity: 1 }}>
+                {
+                    pageLoader==true ?  <div className="loader">
+              <div className="clock">
+                <div className="pointers"></div>
+              </div>
+            </div>:
+            <div style={{ opacity: 1 }}>
                         {/* <CommonFilter />
                         <br/> */}
                         <Grid container spacing={3}>
@@ -696,21 +716,21 @@ const Dashboard = (prop) => {
                                                             </div>
                                                             <div className='th-div td-div'>
                                                                 <label>DEPOSIT</label>
-                                                                <label>11</label>
-                                                                <label>4</label>
-                                                                <label>82</label>
+                                                                <label>{fullData.all_transaction.deposit_requests.deposit_pending_request}</label>
+                                                                <label>{fullData.all_transaction.deposit_requests.deposit_rejected_request}</label>
+                                                                <label>{fullData.all_transaction.deposit_requests.deposit_approved_request}</label>
                                                             </div>
                                                             <div className='th-div td-div'>
                                                                 <label>WITHDRAWALS</label>
-                                                                <label>5</label>
+                                                                <label>{}</label>
                                                                 <label>1</label>
                                                                 <label>15</label>
                                                             </div>
                                                             <div className='th-div td-div'>
                                                                 <label>INTERNAL TRANSFER</label>
-                                                                <label>0</label>
-                                                                <label>0</label>
-                                                                <label>12</label>
+                                                                <label>{fullData.all_transaction.transfer_requests.transfer_pending_request}</label>
+                                                                <label>{fullData.all_transaction.transfer_requests.transfer_rejected_request}</label>
+                                                                <label>{fullData.all_transaction.transfer_requests.transfer_approved_request }</label>
                                                             </div>
                                                         </div>
                                                     </Grid>
@@ -745,6 +765,8 @@ const Dashboard = (prop) => {
                             </Grid>
                         </Grid>
                     </div>
+                }
+                   
                 </div>
             </div>
         </div>

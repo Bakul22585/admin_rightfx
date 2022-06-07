@@ -99,7 +99,7 @@ const CommonTable = (prop) => {
     const fetchClient = async page => {
         setClientLoading(true);
         const param = new FormData();
-         param.append('is_app', 1);
+        param.append('is_app', 1);
         param.append('AADMIN_LOGIN_ID', 1);  
         param.append('draw', 0);
         param.append('start', page);
@@ -107,6 +107,8 @@ const CommonTable = (prop) => {
         if (prop.level) {
             param.append('level_id', prop.level);
         }
+        if(prop.salesAgent)
+        {param.append('manager_id', prop.salesAgent);}
         if (prop.filter) {
             if (prop.filter.deposit_from) {
                 param.append('start_date', prop.filter.deposit_from);
@@ -196,6 +198,8 @@ const CommonTable = (prop) => {
         prop.refresh,
         prop.searchWord,
         prop.search,
+        prop.param,
+        prop.salesAgent
     ]);
     // console.log("common table",prop);
     return (
