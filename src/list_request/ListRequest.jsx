@@ -718,7 +718,7 @@ if(updateDate.structure_id==""){
                                                               });
                                                           }}
                                                       >
-                                                          <MenuItem value="0">Select IB Group</MenuItem>
+                                                          <MenuItem value="">Select IB Group</MenuItem>
                                                           {
                                                               item.ibGroup.map((item1, index1) => {
                                                                   return (

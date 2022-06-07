@@ -632,38 +632,6 @@ const IBStructure = () => {
     };
 
     const submit = async () => {
-        console.log('form', form);
-        /* if (form.group_name == "") {
-            toast.error("Please enter group name");
-        } else if (form.ib_mt5group_name == "") {
-            toast.error("Please enter mt5 group name");
-        } else if (form.execution == "") {
-            toast.error("Please enter execution");
-        } else if (form.commission == "") {
-            toast.error("Please enter commission");
-        } else if (form.ib_comapny_get == "") {
-            toast.error("Please enter company will get");
-        } else if (form.ib_company_passon == "") {
-            toast.error("Please enter company will passon");
-        } else if (form.leverage == "") {
-            toast.error("Please enter leverage");
-        } else if (form.minimum_deposit == "") {
-            toast.error("Please enter Minimum Deposit");
-        } else if (form.plan_title == "") {
-            toast.error("please enter plan title");
-        } else if (form.minimum_trade_size == "") {
-            toast.error("Please enter minimun trade size");
-        } else if (form.spread == "") {
-            toast.error("Please enter spread");
-        } else if (form.stop_out_level == "") {
-            toast.error("Please enter stop out level");
-        } else if (form.swap_free == "") {
-            toast.error("Please enter swap free");
-        } else if (form.trading_instrument == "") {
-            toast.error("Please enter trading instrument");
-        } else if (form.trading_plaform == "") {
-            toast.error("Please enter trading plaform");
-        } else { */
             var error = false;
             if (form.structure_name == "") {
                 toast.error("Please enter structure name");
