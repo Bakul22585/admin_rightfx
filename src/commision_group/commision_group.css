@@ -26,3 +26,33 @@
 .commission-delete-icon {
     color: red;
 }
+.ib-structure.view-commission-content-section {
+    flex-direction: column;
+}
+.ib-structure.view-commission-content-section .main-section, .ib-structure.view-commission-content-section .pair-section .pair-data {
+    display: flex;
+    gap: 10px;
+}
+.ib-structure.view-commission-content-section .pair-section {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+.ib-structure.view-commission-content-section .main-section div:nth-child(1), .ib-structure.view-commission-content-section .pair-section .pair-data div:nth-child(1) {
+    width: 150px;
+    text-transform: capitalize;
+}
+.ib-structure.view-commission-content-section .main-section input, .ib-structure.view-commission-content-section .pair-data input  {
+    border-radius: 10px;
+    outline: 0;
+    border: 1px solid #73748b;
+    padding: 5px;
+}
+.ib-structure.view-commission-content-section .group-structure-section {
+    border-bottom: 1px solid rgb(0 0 0 / 15%);
+}
+.ib-structure.view-commission-content-section .group-structure-section:last-child {
+    border-bottom: 0px solid rgb(0 0 0 / 15%);
+}

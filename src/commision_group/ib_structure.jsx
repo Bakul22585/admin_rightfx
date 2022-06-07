@@ -10,6 +10,7 @@ import {
     FormControlLabel,
     FormGroup,
     Grid,
+    InputLabel,
     Menu,
     MenuItem,
     Paper,
@@ -45,30 +46,9 @@ const IBStructure = () => {
     toast.configure();
 
     const [form, setForm] = useState({
-        ib_group_level_id: "",
-        group_name: "",
-        ib_mt5group_name: "",
-        ib_comapny_get: "",
-        ib_company_passon: "",
-        plan_title: "",
-        minimum_deposit: "",
-        spread: "",
-        commission: "",
-        leverage: "",
-        swap_free: "",
-        trading_plaform: "",
-        execution: "",
-        trading_instrument: "",
-        account_currency: "",
-        minimum_trade_size: "",
-        stop_out_level: "",
-        is_default: "",
-        is_private: "",
-        commission_type: "",
-        level: "",
-        will_get: "",
-        will_passon: "",
-        partnership: "",
+        structure_id: "",
+        structure_name: "",
+        structure_data: [],
         isLoader: false,
     });
 
@@ -539,62 +519,99 @@ const IBStructure = () => {
                 </div>
             </div>;
         } else if (dialogTitle == 'Add') {
-            return <div className="view-commission-content-section">
-                <div className="view-content-element">
-                    <TextField label="Group Name" variant="standard" sx={{ width: '100%' }} name='group_name' value={form.group_name} onChange={input} />
+            return <div className="ib-structure view-commission-content-section">
+                <div style={{ width: '100%' }}>
+                    <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={form.structure_name} onChange={input} />
                 </div>
-                <div className="view-content-element">
-                    <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Commission" variant="standard" sx={{ width: '100%' }} name='commission' value={form.commission} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Company Will Get" variant="standard" sx={{ width: '100%' }} name='ib_comapny_get' value={form.ib_comapny_get} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Company Will Passon" variant="standard" sx={{ width: '100%' }} name='ib_company_passon' value={form.ib_company_passon} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Leverage" variant="standard" sx={{ width: '100%' }} name='leverage' value={form.leverage} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Minimum Deposit" variant="standard" sx={{ width: '100%' }} name='minimum_deposit' value={form.minimum_deposit} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Plan Title" variant="standard" sx={{ width: '100%' }} name='plan_title' value={form.plan_title} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Minimun Trade Size" variant="standard" sx={{ width: '100%' }} name='minimum_trade_size' value={form.minimum_trade_size} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Spread" variant="standard" sx={{ width: '100%' }} name='spread' value={form.spread} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Stop out Level" variant="standard" sx={{ width: '100%' }} name='stop_out_level' value={form.stop_out_level} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Swap Free" variant="standard" sx={{ width: '100%' }} name='swap_free' value={form.swap_free} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Trading Instrument" variant="standard" sx={{ width: '100%' }} name='trading_instrument' value={form.trading_instrument} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <TextField label="Trading Platform" variant="standard" sx={{ width: '100%' }} name='trading_plaform' value={form.trading_plaform} onChange={input} />
-                </div>
-                <div className="view-content-element">
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox name='is_default' checked={form.is_default} onChange={input} />} label="Is Default" />
-                    </FormGroup>
-                </div>
-                <div className="view-content-element">
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox name='is_private' checked={form.is_private} onChange={input} />} label="Is Private" />
-                    </FormGroup>
-                </div>
+                {
+                    form.structure_data.map((item, index) => {
+                        return (
+                            <div className="group-structure-section">
+                                <div className="main-section">
+                                    <div>{item.ib_group_name}</div>
+                                    <div>
+                                        <input type='number' className="rebert_amount" placeholder="Rebert" value={item.group_rebate}
+                                            onChange={(e) => {
+                                                form.structure_data[index]['group_rebate'] = e.target.value;
+                                                setForm({
+                                                    ...form
+                                                });
+                                            }} />
+                                    </div>
+                                    <div>
+                                        <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                                            onChange={(e) => {
+                                                form.structure_data[index]['group_commission'] = e.target.value;
+                                                setForm({
+                                                    ...form
+                                                });
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        {
+                                            (item.ibGroup != undefined) ?
+                                                <FormControl variant="standard">
+                                                    <Select
+                                                        label
+                                                        className="select-font-small"
+                                                        value={item.ib_group_level_id}
+                                                        name="title"
+                                                        onChange={(e) => {
+                                                            form.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                                            setForm({
+                                                                ...form
+                                                            });
+                                                        }}
+                                                    >
+                                                        <MenuItem value="0">Select IB Group</MenuItem>
+                                                        {
+                                                            item.ibGroup.map((item1, index1) => {
+                                                                return (
+                                                                    <MenuItem value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
+                                                                );
+                                                            })
+                                                        }
+                                                    </Select>
+                                                </FormControl> : ''
+                                        }
+                                    </div>
+                                </div>
+                                <div className="pair-section">
+                                    {
+                                        item.pair_data.map((item1, index1) => {
+                                            return (
+                                                <div className="pair-data">
+                                                    <div>{item1.pair_name}</div>
+                                                    <div>
+                                                        <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
+                                                            onChange={(e) => {
+                                                                form.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
+                                                                setForm({
+                                                                    ...form
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
+                                                            onChange={(e) => {
+                                                                form.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
+                                                                setForm({
+                                                                    ...form
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        );
+                    })
+                }
             </div>;
         }
     };
@@ -616,7 +633,7 @@ const IBStructure = () => {
 
     const submit = async () => {
         console.log('form', form);
-        if (form.group_name == "") {
+        /* if (form.group_name == "") {
             toast.error("Please enter group name");
         } else if (form.ib_mt5group_name == "") {
             toast.error("Please enter mt5 group name");
@@ -646,35 +663,58 @@ const IBStructure = () => {
             toast.error("Please enter trading instrument");
         } else if (form.trading_plaform == "") {
             toast.error("Please enter trading plaform");
-        } else {
+        } else { */
+            var error = false;
+            if (form.structure_name == "") {
+                toast.error("Please enter structure name");
+                error = true;
+            } else {
+                form.structure_data.forEach(element => {
+                    console.log(element.ib_group_name, element.group_rebate);
+                    if (element.group_rebate === "") {
+                        toast.error(`Please enter ${element.ib_group_name} rebate`);
+                        error = true;
+                        return false;
+                    } else if (element.group_commission === "") {
+                        toast.error(`Please enter ${element.ib_group_name} commission`);
+                        error = true;
+                        return false;
+                    } else if (element.ib_group_level_id === 0) {
+                        toast.error(`Please enter ${element.ib_group_name} ib group`);
+                        error = true;
+                        return false;
+                    } else {
+                        element.pair_data.forEach(element1 => {
+                            if (element1.rebate === "") {
+                                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                                error = true;
+                                return false;
+                            } else if (element1.commission === "") {
+                                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                                error = true;
+                                return false;
+                            }
+                        });
+                    }
+                    if (error) {
+                        return false;
+                    }
+                });
+            }
+            if (error) {
+                return false;
+            }
             form.isLoader = true;
             setForm({ ...form });
             const param = new FormData();
             param.append('is_app', 1);
             param.append('AADMIN_LOGIN_ID', 1);
-            param.append('action', 'add_ib_commission_group');
-            // param.append('ib_group_level_id', form.ib_group_level_id);
-            param.append('ib_group_name', form.group_name);
-            param.append('ib_mt5group_name', form.ib_mt5group_name);
-            param.append('ib_comapny_get', form.ib_comapny_get);
-            param.append('ib_company_passon', form.ib_company_passon);
-            param.append('plan_title', form.plan_title);
-            param.append('minimum_deposit', form.minimum_deposit);
-            param.append('spread', form.spread);
-            param.append('commission', form.commission);
-            param.append('leverage', form.leverage);
-            param.append('swap_free', form.swap_free);
-            param.append('trading_plaform', form.trading_plaform);
-            param.append('execution', form.execution);
-            param.append('trading_instrument', form.trading_instrument);
-            param.append('account_currency', form.account_currency);
-            param.append('minimum_trade_size', form.minimum_trade_size);
-            param.append('stop_out_level', form.stop_out_level);
-            param.append('is_default', form.is_default ? "1" : "0");
-            param.append('is_private', form.is_private ? "1" : "0");
-            param.append('account_currency', "USD");
+            param.append('action', 'insert_master_structure');
+            param.append('user_id', form.group_name);
+            param.append('structure_name', form.structure_name);
+            param.append('pair_data', JSON.stringify(form.structure_data));
 
-            await axios.post(`${Url}/ajaxfiles/ib_commission_group_manage.php`, param).then((res) => {
+            await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
                 if (res.data.message == "Session has been expired") {
                     localStorage.setItem("login", true);
                     navigate("/");
@@ -689,7 +729,7 @@ const IBStructure = () => {
                     setOpenModel(false);
                 }
             });
-        }
+        // }
     };
 
     const submitUpdate = async () => {
@@ -770,36 +810,29 @@ const IBStructure = () => {
         }
     };
 
-    const AddCommissionGroup = () => {
-        setDialogTitle('Add');
-        setForm({
-            ib_group_level_id: "",
-            group_name: "",
-            ib_mt5group_name: "",
-            ib_comapny_get: "",
-            ib_company_passon: "",
-            plan_title: "",
-            minimum_deposit: "",
-            spread: "",
-            commission: "",
-            leverage: "",
-            swap_free: "",
-            trading_plaform: "",
-            execution: "",
-            trading_instrument: "",
-            account_currency: "",
-            minimum_trade_size: "",
-            stop_out_level: "",
-            is_default: false,
-            is_private: false,
-            commission_type: "",
-            level: "",
-            will_get: "",
-            will_passon: "",
-            partnership: "",
-            isLoader: false,
+    const AddCommissionGroup = async () => {
+        const param = new FormData();
+        param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1);
+        param.append('action', 'get_default_structure');
+        await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+
+            if (res.data.status == 'error') {
+                toast.error(res.data.message);
+            } else {
+                form.structure_data = res.data.data;
+                setForm({ ...form });
+                console.log('form', form);
+                setMaxWidth('md');
+                setDialogTitle('Add');
+                setOpenModel(true)
+            }
         });
-        setOpenModel(true)
+
     }
 
     const handleAction = async (id, flag) => {
