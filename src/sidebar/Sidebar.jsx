@@ -158,7 +158,7 @@ const Sidebar = (prop) => {
                     <span className="material-icons" style={style}>
                     fact_check
                     </span>
-                    Partnership Requests List
+                    IB Requests List
                   </NavLink>
                 </li>
                 <li>
@@ -220,6 +220,9 @@ const Sidebar = (prop) => {
                     <ul>
                       <li>
                         <NavLink to="/commision_group" onClick={CloseSidebar}>Commision Group</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/ib_structure" onClick={CloseSidebar}>IB Structure</NavLink>
                       </li>
                       {/* <li>
                         <NavLink to="/generate_income" onClick={CloseSidebar}>Generate Income</NavLink>

@@ -19,6 +19,7 @@ const ListRequest = () => {
     const [updateDate, setUpdateDate] = useState({
         structure_id: "",
         sponsor_approve: "",
+        admin_approve: "",
         remarks: "",
         isLoader: false,
         refresh: false,
@@ -372,7 +373,7 @@ const ListRequest = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>Partnership Request List</p>
+                                <p className='main-heading'>IB Request List</p>
                                 <CommonFilter search={searchBy}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
@@ -405,7 +406,7 @@ const ListRequest = () => {
             style={{ borderBottom: "none" }}
           >
             <h5 className="ml-3 w-100 text-start mt-2 mb-2 font-weight-bold">
-              View Partnership
+              View IB
             </h5>
             <CloseIcon
               onClick={() => {
@@ -556,6 +557,31 @@ const ListRequest = () => {
                     Status
                   </label>
                   <Select
+                    value={updateDate.admin_approve}
+                    name="admin_approve"
+                    onChange={input01}
+                    displayEmpty
+                    inputProps={{
+                      "aria-label": "Without label",
+                    }}
+                    input={<BootstrapInput />}
+                    className="mt-0 ml-0"
+                    style={{ width: "100%" }}
+                  >
+                    <MenuItem value="">Select Option</MenuItem>
+                    <MenuItem value="0">PENDING</MenuItem>
+                    <MenuItem value="1">APPROVED</MenuItem>
+                    <MenuItem value="2">REJECTED</MenuItem>
+                  </Select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="sponsor_approve"
+                    className="text-info font-weight-bold form-label-head w-100  required"
+                  >
+                    Sponsor Status
+                  </label>
+                  <Select
                     value={updateDate.sponsor_approve}
                     name="sponsor_approve"
                     onChange={input01}
@@ -573,6 +599,57 @@ const ListRequest = () => {
                     <MenuItem value="2">REJECTED</MenuItem>
                   </Select>
                 </div>
+                <div>
+                  <label
+                    htmlFor="sponsor_approve"
+                    className="text-info font-weight-bold form-label-head w-100  required"
+                  >
+                    IB Groups
+                  </label>
+                  <Select
+                    value={updateDate.admin_approve}
+                    name="admin_approve"
+                    onChange={input01}
+                    displayEmpty
+                    inputProps={{
+                      "aria-label": "Without label",
+                    }}
+                    input={<BootstrapInput />}
+                    className="mt-0 ml-0"
+                    style={{ width: "100%" }}
+                  >
+                    <MenuItem value="">Select Option</MenuItem>
+                    <MenuItem value="0">PENDING</MenuItem>
+                    <MenuItem value="1">APPROVED</MenuItem>
+                    <MenuItem value="2">REJECTED</MenuItem>
+                  </Select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="sponsor_approve"
+                    className="text-info font-weight-bold form-label-head w-100  required"
+                  >
+                    Status
+                  </label>
+                  <Select
+                    value={updateDate.admin_approve}
+                    name="admin_approve"
+                    onChange={input01}
+                    displayEmpty
+                    inputProps={{
+                      "aria-label": "Without label",
+                    }}
+                    input={<BootstrapInput />}
+                    className="mt-0 ml-0"
+                    style={{ width: "100%" }}
+                  >
+                    <MenuItem value="">Select Option</MenuItem>
+                    <MenuItem value="0">PENDING</MenuItem>
+                    <MenuItem value="1">APPROVED</MenuItem>
+                    <MenuItem value="2">REJECTED</MenuItem>
+                  </Select>
+                </div>
+                
                 <div>
                   <label
                     htmlFor="remarks"

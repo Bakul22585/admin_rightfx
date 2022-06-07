@@ -46,6 +46,7 @@ import IBCommisionReport from './report/IBCommisionReport';
 import UserProfitAndLoss from './report/UserProfitAndLoss';
 import BasicReport from './report/BasicReport';
 import BasicIbReport from './report/BasicIbReport';
+import IBStructure from './commision_group/ib_structure';
 function useScrollToTop() {
   const { pathname } = useLocation();
 
@@ -123,6 +124,7 @@ const App = () => {
                 <Route exact path="/user_profit_and_loss" element={<UserProfitAndLoss/>} />
                 <Route exact path="/ib_commision_report" element={<IBCommisionReport/>} />
                 <Route exact path="/basic_ib_report" element={<BasicIbReport/>} />
+                <Route exact path="/ib_structure" element={<IBStructure/>} />
 
                 
               </Routes>

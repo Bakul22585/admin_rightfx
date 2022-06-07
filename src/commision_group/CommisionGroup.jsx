@@ -134,6 +134,16 @@ const CommisionGroup = () => {
       wrap: true,
     },
     {
+      name: "MT5 GROUP NAME",
+      selector: (row) => {
+        return <span title={row.group_name}>{row.ib_mt5group_name}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.7,
+      wrap: true,
+    },
+    {
       name: "COMMISSION",
       selector: (row) => {
         return <span title={row.commission}>{row.commission}</span>;
@@ -183,6 +193,26 @@ const CommisionGroup = () => {
       sortable: true,
       reorder: true,
       grow: 0.5,
+      wrap: true,
+    },
+    {
+      name: "Is Default",
+      selector: (row) => {
+        return <span title={row.plan_title}>{(row.is_default == "0")? "No" :"Yes"}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.2,
+      wrap: true,
+    },
+    {
+      name: "Is Private",
+      selector: (row) => {
+        return <span title={row.plan_title}>{(row.is_private == "0")? "No" :"Yes"}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.2,
       wrap: true,
     },
     {
