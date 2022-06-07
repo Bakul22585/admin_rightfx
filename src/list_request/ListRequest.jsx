@@ -269,8 +269,8 @@ const ListRequest = () => {
         setOpenModel(true);
         setIbData(prop);
         // const param = new FormData();
-        // // param.append("is_app", 1);
-        // // param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         // param.append("user_id", id);
         // param.append("action", "get_my_structure");
         // axios

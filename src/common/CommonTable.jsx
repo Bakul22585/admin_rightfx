@@ -107,6 +107,11 @@ const CommonTable = (prop) => {
         if (prop.level) {
             param.append('level_id', prop.level);
         }
+        if(prop.checkStatus){
+            
+            param.append('status', prop.checkStatus);
+
+        }
         if(prop.salesAgent)
         {param.append('manager_id', prop.salesAgent);}
         if (prop.filter) {
@@ -199,7 +204,8 @@ const CommonTable = (prop) => {
         prop.searchWord,
         prop.search,
         prop.param,
-        prop.salesAgent
+        prop.salesAgent,
+        prop.checkStatus
     ]);
     // console.log("common table",prop);
     return (

@@ -13,6 +13,7 @@ import {
   Menu,
   MenuItem,
   Paper,
+  InputLabel,
   Select,
   TextField,
 } from "@mui/material";
@@ -32,7 +33,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const CommisionGroup = () => {
-
+const[mt5GroupName,setmt5GroupName]=useState([])
   const navigate = useNavigate();
   const [refresh, setRefresh] = useState(false);
   const [open, setOpen] = useState(false);
@@ -254,11 +255,12 @@ const CommisionGroup = () => {
                 className="edit"
                 {...row}
                 onClick={(event) => {
+                  getMt5GroupName()
                   setDialogTitle('Edit');
                   setForm({
                     ib_group_level_id: row.ib_group_level_id,
                     group_name: row.group_name,
-                    ib_mt5group_name: row.ib_mt5group_name,
+                    ib_mt5group_name: row.ib_group_main_id,
                     ib_comapny_get: row.ib_comapny_get,
                     ib_company_passon: row.ib_company_passon,
                     plan_title: row.plan_title,
@@ -497,7 +499,22 @@ const CommisionGroup = () => {
           <TextField label="Group Name" variant="standard" sx={{ width: '100%' }} name='group_name' value={form.group_name} onChange={input}/>
         </div>
         <div className="view-content-element">
-          <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/>
+          {/* <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/> */}
+          <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>MT5 Group Name</InputLabel>
+              <Select
+                label
+                value={form.ib_mt5group_name}
+                // className="select-font-small"
+                name="ib_mt5group_name"
+                onChange={input}
+              >
+              {mt5GroupName.map((item)=>{
+                return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
+              })}
+                {/* <MenuItem value="0">Demo</MenuItem> */}
+              </Select>
+            </FormControl>
         </div>
         <div className="view-content-element">
           <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input}/>
@@ -555,7 +572,22 @@ const CommisionGroup = () => {
           <TextField label="Group Name" variant="standard" sx={{ width: '100%' }} name='group_name' value={form.group_name} onChange={input}/>
         </div>
         <div className="view-content-element">
-          <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/>
+          {/* <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/> */}
+          <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>MT5 Group Name</InputLabel>
+              <Select
+                label
+                value={form.ib_mt5group_name}
+                // className="select-font-small"
+                name="ib_mt5group_name"
+                onChange={input}
+              >
+              {mt5GroupName.map((item)=>{
+                return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
+              })}
+                {/* <MenuItem value="0">Demo</MenuItem> */}
+              </Select>
+            </FormControl>
         </div>
         <div className="view-content-element">
           <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input}/>
@@ -630,7 +662,7 @@ const CommisionGroup = () => {
     if (form.group_name == "") {
       toast.error("Please enter group name");
     } else if (form.ib_mt5group_name == "") {
-      toast.error("Please enter mt5 group name");
+      toast.error("Please Select mt5 group name");
     } else if (form.execution == "") {
       toast.error("Please enter execution");
     } else if (form.commission == "") {
@@ -780,9 +812,21 @@ const CommisionGroup = () => {
     });
     }
   };
-
+  const getMt5GroupName=()=>{
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+    param.append("action", "get_main_ib_groups");
+    axios
+      .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
+      .then((res) => {
+        setmt5GroupName(res.data.data)
+      });
+  
+  }
   const AddCommissionGroup = () => {
     setDialogTitle('Add');
+    getMt5GroupName()
     setForm({
       ib_group_level_id: "",
       group_name: "",
