@@ -651,6 +651,12 @@ const Profile = () => {
   toast.configure();
   const [mtBalance, setMtBalance] = useState("");
   const [masterStructureData, setMasterStructureData] = useState([]);
+  const [newMasterStructureData, setNewMasterStructureData] = useState({
+    structure_name: "",
+    structure_data: [],
+    structure_id: "",
+    isLoader: false,
+  });
   const [structureList, setStructureList] = useState({
     data: [],
     structure_name: "",
@@ -950,7 +956,7 @@ const Profile = () => {
           <div>
             <Button
               className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
-              // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
+            // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
             >
               <DeleteIcon sx={{ color: "red" }} />
             </Button>
@@ -1128,19 +1134,18 @@ const Profile = () => {
         return (
           <span
             title={row.sponsor_approve}
-            className={`text-color-${
-              row.sponsor_approve == "1"
-                ? "green"
-                : row.sponsor_approve == "2"
+            className={`text-color-${row.sponsor_approve == "1"
+              ? "green"
+              : row.sponsor_approve == "2"
                 ? "red"
                 : "yellow"
-            }`}
+              }`}
           >
             {row.sponsor_approve == "1"
               ? "APPROVED"
               : row.sponsor_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -1155,19 +1160,18 @@ const Profile = () => {
         return (
           <span
             title={row.admin_approve}
-            className={`text-color-${
-              row.admin_approve == "1"
-                ? "green"
-                : row.admin_approve == "2"
+            className={`text-color-${row.admin_approve == "1"
+              ? "green"
+              : row.admin_approve == "2"
                 ? "red"
                 : "yellow"
-            }`}
+              }`}
           >
             {row.admin_approve == "1"
               ? "APPROVED"
               : row.admin_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -1182,15 +1186,14 @@ const Profile = () => {
         return (
           <span
             title={row.status}
-            className={`text-color-${
-              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-            }`}
+            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+              }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -1246,58 +1249,58 @@ const Profile = () => {
     });
   };
 
-    const updatePartnership = () => {
+  const updatePartnership = () => {
     if (updateDate.sponsor_approve == "") {
-        toast.error("Status is required");
-      } else if (updateDate.remarks == "") {
-        toast.error("Remark is required");
-      } else {
-        const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
-        param.append("user_id", id);
-        param.append("action", "update_partnership_request");
-        param.append("ib_application_id", ibdata.ib_application_id);
-        param.append("structure_id", updateDate.structure_id);
-        param.append("sponsor_approve", updateDate.sponsor_approve);
-        param.append("remarks", updateDate.remarks);
-        setUpdateDate((prevalue) => {
-          return {
-            ...prevalue,
-            isLoader: true,
-          };
+      toast.error("Status is required");
+    } else if (updateDate.remarks == "") {
+      toast.error("Remark is required");
+    } else {
+      const param = new FormData();
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("action", "update_partnership_request");
+      param.append("ib_application_id", ibdata.ib_application_id);
+      param.append("structure_id", updateDate.structure_id);
+      param.append("sponsor_approve", updateDate.sponsor_approve);
+      param.append("remarks", updateDate.remarks);
+      setUpdateDate((prevalue) => {
+        return {
+          ...prevalue,
+          isLoader: true,
+        };
+      });
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+            setUpdateDate((prevalue) => {
+              return {
+                ...prevalue,
+                isLoader: false,
+              };
+            });
+          } else {
+            toast.success(res.data.message);
+            setUpdateDate((prevalue) => {
+              return {
+                ...prevalue,
+                isLoader: false,
+                refresh: !updateDate.refresh,
+              };
+            });
+            setOpenModel(false);
+          }
         });
-        axios
-          .post(Url + "/ajaxfiles/update_user_profile.php", param)
-          .then((res) => {
-            if (res.data.status == "error") {
-              toast.error(res.data.message);
-              setUpdateDate((prevalue) => {
-                return {
-                  ...prevalue,
-                  isLoader: false,
-                };
-              });
-            } else {
-              toast.success(res.data.message);
-              setUpdateDate((prevalue) => {
-                return {
-                  ...prevalue,
-                  isLoader: false,
-                  refresh: !updateDate.refresh,
-                };
-              });
-              setOpenModel(false);
-            }
-          });
-      }
-    };
+    }
+  };
   const viewRequest = (prop) => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_my_structure");
     axios
@@ -1384,8 +1387,8 @@ const Profile = () => {
   ];
   const getAccountList = () => {
     const param = new FormData();
-    // param.append("user_id", id);
-    // param.append("is_app", 1);
+    param.append("user_id", id);
+    param.append("is_app", 1);
     param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_mt5_account_list");
 
@@ -1398,8 +1401,8 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "list_my_structures");
 
     axios
@@ -1416,8 +1419,8 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
-    // param1.append("is_app", 1);
-    // param1.append("AADMIN_LOGIN_ID", 1);
+    param1.append("is_app", 1);
+    param1.append("AADMIN_LOGIN_ID", 1);
     param1.append("user_id", id);
 
     if (res !== null) {
@@ -1481,7 +1484,7 @@ const Profile = () => {
                               e.target.value,
                               x,
                               masterStructureData["pair_data"][x][index1][
-                                "rebate"
+                              "rebate"
                               ],
                               item1.rebate,
                               masterStructureData
@@ -1522,20 +1525,25 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
-    if (res) {
+    param.append('action', 'get_default_structure');
+    /* if (res) {
       param.append("structure_id", res);
       param.append("action", "get_my_structure");
     } else {
       param.append("action", "add_new_structure_data");
-    }
+    } */
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param)
       .then((res) => {
         console.log("ras.data.data", res.data.data);
-        setMasterStructureData(res.data.data); // setStructureList((preValue) => {
+        newMasterStructureData.structure_data = res.data.data;
+        setNewMasterStructureData({ ...newMasterStructureData });
+        console.log('newMasterStructureData', newMasterStructureData);
+        // setMasterStructureData(res.data.data); 
+        // setStructureList((preValue) => {
         //   return {
         //     ...preValue,
         //     data: res.data.data,
@@ -1546,8 +1554,8 @@ const Profile = () => {
   };
   const getBankList = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "view_bank_details");
     axios
@@ -2097,8 +2105,8 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Add Master Structure") {
       return (
-        <div>
-          <div className="structureNameSection">
+        <div className="master-structure-section">
+          <div className="structureNameSection view-ib-content-section">
             <input
               type="text"
               className=""
@@ -2108,72 +2116,129 @@ const Profile = () => {
                 setStructureList((preValue) => {
                   return {
                     ...preValue,
-
                     structure_name: e.target.value,
                   };
                 });
               }}
             />
           </div>
-          {forinloop()}
-          {/* {masterStructureData.map((item, index) => {
-            return (
-              <div className="structureInputSection">
-                <hr className="solid" />
-                <br />
-                <Grid container>
-                  <Grid item md={4} lg={4} xl={4} className="label-center">
-                    <label>{item.ib_group_name}</label>
-                  </Grid>
-                  <Grid item md={8} lg={8} xl={8}>
-                    <Grid container spacing={1}>
-                      {item.pair_data.map((item1, index1) => {
-                        return (
-                          <>
-                            <Grid item md={4} lg={4} xl={4}>
-                              <label>{item1.pair_name}</label>
-                            </Grid>
-                            <Grid item md={4} lg={4} xl={4}>
-                              <input
-                                value={item1.rebate}
-                                type="text"
-                                className=""
-                                placeholder="Rebate"
-                                onChange={(e) => {
-                                  masterStructureData[index]["pair_data"][
-                                    index1
-                                  ]["rebate"] = e.target.value;
-                                  setMasterStructureData([
-                                    ...masterStructureData,
-                                  ]);
-                                }}
-                              />
-                            </Grid>
-                            <Grid item md={4} lg={4} xl={4}>
-                              <input
-                                value={item1.commission}
-                                type="text"
-                                className=""
-                                placeholder="Commission"
-                                onChange={(e) => {
-                                  masterStructureData[index]["pair_data"][
-                                    index1
-                                  ]["commission"] = e.target.value;
-                                  setMasterStructureData([
-                                    ...masterStructureData,
-                                  ]);
-                                }}
-                              />
-                            </Grid>
-                          </>
-                        );
-                      })}
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </div>
-            );
-          })} */}
+          <div className="main-content-input">
+            <div className="ib-structure view-commission-content-section">
+              {
+                newMasterStructureData.structure_data.map((item, index) => {
+                  return (
+                    <div className="group-structure-section">
+                      <div className="main-section">
+                        <div className='main-section-title'>{item.ib_group_name}</div>
+                        <div className='main-section-input-element'>
+                          <div>
+                            {/* <span>Rebate</span> */}
+                            <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
+                              onChange={(e) => {
+                                newMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData
+                                });
+                              }} />
+                          </div>
+                          <div>
+                            {/* <span>Commission</span> */}
+                            <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                              onChange={(e) => {
+                                newMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData
+                                });
+                              }}
+                            />
+                          </div>
+                          <div>
+                            {
+                              (item.ibGroup != undefined) ?
+                                <FormControl variant="standard">
+                                  <Select
+                                    label
+                                    className="select-font-small"
+                                    value={item.ib_group_level_id}
+                                    name="title"
+                                    onChange={(e) => {
+                                      newMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                      // var selectedIbgroupLevelIds = newMasterStructureData.structure_data.map((item) => {return item.ib_group_level_id});
+                                      // console.log(selectedIbgroupLevelIds);
+                                      // newMasterStructureData.structure_data.forEach((element, key) => {
+                                      //   element.ibGroup.forEach((element1, key1) => {
+                                      //     selectedIbgroupLevelIds.forEach((element2, key3) => {
+                                      //       console.log(element1.ib_group_level_id, element2);
+                                      //       if (element1.ib_group_level_id == element2) {
+                                      //         newMasterStructureData.structure_data[key]['ibGroup'][key1]['isDisable'] = true;
+                                      //       } else {
+                                      //         newMasterStructureData.structure_data[key]['ibGroup'][key1]['isDisable'] = false;
+                                      //       }
+                                      //     });
+                                      //   });
+                                      // })
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData
+                                      });
+                                      console.log('newMasterStructureData', newMasterStructureData);
+                                    }}
+                                  >
+                                    <MenuItem value={0}>Select IB Group</MenuItem>
+                                    {
+                                      item.ibGroup.map((item1, index1) => {
+                                        return (
+                                          <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
+                                        );
+                                      })
+                                    }
+                                  </Select>
+                                </FormControl> : ''
+                            }
+                          </div>
+                        </div>
+                        <div className='action-section'>
+                          <span onClick={(e) => { newMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                        </div>
+                      </div>
+                      <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
+                        {
+                          item.pair_data.map((item1, index1) => {
+                            return (
+                              <div className="pair-data">
+                                <div className='pair-data-title'>{item1.pair_name}</div>
+                                <div>
+                                  <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
+                                    onChange={(e) => {
+                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData
+                                      });
+                                    }}
+                                  />
+                                </div>
+                                <div>
+                                  <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
+                                    onChange={(e) => {
+                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData
+                                      });
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })
+                        }
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+          {/* {forinloop()} */}
+
         </div>
       );
     } else if (dialogTitle == "Edit Master Structure") {
@@ -3136,7 +3201,7 @@ const Profile = () => {
                 </FormControl>
               ) : transactionForm.account_to != "" ? (
                 transactionForm.account == "MT5" &&
-                transactionForm.account_to == "Wallet" ? (
+                  transactionForm.account_to == "Wallet" ? (
                   <TextField
                     className="disabled-input-wallet-code"
                     label="Wallet Code"
@@ -3163,7 +3228,7 @@ const Profile = () => {
                 ""
               )}
               {transactionForm.from_mt5_account_id &&
-              transactionForm.account == "MT5" ? (
+                transactionForm.account == "MT5" ? (
                 <>
                   {" "}
                   <TextField
@@ -4009,8 +4074,8 @@ const Profile = () => {
   const createMt5AccountSubmit = () => {
     console.log(createMt5Form);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
 
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
@@ -4078,8 +4143,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -4134,8 +4199,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -4183,8 +4248,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -4234,8 +4299,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -4287,8 +4352,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -4331,8 +4396,8 @@ const Profile = () => {
 
     console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(masterStructureData));
     param.append("structure_name", structureList.structure_name);
@@ -4354,8 +4419,8 @@ const Profile = () => {
 
     console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(masterStructureData));
     param.append("structure_name", structureList.structure_name);
@@ -4396,8 +4461,8 @@ const Profile = () => {
   };
   useEffect(() => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
@@ -4452,8 +4517,8 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -4690,8 +4755,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -4775,8 +4840,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -4825,8 +4890,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
@@ -4886,8 +4951,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "add_user_bank");
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
@@ -4983,8 +5048,8 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         param.append("action", "add_deposit");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
         param.append("payment_method", transactionForm.payment);
@@ -5045,8 +5110,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_withdraw");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
         if (transactionForm.crypto_name) {
@@ -5232,8 +5297,8 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     userData.isLoader = true;
     setuserData({ ...userData });
@@ -5261,8 +5326,8 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_general_information");
     await axios
@@ -5311,8 +5376,8 @@ const Profile = () => {
     getMt5LivePackages();
     getAccountList();
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_leverages");
     axios
@@ -5391,14 +5456,13 @@ const Profile = () => {
                     <Tab label="LOGS" />
                     <Tab label="TRANSACTIONS" />
                     {
-                      userData.data.is_ib_account=="0"?"":
-                    <>
-                    <Tab label="REFERRALS" />
-                    <Tab label="PARTNERSHIP" />
-                 
-                    </>
-                  }
-                  <Tab label="STATEMENT" />
+                      userData.data.is_ib_account == "0" ? "" : <Tab label="REFERRALS" />
+                    }
+                    {
+                      userData.data.is_ib_account == "0" ? "" : <Tab label="PARTNERSHIP" />
+                    }
+
+                    <Tab label="STATEMENT" />
                   </Tabs>
                   <SwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -5483,7 +5547,7 @@ const Profile = () => {
                                   focused
                                   name="email"
                                   disabled
-                                  // onChange={profileInput}
+                                // onChange={profileInput}
                                 />
                               </div>
                               <div className="element">
@@ -5839,55 +5903,55 @@ const Profile = () => {
                               </div>
                               <br />
                               {
-                                userData.data.is_ib_account=="0"?"":
-                                <>
-                              <p className="group-header">IB</p>
-                              <div className="mt5btngroup">
-                              
-                                <Button
-                                  variant="contained"
-                                  className="add_master_structure btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Master Structure
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="edit_master_structure btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Edit Master Structure
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="add_shared_structure btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Shared Structure
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="link_client btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Link Client
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="link_ib btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Link To IB
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="unlink_ib btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Unlink IB
-                                </Button>
-                              </div>
-                              </>
+                                userData.data.is_ib_account == "0" ? "" :
+                                  <>
+                                    <p className="group-header">IB</p>
+                                    <div className="mt5btngroup">
+
+                                      <Button
+                                        variant="contained"
+                                        className="add_master_structure btn-hover-css"
+                                        onClick={openDialogbox}
+                                      >
+                                        Add Master Structure
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        className="edit_master_structure btn-hover-css"
+                                        onClick={openDialogbox}
+                                      >
+                                        Edit Master Structure
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        className="add_shared_structure btn-hover-css"
+                                        onClick={openDialogbox}
+                                      >
+                                        Add Shared Structure
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        className="link_client btn-hover-css"
+                                        onClick={openDialogbox}
+                                      >
+                                        Link Client
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        className="link_ib btn-hover-css"
+                                        onClick={openDialogbox}
+                                      >
+                                        Link To IB
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        className="unlink_ib btn-hover-css"
+                                        onClick={openDialogbox}
+                                      >
+                                        Unlink IB
+                                      </Button>
+                                    </div>
+                                  </>
                               }
                               <br />
                               <p className="group-header">Communication</p>
@@ -6968,7 +7032,7 @@ const Profile = () => {
             <Grid
               container
               spacing={1}
-              // className="MuiGrid-justify-xs-space-between mt-2"
+            // className="MuiGrid-justify-xs-space-between mt-2"
             >
               <div>
                 <div className="main-content-display">
@@ -7015,55 +7079,52 @@ const Profile = () => {
                   <div className="display-element">
                     <h6>IB APPROVE</h6>
                     <div
-                      className={`col s12 text-color-${
-                        ibdata.sponsor_approve == "1"
-                          ? "green"
-                          : ibdata.sponsor_approve == "2"
+                      className={`col s12 text-color-${ibdata.sponsor_approve == "1"
+                        ? "green"
+                        : ibdata.sponsor_approve == "2"
                           ? "red"
                           : "yellow"
-                      }`}
+                        }`}
                     >
                       {ibdata.sponsor_approve == "1"
                         ? "APPROVED"
                         : ibdata.sponsor_approve == "2"
-                        ? "REJECTED"
-                        : "PENDING"}
+                          ? "REJECTED"
+                          : "PENDING"}
                     </div>
                   </div>
                   <div className="display-element">
                     <h6>ADMIN APPROVE</h6>
                     <div
-                      className={`col s12 text-color-${
-                        ibdata.admin_approve == "1"
-                          ? "green"
-                          : ibdata.admin_approve == "2"
+                      className={`col s12 text-color-${ibdata.admin_approve == "1"
+                        ? "green"
+                        : ibdata.admin_approve == "2"
                           ? "red"
                           : "yellow"
-                      }`}
+                        }`}
                     >
                       {ibdata.admin_approve == "1"
                         ? "APPROVED"
                         : ibdata.admin_approve == "2"
-                        ? "REJECTED"
-                        : "PENDING"}
+                          ? "REJECTED"
+                          : "PENDING"}
                     </div>
                   </div>
                   <div className="display-element">
                     <h6>STATUS</h6>
                     <div
-                      className={`col s12 text-color-${
-                        ibdata.status == "1"
-                          ? "green"
-                          : ibdata.status == "2"
+                      className={`col s12 text-color-${ibdata.status == "1"
+                        ? "green"
+                        : ibdata.status == "2"
                           ? "red"
                           : "yellow"
-                      }`}
+                        }`}
                     >
                       {ibdata.status == "1"
                         ? "APPROVED"
                         : ibdata.status == "2"
-                        ? "REJECTED"
-                        : "PENDING"}
+                          ? "REJECTED"
+                          : "PENDING"}
                     </div>
                   </div>{" "}
                 </div>

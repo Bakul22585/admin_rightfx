@@ -28,7 +28,6 @@ const ListRequest = () => {
     structure_data: [],
     isLoader: false,
     refresh: false,
-    structure_id: ""
   });
   const input01 = (event) => {
     const { name, value } = event.target;
@@ -275,34 +274,38 @@ const ListRequest = () => {
   const viewRequest = async (prop) => {
     // setOpenModel(true);
     setIbData(prop);
-    const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
-    param.append('action', 'get_default_structure');
-    param.append('user_id', prop.requested_user_id);
-    await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-
-      if (res.data.status == 'error') {
-        toast.error(res.data.message);
-      } else {
-        updateDate.structure_data = res.data.data;
-        if (res.data.structure_id) {
-          updateDate.structure_id = res.data.structure_id;
-          updateDate.structure_name = res.data.structure_name;
+    if (prop.sponsor_id == "0") {
+      const param = new FormData();
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
+      param.append('action', 'get_default_structure');
+      param.append('user_id', prop.requested_user_id);
+      await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
         }
-
-        setUpdateDate({ ...updateDate });
-
-        console.log('form', updateDate);
-        // setMaxWidth('md');
-        // setDialogTitle('Add');
-        setOpenModel(true)
-      }
-    });
+  
+        if (res.data.status == 'error') {
+          toast.error(res.data.message);
+        } else {
+          updateDate.structure_data = res.data.data;
+          if (res.data.structure_id) {
+            updateDate.structure_id = res.data.structure_id;
+            updateDate.structure_name = res.data.structure_name;
+          }
+  
+          setUpdateDate({ ...updateDate });
+  
+          console.log('form', updateDate);
+          // setMaxWidth('md');
+          // setDialogTitle('Add');
+          setOpenModel(true)
+        }
+      });
+    } else {
+      setOpenModel(true)
+    }
     /* const param = new FormData();
     param.append("is_app", 1);
     param.append("AADMIN_LOGIN_ID", 1);
@@ -368,55 +371,56 @@ const ListRequest = () => {
   toast.configure();
   const updatePartnership = async () => {
     var error = false;
-    if (updateDate.structure_name == "") {
-      toast.error("Please enter structure name");
-
-      error = true;
-    } else {
-      updateDate.structure_data.forEach(element => {
-        console.log(element.ib_group_name, element.group_rebate);
-        if (element.group_rebate === "") {
-          toast.error(`Please enter ${element.ib_group_name} rebate`);
-          error = true;
-          return false;
-        } else if (element.group_commission === "") {
-          toast.error(`Please enter ${element.ib_group_name} commission`);
-          error = true;
-          return false;
-        } else if (element.ib_group_level_id === 0) {
-          toast.error(`Please enter ${element.ib_group_name} ib group`);
-          error = true;
-          return false;
-        } else {
-          element.pair_data.forEach(element1 => {
-            if (element1.rebate === "") {
-              toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
-              error = true;
-              return false;
-            } else if (element1.rebate > element.group_rebate) {
-              // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-              toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
-              error = true;
-              return false;
-            } else if (element1.commission === "") {
-              toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
-              error = true;
-              return false;
-            } else if (element1.commission > element.group_commission) {
-              // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-              toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
-              error = true;
-              return false;
-            }
-          });
-        }
-        if (error) {
-          return false;
-        }
-      });
-    }
-    if (error) {
-      return false;
+    if (updateDate.structure_data.length > 0) {
+      if (updateDate.structure_name == "") {
+        toast.error("Please enter structure name");
+        error = true;
+      } else {
+        updateDate.structure_data.forEach(element => {
+          console.log(element.ib_group_name, element.group_rebate);
+          if (element.group_rebate === "") {
+            toast.error(`Please enter ${element.ib_group_name} rebate`);
+            error = true;
+            return false;
+          } else if (element.group_commission === "") {
+            toast.error(`Please enter ${element.ib_group_name} commission`);
+            error = true;
+            return false;
+          } else if (element.ib_group_level_id === 0) {
+            toast.error(`Please enter ${element.ib_group_name} ib group`);
+            error = true;
+            return false;
+          } else {
+            element.pair_data.forEach(element1 => {
+              if (element1.rebate === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                error = true;
+                return false;
+              } else if (element1.rebate > element.group_rebate) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                error = true;
+                return false;
+              } else if (element1.commission === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                error = true;
+                return false;
+              } else if (element1.commission > element.group_commission) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                error = true;
+                return false;
+              }
+            });
+          }
+          if (error) {
+            return false;
+          }
+        });
+      }
+      if (error) {
+        return false;
+      }
     }
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
@@ -569,7 +573,7 @@ const ListRequest = () => {
                       </div>
                       <div className="display-element">
                         <h6>ACQUIRE CLIENT</h6>
-                        <div>{ibdata.execution}</div>
+                        <div>{ibdata.acquire_client}</div>
                       </div>
                       <div className="display-element">
                         <h6>COUNTRY</h6>
@@ -655,9 +659,12 @@ const ListRequest = () => {
                   <div className="divider"></div>
                   <div className="main-content-input">
                     <div className="ib-structure view-commission-content-section">
-                      <div style={{ width: '100%' }}>
+                    {
+                      (ibdata.sponsor_id == "0")? <div style={{ width: '100%' }}>
                         <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={updateDate.structure_name} onChange={input01} />
-                      </div>
+                      </div> : ""
+                    }
+                      
                       {
                         updateDate.structure_data.map((item, index) => {
                           return (
@@ -755,7 +762,8 @@ const ListRequest = () => {
                         })
                       }
                     </div>
-                    <div>
+                    {
+                      (ibdata.sponsor_id == "0") ? <div>
                       <label
                         htmlFor="sponsor_approve"
                         className="text-info font-weight-bold form-label-head w-100  required"
@@ -779,7 +787,9 @@ const ListRequest = () => {
                         <MenuItem value="1">APPROVED</MenuItem>
                         <MenuItem value="2">REJECTED</MenuItem>
                       </Select>
-                    </div>
+                    </div> : ""
+                    }
+                    
                     <div>
                       <label
                         htmlFor="sponsor_approve"
