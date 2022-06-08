@@ -254,8 +254,8 @@ const Leads = () => {
 
 const getcontry=()=>{
   const param = new FormData();
-  param.append('is_app', 1);
-           param.append('AADMIN_LOGIN_ID', 1); 
+  // param.append('is_app', 1);
+  //          param.append('AADMIN_LOGIN_ID', 1); 
  axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
    if (res.data.status == "error") {
      // toast.error(res.data.message);
@@ -266,8 +266,8 @@ const getcontry=()=>{
 }
 const getListManagers=()=>{
   const param = new FormData();
-  param.append('is_app', 1);
-           param.append('AADMIN_LOGIN_ID', 1); 
+  // param.append('is_app', 1);
+  //          param.append('AADMIN_LOGIN_ID', 1); 
            param.append('action',"list_managers"); 
 
  axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
@@ -416,8 +416,8 @@ return {
   isLoader:true,
 }
       })
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("cp_access", cpData.cp_access);
       param.append("leads_status", "1");
       param.append("inquiry_id", cpData.inquiry_id);
@@ -1302,8 +1302,8 @@ console.log("listManagers",listManagers)
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-        param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); 
+        // param.append('is_app', 1);
+        //     param.append('AADMIN_LOGIN_ID', 1); 
       param.append('customer_name', form.customer_name);
       param.append('customer_mobile', form.customer_mobile);
       param.append('customer_email', form.customer_email);
@@ -1437,8 +1437,8 @@ console.log("listManagers",listManagers)
   const approveInterestStatus = (e, data) => {
     console.log(e.target.value, data);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "change_interest");
     param.append("inquiry_id", data.inquiry_id);
     param.append("interest",e.target.value);
@@ -1476,8 +1476,8 @@ console.log("listManagers",listManagers)
   const approvechangeAssign = (e, data) => {
     console.log(e.target.value, data);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "change_assign_to");
     param.append("inquiry_id", data.inquiry_id);
     param.append("lead_assign_user_id",e.target.value);
@@ -1532,8 +1532,8 @@ console.log("listManagers",listManagers)
     } else {
       newFollowupForm.isLoader = true;
       setNewFollowupForm({ ...newFollowupForm });
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1); 
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1); 
       param.append('status_id', newFollowupForm.interest);
       param.append('lead_assign_user_id', newFollowupForm.lead_assign_user_id);
       param.append('remarks', newFollowupForm.remark);
@@ -1690,8 +1690,8 @@ console.log("listManagers",listManagers)
     } else if (status == 'rejected') {
       param.append('leads_status', 3);
     }
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1); 
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1); 
     await axios.post(`${Url}/ajaxfiles/update_lead_status.php`, param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);

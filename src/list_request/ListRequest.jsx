@@ -28,7 +28,7 @@ const ListRequest = () => {
     structure_data: [],
     isLoader: false,
     refresh: false,
-    structure_id:""
+    structure_id: ""
   });
   const input01 = (event) => {
     const { name, value } = event.target;
@@ -168,10 +168,10 @@ const ListRequest = () => {
           <span
             title={row.sponsor_approve}
             className={`text-color-${row.sponsor_approve == "1"
-                ? "green"
-                : row.sponsor_approve == "2"
-                  ? "red"
-                  : "yellow"
+              ? "green"
+              : row.sponsor_approve == "2"
+                ? "red"
+                : "yellow"
               }`}
           >
             {row.sponsor_approve == "1"
@@ -194,10 +194,10 @@ const ListRequest = () => {
           <span
             title={row.admin_approve}
             className={`text-color-${row.admin_approve == "1"
-                ? "green"
-                : row.admin_approve == "2"
-                  ? "red"
-                  : "yellow"
+              ? "green"
+              : row.admin_approve == "2"
+                ? "red"
+                : "yellow"
               }`}
           >
             {row.admin_approve == "1"
@@ -252,11 +252,11 @@ const ListRequest = () => {
                     return {
                       ...preValue,
                       remarks: row.remarks,
-                      requested_user_id:row.requested_user_id,
-                      ib_application_id:row.ib_application_id
+                      requested_user_id: row.requested_user_id,
+                      ib_application_id: row.ib_application_id
                     }
                   })
-                
+
                 }}
               >
                 <i className="material-icons">view_timeline</i>
@@ -271,8 +271,8 @@ const ListRequest = () => {
       grow: 0.3,
     },
   ];
-  console.log("updateDate",ibdata)
-  const viewRequest = async(prop) => {
+  console.log("updateDate", ibdata)
+  const viewRequest = async (prop) => {
     // setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
@@ -281,27 +281,27 @@ const ListRequest = () => {
     param.append('action', 'get_default_structure');
     param.append('user_id', prop.requested_user_id);
     await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-            localStorage.setItem("login", true);
-            navigate("/");
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+
+      if (res.data.status == 'error') {
+        toast.error(res.data.message);
+      } else {
+        updateDate.structure_data = res.data.data;
+        if (res.data.structure_id) {
+          updateDate.structure_id = res.data.structure_id;
+          updateDate.structure_name = res.data.structure_name;
         }
 
-        if (res.data.status == 'error') {
-            toast.error(res.data.message);
-        } else {
-            updateDate.structure_data = res.data.data;
-            if(res.data.structure_id){
-              updateDate.structure_id = res.data.structure_id;
-              updateDate.structure_name = res.data.structure_name;
-            }
+        setUpdateDate({ ...updateDate });
 
-            setUpdateDate({ ...updateDate});
-           
-            console.log('form', updateDate);
-            // setMaxWidth('md');
-            // setDialogTitle('Add');
-            setOpenModel(true)
-        }
+        console.log('form', updateDate);
+        // setMaxWidth('md');
+        // setDialogTitle('Add');
+        setOpenModel(true)
+      }
     });
     /* const param = new FormData();
     param.append("is_app", 1);
@@ -369,44 +369,54 @@ const ListRequest = () => {
   const updatePartnership = async () => {
     var error = false;
     if (updateDate.structure_name == "") {
-        toast.error("Please enter structure name");
-        
-        error = true;
+      toast.error("Please enter structure name");
+
+      error = true;
     } else {
       updateDate.structure_data.forEach(element => {
-            console.log(element.ib_group_name, element.group_rebate);
-            if (element.group_rebate === "") {
-                toast.error(`Please enter ${element.ib_group_name} rebate`);
-                error = true;
-                return false;
-            } else if (element.group_commission === "") {
-                toast.error(`Please enter ${element.ib_group_name} commission`);
-                error = true;
-                return false;
-            } else if (element.ib_group_level_id === 0) {
-                toast.error(`Please enter ${element.ib_group_name} ib group`);
-                error = true;
-                return false;
-            } else {
-                element.pair_data.forEach(element1 => {
-                    if (element1.rebate === "") {
-                        toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
-                        error = true;
-                        return false;
-                    } else if (element1.commission === "") {
-                        toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
-                        error = true;
-                        return false;
-                    }
-                });
+        console.log(element.ib_group_name, element.group_rebate);
+        if (element.group_rebate === "") {
+          toast.error(`Please enter ${element.ib_group_name} rebate`);
+          error = true;
+          return false;
+        } else if (element.group_commission === "") {
+          toast.error(`Please enter ${element.ib_group_name} commission`);
+          error = true;
+          return false;
+        } else if (element.ib_group_level_id === 0) {
+          toast.error(`Please enter ${element.ib_group_name} ib group`);
+          error = true;
+          return false;
+        } else {
+          element.pair_data.forEach(element1 => {
+            if (element1.rebate === "") {
+              toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+              error = true;
+              return false;
+            } else if (element1.rebate > element.group_rebate) {
+              // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+              toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+              error = true;
+              return false;
+            } else if (element1.commission === "") {
+              toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+              error = true;
+              return false;
+            } else if (element1.commission > element.group_commission) {
+              // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+              toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+              error = true;
+              return false;
             }
-            if (error) {
-                return false;
-            }
-        });
+          });
+        }
+        if (error) {
+          return false;
+        }
+      });
     }
     if (error) {
-        return false;
+      return false;
     }
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
@@ -419,43 +429,45 @@ const ListRequest = () => {
     param.append('sponsor_approve', updateDate.sponsor_approve);
     param.append('admin_approve', updateDate.admin_approve);
     param.append('structure_name', updateDate.structure_name);
-if(updateDate.structure_id){
-  param.append('structure_id', updateDate.structure_id);
-  param.append('action', 'update_master_structure');
-}
-if(updateDate.structure_id==""){
-  param.append('action', 'insert_master_structure');
-}
+    if (updateDate.structure_id) {
+      param.append('structure_id', updateDate.structure_id);
+      param.append('action', 'update_master_structure');
+    }
+    if (updateDate.structure_id == "") {
+      param.append('action', 'insert_master_structure');
+    }
     param.append('pair_data', JSON.stringify(updateDate.structure_data));
 
     await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-            localStorage.setItem("login", true);
-            navigate("/");
-        }
-        updateDate.isLoader = false;
-        setUpdateDate({ ...updateDate });
-        if (res.data.status == 'error') {
-            toast.error(res.data.message);
-        } else {
-            toast.success(res.data.message);
-            setOpenModel(false);
-            setUpdateDate({  structure_id: "",
-            sponsor_approve: "",
-            admin_approve: "",
-            remarks: "",
-            structure_name: "",
-            structure_data: [],
-            isLoader: false,
-            refresh: !updateDate.refresh,
-            
-            structure_id:""})
-            
-            
-        }
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      updateDate.isLoader = false;
+      setUpdateDate({ ...updateDate });
+      if (res.data.status == 'error') {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
+        setOpenModel(false);
+        setUpdateDate({
+          structure_id: "",
+          sponsor_approve: "",
+          admin_approve: "",
+          remarks: "",
+          structure_name: "",
+          structure_data: [],
+          isLoader: false,
+          refresh: !updateDate.refresh,
+
+          structure_id: ""
+        })
+
+
+      }
     });
-// }
-};
+    // }
+  };
   const [searchBy, setSearchBy] = useState([
     {
       'label': 'DATE',
@@ -540,11 +552,10 @@ if(updateDate.structure_id==""){
                   }}
                 />
               </DialogTitle>
-              <DialogContent className="create-account-content ml-4">
+              <DialogContent className="view-ib-content-section">
                 <Grid
                   container
                   spacing={1}
-                // className="MuiGrid-justify-xs-space-between mt-2"
                 >
                   <div>
                     <div className="main-content-display">
@@ -592,10 +603,10 @@ if(updateDate.structure_id==""){
                         <h6>IB APPROVE</h6>
                         <div
                           className={`col s12 text-color-${ibdata.sponsor_approve == "1"
-                              ? "green"
-                              : ibdata.sponsor_approve == "2"
-                                ? "red"
-                                : "yellow"
+                            ? "green"
+                            : ibdata.sponsor_approve == "2"
+                              ? "red"
+                              : "yellow"
                             }`}
                         >
                           {ibdata.sponsor_approve == "1"
@@ -609,10 +620,10 @@ if(updateDate.structure_id==""){
                         <h6>ADMIN APPROVE</h6>
                         <div
                           className={`col s12 text-color-${ibdata.admin_approve == "1"
-                              ? "green"
-                              : ibdata.admin_approve == "2"
-                                ? "red"
-                                : "yellow"
+                            ? "green"
+                            : ibdata.admin_approve == "2"
+                              ? "red"
+                              : "yellow"
                             }`}
                         >
                           {ibdata.admin_approve == "1"
@@ -626,10 +637,10 @@ if(updateDate.structure_id==""){
                         <h6>STATUS</h6>
                         <div
                           className={`col s12 text-color-${ibdata.status == "1"
-                              ? "green"
-                              : ibdata.status == "2"
-                                ? "red"
-                                : "yellow"
+                            ? "green"
+                            : ibdata.status == "2"
+                              ? "red"
+                              : "yellow"
                             }`}
                         >
                           {ibdata.status == "1"
@@ -643,128 +654,105 @@ if(updateDate.structure_id==""){
                   </div>
                   <div className="divider"></div>
                   <div className="main-content-input">
-                    {/* <div>
-                  <label
-                    htmlFor="structure_id"
-                    className="text-info font-weight-bold form-label-head w-100  required"
-                  >
-                    Structure type
-                  </label>
-                  <Select
-                    value={updateDate.structure_id}
-                    name="structure_id"
-                    onChange={input01}
-                    displayEmpty
-                    inputProps={{
-                      "aria-label": "Without label",
-                    }}
-                    input={<BootstrapInput />}
-                    className="mt-0 ml-0"
-                    style={{ width: "100%" }}
-                  >
-                    <MenuItem value="">Select Option</MenuItem>
-                    {getStructuresList.map((item) => {
-                      return (
-                        <MenuItem value={item.structure_id}>
-                          {item.structure_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </div> */}
-                   
                     <div className="ib-structure view-commission-content-section">
-                    <div style={{ width: '100%' }}>
-                    <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={updateDate.structure_name} onChange={input01} />
-                </div>
+                      <div style={{ width: '100%' }}>
+                        <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={updateDate.structure_name} onChange={input01} />
+                      </div>
                       {
                         updateDate.structure_data.map((item, index) => {
                           return (
-                              <div className="group-structure-section">
-                                  <div className="main-section">
-                                      <div>{item.ib_group_name}</div>
-                                      <div>
-                                          <input type='number' className="rebert_amount" placeholder="Rebert" value={item.group_rebate}
-                                              onChange={(e) => {
-                                                updateDate.structure_data[index]['group_rebate'] = e.target.value;
-                                                  setUpdateDate({
-                                                      ...updateDate
-                                                  });
-                                              }} />
-                                      </div>
-                                      <div>
-                                          <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
-                                              onChange={(e) => {
-                                                updateDate.structure_data[index]['group_commission'] = e.target.value;
-                                                  setUpdateDate({
-                                                      ...updateDate
-                                                  });
-                                              }}
-                                          />
-                                      </div>
-                                      <div>
-                                          {
-                                              (item.ibGroup != undefined) ?
-                                                  <FormControl variant="standard">
-                                                      <Select
-                                                          label
-                                                          className="select-font-small"
-                                                          value={item.ib_group_level_id}
-                                                          name="title"
-                                                          onChange={(e) => {
-                                                            updateDate.structure_data[index]['ib_group_level_id'] = e.target.value;
-                                                              setUpdateDate({
-                                                                  ...updateDate
-                                                              });
-                                                          }}
-                                                      >
-                                                          <MenuItem value="">Select IB Group</MenuItem>
-                                                          {
-                                                              item.ibGroup.map((item1, index1) => {
-                                                                  return (
-                                                                      <MenuItem value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
-                                                                  );
-                                                              })
-                                                          }
-                                                      </Select>
-                                                  </FormControl> : ''
-                                          }
-                                      </div>
+                            <div className="group-structure-section">
+                              <div className="main-section">
+                                <div className='main-section-title'>{item.ib_group_name}</div>
+                                <div className='main-section-input-element'>
+                                  <div>
+                                    {/* <span>Rebate</span> */}
+                                    <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
+                                      onChange={(e) => {
+                                        updateDate.structure_data[index]['group_rebate'] = e.target.value;
+                                        setUpdateDate({
+                                          ...updateDate
+                                        });
+                                      }} />
                                   </div>
-                                  <div className="pair-section">
-                                      {
-                                          item.pair_data.map((item1, index1) => {
-                                              return (
-                                                  <div className="pair-data">
-                                                      <div>{item1.pair_name}</div>
-                                                      <div>
-                                                          <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
-                                                              onChange={(e) => {
-                                                                updateDate.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
-                                                                  setUpdateDate({
-                                                                      ...updateDate
-                                                                  });
-                                                              }}
-                                                          />
-                                                      </div>
-                                                      <div>
-                                                          <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
-                                                              onChange={(e) => {
-                                                                  updateDate.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
-                                                                  setUpdateDate({
-                                                                      ...updateDate
-                                                                  });
-                                                              }}
-                                                          />
-                                                      </div>
-                                                  </div>
-                                              );
-                                          })
-                                      }
+                                  <div>
+                                  {/* <span>Commission</span> */}
+                                    <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                                      onChange={(e) => {
+                                        updateDate.structure_data[index]['group_commission'] = e.target.value;
+                                        setUpdateDate({
+                                          ...updateDate
+                                        });
+                                      }}
+                                    />
                                   </div>
+                                  <div>
+                                    {
+                                      (item.ibGroup != undefined) ?
+                                        <FormControl variant="standard">
+                                          <Select
+                                            label
+                                            className="select-font-small"
+                                            value={item.ib_group_level_id}
+                                            name="title"
+                                            onChange={(e) => {
+                                              updateDate.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                              setUpdateDate({
+                                                ...updateDate
+                                              });
+                                            }}
+                                          >
+                                            <MenuItem value={0}>Select IB Group</MenuItem>
+                                            {
+                                              item.ibGroup.map((item1, index1) => {
+                                                return (
+                                                  <MenuItem value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
+                                                );
+                                              })
+                                            }
+                                          </Select>
+                                        </FormControl> : ''
+                                    }
+                                  </div>
+                                </div>
+                                <div className='action-section'>
+                                  <span onClick={(e) => {updateDate.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({...updateDate})}}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                </div>
                               </div>
+                              <div className={`pair-section ${(item.is_visible) ? 'child-section-visible':''}`}>
+                                {
+                                  item.pair_data.map((item1, index1) => {
+                                    return (
+                                      <div className="pair-data">
+                                        <div className='pair-data-title'>{item1.pair_name}</div>
+                                        <div>
+                                          <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
+                                            onChange={(e) => {
+                                              updateDate.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
+                                              setUpdateDate({
+                                                ...updateDate
+                                              });
+                                            }}
+                                          />
+                                        </div>
+                                        <div>
+                                          <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
+                                            onChange={(e) => {
+                                              updateDate.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
+                                              setUpdateDate({
+                                                ...updateDate
+                                              });
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    );
+                                  })
+                                }
+                              </div>
+                            </div>
                           );
-                      })
+                        })
                       }
                     </div>
                     <div>
@@ -817,7 +805,7 @@ if(updateDate.structure_id==""){
                         <MenuItem value="2">REJECTED</MenuItem>
                       </Select>
                     </div>
-              
+
                     <div>
                       <label
                         htmlFor="remarks"
@@ -856,7 +844,7 @@ if(updateDate.structure_id==""){
                         </ColorButton>
                       ) : (
                         <ColorButton onClick={updatePartnership}>
-                          {updateDate.structure_id=="" ?"Insert":"Update"}
+                          {updateDate.structure_id == "" ? "Insert" : "Update"}
                         </ColorButton>
                       )}
                       {/* <ColorButton onClick={updatePartnership}>Update</ColorButton> */}

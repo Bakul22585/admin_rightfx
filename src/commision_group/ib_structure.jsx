@@ -675,8 +675,8 @@ const IBStructure = () => {
             form.isLoader = true;
             setForm({ ...form });
             const param = new FormData();
-            param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1);
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
             param.append('action', 'insert_master_structure');
             param.append('user_id', form.group_name);
             param.append('structure_name', form.structure_name);
@@ -736,8 +736,8 @@ const IBStructure = () => {
             form.isLoader = true;
             setForm({ ...form });
             const param = new FormData();
-            param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1);
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
             param.append('action', 'update_ib_commission_group');
             param.append('ib_group_level_id', form.ib_group_level_id);
             param.append('group_name', form.group_name);
@@ -780,8 +780,8 @@ const IBStructure = () => {
 
     const AddCommissionGroup = async () => {
         const param = new FormData();
-        param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1);
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('action', 'get_default_structure');
         await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -808,8 +808,8 @@ const IBStructure = () => {
         if (flag == 'delete') {
             param.append('action', 'delete_ib_commission_group');
         }
-        param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1);
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('ib_group_level_id', id.ib_group_level_id);
         await axios.post(`${Url}/ajaxfiles/ib_commission_group_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {

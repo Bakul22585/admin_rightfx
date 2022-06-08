@@ -18,3 +18,10 @@
     color: #cfcf58;
     font-weight: 600;
 }
+.view-ib-content-section .main-content-display .display-element {
+    flex-direction: row;
+    gap: 5px;
+}
+.view-ib-content-section .main-content-input .ib-structure.view-commission-content-section .group-structure-section:last-child {
+    display: block;
+}

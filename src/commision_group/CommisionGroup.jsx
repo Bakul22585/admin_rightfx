@@ -693,8 +693,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('action', 'add_ib_commission_group');
       // param.append('ib_group_level_id', form.ib_group_level_id);
       param.append('ib_group_name', form.group_name);
@@ -771,8 +771,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('action', 'update_ib_commission_group');
       param.append('ib_group_level_id', form.ib_group_level_id);
       param.append('group_name', form.group_name);
@@ -814,8 +814,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
   };
   const getMt5GroupName=()=>{
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_main_ib_groups");
     axios
       .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
@@ -862,8 +862,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
     if (flag == 'delete') {
         param.append('action', 'delete_ib_commission_group');
     }
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('ib_group_level_id', id.ib_group_level_id);
     await axios.post(`${Url}/ajaxfiles/ib_commission_group_manage.php`, param).then((res) => {
         if (res.data.message == "Session has been expired") {
