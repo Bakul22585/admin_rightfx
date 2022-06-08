@@ -22,7 +22,6 @@ const ListRequest = () => {
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
     sponsor_approve: "",
-    admin_approve: "",
     remarks: "",
     structure_name: "",
     structure_data: [],
@@ -190,6 +189,7 @@ const ListRequest = () => {
       name: "ADMIN APPROVE",
       selector: (row) => {
         return (
+          
           <span
             title={row.admin_approve}
             className={`text-color-${row.admin_approve == "1"
@@ -422,6 +422,7 @@ const ListRequest = () => {
         return false;
       }
     }
+
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
     const param = new FormData();

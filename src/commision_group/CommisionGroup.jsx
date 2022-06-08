@@ -260,7 +260,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
                   setForm({
                     ib_group_level_id: row.ib_group_level_id,
                     group_name: row.group_name,
-                    ib_mt5group_name: row.ib_group_main_id,
+                    ib_mt5group_name: row.ib_mt5group_name,
                     ib_comapny_get: row.ib_comapny_get,
                     ib_company_passon: row.ib_company_passon,
                     plan_title: row.plan_title,
@@ -499,8 +499,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
           <TextField label="Group Name" variant="standard" sx={{ width: '100%' }} name='group_name' value={form.group_name} onChange={input}/>
         </div>
         <div className="view-content-element">
-          {/* <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/> */}
-          <FormControl variant="standard" sx={{ width: "100%" }}>
+          <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/>
+          {/* <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>MT5 Group Name</InputLabel>
               <Select
                 label
@@ -511,10 +511,10 @@ const[mt5GroupName,setmt5GroupName]=useState([])
               >
               {mt5GroupName.map((item)=>{
                 return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
-              })}
+              })} */}
                 {/* <MenuItem value="0">Demo</MenuItem> */}
-              </Select>
-            </FormControl>
+              {/* </Select>
+            </FormControl> */}
         </div>
         <div className="view-content-element">
           <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input}/>
@@ -572,8 +572,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
           <TextField label="Group Name" variant="standard" sx={{ width: '100%' }} name='group_name' value={form.group_name} onChange={input}/>
         </div>
         <div className="view-content-element">
-          {/* <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/> */}
-          <FormControl variant="standard" sx={{ width: "100%" }}>
+          <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/>
+          {/* <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>MT5 Group Name</InputLabel>
               <Select
                 label
@@ -585,9 +585,9 @@ const[mt5GroupName,setmt5GroupName]=useState([])
               {mt5GroupName.map((item)=>{
                 return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
               })}
-                {/* <MenuItem value="0">Demo</MenuItem> */}
+               <MenuItem value="0">Demo</MenuItem> 
               </Select>
-            </FormControl>
+            </FormControl> */}
         </div>
         <div className="view-content-element">
           <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input}/>
