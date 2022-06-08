@@ -271,11 +271,11 @@ const Sidebar = (prop) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link-simple " to="/partnership_withdraw" onClick={CloseSidebar}>
+                  <NavLink className="nav-link-simple " to="/ib_withdraw" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     file_upload
                     </span>
-                    Partnership Withdraw
+                    ib Withdraw
                   </NavLink>
                 </li>
                 <li>

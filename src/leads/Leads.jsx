@@ -215,7 +215,8 @@ const Leads = () => {
   const[cpData,setCpData]=useState({
     cp_access:"",
         demo_mt5:"",
-        isLoader:""
+        isLoader:"",
+        refresh:false
   })
  
   const [searchBy, setSearchBy] = useState([
@@ -269,7 +270,6 @@ const getListManagers=()=>{
            param.append('AADMIN_LOGIN_ID', 1); 
            param.append('action',"list_managers"); 
 
-           
  axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
    if (res.data.status == "error") {
      // toast.error(res.data.message);
@@ -444,8 +444,9 @@ return {
             return {
               ...preValue,
               isLoader:false,
+              refresh:!cpData.refresh,
             }
-                  })
+              })
             toast.success(res.data.message)
             setOpen(false);
         }
@@ -511,7 +512,12 @@ return {
               label="Assign To Sales-Executive"
               name='assign'
             >
-              <MenuItem value="1">Test</MenuItem>
+            {
+              listManagers.map((item)=>{
+                return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
+              })
+            }
+              
             </Select>
           </FormControl>
         </div>
@@ -1130,6 +1136,7 @@ return(
               user_password:"",
               inquiry_id:row.inquiry_id,
               leads_status:"Completed",
+              refresh:false,
             })
             setDialogTitle('Are you sure?');
     setMaxWidth('md');
@@ -1321,7 +1328,14 @@ console.log("listManagers",listManagers)
         if (res.data.status == 'error') {
           toast.error(res.data.message);
         } else {
-          setRefresh(!refresh);
+         
+          setCpData((preValue)=>{
+            return {
+              ...preValue,
+              isLoader:true,
+              refresh:!cpData.refresh
+            }
+                  })
           toast.success(res.data.message);
           setOpen(false);
           setForm({
@@ -1723,7 +1737,7 @@ console.log("listManagers",listManagers)
                   </div>
                   <br />
                   {/* <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} /> */}
-                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={filterDate}  checkStatus={checkStatus}/>
+                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={cpData.refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={filterDate}  checkStatus={checkStatus}/>
                 </Paper>
 
                 <BootstrapDialog

@@ -95,7 +95,7 @@ const App = () => {
                 <Route exact path="/activity_log" element={<ActivityLog />} />
                 <Route exact path="/faq_editor" element={<FAQEditor />} />
                 <Route exact path="/ib_withdraw" element={<IBWithdraw />} />
-                <Route exact path="/partnership_withdraw" element={<PartnershipWithdraw />} />
+                <Route exact path="/ib_withdraw" element={<PartnershipWithdraw />} />
                 <Route exact path="/deposit" element={<Deposit />} />
                 <Route exact path="/withdrawal" element={<Withdraw />} />
                 <Route exact path="/master/:id" element={<Master />} />
