@@ -77,6 +77,9 @@ const HistoryKYC = () => {
     const [selectedPassbookFile, setSelectedPassbookFile] = useState()
     const [previewPassbook, setPreviewPassbook] = useState();
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [param, setParam] = useState({
+        'kyc_status': '1'
+    });
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -186,39 +189,40 @@ const HistoryKYC = () => {
             reorder: true,
             grow: 0.3,
         },
-        {
-            name: 'Action',
-            button: true,
-            cell: row => {
-                return <div>
-                    <Button
-                        id={`actionButton_${row.sr_no}`}
-                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={(event) => handleContextClick(event, row.sr_no)}
-                        {...row}
-                        style={{ color: 'rgb(144 145 139)' }}
-                    >
-                        <i className="material-icons">more_horiz</i>
-                    </Button>
-                    <Menu
-                        id={`basic-menu-${row.sr_no}`}
-                        anchorEl={openTableMenus[row.sr_no]}
-                        open={Boolean(openTableMenus[row.sr_no])}
-                        onClose={(event) => handleContextClose(row.sr_no)}
-                    >
-                        <MenuItem className='view' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-                        <MenuItem className='edit' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">visibility</i>&nbsp;&nbsp;Edit</MenuItem>
-                        {(row.status != '1') ? <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem> : ''}
-                        <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem>
 
-                    </Menu>
-                </div>
-            },
-            ignoreRowClick: true,
-            allowOverflow: true
-        }
+        // {
+        //     name: 'Action',
+        //     button: true,
+        //     cell: row => {
+        //         return <div>
+        //             <Button
+        //                 id={`actionButton_${row.sr_no}`}
+        //                 aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+        //                 aria-haspopup="true"
+        //                 aria-expanded={open ? 'true' : undefined}
+        //                 onClick={(event) => handleContextClick(event, row.sr_no)}
+        //                 {...row}
+        //                 style={{ color: 'rgb(144 145 139)' }}
+        //             >
+        //                 <i className="material-icons">more_horiz</i>
+        //             </Button>
+        //             <Menu
+        //                 id={`basic-menu-${row.sr_no}`}
+        //                 anchorEl={openTableMenus[row.sr_no]}
+        //                 open={Boolean(openTableMenus[row.sr_no])}
+        //                 onClose={(event) => handleContextClose(row.sr_no)}
+        //             >
+        //                 <MenuItem className='view' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
+        //                 <MenuItem className='edit' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">visibility</i>&nbsp;&nbsp;Edit</MenuItem>
+        //                 {(row.status != '1') ? <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem> : ''}
+        //                 <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem>
+
+        //             </Menu>
+        //         </div>
+        //     },
+        //     ignoreRowClick: true,
+        //     allowOverflow: true
+        // }
     ];
 
     const handleContextClick = (event, index) => {
@@ -243,9 +247,9 @@ const HistoryKYC = () => {
         } else if (status == 'Edit KYC Details') {
             param.append('action', 'view_kyc');
         }
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
-        // param.append('user_id', data.user_id);
+         param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); 
+        param.append('user_id', data.user_id);
         param.append('kyc_id', data.kyc_id);
         await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -674,8 +678,8 @@ const HistoryKYC = () => {
             setForm({ ...form });
             const param = new FormData();
             param.append('action', 'update_kyc');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+             param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); 
             param.append('aadhar_card_number', form.aadhar_card_number);
             param.append('bank_account_number', form.account_number);
             param.append('bank_name', form.bank_name);
@@ -747,8 +751,8 @@ const HistoryKYC = () => {
         if (status == 'approved') {
             const param = new FormData();
             param.append('action', 'approve_kyc');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+             param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); 
             param.append('kyc_id', data.kyc_id);
 
             await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -766,8 +770,8 @@ const HistoryKYC = () => {
         } else if (status == 'rejected') {
             const param = new FormData();
             param.append('action', 'reject_kyc');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+             param.append('is_app', 1);
+            param.append('AADMIN_LOGIN_ID', 1); 
             param.append('kyc_id', data.kyc_id);
 
             await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -887,7 +891,7 @@ const HistoryKYC = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} />
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} param={param} />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

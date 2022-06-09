@@ -10,6 +10,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
+import CustomImageModal from '../common/CustomImageModal';
 
 const PendingKYC = () => {
 
@@ -18,7 +20,7 @@ const PendingKYC = () => {
     const [refresh, setRefresh] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState("");
     const [param, setParam] = useState({
-        'kyc_status': 'pending_rejected'
+        'kyc_status': ''
     });
     const [searchBy, setSearchBy] = useState([
         {
@@ -101,13 +103,43 @@ const PendingKYC = () => {
             wrap: true,
             grow: 0.5,
         },
+        // {
+        //     name: 'FRONT SIDE',
+        //     selector: row => { return <span title={row.bank_account_number}><CustomImageModal image={row.aadhar_card_front_image}/></span> },
+        //     sortable: true,
+        //     reorder: true,
+        //     wrap: true,
+        //     grow: 0.5,
+        // }, {
+        //     name: 'BACK SIDE',
+        //     selector: row => { return <span title={row.bank_account_number}><CustomImageModal image={row.aadhar_card_back_image}/></span> },
+        //     sortable: true,
+        //     reorder: true,
+        //     wrap: true,
+        //     grow: 0.5,
+        // },
         {
-            name: 'STATUS',
-            selector: row => { return <span className={`status-${(row.status == '1') ? 'active' : 'in-active'}`}>{(row.status == '1') ? 'Active' : 'In-Active'}</span> },
+            name: "STATUS",
+            selector: (row) => {
+              return (
+                <span
+                  title={row.status}
+                  className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+                    }`}
+                >
+                  {row.status == "1"
+                    ? "APPROVED"
+                    : row.status == "2"
+                      ? "REJECTED"
+                      : "PENDING"}
+                </span>
+              );
+            },
             sortable: true,
             reorder: true,
-            grow: 0.3,
-        },
+            wrap: true,
+            grow: 1,
+          },
         {
             name: 'Action',
             button: true,
@@ -208,9 +240,34 @@ const PendingKYC = () => {
     const changeStatus = (status, data) => {
         console.log(status, data);
         if (status == 'approved') {
-            toast.success('KYC has been successfully completed.');
+            console.log("data",data)
+            const param = new FormData();
+            param.append("is_app", 1);
+            param.append("AADMIN_LOGIN_ID", 1);
+            param.append("kyc_id", data.kyc_id);
+            param.append("action", "approve_kyc");
+            axios
+              .post(Url + "/ajaxfiles/kyc_manage.php", param)
+              .then((res) => {
+                setRefresh(!refresh)
+toast.success('KYC has been successfully completed.');         
+     });
+            
         } else if (status == 'rejected') {
-            toast.success('KYC has been successfully rejected.');
+            console.log("data",data)
+            const param = new FormData();
+            param.append("is_app", 1);
+            param.append("AADMIN_LOGIN_ID", 1);
+            param.append("kyc_id", data.kyc_id);
+            param.append("action", "reject_kyc");
+            axios
+              .post(Url + "/ajaxfiles/kyc_manage.php", param)
+              .then((res) => {
+                setRefresh(!refresh)
+                toast.success('KYC has been successfully rejected.');
+              });
+              
+            
         }
     }
 
