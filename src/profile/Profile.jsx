@@ -1256,8 +1256,8 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1299,8 +1299,8 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_my_structure");
     axios
@@ -1388,8 +1388,8 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_mt5_account_list");
 
     axios
@@ -1401,8 +1401,8 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "list_my_structures");
 
     axios
@@ -1525,8 +1525,8 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append('action', 'get_default_structure');
     /* if (res) {
@@ -1554,8 +1554,8 @@ const Profile = () => {
   };
   const getBankList = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "view_bank_details");
     axios
@@ -1568,8 +1568,8 @@ const Profile = () => {
   const getwalletBalance = () => {
     if (transactionForm.account == "Wallet") {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "view_balance");
       axios
@@ -1581,8 +1581,8 @@ const Profile = () => {
   };
   const getMtBalance = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("from_mt5_account_id", transactionForm.from_mt5_account_id);
     param.append("action", "view_mt5_balance");
@@ -1593,8 +1593,8 @@ const Profile = () => {
 
   const getMt5LivePackages = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     axios
       .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
       .then((res) => {
@@ -1655,6 +1655,11 @@ const Profile = () => {
       });
     } else if (e.target.classList.contains("add_master_structure")) {
       setDialogTitle("Add Master Structure");
+      newMasterStructureData.structure_name = "";
+      newMasterStructureData.structure_data = [];
+      newMasterStructureData.structure_id = "";
+      newMasterStructureData.isLoader = false;
+      setNewMasterStructureData({...newMasterStructureData});
       getMasterStructure();
       setmasterStructureForm({
         name: "",
@@ -1671,6 +1676,11 @@ const Profile = () => {
       });
     } else if (e.target.classList.contains("edit_master_structure")) {
       setDialogTitle("Edit Master Structure");
+      newMasterStructureData.structure_name = "";
+      newMasterStructureData.structure_data = [];
+      newMasterStructureData.structure_id = "";
+      newMasterStructureData.isLoader = false;
+      setNewMasterStructureData({...newMasterStructureData});
       getMasterStructureList();
       setMasterStructureData([])
       setmasterStructureForm({
@@ -2112,13 +2122,16 @@ const Profile = () => {
               className=""
               placeholder="Structure Name"
               name="name"
+              value={newMasterStructureData.structure_name}
               onChange={(e) => {
-                setStructureList((preValue) => {
-                  return {
-                    ...preValue,
-                    structure_name: e.target.value,
-                  };
-                });
+                newMasterStructureData.structure_name = e.target.value;
+                setNewMasterStructureData({...newMasterStructureData});
+                // setStructureList((preValue) => {
+                //   return {
+                //     ...preValue,
+                //     structure_name: e.target.value,
+                //   };
+                // });
               }}
             />
           </div>
@@ -2136,6 +2149,9 @@ const Profile = () => {
                             <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
                               onChange={(e) => {
                                 newMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
+                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
+                                });
                                 setNewMasterStructureData({
                                   ...newMasterStructureData
                                 });
@@ -2146,6 +2162,9 @@ const Profile = () => {
                             <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
                               onChange={(e) => {
                                 newMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
+                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
+                                });
                                 setNewMasterStructureData({
                                   ...newMasterStructureData
                                 });
@@ -2163,20 +2182,6 @@ const Profile = () => {
                                     name="title"
                                     onChange={(e) => {
                                       newMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
-                                      // var selectedIbgroupLevelIds = newMasterStructureData.structure_data.map((item) => {return item.ib_group_level_id});
-                                      // console.log(selectedIbgroupLevelIds);
-                                      // newMasterStructureData.structure_data.forEach((element, key) => {
-                                      //   element.ibGroup.forEach((element1, key1) => {
-                                      //     selectedIbgroupLevelIds.forEach((element2, key3) => {
-                                      //       console.log(element1.ib_group_level_id, element2);
-                                      //       if (element1.ib_group_level_id == element2) {
-                                      //         newMasterStructureData.structure_data[key]['ibGroup'][key1]['isDisable'] = true;
-                                      //       } else {
-                                      //         newMasterStructureData.structure_data[key]['ibGroup'][key1]['isDisable'] = false;
-                                      //       }
-                                      //     });
-                                      //   });
-                                      // })
                                       setNewMasterStructureData({
                                         ...newMasterStructureData
                                       });
@@ -4074,8 +4079,8 @@ const Profile = () => {
   const createMt5AccountSubmit = () => {
     console.log(createMt5Form);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
 
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
@@ -4143,8 +4148,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -4199,8 +4204,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -4248,8 +4253,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -4299,8 +4304,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -4352,8 +4357,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -4396,8 +4401,8 @@ const Profile = () => {
 
     console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(masterStructureData));
     param.append("structure_name", structureList.structure_name);
@@ -4417,26 +4422,68 @@ const Profile = () => {
   const masterStructureSubmit = () => {
     console.log(masterStructureData.length);
 
+    var error = false;
+    if (newMasterStructureData.structure_data.length > 0) {
+      if (newMasterStructureData.structure_name == "") {
+        toast.error("Please enter structure name");
+        error = true;
+      } else {
+        newMasterStructureData.structure_data.forEach(element => {
+          console.log(element.ib_group_name, element.group_rebate);
+          if (element.group_rebate === "") {
+            toast.error(`Please enter ${element.ib_group_name} rebate`);
+            error = true;
+            return false;
+          } else if (element.group_commission === "") {
+            toast.error(`Please enter ${element.ib_group_name} commission`);
+            error = true;
+            return false;
+          } else if (element.ib_group_level_id === 0) {
+            toast.error(`Please enter ${element.ib_group_name} ib group`);
+            error = true;
+            return false;
+          } else {
+            element.pair_data.forEach(element1 => {
+              if (element1.rebate === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                error = true;
+                return false;
+              } else if (element1.rebate > element.group_rebate) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                error = true;
+                return false;
+              } else if (element1.commission === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                error = true;
+                return false;
+              } else if (element1.commission > element.group_commission) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                error = true;
+                return false;
+              }
+            });
+          }
+          if (error) {
+            return false;
+          }
+        });
+      }
+      if (error) {
+        return false;
+      }
+    }
+
+    console.log("masterStructureDataon function", newMasterStructureData);
     console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
-    param.append("pair_data", JSON.stringify(masterStructureData));
-    param.append("structure_name", structureList.structure_name);
+    param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
+    param.append("structure_name", newMasterStructureData.structure_name);
     param.append("action", "insert_strcuture_master");
-
-    // if (
-    //   structureList.data == null ||
-    //   structureList.structure_id == "add_new_structure_data"
-    // )
-    //  {
-    //   param.append("action", "insert_strcuture_master");
-    // } else if (structureList.data) {
-    //   param.append("structure_name", structureList.structure_name);
-    //   param.append("structure_id", structureList.structure_id);
-    //   param.append("action", "update_strcuture_master");
-    // }
 
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param)
@@ -4461,8 +4508,8 @@ const Profile = () => {
   };
   useEffect(() => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
@@ -4517,8 +4564,8 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -4755,8 +4802,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -4840,8 +4887,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -4890,8 +4937,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
@@ -4951,8 +4998,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "add_user_bank");
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
@@ -5048,8 +5095,8 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         param.append("action", "add_deposit");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
         param.append("payment_method", transactionForm.payment);
@@ -5110,8 +5157,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_withdraw");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
         if (transactionForm.crypto_name) {
@@ -5176,8 +5223,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_transfer");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", userData.data["user_id"]);
         param.append("from_transfer", transactionForm.account);
         param.append("to_transfer", transactionForm.account_to);
@@ -5228,8 +5275,8 @@ const Profile = () => {
         toast.error("Please enter note");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("action", "add_mt5_bonus");
         param.append("action", transactionForm.credit_type);
@@ -5297,8 +5344,8 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     userData.isLoader = true;
     setuserData({ ...userData });
@@ -5326,8 +5373,8 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_general_information");
     await axios
@@ -5376,8 +5423,8 @@ const Profile = () => {
     getMt5LivePackages();
     getAccountList();
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_leverages");
     axios

@@ -27,7 +27,7 @@ const ListRequest = () => {
     structure_data: [],
     isLoader: false,
     refresh: false,
-    admin_approve:""
+    admin_approve: ""
   });
   const input01 = (event) => {
     const { name, value } = event.target;
@@ -190,7 +190,7 @@ const ListRequest = () => {
       name: "ADMIN APPROVE",
       selector: (row) => {
         return (
-          
+
           <span
             title={row.admin_approve}
             className={`text-color-${row.admin_approve == "1"
@@ -242,7 +242,7 @@ const ListRequest = () => {
           <span title={row.structure_name}>
             {" "}
             {/* {((row.sponsor_approve == "1" && row.admin_approve == "0") || row.sponsor_id=="0") ?  */}
-            {(row.show_update_btn) ? 
+            {(row.show_update_btn) ?
               <Button
                 sx={{ color: "black" }}
                 onClick={() => {
@@ -250,7 +250,7 @@ const ListRequest = () => {
                   setUpdateDate((preValue) => {
                     return {
                       ...preValue,
-                      admin_approve:row.admin_approve,
+                      admin_approve: row.admin_approve,
                       remarks: row.remarks,
                       requested_user_id: row.requested_user_id,
                       ib_application_id: row.ib_application_id
@@ -261,7 +261,7 @@ const ListRequest = () => {
               >
                 <i className="material-icons">view_timeline</i>
               </Button>
-            : ""}
+              : ""}
           </span>
         );
       },
@@ -286,7 +286,7 @@ const ListRequest = () => {
           localStorage.setItem("login", true);
           navigate("/");
         }
-  
+
         if (res.data.status == 'error') {
           toast.error(res.data.message);
         } else {
@@ -295,9 +295,9 @@ const ListRequest = () => {
             updateDate.structure_id = res.data.structure_id;
             updateDate.structure_name = res.data.structure_name;
           }
-  
+
           setUpdateDate({ ...updateDate });
-  
+
           console.log('form', updateDate);
           // setMaxWidth('md');
           // setDialogTitle('Add');
@@ -465,7 +465,7 @@ const ListRequest = () => {
           structure_data: [],
           isLoader: false,
           refresh: !updateDate.refresh,
-    admin_approve:""
+          admin_approve: ""
         })
 
 
@@ -660,12 +660,12 @@ const ListRequest = () => {
                   <div className="divider"></div>
                   <div className="main-content-input">
                     <div className="ib-structure view-commission-content-section">
-                    {
-                      (ibdata.sponsor_id == "0")? <div style={{ width: '100%' }}>
-                        <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={updateDate.structure_name} onChange={input01} />
-                      </div> : ""
-                    }
-                      
+                      {
+                        (ibdata.sponsor_id == "0") ? <div style={{ width: '100%' }}>
+                          <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={updateDate.structure_name} onChange={input01} />
+                        </div> : ""
+                      }
+
                       {
                         updateDate.structure_data.map((item, index) => {
                           return (
@@ -684,7 +684,7 @@ const ListRequest = () => {
                                       }} />
                                   </div>
                                   <div>
-                                  {/* <span>Commission</span> */}
+                                    {/* <span>Commission</span> */}
                                     <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
                                       onChange={(e) => {
                                         updateDate.structure_data[index]['group_commission'] = e.target.value;
@@ -697,31 +697,31 @@ const ListRequest = () => {
                                   <div>
                                     {
                                       (item.ibGroup != undefined) ?
-                                      <Autocomplete
-                        
-                        disablePortal
-                        options={item.ibGroup}
-                        getOptionLabel={(option) => (option ? option.ib_group_name : "")}
-                        onInputChange={(event, newInputValue) => {
-                            // fetchAccount(event, newInputValue);
-                        }}
-                        onChange={(e) => {
-                                              updateDate.structure_data[index]['ib_group_level_id'] = e.target.value;
-                                              setUpdateDate({
-                                                ...updateDate
-                                              });
-                                            }}
-                        
-                        renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%' ,border:'0px !important'}}/>}
-                    /> : ''
+                                        <Autocomplete
+                                        className='autoComplete-input-remove-border'
+                                          disablePortal
+                                          options={item.ibGroup}
+                                          getOptionLabel={(option) => (option ? option.ib_group_name : "")}
+                                          onInputChange={(event, newInputValue) => {
+                                            // fetchAccount(event, newInputValue);
+                                          }}
+                                          onChange={(e) => {
+                                            updateDate.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                            setUpdateDate({
+                                              ...updateDate
+                                            });
+                                          }}
+
+                                          renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%', border: '0px !important' }} />}
+                                        /> : ''
                                     }
                                   </div>
                                 </div>
                                 <div className='action-section'>
-                                  <span onClick={(e) => {updateDate.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({...updateDate})}}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                  <span onClick={(e) => { updateDate.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...updateDate }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
                                 </div>
                               </div>
-                              <div className={`pair-section ${(item.is_visible) ? 'child-section-visible':''}`}>
+                              <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
                                 {
                                   item.pair_data.map((item1, index1) => {
                                     return (
@@ -758,7 +758,7 @@ const ListRequest = () => {
                       }
                     </div>
                     {/* { */}
-                      {/* (ibdata.sponsor_id == "0") ? <div>
+                    {/* (ibdata.sponsor_id == "0") ? <div>
                       <label
                         htmlFor="sponsor_approve"
                         className="text-info font-weight-bold form-label-head w-100  required"
@@ -784,7 +784,7 @@ const ListRequest = () => {
                       </Select>
                     </div> : ""
                     } */}
-                    
+
                     <div>
                       <label
                         htmlFor="sponsor_approve"

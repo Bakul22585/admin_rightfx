@@ -25,3 +25,6 @@
 .view-ib-content-section .main-content-input .ib-structure.view-commission-content-section .group-structure-section:last-child {
     display: block;
 }
+.autoComplete-input-remove-border input {
+    border: 0px !important;
+}
