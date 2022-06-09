@@ -224,10 +224,10 @@ const Header = (prop) => {
         </form> */}
         <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
-            <Avatar sx={{ bgcolor: '#2a3f73' }}>DB</Avatar>{" "}
+            <Avatar sx={{ bgcolor: '#2a3f73' }}>RA</Avatar>{" "}
           </span>
           <span className="d-none d-md-inline-block mx-2">
-            Dhaval Bhayani
+         RightFx Admin
           </span>
           <KeyboardArrowDownIcon />
         </ButtonBase>
@@ -248,12 +248,12 @@ const Header = (prop) => {
         >
           <div className="dropdown-menu-xl overflow-hidden p-0">
             <div className="d-flex p-4 cursor-pointer" onClick={() => MyAccount()}>
-              <Avatar sx={{ bgcolor: '#2a3f73' }}>DB</Avatar>
+              <Avatar sx={{ bgcolor: '#2a3f73' }}>RA</Avatar>
               <div className="mx-3">
                 <h6 className="font-weight-bold mb-1 text-black">
-                  Dhiren Bhayani
+                RightFx Admin
                 </h6>
-                <p className="text-black-50 mb-0">bhayanidhiren777@gmail.com</p>
+                <p className="text-black-50 mb-0">rightfx@gmail.com</p>
               </div>
             </div>
             <div className="divider"></div>
