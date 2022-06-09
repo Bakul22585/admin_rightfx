@@ -16,6 +16,7 @@ import Chart from "react-apexcharts";
 import CommonFilter from '../common/CommonFilter';
 import { Url } from '../global';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const WorldMap = require('react-world-map');
 
 var data: [string, number][] = [
@@ -354,9 +355,11 @@ var ibSummaryOptions = {
 };
 
 const Dashboard = (prop) => {
+
+    const navigate = useNavigate();
     const [selected, onSelect] = useState(null);
-    const [fullData,setFullData]=useState({})
-    const[pageLoader,setPageLoader]=useState(true)
+    const [fullData, setFullData] = useState({})
+    const [pageLoader, setPageLoader] = useState(true)
     useEffect(() => {
         if (localStorage.getItem('login') == "true") {
             prop.setLogin("true");
@@ -365,259 +368,145 @@ const Dashboard = (prop) => {
         param.append("is_app", 1);
         param.append("AADMIN_LOGIN_ID", 1);
         axios
-          .post(Url + "/ajaxfiles/dashboard.php", param)
-          .then((res) => {
-              console.log("asd",res.data)
-            setFullData(res.data);
-            setPageLoader(false)
-          });
+            .post(Url + "/ajaxfiles/dashboard.php", param)
+            .then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    prop.setLogin("true");
+                    // navigate("/");
+                } else {
+                    console.log("asd", res.data)
+                    setFullData(res.data);
+                    setPageLoader(false)
+                }
+            });
     }, [])
-    console.log("fullData",fullData.deposit_requests)
+    console.log("fullData", fullData)
 
     return (
         <div>
             <div className="app-content--inner">
                 <div className="app-content--inner__wrapper mh-100-vh">
-                {
-                    pageLoader==true ?  <div className="loader">
-              <div className="clock">
-                <div className="pointers"></div>
-              </div>
-            </div>:
-            <div style={{ opacity: 1 }}>
-                        {/* <CommonFilter />
+                    {
+                        pageLoader == true ? <div className="loader">
+                            <div className="clock">
+                                <div className="pointers"></div>
+                            </div>
+                        </div> :
+                            <div style={{ opacity: 1 }}>
+                                {/* <CommonFilter />
                         <br/> */}
-                        <Grid container spacing={3}>
-                            <Grid item md={12} lg={12} xl={12} sm={12} className='margin-bottom-30px'>
                                 <Grid container spacing={3}>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>Dashboard&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='section-header'>
-                                                            <p>&nbsp;</p>
-                                                            <ButtonGroup disableElevation variant="contained" className='action-group-button'>
-                                                                <Button>Leads</Button>
-                                                                <Button className='button-group-off'>Clients</Button>
-                                                            </ButtonGroup>
-                                                        </div>
-                                                        <div className='chartSection'>
-                                                            <HighchartsReact
-                                                                options={options}
-                                                                highcharts={Highcharts}
-                                                                constructorType={'mapChart'}
-                                                            />
-                                                        </div>
-                                                    </Grid>
-                                                    {/* <Grid item sm={6} md={3}>
-                                                    </Grid> */}
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <div className='section-header'>
-                                                    <p className='section-title'>Reminders</p>
-                                                    <p className='section-count'>4</p>
-                                                </div>
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='remainderContentSection'>
-                                                            <div className='remainder'>
-                                                                <i className="material-icons">textsms</i>
-                                                                <div className='content'>
-                                                                    <p>remind me to tomorrow call to him</p>
-                                                                    <p>Test Test</p>
-                                                                    <p>01/12/2022</p>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                            <div className='remainder'>
-                                                                <i className="material-icons">textsms</i>
-                                                                <div className='content'>
-                                                                    <p>remind me to tomorrow call to him</p>
-                                                                    <p>Test Test</p>
-                                                                    <p>01/12/2022</p>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                            <div className='remainder'>
-                                                                <i className="material-icons">textsms</i>
-                                                                <div className='content'>
-                                                                    <p>remind me to tomorrow call to him</p>
-                                                                    <p>Test Test</p>
-                                                                    <p>01/12/2022</p>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                            <div className='remainder'>
-                                                                <i className="material-icons">textsms</i>
-                                                                <div className='content'>
-                                                                    <p>remind me to tomorrow call to him</p>
-                                                                    <p>Test Test</p>
-                                                                    <p>01/12/2022</p>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                            <div className='moreRemainderSection'>
-                                                                <span>More</span>
-                                                            </div>
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <div className='section-header'>
-                                                    <p className='section-title'>Daily Sales</p>
-                                                    <ButtonGroup disableElevation variant="contained" className='action-group-button'>
-                                                        <Button>Week</Button>
-                                                        <Button className='button-group-off'>Month</Button>
-                                                        <Button className='button-group-off'>Year</Button>
-                                                    </ButtonGroup>
-                                                </div>
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='remainderContentSection'>
-                                                            <Chart
-                                                                options={dailySalesOptions}
-                                                                series={dailySalesOptions.series}
-                                                                type="area" />
-                                                            <div className='bottom-label-section'>
-                                                                <div className='label'>
-                                                                    <span className='blur-dot-chart'></span> Total Deposit : <b>0</b>
-                                                                </div>
-                                                                <div className='label'>
-                                                                    <span className='green-dot-chart'></span> Total Withdraw : <b>0</b>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <div className='section-header'>
-                                                    <p className='section-title'>IB Summary</p>
-                                                    <ButtonGroup disableElevation variant="contained" className='action-group-button'>
-                                                        <Button>Week</Button>
-                                                        <Button className='button-group-off'>Month</Button>
-                                                        <Button className='button-group-off'>Year</Button>
-                                                    </ButtonGroup>
-                                                </div>
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='remainderContentSection'>
-                                                            <Chart
-                                                                options={ibSummaryOptions}
-                                                                series={ibSummaryOptions.series}
-                                                                type="area" />
-                                                            <div className='bottom-label-section'>
-                                                                <div className='label'>
-                                                                    <span className='blur-dot-chart'></span> Total Deposit : <b>0</b>
-                                                                </div>
-                                                                <div className='label'>
-                                                                    <span className='green-dot-chart'></span> Total Withdraw : <b>0</b>
-                                                                </div>
-                                                                <div className='label'>
-                                                                    <span className='red-dot-chart'></span> Total Commission : <b>0</b>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <div className='section-header'>
-                                                    <p className='section-title'>Request</p>
-                                                </div>
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='remainderContentSection'>
-                                                            <div className='th-div'>
-                                                                <label></label>
-                                                                <label>PENDING</label>
-                                                                <label>REJECTED</label>
-                                                                <label>APPROVED</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>ADDITIONAL ACCOUNT</label>
-                                                                <label>1</label>
-                                                                <label>2</label>
-                                                                <label>2</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>IB REQUEST</label>
-                                                                <label>7</label>
-                                                                <label>2</label>
-                                                                <label>120</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>LEVERAGE</label>
-                                                                <label>1</label>
-                                                                <label>0</label>
-                                                                <label>6</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>STRUCTURE</label>
-                                                                <label>1</label>
-                                                                <label>1</label>
-                                                                <label>2</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>PROMOTIONS</label>
-                                                                <label>3</label>
-                                                                <label>1</label>
-                                                                <label>4</label>
-                                                            </div>
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
+                                    <Grid item md={12} lg={12} xl={12} sm={12} className='margin-bottom-30px'>
                                         <Grid container spacing={3}>
                                             <Grid item md={6} lg={6} xl={6} sm={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                <p className='main-heading'>Dashboard&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
+                                                    <CardContent className="py-3">
+                                                        <Grid container spacing={2}>
+                                                            <Grid item sm={12} md={12} lg={12}>
+                                                                <div className='section-header'>
+                                                                    <p>&nbsp;</p>
+                                                                    <ButtonGroup disableElevation variant="contained" className='action-group-button'>
+                                                                        <Button>Leads</Button>
+                                                                        <Button className='button-group-off'>Clients</Button>
+                                                                    </ButtonGroup>
+                                                                </div>
+                                                                <div className='chartSection'>
+                                                                    <HighchartsReact
+                                                                        options={options}
+                                                                        highcharts={Highcharts}
+                                                                        constructorType={'mapChart'}
+                                                                    />
+                                                                </div>
+                                                            </Grid>
+                                                            {/* <Grid item sm={6} md={3}>
+                                                    </Grid> */}
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
                                                     <CardContent className="py-3">
                                                         <div className='section-header'>
-                                                            <p className='section-title'>Leads</p>
+                                                            <p className='section-title'>Reminders</p>
+                                                            <p className='section-count'>4</p>
                                                         </div>
                                                         <Grid container spacing={2}>
                                                             <Grid item sm={12} md={12} lg={12}>
-                                                                <div className='leadsContentSection'>
-                                                                    <div className='allLeadsNumner'>
-                                                                        <b>21</b>
-                                                                        <p>All</p>
-                                                                    </div>
-                                                                    <div className='leadRightContentSection'>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>0</span>
-                                                                            <p>New</p>
+                                                                <div className='remainderContentSection'>
+                                                                    <div className='remainder'>
+                                                                        <i className="material-icons">textsms</i>
+                                                                        <div className='content'>
+                                                                            <p>remind me to tomorrow call to him</p>
+                                                                            <p>Test Test</p>
+                                                                            <p>01/12/2022</p>
                                                                         </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>19</span>
-                                                                            <p>Unassigned</p>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className='remainder'>
+                                                                        <i className="material-icons">textsms</i>
+                                                                        <div className='content'>
+                                                                            <p>remind me to tomorrow call to him</p>
+                                                                            <p>Test Test</p>
+                                                                            <p>01/12/2022</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className='remainder'>
+                                                                        <i className="material-icons">textsms</i>
+                                                                        <div className='content'>
+                                                                            <p>remind me to tomorrow call to him</p>
+                                                                            <p>Test Test</p>
+                                                                            <p>01/12/2022</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className='remainder'>
+                                                                        <i className="material-icons">textsms</i>
+                                                                        <div className='content'>
+                                                                            <p>remind me to tomorrow call to him</p>
+                                                                            <p>Test Test</p>
+                                                                            <p>01/12/2022</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className='moreRemainderSection'>
+                                                                        <span>More</span>
+                                                                    </div>
+                                                                </div>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
+                                                    <CardContent className="py-3">
+                                                        <div className='section-header'>
+                                                            <p className='section-title'>Daily Sales</p>
+                                                            <ButtonGroup disableElevation variant="contained" className='action-group-button'>
+                                                                <Button>Week</Button>
+                                                                <Button className='button-group-off'>Month</Button>
+                                                                <Button className='button-group-off'>Year</Button>
+                                                            </ButtonGroup>
+                                                        </div>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item sm={12} md={12} lg={12}>
+                                                                <div className='remainderContentSection'>
+                                                                    <Chart
+                                                                        options={dailySalesOptions}
+                                                                        series={dailySalesOptions.series}
+                                                                        type="area" />
+                                                                    <div className='bottom-label-section'>
+                                                                        <div className='label'>
+                                                                            <span className='blur-dot-chart'></span> Total Deposit : <b>0</b>
+                                                                        </div>
+                                                                        <div className='label'>
+                                                                            <span className='green-dot-chart'></span> Total Withdraw : <b>0</b>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -627,27 +516,230 @@ const Dashboard = (prop) => {
                                                 </Paper>
                                             </Grid>
                                             <Grid item md={6} lg={6} xl={6} sm={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
                                                     <CardContent className="py-3">
                                                         <div className='section-header'>
-                                                            <p className='section-title'>Clients</p>
+                                                            <p className='section-title'>IB Summary</p>
+                                                            <ButtonGroup disableElevation variant="contained" className='action-group-button'>
+                                                                <Button>Week</Button>
+                                                                <Button className='button-group-off'>Month</Button>
+                                                                <Button className='button-group-off'>Year</Button>
+                                                            </ButtonGroup>
                                                         </div>
                                                         <Grid container spacing={2}>
                                                             <Grid item sm={12} md={12} lg={12}>
-                                                                <div className='leadsContentSection'>
-                                                                    <div className='allLeadsNumner'>
-                                                                        <b>227</b>
-                                                                        <p>All</p>
+                                                                <div className='remainderContentSection'>
+                                                                    <Chart
+                                                                        options={ibSummaryOptions}
+                                                                        series={ibSummaryOptions.series}
+                                                                        type="area" />
+                                                                    <div className='bottom-label-section'>
+                                                                        <div className='label'>
+                                                                            <span className='blur-dot-chart'></span> Total Deposit : <b>0</b>
+                                                                        </div>
+                                                                        <div className='label'>
+                                                                            <span className='green-dot-chart'></span> Total Withdraw : <b>0</b>
+                                                                        </div>
+                                                                        <div className='label'>
+                                                                            <span className='red-dot-chart'></span> Total Commission : <b>0</b>
+                                                                        </div>
                                                                     </div>
-                                                                    <div className='leadRightContentSection'>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>0</span>
-                                                                            <p>New</p>
+                                                                </div>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
+                                                    <CardContent className="py-3">
+                                                        <div className='section-header'>
+                                                            <p className='section-title'>Request</p>
+                                                        </div>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item sm={12} md={12} lg={12}>
+                                                                <div className='remainderContentSection'>
+                                                                    <div className='th-div'>
+                                                                        <label></label>
+                                                                        <label>PENDING</label>
+                                                                        <label>REJECTED</label>
+                                                                        <label>APPROVED</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>ADDITIONAL ACCOUNT</label>
+                                                                        <label>1</label>
+                                                                        <label>2</label>
+                                                                        <label>2</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>IB REQUEST</label>
+                                                                        <label>7</label>
+                                                                        <label>2</label>
+                                                                        <label>120</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>LEVERAGE</label>
+                                                                        <label>1</label>
+                                                                        <label>0</label>
+                                                                        <label>6</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>STRUCTURE</label>
+                                                                        <label>1</label>
+                                                                        <label>1</label>
+                                                                        <label>2</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>PROMOTIONS</label>
+                                                                        <label>3</label>
+                                                                        <label>1</label>
+                                                                        <label>4</label>
+                                                                    </div>
+                                                                </div>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Grid container spacing={3}>
+                                                    <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                        <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                            <CardContent className="py-3">
+                                                                <div className='section-header'>
+                                                                    <p className='section-title'>Leads</p>
+                                                                </div>
+                                                                <Grid container spacing={2}>
+                                                                    <Grid item sm={12} md={12} lg={12}>
+                                                                        <div className='leadsContentSection'>
+                                                                            <div className='allLeadsNumner'>
+                                                                                <b>21</b>
+                                                                                <p>All</p>
+                                                                            </div>
+                                                                            <div className='leadRightContentSection'>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>0</span>
+                                                                                    <p>New</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>19</span>
+                                                                                    <p>Unassigned</p>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>209</span>
-                                                                            <p>Unassigned</p>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </CardContent>
+                                                        </Paper>
+                                                    </Grid>
+                                                    <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                        <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                            <CardContent className="py-3">
+                                                                <div className='section-header'>
+                                                                    <p className='section-title'>Clients</p>
+                                                                </div>
+                                                                <Grid container spacing={2}>
+                                                                    <Grid item sm={12} md={12} lg={12}>
+                                                                        <div className='leadsContentSection'>
+                                                                            <div className='allLeadsNumner'>
+                                                                                <b>227</b>
+                                                                                <p>All</p>
+                                                                            </div>
+                                                                            <div className='leadRightContentSection'>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>0</span>
+                                                                                    <p>New</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>209</span>
+                                                                                    <p>Unassigned</p>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </CardContent>
+                                                        </Paper>
+                                                    </Grid>
+                                                    <Grid item md={12} lg={12} xl={12} sm={12}>
+                                                        <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                            <CardContent className="py-3">
+                                                                <div className='section-header'>
+                                                                    <p className='section-title'>KYC Documents</p>
+                                                                </div>
+                                                                <Grid container spacing={2}>
+                                                                    <Grid item sm={12} md={12} lg={12}>
+                                                                        <div className='leadsContentSection kyc-document'>
+                                                                            <div className='leadRightContentSection'>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>9</span>
+                                                                                    <p>Pending Approval</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>34</span>
+                                                                                    <p>Approval (Unfunded)</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>0</span>
+                                                                                    <p>Rejected KYC</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>1</span>
+                                                                                    <p>Missing KYC</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>112</span>
+                                                                                    <p>No KYC (Unfunded)</p>
+                                                                                </div>
+                                                                                <div className='roundedShapeContent'>
+                                                                                    <span>1</span>
+                                                                                    <p>Expired Documents</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </CardContent>
+                                                        </Paper>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item md={6} lg={6} xl={6} sm={12}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
+                                                    <CardContent className="py-3">
+                                                        <div className='section-header'>
+                                                            <p className='section-title'>Transaction</p>
+                                                        </div>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item sm={12} md={12} lg={12}>
+                                                                <div className='remainderContentSection'>
+                                                                    <div className='th-div'>
+                                                                        <label></label>
+                                                                        <label>PENDING</label>
+                                                                        <label>REJECTED</label>
+                                                                        <label>APPROVED</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>DEPOSIT</label>
+                                                                        <label>{fullData.all_transaction.deposit_requests.deposit_pending_request}</label>
+                                                                        <label>{fullData.all_transaction.deposit_requests.deposit_rejected_request}</label>
+                                                                        <label>{fullData.all_transaction.deposit_requests.deposit_approved_request}</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>WITHDRAWALS</label>
+                                                                        <label>{ }</label>
+                                                                        <label>1</label>
+                                                                        <label>15</label>
+                                                                    </div>
+                                                                    <div className='th-div td-div'>
+                                                                        <label>INTERNAL TRANSFER</label>
+                                                                        <label>{fullData.all_transaction.transfer_requests.transfer_pending_request}</label>
+                                                                        <label>{fullData.all_transaction.transfer_requests.transfer_rejected_request}</label>
+                                                                        <label>{fullData.all_transaction.transfer_requests.transfer_approved_request}</label>
                                                                     </div>
                                                                 </div>
                                                             </Grid>
@@ -656,40 +748,22 @@ const Dashboard = (prop) => {
                                                 </Paper>
                                             </Grid>
                                             <Grid item md={12} lg={12} xl={12} sm={12}>
-                                                <Paper elevation={2} style={{ borderRadius: "10px" }}>
+                                                <p className='main-heading'>&nbsp;</p>
+                                                <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
                                                     <CardContent className="py-3">
                                                         <div className='section-header'>
-                                                            <p className='section-title'>KYC Documents</p>
+                                                            <p className='section-title montly-sales-target'>Monthly Sales Target</p>
+                                                            <div className='section-action-button'>
+                                                                <span className='action'>ACCOUNT TARGET</span>
+                                                                <span>MONEY IN</span>
+                                                                <span>MONEY OUT</span>
+                                                                <span>NET</span>
+                                                            </div>
                                                         </div>
                                                         <Grid container spacing={2}>
                                                             <Grid item sm={12} md={12} lg={12}>
-                                                                <div className='leadsContentSection kyc-document'>
-                                                                    <div className='leadRightContentSection'>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>9</span>
-                                                                            <p>Pending Approval</p>
-                                                                        </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>34</span>
-                                                                            <p>Approval (Unfunded)</p>
-                                                                        </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>0</span>
-                                                                            <p>Rejected KYC</p>
-                                                                        </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>1</span>
-                                                                            <p>Missing KYC</p>
-                                                                        </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>112</span>
-                                                                            <p>No KYC (Unfunded)</p>
-                                                                        </div>
-                                                                        <div className='roundedShapeContent'>
-                                                                            <span>1</span>
-                                                                            <p>Expired Documents</p>
-                                                                        </div>
-                                                                    </div>
+                                                                <div className='remainderContentSection'>
+
                                                                 </div>
                                                             </Grid>
                                                         </Grid>
@@ -698,75 +772,10 @@ const Dashboard = (prop) => {
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <Grid item md={6} lg={6} xl={6} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <div className='section-header'>
-                                                    <p className='section-title'>Transaction</p>
-                                                </div>
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='remainderContentSection'>
-                                                            <div className='th-div'>
-                                                                <label></label>
-                                                                <label>PENDING</label>
-                                                                <label>REJECTED</label>
-                                                                <label>APPROVED</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>DEPOSIT</label>
-                                                                <label>{fullData.all_transaction.deposit_requests.deposit_pending_request}</label>
-                                                                <label>{fullData.all_transaction.deposit_requests.deposit_rejected_request}</label>
-                                                                <label>{fullData.all_transaction.deposit_requests.deposit_approved_request}</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>WITHDRAWALS</label>
-                                                                <label>{}</label>
-                                                                <label>1</label>
-                                                                <label>15</label>
-                                                            </div>
-                                                            <div className='th-div td-div'>
-                                                                <label>INTERNAL TRANSFER</label>
-                                                                <label>{fullData.all_transaction.transfer_requests.transfer_pending_request}</label>
-                                                                <label>{fullData.all_transaction.transfer_requests.transfer_rejected_request}</label>
-                                                                <label>{fullData.all_transaction.transfer_requests.transfer_approved_request }</label>
-                                                            </div>
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item md={12} lg={12} xl={12} sm={12}>
-                                        <p className='main-heading'>&nbsp;</p>
-                                        <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
-                                            <CardContent className="py-3">
-                                                <div className='section-header'>
-                                                    <p className='section-title montly-sales-target'>Monthly Sales Target</p>
-                                                    <div className='section-action-button'>
-                                                        <span className='action'>ACCOUNT TARGET</span>
-                                                        <span>MONEY IN</span>
-                                                        <span>MONEY OUT</span>
-                                                        <span>NET</span>
-                                                    </div>
-                                                </div>
-                                                <Grid container spacing={2}>
-                                                    <Grid item sm={12} md={12} lg={12}>
-                                                        <div className='remainderContentSection'>
-                                                            
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                            </CardContent>
-                                        </Paper>
-                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </div>
-                }
-                   
+                            </div>
+                    }
+
                 </div>
             </div>
         </div>

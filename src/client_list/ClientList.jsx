@@ -427,7 +427,7 @@ const ClientList = () => {
             wrap: true,
             grow: 1.2,
         },
-        {
+        /* {
             name: 'Action',
             button: true,
             cell: row => {
@@ -468,7 +468,7 @@ const ClientList = () => {
             },
             ignoreRowClick: true,
             allowOverflow: true
-        }
+        } */
     ];
 
     const actionMenuPopup = (e, data) => {
@@ -569,12 +569,12 @@ const ClientList = () => {
                                 <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <div className='actionGroupButton'>
+                                    {/* <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={handleClickOpen}>Add New Client</Button>
                                         <Button variant="contained">Add IB</Button>
                                         <Button variant="contained">All</Button>
                                     </div>
-                                    <br />
+                                    <br /> */}
                                     <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} search={searchBy} searchWord={searchKeyword} />
                                 </Paper>
 

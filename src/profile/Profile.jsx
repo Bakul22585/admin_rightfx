@@ -1256,8 +1256,8 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1299,8 +1299,8 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_my_structure");
     axios
@@ -1388,8 +1388,8 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_mt5_account_list");
 
     axios
@@ -1401,8 +1401,8 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "list_my_structures");
 
     axios
@@ -1419,8 +1419,8 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
-    param1.append("is_app", 1);
-    param1.append("AADMIN_LOGIN_ID", 1);
+    // param1.append("is_app", 1);
+    // param1.append("AADMIN_LOGIN_ID", 1);
     param1.append("user_id", id);
 
     if (res !== null) {
@@ -1525,8 +1525,8 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append('action', 'get_default_structure');
     /* if (res) {
@@ -1554,8 +1554,8 @@ const Profile = () => {
   };
   const getBankList = () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "view_bank_details");
     axios
@@ -4074,8 +4074,8 @@ const Profile = () => {
   const createMt5AccountSubmit = () => {
     console.log(createMt5Form);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
 
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
@@ -4143,8 +4143,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -4199,8 +4199,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -4248,8 +4248,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -4299,8 +4299,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -4352,8 +4352,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -4396,8 +4396,8 @@ const Profile = () => {
 
     console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(masterStructureData));
     param.append("structure_name", structureList.structure_name);
@@ -4419,8 +4419,8 @@ const Profile = () => {
 
     console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(masterStructureData));
     param.append("structure_name", structureList.structure_name);
@@ -4461,8 +4461,8 @@ const Profile = () => {
   };
   useEffect(() => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
@@ -4517,8 +4517,8 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -4755,8 +4755,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -4840,8 +4840,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -4890,8 +4890,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
@@ -4951,8 +4951,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "add_user_bank");
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
@@ -5048,8 +5048,8 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         param.append("action", "add_deposit");
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
         param.append("payment_method", transactionForm.payment);
@@ -5110,8 +5110,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_withdraw");
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
         if (transactionForm.crypto_name) {
@@ -5297,8 +5297,8 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     userData.isLoader = true;
     setuserData({ ...userData });
@@ -5326,8 +5326,8 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_general_information");
     await axios
@@ -5376,8 +5376,8 @@ const Profile = () => {
     getMt5LivePackages();
     getAccountList();
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_leverages");
     axios

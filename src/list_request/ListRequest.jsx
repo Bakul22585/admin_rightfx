@@ -240,9 +240,8 @@ const ListRequest = () => {
         return (
           <span title={row.structure_name}>
             {" "}
-            {row.status == "1" ? (
-              ""
-            ) : (
+            {/* {((row.sponsor_approve == "1" && row.admin_approve == "0") || row.sponsor_id=="0") ?  */}
+            {(row.show_update_btn) ? 
               <Button
                 sx={{ color: "black" }}
                 onClick={() => {
@@ -260,7 +259,7 @@ const ListRequest = () => {
               >
                 <i className="material-icons">view_timeline</i>
               </Button>
-            )}
+            : ""}
           </span>
         );
       },
@@ -276,8 +275,8 @@ const ListRequest = () => {
     setIbData(prop);
     if (prop.sponsor_id == "0") {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('action', 'get_default_structure');
       param.append('user_id', prop.requested_user_id);
       await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
@@ -426,8 +425,8 @@ const ListRequest = () => {
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('requested_user_id', ibdata.requested_user_id);
     param.append('ib_application_id', ibdata.ib_application_id);
     param.append('remarks', updateDate.remarks);
