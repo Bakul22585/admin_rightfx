@@ -1,6 +1,6 @@
 import './list_request.css';
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, Menu, MenuItem, Paper, Select, TextField } from "@mui/material";
+import { Autocomplete, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, Menu, MenuItem, Paper, Select, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from '../common/CommonFilter';
@@ -27,6 +27,7 @@ const ListRequest = () => {
     structure_data: [],
     isLoader: false,
     refresh: false,
+    admin_approve:""
   });
   const input01 = (event) => {
     const { name, value } = event.target;
@@ -249,6 +250,7 @@ const ListRequest = () => {
                   setUpdateDate((preValue) => {
                     return {
                       ...preValue,
+                      admin_approve:row.admin_approve,
                       remarks: row.remarks,
                       requested_user_id: row.requested_user_id,
                       ib_application_id: row.ib_application_id
@@ -269,14 +271,14 @@ const ListRequest = () => {
       grow: 0.3,
     },
   ];
-  console.log("updateDate", ibdata)
+  console.log("updateDate", updateDate)
   const viewRequest = async (prop) => {
     // setOpenModel(true);
     setIbData(prop);
     if (prop.sponsor_id == "0") {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
       param.append('action', 'get_default_structure');
       param.append('user_id', prop.requested_user_id);
       await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
@@ -425,12 +427,12 @@ const ListRequest = () => {
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('requested_user_id', ibdata.requested_user_id);
     param.append('ib_application_id', ibdata.ib_application_id);
     param.append('remarks', updateDate.remarks);
-    param.append('sponsor_approve', updateDate.sponsor_approve);
+    // param.append('sponsor_approve', updateDate.sponsor_approve);
     param.append('admin_approve', updateDate.admin_approve);
     param.append('structure_name', updateDate.structure_name);
     if (updateDate.structure_id) {
@@ -463,8 +465,7 @@ const ListRequest = () => {
           structure_data: [],
           isLoader: false,
           refresh: !updateDate.refresh,
-
-          structure_id: ""
+    admin_approve:""
         })
 
 
@@ -696,29 +697,23 @@ const ListRequest = () => {
                                   <div>
                                     {
                                       (item.ibGroup != undefined) ?
-                                        <FormControl variant="standard">
-                                          <Select
-                                            label
-                                            className="select-font-small"
-                                            value={item.ib_group_level_id}
-                                            name="title"
-                                            onChange={(e) => {
+                                      <Autocomplete
+                        
+                        disablePortal
+                        options={item.ibGroup}
+                        getOptionLabel={(option) => (option ? option.ib_group_name : "")}
+                        onInputChange={(event, newInputValue) => {
+                            // fetchAccount(event, newInputValue);
+                        }}
+                        onChange={(e) => {
                                               updateDate.structure_data[index]['ib_group_level_id'] = e.target.value;
                                               setUpdateDate({
                                                 ...updateDate
                                               });
                                             }}
-                                          >
-                                            <MenuItem value={0}>Select IB Group</MenuItem>
-                                            {
-                                              item.ibGroup.map((item1, index1) => {
-                                                return (
-                                                  <MenuItem value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
-                                                );
-                                              })
-                                            }
-                                          </Select>
-                                        </FormControl> : ''
+                        
+                        renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%' ,border:'0px !important'}}/>}
+                    /> : ''
                                     }
                                   </div>
                                 </div>
@@ -762,8 +757,8 @@ const ListRequest = () => {
                         })
                       }
                     </div>
-                    {
-                      (ibdata.sponsor_id == "0") ? <div>
+                    {/* { */}
+                      {/* (ibdata.sponsor_id == "0") ? <div>
                       <label
                         htmlFor="sponsor_approve"
                         className="text-info font-weight-bold form-label-head w-100  required"
@@ -788,7 +783,7 @@ const ListRequest = () => {
                         <MenuItem value="2">REJECTED</MenuItem>
                       </Select>
                     </div> : ""
-                    }
+                    } */}
                     
                     <div>
                       <label
