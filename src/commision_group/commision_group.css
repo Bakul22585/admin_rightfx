@@ -38,6 +38,7 @@
 .ib-structure.view-commission-content-section .main-section .main-section-input-element {
     display: flex;
     gap: 10px;
+    align-items: baseline;
 }
 .ib-structure.view-commission-content-section .pair-section {
     padding: 25px;
