@@ -49,7 +49,6 @@ const PendingKYC = () => {
           'name': 'bank_account_no'
         }
       ]);
-
     const column = [
         {
             name: 'SR.NO',
@@ -242,8 +241,8 @@ const PendingKYC = () => {
         if (status == 'approved') {
             console.log("data",data)
             const param = new FormData();
-            param.append("is_app", 1);
-            param.append("AADMIN_LOGIN_ID", 1);
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
             param.append("kyc_id", data.kyc_id);
             param.append("action", "approve_kyc");
             axios
@@ -256,8 +255,8 @@ toast.success('KYC has been successfully completed.');
         } else if (status == 'rejected') {
             console.log("data",data)
             const param = new FormData();
-            param.append("is_app", 1);
-            param.append("AADMIN_LOGIN_ID", 1);
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
             param.append("kyc_id", data.kyc_id);
             param.append("action", "reject_kyc");
             axios
