@@ -493,5 +493,66 @@ text.highcharts-credits {
     display: block;
 }
 .master-structure-section .ib-structure.view-commission-content-section .group-structure-section .main-section .main-section-title {
-    min-width: 0;
+    min-width: 120px;
+}
+.partnership-main-section .master-structure-section {
+    width: 50%;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 10px;
+    gap: 0px;
+}
+.partnership-main-section .bankDetailsTabSection .structureNameSection {
+    flex-direction: column;
+    padding: 10px 0;
+}
+.partnership-main-section .bankDetailsTabSection .structureNameSection label {
+    padding: 0;
+    color: #5e7e99;
+    font-weight: 700;
+    font-size: 12px;
+}
+.partnership-main-section .bankDetailsTabSection .structureNameSection span {
+    padding: 0;
+    color: #5e7e99;
+    font-weight: 700;
+    font-size: 14px;
+}
+.referrals-section {
+    margin: 15px 0;
+}
+.referrals-section table {
+    width: 100%;
+}
+.referrals-section table thead tr {
+    background-color: #2a3f73;
+    color: white;
+}
+.referrals-section table thead tr th, .referrals-section table tbody tr td {
+    padding: 10px;
+    font-size: 14px;
+}
+.referrals-section table tbody tr td .collaps-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.referrals-section table tbody tr td .collaps-content i {
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.referrals-section table tbody tr.referral-child-structure-users {
+    background-color: aliceblue;
+}
+.referral-commission_rebate-content {
+    padding: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
 }

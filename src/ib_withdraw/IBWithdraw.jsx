@@ -10,38 +10,41 @@ import { Url } from '../global';
 const IBWithdraw = () => {
 
     const [refresh, setRefresh] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'EMAIL',
-          'value': false,
-          'name': 'email'
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'email'
         },
         {
-          'label': 'MT5 A/C NO.',
-          'value': false,
-          'name': 'mt5_acc_no'
+            'label': 'MT5 A/C NO.',
+            'value': false,
+            'name': 'mt5_acc_no'
         },
         {
-          'label': 'AMOUNT',
-          'value': false,
-          'name': 'amount'
+            'label': 'AMOUNT',
+            'value': false,
+            'name': 'amount'
         },
         {
-          'label': 'REMARKS',
-          'value': false,
-          'name': 'remarks'
+            'label': 'REMARKS',
+            'value': false,
+            'name': 'remarks'
         },
-      ]);
+    ]);
+    const [param, setParam] = useState("");
+
 
     const column = [
         {
@@ -103,7 +106,7 @@ const IBWithdraw = () => {
         },
         {
             name: 'STATUS',
-            selector: row => { return <span className={`status-${(row.status == '1')?'active' : 'in-active'}`}>{(row.status == '1')? 'Active' : 'In-Active'}</span> },
+            selector: row => { return <span className={`status-${(row.status == '1') ? 'active' : 'in-active'}`}>{(row.status == '1') ? 'Active' : 'In-Active'}</span> },
             sortable: true,
             reorder: true,
             grow: 0.3,
@@ -118,13 +121,13 @@ const IBWithdraw = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>IB Withdraw</p>
-                                <CommonFilter search={searchBy}/>
-                                <br/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
+                                <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/ib_withdraw_list.php`} column={column} sort='1' refresh={refresh}/>
+                                                <CommonTable url={`${Url}/datatable/ib_withdraw_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

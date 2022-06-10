@@ -274,11 +274,12 @@ const ListRequest = () => {
   console.log("updateDate", updateDate)
   const viewRequest = async (prop) => {
     // setOpenModel(true);
+    console.log('prop',prop);
     setIbData(prop);
     if (prop.sponsor_id == "0") {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('action', 'get_default_structure');
       param.append('user_id', prop.requested_user_id);
       await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
@@ -295,7 +296,10 @@ const ListRequest = () => {
             updateDate.structure_id = res.data.structure_id;
             updateDate.structure_name = res.data.structure_name;
           }
-
+          updateDate.remarks = prop.remarks;
+          updateDate.admin_approve = prop.admin_approve;
+          updateDate.structure_name = prop.structure_name;
+          
           setUpdateDate({ ...updateDate });
 
           console.log('form', updateDate);
@@ -427,8 +431,8 @@ const ListRequest = () => {
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     param.append('requested_user_id', ibdata.requested_user_id);
     param.append('ib_application_id', ibdata.ib_application_id);
     param.append('remarks', updateDate.remarks);
@@ -678,6 +682,9 @@ const ListRequest = () => {
                                     <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
                                       onChange={(e) => {
                                         updateDate.structure_data[index]['group_rebate'] = e.target.value;
+                                        updateDate.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                          updateDate.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
+                                        });
                                         setUpdateDate({
                                           ...updateDate
                                         });
@@ -688,13 +695,16 @@ const ListRequest = () => {
                                     <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
                                       onChange={(e) => {
                                         updateDate.structure_data[index]['group_commission'] = e.target.value;
+                                        updateDate.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                          updateDate.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
+                                        });
                                         setUpdateDate({
                                           ...updateDate
                                         });
                                       }}
                                     />
                                   </div>
-                                  <div>
+                                  {/* <div>
                                     {
                                       (item.ibGroup != undefined) ?
                                         <Autocomplete
@@ -705,8 +715,8 @@ const ListRequest = () => {
                                           onInputChange={(event, newInputValue) => {
                                             // fetchAccount(event, newInputValue);
                                           }}
-                                          onChange={(e) => {
-                                            updateDate.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                          onChange={(event, newValue) => {
+                                            updateDate.structure_data[index]['ib_group_level_id'] = newValue.ib_group_level_id;
                                             setUpdateDate({
                                               ...updateDate
                                             });
@@ -715,7 +725,7 @@ const ListRequest = () => {
                                           renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%', border: '0px !important' }} />}
                                         /> : ''
                                     }
-                                  </div>
+                                  </div> */}
                                 </div>
                                 <div className='action-section'>
                                   <span onClick={(e) => { updateDate.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...updateDate }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>

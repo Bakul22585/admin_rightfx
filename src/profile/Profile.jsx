@@ -54,6 +54,8 @@ import mapDataWorld from "@highcharts/map-collection/custom/world.geo.json";
 import Chart from "react-apexcharts";
 import { Url } from "../global";
 import KycDocument from "./KycDocument";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 const WorldMap = require("react-world-map");
 
 interface TabPanelProps {
@@ -465,7 +467,11 @@ const Profile = () => {
   const [value, setValue] = useState(0);
   const [dialogTitle, setDialogTitle] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
-  // const [filterData, setFilterData] = useState({});
+  const [param, setParam] = useState({
+    'action': 'my_referrals',
+    'user_id': id,
+    'structure_id': 0
+  });
   const [userData, setuserData] = useState({ isLoader: true, data: {} });
   const [filterData, setFilterData] = useState(null);
   const [mt5AccountList, setMt5AccountList] = useState([]);
@@ -657,11 +663,29 @@ const Profile = () => {
     structure_id: "",
     isLoader: false,
   });
+  const [partnershipMasterStructureData, setPartnershipMasterStructureData] = useState({
+    structure_name: "",
+    structure_data: [],
+    structure_id: "",
+    isLoader: false,
+  });
+  const [newPartnershipMasterStructureData, setNewPartnershipMasterStructureData] = useState({
+    structure_name: "",
+    structure_data: [],
+    structure_id: "",
+    isLoader: false,
+  });
   const [structureList, setStructureList] = useState({
     data: [],
     structure_name: "",
     structure_id: "",
   });
+  const [referralData, setReferralData] = useState({
+    data: [],
+    structure_name: "",
+    structure_id: "",
+  });
+
   const depositColumn = [
     {
       name: "Bank Name",
@@ -804,6 +828,7 @@ const Profile = () => {
       allowOverflow: true,
     },
   ];
+
   const mt5AccountListColumn = [
     {
       name: "Sr No",
@@ -836,7 +861,7 @@ const Profile = () => {
       name: "Account Type",
       selector: (row) => {
         return (
-          <span title={row.acc_type}>
+          <span title={row.acc_type == "1" ? "Live" : "Demo"}>
             {row.acc_type == "1" ? "Live" : "Demo"}
           </span>
         );
@@ -1007,6 +1032,53 @@ const Profile = () => {
       grow: 1,
     },
   ];
+
+  const referralsColumn = [
+    {
+      name: "Name",
+      selector: (row) => row.structure_name,
+      sortable: true,
+      reorder: true,
+      grow: 0.4,
+    },
+
+    {
+      name: "Client Type",
+      selector: (row) => row.client_type,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: "Account",
+      selector: (row) => row.mt5_acc_no,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: "Commission",
+      selector: (row) => row.group_commission,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: "Rebate",
+      selector: (row) => row.group_rebate,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: "Parent Name",
+      selector: (row) => row.sponsor_name,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+  ];
+
   const partnershipcolumn = [
     {
       name: "SR.NO",
@@ -1229,8 +1301,10 @@ const Profile = () => {
       grow: 0.3,
     },
   ];
+
   const [ibdata, setIbData] = useState("");
   const [openModel, setOpenModel] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [getStructuresList, setGetStructuresList] = useState([]);
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
@@ -1239,6 +1313,7 @@ const Profile = () => {
     isLoader: false,
     refresh: false,
   });
+
   const input01 = (event) => {
     const { name, value } = event.target;
     setUpdateDate((prevalue) => {
@@ -1273,6 +1348,10 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           if (res.data.status == "error") {
             toast.error(res.data.message);
             setUpdateDate((prevalue) => {
@@ -1295,6 +1374,7 @@ const Profile = () => {
         });
     }
   };
+
   const viewRequest = (prop) => {
     setOpenModel(true);
     setIbData(prop);
@@ -1306,6 +1386,10 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setGetStructuresList(res.data.data);
       });
   };
@@ -1320,7 +1404,7 @@ const Profile = () => {
     },
 
     {
-      name: "Notes",
+      name: "Description",
       selector: (row) => row.notes,
       sortable: true,
       reorder: true,
@@ -1332,22 +1416,34 @@ const Profile = () => {
       sortable: true,
       reorder: true,
       grow: 1,
-    },
-    {
-      name: "Reminder ",
-      selector: (row) => row.reminder,
-      sortable: true,
-      reorder: true,
-      grow: 1,
-    },
-    {
-      name: "Reminder ",
-      selector: (row) => <>{row.status == "0" ? "Not Read" : "Read"}</>,
-      sortable: true,
-      reorder: true,
-      grow: 1,
-    },
+    }
   ];
+
+  const logColumn = [
+    {
+      name: "SR NO",
+      selector: (row) => row.sr_no,
+      sortable: true,
+      reorder: true,
+      grow: 0.4,
+    },
+
+    {
+      name: "Description",
+      selector: (row) => row.description,
+      sortable: true,
+      reorder: true,
+      grow: 3,
+    },
+    {
+      name: "DATETIME",
+      selector: (row) => row.date,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    }
+  ];
+
   const walletHistoryColumn = [
     {
       name: "SR NO",
@@ -1362,13 +1458,23 @@ const Profile = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+      wrap: true,
     },
     {
-      name: "DESCRIPTION",
+      name: "Type",
       selector: (row) => row.description,
       sortable: true,
       reorder: true,
       grow: 1,
+      wrap: true,
+    },
+    {
+      name: "DESCRIPTION",
+      selector: (row) => row.remarks,
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
     },
     {
       name: "AMOUNT",
@@ -1385,6 +1491,7 @@ const Profile = () => {
       grow: 0.5,
     },
   ];
+
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
@@ -1395,9 +1502,14 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setMt5AccountList(res.data.data);
       });
   };
+
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
@@ -1408,6 +1520,10 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setStructureList((preValue) => {
           return {
             ...preValue,
@@ -1435,9 +1551,14 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param1)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setMasterStructureData(res.data.data);
       });
   };
+
   const forinloop = () => {
     console.log("masterStructureData123", masterStructureData);
 
@@ -1528,16 +1649,20 @@ const Profile = () => {
     // param.append("is_app", 1);
     // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
-    param.append('action', 'get_default_structure');
-    /* if (res) {
+    if (res) {
       param.append("structure_id", res);
       param.append("action", "get_my_structure");
     } else {
-      param.append("action", "add_new_structure_data");
-    } */
+      param.append('action', 'get_default_structure');
+      // param.append("action", "add_new_structure_data");
+    }
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         console.log("ras.data.data", res.data.data);
         newMasterStructureData.structure_data = res.data.data;
         setNewMasterStructureData({ ...newMasterStructureData });
@@ -1552,6 +1677,38 @@ const Profile = () => {
       });
     console.log("masterStructureData", masterStructureData);
   };
+
+  const getPartnershipMasterStructure = (res) => {
+    const param = new FormData();
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    if (res) {
+      param.append("structure_id", res);
+      param.append("action", "get_my_structure");
+    } else {
+      param.append('action', 'get_default_structure');
+      // param.append("action", "add_new_structure_data");
+    }
+    axios
+      .post(Url + "/ajaxfiles/master_structure_manage.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        console.log("ras.data.data", resData.data.data);
+        if (res) {
+          partnershipMasterStructureData.structure_data = resData.data.data;
+          setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
+        } else {
+          newPartnershipMasterStructureData.structure_data = resData.data.data;
+          setNewPartnershipMasterStructureData({ ...newPartnershipMasterStructureData });
+        }
+        console.log('partnershipMasterStructureData', partnershipMasterStructureData);
+      });
+  };
+
   const getBankList = () => {
     const param = new FormData();
     // param.append("is_app", 1);
@@ -1561,6 +1718,10 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setAllBank(res.data.data);
       });
   };
@@ -1575,10 +1736,15 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/internal_transfer.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           setWalletBal(res.data.formated_balance);
         });
     }
   };
+
   const getMtBalance = () => {
     const param = new FormData();
     // param.append("is_app", 1);
@@ -1587,6 +1753,10 @@ const Profile = () => {
     param.append("from_mt5_account_id", transactionForm.from_mt5_account_id);
     param.append("action", "view_mt5_balance");
     axios.post(Url + "/ajaxfiles/internal_transfer.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       setMtBalance(res.data.formated_balance);
     });
   };
@@ -1599,6 +1769,10 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setCreateLiveType(res.data.data);
       });
   };
@@ -1606,6 +1780,29 @@ const Profile = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     console.log("newValue", newValue);
+    if (newValue == 7) {
+      setReferralData({
+        data: [],
+        structure_name: "",
+        structure_id: "",
+      });
+      setPartnershipMasterStructureData({
+        structure_name: "",
+        structure_data: [],
+        structure_id: "",
+        isLoader: false,
+      });
+      getMasterStructureList();
+    }
+    if (newValue == 8) {
+      setPartnershipMasterStructureData({
+        structure_name: "",
+        structure_data: [],
+        structure_id: "",
+        isLoader: false,
+      });
+      getMasterStructureList();
+    }
   };
 
   const handleChangeIndex = (index) => {
@@ -1660,7 +1857,7 @@ const Profile = () => {
       newMasterStructureData.structure_data = [];
       newMasterStructureData.structure_id = "";
       newMasterStructureData.isLoader = false;
-      setNewMasterStructureData({...newMasterStructureData});
+      setNewMasterStructureData({ ...newMasterStructureData });
       getMasterStructure();
       setmasterStructureForm({
         name: "",
@@ -1681,7 +1878,7 @@ const Profile = () => {
       newMasterStructureData.structure_data = [];
       newMasterStructureData.structure_id = "";
       newMasterStructureData.isLoader = false;
-      setNewMasterStructureData({...newMasterStructureData});
+      setNewMasterStructureData({ ...newMasterStructureData });
       getMasterStructureList();
       setMasterStructureData([])
       setmasterStructureForm({
@@ -1808,7 +2005,7 @@ const Profile = () => {
         campaign: "",
       });
     } else if (e.target.classList.contains("edit_structure")) {
-      setDialogTitle("EDIT SHARED STRUCTURE");
+      setDialogTitle("EDIT STRUCTURE");
       setEditSharedStructureForm({
         name: "",
         total_rebate: "",
@@ -1833,9 +2030,11 @@ const Profile = () => {
     }
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   console.log("masterStructureData", masterStructureData);
   const handleContextClick = (event, index) => {
     console.log(event.currentTarget.getAttribute("id"), index);
@@ -2126,7 +2325,7 @@ const Profile = () => {
               value={newMasterStructureData.structure_name}
               onChange={(e) => {
                 newMasterStructureData.structure_name = e.target.value;
-                setNewMasterStructureData({...newMasterStructureData});
+                setNewMasterStructureData({ ...newMasterStructureData });
                 // setStructureList((preValue) => {
                 //   return {
                 //     ...preValue,
@@ -2172,7 +2371,7 @@ const Profile = () => {
                               }}
                             />
                           </div>
-                          <div>
+                          {/* <div>
                             {
                               (item.ibGroup != undefined) ?
                                 <FormControl variant="standard">
@@ -2200,7 +2399,7 @@ const Profile = () => {
                                   </Select>
                                 </FormControl> : ''
                             }
-                          </div>
+                          </div> */}
                         </div>
                         <div className='action-section'>
                           <span onClick={(e) => { newMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
@@ -2249,8 +2448,8 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Edit Master Structure") {
       return (
-        <div>
-          <div className="structureNameSection">
+        <div className="master-structure-section">
+          <div className="structureNameSection view-ib-content-section">
             {/* <input
                   type="text"
                   className=""
@@ -2266,11 +2465,11 @@ const Profile = () => {
                   }}
                 /> */}
             <FormControl variant="standard" sx={{ width: "100%" }}>
-              <InputLabel>Client</InputLabel>
+              <InputLabel>Structure</InputLabel>
               <Select
                 label
                 className="select-font-small"
-                name="client"
+                name="Structure"
                 onChange={(e) => {
                   console.log(
                     "svalue",
@@ -2279,6 +2478,8 @@ const Profile = () => {
                     )[0].structure_name
                   );
                   getMasterStructure(e.target.value);
+                  newMasterStructureData.structure_id = e.target.value;
+                  newMasterStructureData.structure_name = structureList.data.filter((x) => x.structure_id == e.target.value)[0].structure_name;
                   setStructureList((prevalue) => {
                     return {
                       ...prevalue,
@@ -2300,7 +2501,113 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          {forinloop()}
+          <div className="main-content-input">
+            <div className="ib-structure view-commission-content-section">
+              {
+                newMasterStructureData.structure_data.map((item, index) => {
+                  return (
+                    <div className="group-structure-section">
+                      <div className="main-section">
+                        <div className='main-section-title'>{item.ib_group_name}</div>
+                        <div className='main-section-input-element'>
+                          <div>
+                            {/* <span>Rebate</span> */}
+                            <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
+                              onChange={(e) => {
+                                newMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
+                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData
+                                });
+                              }} />
+                          </div>
+                          <div>
+                            {/* <span>Commission</span> */}
+                            <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                              onChange={(e) => {
+                                newMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
+                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData
+                                });
+                              }}
+                            />
+                          </div>
+                          {/* <div>
+                            {
+                              (item.ibGroup != undefined) ?
+                                <FormControl variant="standard">
+                                  <Select
+                                    label
+                                    className="select-font-small"
+                                    value={item.ib_group_level_id}
+                                    name="title"
+                                    onChange={(e) => {
+                                      newMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData
+                                      });
+                                      console.log('newMasterStructureData', newMasterStructureData);
+                                    }}
+                                  >
+                                    <MenuItem value={0}>Select IB Group</MenuItem>
+                                    {
+                                      item.ibGroup.map((item1, index1) => {
+                                        return (
+                                          <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
+                                        );
+                                      })
+                                    }
+                                  </Select>
+                                </FormControl> : ''
+                            }
+                          </div> */}
+                        </div>
+                        <div className='action-section'>
+                          <span onClick={(e) => { newMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                        </div>
+                      </div>
+                      <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
+                        {
+                          item.pair_data.map((item1, index1) => {
+                            return (
+                              <div className="pair-data">
+                                <div className='pair-data-title'>{item1.pair_name}</div>
+                                <div>
+                                  <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
+                                    onChange={(e) => {
+                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData
+                                      });
+                                    }}
+                                  />
+                                </div>
+                                <div>
+                                  <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
+                                    onChange={(e) => {
+                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData
+                                      });
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })
+                        }
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
           {/* {masterStructureData.map((item, index) => {
             return (
               <div className="structureInputSection">
@@ -2648,7 +2955,7 @@ const Profile = () => {
             />
           </div>
           <br />
-          <div>
+          {/* <div>
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Call Status</InputLabel>
               <Select
@@ -2675,8 +2982,8 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+          <br /> */}
+          {/* <div>
             <FormControlLabel
               className="declarationCheckbox"
               control={
@@ -2702,7 +3009,7 @@ const Profile = () => {
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       );
     } else if (dialogTitle == "Add Account" || dialogTitle == "Edit Account") {
@@ -3375,9 +3682,194 @@ const Profile = () => {
           </div>
         </div>
       );
-    } else if (dialogTitle == "EDIT SHARED STRUCTURE") {
+    } else if (dialogTitle == "EDIT STRUCTURE") {
       return (
-        <div>
+        <div className="master-structure-section">
+          <div className="structureNameSection view-ib-content-section">
+            <input
+              type="text"
+              className=""
+              placeholder="Structure Name"
+              name="name"
+              value={partnershipMasterStructureData.structure_name}
+              onChange={(e) => {
+                partnershipMasterStructureData.structure_name = e.target.value;
+                setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
+                // setStructureList((preValue) => {
+                //   return {
+                //     ...preValue,
+                //     structure_name: e.target.value,
+                //   };
+                // });
+              }}
+            />
+          </div>
+          <div className="main-content-input">
+            <div className="ib-structure view-commission-content-section">
+              {
+                partnershipMasterStructureData.structure_data.map((item, index) => {
+                  return (
+                    <div className="group-structure-section">
+                      <div className="main-section">
+                        <div className='main-section-title'>{item.ib_group_name}</div>
+                        <div className='main-section-input-element'>
+                          <div>
+                            {/* <span>Rebate</span> */}
+                            <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
+                              onChange={(e) => {
+                                partnershipMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
+                                partnershipMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                  partnershipMasterStructureData.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
+                                });
+                                setPartnershipMasterStructureData({
+                                  ...partnershipMasterStructureData
+                                });
+                              }} />
+                          </div>
+                          <div>
+                            {/* <span>Commission</span> */}
+                            <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                              onChange={(e) => {
+                                partnershipMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
+                                partnershipMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
+                                  partnershipMasterStructureData.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
+                                });
+                                setPartnershipMasterStructureData({
+                                  ...partnershipMasterStructureData
+                                });
+                              }}
+                            />
+                          </div>
+                          {/* <div>
+                            {
+                              (item.ibGroup != undefined) ?
+                                <FormControl variant="standard">
+                                  <Select
+                                    label
+                                    className="select-font-small"
+                                    value={item.ib_group_level_id}
+                                    name="title"
+                                    onChange={(e) => {
+                                      partnershipMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData
+                                      });
+                                      console.log('partnershipMasterStructureData', partnershipMasterStructureData);
+                                    }}
+                                  >
+                                    <MenuItem value={0}>Select IB Group</MenuItem>
+                                    {
+                                      item.ibGroup.map((item1, index1) => {
+                                        return (
+                                          <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
+                                        );
+                                      })
+                                    }
+                                  </Select>
+                                </FormControl> : ''
+                            }
+                          </div> */}
+                        </div>
+                        <div className='action-section'>
+                          <span onClick={(e) => { partnershipMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setPartnershipMasterStructureData({ ...partnershipMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                        </div>
+                      </div>
+                      <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
+                        {
+                          item.pair_data.map((item1, index1) => {
+                            return (
+                              <div className="pair-data">
+                                <div className='pair-data-title'>{item1.pair_name}</div>
+                                <div>
+                                  <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
+                                    onChange={(e) => {
+                                      partnershipMasterStructureData.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData
+                                      });
+                                    }}
+                                  />
+                                </div>
+                                <div>
+                                  <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
+                                    onChange={(e) => {
+                                      partnershipMasterStructureData.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData
+                                      });
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })
+                        }
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+          {/* {masterStructureData.map((item, index) => {
+            return (
+              <div className="structureInputSection">
+                <hr className="solid" />
+                <br />
+                <Grid container>
+                  <Grid item md={4} lg={4} xl={4} className="label-center">
+                    <label>{item.ib_group_name}</label>
+                  </Grid>
+                  <Grid item md={8} lg={8} xl={8}>
+                    <Grid container spacing={1}>
+                      {item.pair_data.map((item1, index1) => {
+                        return (
+                          <>
+                            <Grid item md={4} lg={4} xl={4}>
+                              <label>{item1.pair_name}</label>
+                            </Grid>
+                            <Grid item md={4} lg={4} xl={4}>
+                              <input
+                                value={item1.rebate}
+                                type="text"
+                                className=""
+                                placeholder="Rebate"
+                                onChange={(e) => {
+                                  masterStructureData[index]["pair_data"][
+                                    index1
+                                  ]["rebate"] = e.target.value;
+                                  setMasterStructureData([
+                                    ...masterStructureData,
+                                  ]);
+                                }}
+                              />
+                            </Grid>
+                            <Grid item md={4} lg={4} xl={4}>
+                              <input
+                                value={item1.commission}
+                                type="text"
+                                className=""
+                                placeholder="Commission"
+                                onChange={(e) => {
+                                  masterStructureData[index]["pair_data"][
+                                    index1
+                                  ]["commission"] = e.target.value;
+                                  setMasterStructureData([
+                                    ...masterStructureData,
+                                  ]);
+                                }}
+                              />
+                            </Grid>
+                          </>
+                        );
+                      })}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </div>
+            );
+          })} */}
+          {/* <div>
           <div className="structureInputSection">
             <Grid container>
               <Grid item md={4} lg={4} xl={4} className="label-center">
@@ -3462,20 +3954,6 @@ const Profile = () => {
                 </Grid>
               </Grid>
             ))}
-            {/* <Grid container spacing={1}>
-                        <Grid item md={4} lg={4} xl={4}>
-                            <label>IB</label>
-                        </Grid>
-                        <Grid item md={4} lg={4} xl={4}>
-                            <input type='text' className='' value='60002830' style={{ width: '70%' }} />
-                        </Grid>
-                        <Grid item md={4} lg={4} xl={4}>
-                            <Button variant="contained" className='btn-gradient'>Proceed</Button>
-                            <IconButton aria-label="delete" className='btn-danger'>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Grid>
-                    </Grid> */}
           </div>
           <hr className="solid" />
           <div className="contentActionButton">
@@ -3490,7 +3968,9 @@ const Profile = () => {
               Update For New Clients Only
             </Button>
           </div>
+        </div> */}
         </div>
+
       );
     } else if (dialogTitle == "Change Password") {
       return (
@@ -4002,7 +4482,7 @@ const Profile = () => {
           </Button>
         </div>
       );
-    } else if (dialogTitle == "EDIT SHARED STRUCTURE") {
+    } else if (dialogTitle == "EDIT STRUCTURE") {
       return (
         <div className="dialogMultipleActionButton">
           <Button
@@ -4011,6 +4491,13 @@ const Profile = () => {
             onClick={handleClose}
           >
             Cancel
+          </Button>
+          <Button
+            variant="contained"
+            className="btn-gradient btn-success"
+            onClick={partnerMasterStructureSubmit}
+          >
+            Edit Structure
           </Button>
         </div>
       );
@@ -4114,6 +4601,13 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setCreateMt5Form((prevalue) => {
+            return { ...prevalue, isLoader: false };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
@@ -4159,14 +4653,18 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setMt5AccessForm((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
-            setMt5AccessForm((preValue) => {
-              return {
-                ...preValue,
-                isLoader: false,
-              };
-            });
           } else {
             toast.success(res.data.message);
             setOpen(false);
@@ -4218,14 +4716,18 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setLinkAccountForm((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
-            setLinkAccountForm((preValue) => {
-              return {
-                ...preValue,
-                isLoader: false,
-              };
-            });
           } else {
             toast.success(res.data.message);
             setOpen(false);
@@ -4233,6 +4735,7 @@ const Profile = () => {
         });
     }
   };
+
   const input3 = (event) => {
     const { name, value } = event.target;
     setResetMt5PasswordForm((prevalue) => {
@@ -4264,18 +4767,22 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setResetMt5PasswordForm((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
             toast.success(res.data.message);
             setOpen(false);
             getAccountList();
-            setResetMt5PasswordForm((preValue) => {
-              return {
-                ...preValue,
-                isLoader: false,
-              };
-            });
           }
         });
     }
@@ -4316,6 +4823,16 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setChangeLeverageForm((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
@@ -4373,14 +4890,18 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setChangeAccountPasswordForm((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
-            setChangeAccountPasswordForm((preValue) => {
-              return {
-                ...preValue,
-                isLoader: false,
-              };
-            });
           } else {
             toast.success(res.data.message);
             setOpen(false);
@@ -4398,21 +4919,79 @@ const Profile = () => {
       };
     });
   };
+
   const masterStructureSubmit1 = () => {
     console.log(masterStructureData.length);
 
-    console.log("masterStructureDataon function", masterStructureData);
+    var error = false;
+    if (newMasterStructureData.structure_data.length > 0) {
+      if (newMasterStructureData.structure_name == "") {
+        toast.error("Please enter structure name");
+        error = true;
+      } else {
+        newMasterStructureData.structure_data.forEach(element => {
+          console.log(element.ib_group_name, element.group_rebate);
+          if (element.group_rebate === "") {
+            toast.error(`Please enter ${element.ib_group_name} rebate`);
+            error = true;
+            return false;
+          } else if (element.group_commission === "") {
+            toast.error(`Please enter ${element.ib_group_name} commission`);
+            error = true;
+            return false;
+          } else if (element.ib_group_level_id === 0) {
+            toast.error(`Please enter ${element.ib_group_name} ib group`);
+            error = true;
+            return false;
+          } else {
+            element.pair_data.forEach(element1 => {
+              if (element1.rebate === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                error = true;
+                return false;
+              } else if (element1.rebate > element.group_rebate) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                error = true;
+                return false;
+              } else if (element1.commission === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                error = true;
+                return false;
+              } else if (element1.commission > element.group_commission) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                error = true;
+                return false;
+              }
+            });
+          }
+          if (error) {
+            return false;
+          }
+        });
+      }
+      if (error) {
+        return false;
+      }
+    }
+
+    console.log("masterStructureDataon function", newMasterStructureData);
     const param = new FormData();
     // param.append("is_app", 1);
     // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
-    param.append("pair_data", JSON.stringify(masterStructureData));
-    param.append("structure_name", structureList.structure_name);
-    param.append("structure_id", structureList.structure_id);
+    param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
+    param.append("structure_name", newMasterStructureData.structure_name);
+    param.append("structure_id", newMasterStructureData.structure_id);
     param.append("action", "update_strcuture_master");
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -4421,6 +5000,89 @@ const Profile = () => {
         }
       });
   };
+
+  const partnerMasterStructureSubmit = () => {
+    console.log(masterStructureData.length);
+
+    var error = false;
+    if (partnershipMasterStructureData.structure_data.length > 0) {
+      if (partnershipMasterStructureData.structure_name == "") {
+        toast.error("Please enter structure name");
+        error = true;
+      } else {
+        partnershipMasterStructureData.structure_data.forEach(element => {
+          console.log(element.ib_group_name, element.group_rebate);
+          if (element.group_rebate === "") {
+            toast.error(`Please enter ${element.ib_group_name} rebate`);
+            error = true;
+            return false;
+          } else if (element.group_commission === "") {
+            toast.error(`Please enter ${element.ib_group_name} commission`);
+            error = true;
+            return false;
+          } else if (element.ib_group_level_id === 0) {
+            toast.error(`Please enter ${element.ib_group_name} ib group`);
+            error = true;
+            return false;
+          } else {
+            element.pair_data.forEach(element1 => {
+              if (element1.rebate === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                error = true;
+                return false;
+              } else if (element1.rebate > element.group_rebate) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                error = true;
+                return false;
+              } else if (element1.commission === "") {
+                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                error = true;
+                return false;
+              } else if (element1.commission > element.group_commission) {
+                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                error = true;
+                return false;
+              }
+            });
+          }
+          if (error) {
+            return false;
+          }
+        });
+      }
+      if (error) {
+        return false;
+      }
+    }
+
+    console.log("masterStructureDataon function", partnershipMasterStructureData);
+    const param = new FormData();
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    param.append("pair_data", JSON.stringify(partnershipMasterStructureData.structure_data));
+    param.append("structure_name", partnershipMasterStructureData.structure_name);
+    param.append("structure_id", partnershipMasterStructureData.structure_id);
+    param.append("action", "update_strcuture_master");
+    axios
+      .post(Url + "/ajaxfiles/master_structure_manage.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          getPartnershipMasterStructure(partnershipMasterStructureData.structure_id);
+          handleClose();
+        }
+      });
+  };
+
   const masterStructureSubmit = () => {
     console.log(masterStructureData.length);
 
@@ -4490,6 +5152,10 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/master_structure_manage.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -4508,11 +5174,16 @@ const Profile = () => {
       };
     });
   };
+
   useEffect(() => {
     const param = new FormData();
     // param.append("is_app", 1);
     // param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
@@ -4522,6 +5193,7 @@ const Profile = () => {
       }
     });
   }, []);
+
   const profileSubmit = async () => {
     console.log(profileForm);
     if (profileForm.title == "") {
@@ -4595,6 +5267,10 @@ const Profile = () => {
       axios
         .post(`${Url}/ajaxfiles/update_user_profile.php`, param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
@@ -4817,14 +5493,18 @@ const Profile = () => {
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setsendMailForm((prevalue) => {
+            return {
+              ...prevalue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
-            setsendMailForm((prevalue) => {
-              return {
-                ...prevalue,
-                isLoader: false,
-              };
-            });
           } else {
             toast.success(res.data.message);
             setOpen(false);
@@ -4877,10 +5557,10 @@ const Profile = () => {
 
     if (noteForm.notes == "") {
       toast.error("Please enter note");
-    } else if (noteForm.call_status == "") {
+    /* } else if (noteForm.call_status == "") {
       toast.error("Please select call status");
     } else if (noteForm.set_reminder == true && noteForm.date == "") {
-      toast.error("Please select date");
+      toast.error("Please select date"); */
     } else {
       setNoteForm((prevalue) => {
         return {
@@ -4894,22 +5574,26 @@ const Profile = () => {
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
-      param.append("call_status", noteForm.call_status);
-      param.append("reminder", noteForm.date);
+      /* param.append("call_status", noteForm.call_status);
+      param.append("reminder", noteForm.date); */
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setNoteForm((prevalue) => {
+            return {
+              ...prevalue,
+              isLoader: false,
+            };
+          });
           if (res.data.status == "error") {
             toast.error(res.data.message);
-            setNoteForm((prevalue) => {
-              return {
-                ...prevalue,
-                isLoader: false,
-              };
-            });
           } else {
             toast.success(res.data.message);
-
+            setRefresh(!refresh);
             setOpen(false);
           }
         });
@@ -4963,22 +5647,20 @@ const Profile = () => {
         await axios
           .post(Url + "/ajaxfiles/update_user_profile.php", param)
           .then((res) => {
+            if (res.data.message == "Session has been expired") {
+              localStorage.setItem("login", true);
+              navigate("/");
+            }
+            setBankAccountForm((preValue) => {
+              return {
+                ...preValue,
+                isLoader: false,
+              };
+            });
             if (res.data.status == "error") {
               toast.error(res.data.message);
-              setBankAccountForm((preValue) => {
-                return {
-                  ...preValue,
-                  isLoader: false,
-                };
-              });
             } else {
               toast.success(res.data.message);
-              setBankAccountForm((preValue) => {
-                return {
-                  ...preValue,
-                  isLoader: false,
-                };
-              });
               setOpen(false);
             }
           });
@@ -5014,6 +5696,10 @@ const Profile = () => {
         await axios
           .post(Url + "/ajaxfiles/update_user_profile.php", param)
           .then((res) => {
+            if (res.data.message == "Session has been expired") {
+              localStorage.setItem("login", true);
+              navigate("/");
+            }
             if (res.data.status == "error") {
               toast.error(res.data.message);
             } else {
@@ -5281,13 +5967,17 @@ const Profile = () => {
         // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("action", "add_mt5_bonus");
-        param.append("action", transactionForm.credit_type);
-        param.append("action", transactionForm.account);
-        param.append("action", transactionForm.amount);
-        param.append("action", transactionForm.note);
+        param.append("credit_type", transactionForm.credit_type);
+        param.append("account", transactionForm.account);
+        param.append("amount", transactionForm.amount);
+        param.append("note", transactionForm.note);
         axios
           .post(Url + "/ajaxfiles/mt5_credit_debit.php", param)
           .then((res) => {
+            if (res.data.message == "Session has been expired") {
+              localStorage.setItem("login", true);
+              navigate("/");
+            }
             if (res.data.status == "error") {
               toast.error(res.data.message);
             } else {
@@ -5334,13 +6024,59 @@ const Profile = () => {
   };
 
   const deleteStructureSubmit = () => {
-    if (deleteStructureForm.structure == "") {
+    if (partnershipMasterStructureData.structure_id == "") {
       toast.error("Please select structure");
     } else {
-      toast.success("Structure has been successfully deleted");
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Are you sure?</h1>
+              <p>Do you want to delete this?</p>
+              <div className='confirmation-alert-action-button'>
+                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                <Button variant="contained" className='btn-gradient btn-danger'
+                  onClick={async () => {
+                    onClose();
+                    const param = new FormData();
+                    // param.append("is_app", 1);
+                    // param.append("AADMIN_LOGIN_ID", 1);
+                    param.append("user_id", id);
+                    param.append("action", 'delete_master_structure');
+                    param.append("structure_id", partnershipMasterStructureData.structure_id);
+                    await axios
+                      .post(`${Url}/ajaxfiles/master_structure_manage.php`, param)
+                      .then((res) => {
+                        if (res.data.message == "Session has been expired") {
+                          localStorage.setItem("login", true);
+                          navigate("/");
+                        }
+                        if (res.data.status == "error") {
+                          toast.error(res.data.message);
+                        } else {
+                          toast.success(res.data.message);
+                          getMasterStructureList();
+                          setPartnershipMasterStructureData({
+                            structure_name: "",
+                            structure_data: [],
+                            structure_id: "",
+                            isLoader: false,
+                          })
+                        }
+                      });
+                  }}
+                >
+                  Yes, Delete it!
+                </Button>
+              </div>
+            </div>
+          );
+        }
+      });
+      /* toast.success("Structure has been successfully deleted");
       setDeleteStructureForm({
         structure: "",
-      });
+      }); */
     }
   };
 
@@ -5419,6 +6155,32 @@ const Profile = () => {
       });
   };
 
+  const getReferralData = async (structure_id) => {
+    const param = new FormData();
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    param.append("structure_id", structure_id);
+    param.append("action", "my_referrals");
+    await axios
+      .post(`${Url}/ajaxfiles/master_structure_manage.php`, param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        userData.isLoader = false;
+        setuserData({ ...userData });
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          referralData.data = res.data.data;
+          setReferralData({ ...referralData });
+          console.log('referralData', referralData);
+        }
+      });
+  };
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
@@ -5433,6 +6195,10 @@ const Profile = () => {
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setLeverageForm(res.data.leverages);
       });
   }, []);
@@ -5513,7 +6279,8 @@ const Profile = () => {
                       userData.data.is_ib_account == "0" ? "" : <Tab label="PARTNERSHIP" />
                     }
 
-                    <Tab label="STATEMENT" />
+                    {/* <Tab label="STATEMENT" /> */}
+                    <Tab label="NOTES" />
                   </Tabs>
                   <SwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -5973,13 +6740,13 @@ const Profile = () => {
                                       >
                                         Edit Master Structure
                                       </Button>
-                                      <Button
+                                      {/* <Button
                                         variant="contained"
                                         className="add_shared_structure btn-hover-css"
                                         onClick={openDialogbox}
                                       >
                                         Add Shared Structure
-                                      </Button>
+                                      </Button> */}
                                       <Button
                                         variant="contained"
                                         className="link_client btn-hover-css"
@@ -6781,88 +7548,20 @@ const Profile = () => {
                             className="paper-main-section"
                           >
                             <div className="headerSection header-title">
-                              <p className="margin-0">Notes</p>
-                              <Button
+                              <p className="margin-0">Logs</p>
+                              {/* <Button
                                 variant="contained"
                                 className="add_note"
                                 onClick={openDialogbox}
                               >
                                 Add Note
-                              </Button>
+                              </Button> */}
                             </div>
                             <div className="bankDetailsTabSection">
                               <CommonTable
-                                url={`${Url}/datatable/notes_list.php`}
-                                column={noteColumn}
+                                url={`${Url}/datatable/log_list.php`}
+                                column={logColumn}
                                 userId={id}
-                                sort="2"
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                      <br />
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">
-                                Individual Stage History
-                              </p>
-                              {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/activity_log_list.php`}
-                                column={activityColumn}
-                                sort="2"
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                      <br />
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">IB Stage History</p>
-                              {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/activity_log_list.php`}
-                                column={activityColumn}
-                                sort="2"
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                      <br />
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Status History</p>
-                              {/* <Button variant="contained" className='add_note' onClick={openDialogbox}>Add Note</Button> */}
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/activity_log_list.php`}
-                                column={activityColumn}
                                 sort="2"
                               />
                             </div>
@@ -6893,7 +7592,7 @@ const Profile = () => {
                                 url={`${Url}/datatable/wallet_history.php`}
                                 column={walletHistoryColumn}
                                 userId={id}
-                                sort="2"
+                                sort="1"
                               />
                             </div>
                           </Paper>
@@ -6912,11 +7611,100 @@ const Profile = () => {
                               <p className="margin-0">Referrals</p>
                             </div>
                             <div className="bankDetailsTabSection">
-                              <HighchartsReact
-                                options={options}
-                                highcharts={Highcharts}
-                                constructorType={"mapChart"}
-                              />
+                              <br />
+                              <FormControl
+                                variant="standard"
+                                sx={{ width: "20%" }}
+                              >
+                                <InputLabel>Structure</InputLabel>
+                                <Select
+                                  label
+                                  className="select-font-small"
+                                  name="structure"
+                                  onChange={(e) => {
+                                    getReferralData(e.target.value);
+                                    // setStructureList((prevalue) => {
+                                    //   return {
+                                    //     ...prevalue,
+                                    //     structure_name: structureList.data.filter(
+                                    //       (x) => x.structure_id == e.target.value
+                                    //     )[0].structure_name,
+                                    //     structure_id: e.target.value,
+                                    //   };
+                                    // });
+                                  }}
+                                >
+                                  {structureList.data.map((item) => {
+                                    return (
+                                      <MenuItem value={item.structure_id}>
+                                        {item.structure_name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                                </Select>
+                              </FormControl>
+                              <br />
+                              <div className="referrals-section">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>Name</th>
+                                      <th>Client Type</th>
+                                      <th>MT5 Account</th>
+                                      <th>Commission</th>
+                                      <th>Rebate</th>
+                                      <th>Sponsor Name</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {
+                                      referralData.data.map((item, index) => {
+                                        return (
+                                          <>
+                                            <tr>
+                                              <td>
+                                                <div className="collaps-content">
+                                                  <i class={`fa fa-angle-${(item.is_collapse) ? 'up' : 'down'}`} onClick={(e) => {
+                                                    referralData.data[index].is_collapse = !item.is_collapse;
+                                                    setReferralData({ ...referralData });
+                                                  }}></i>{item.structure_name}
+                                                </div>
+                                              </td>
+                                              <td>{item.client_type}</td>
+                                              <td>{item.mt5_acc_no}</td>
+                                              <td>
+                                                <div className="referral-commission_rebate-content" style={{ backgroundColor: `${item.group_color}` }}>{item.group_commission}</div>
+                                              </td>
+                                              <td>
+                                                <div className="referral-commission_rebate-content" style={{ backgroundColor: `${item.group_color}` }}>{item.group_rebate}</div>
+                                              </td>
+                                              <td>{item.sponsor_name}</td>
+                                            </tr>
+                                            {
+                                              (item.is_collapse) ?
+                                                item.structure_users.map((item1) => {
+                                                  return (
+                                                    <tr className="referral-child-structure-users">
+                                                      <td>{item1.client_name}</td>
+                                                      <td>{item1.client}</td>
+                                                      <td>{item1.mt5_acc_no}</td>
+                                                      <td></td>
+                                                      <td></td>
+                                                      <td>{item1.sponsor_name}</td>
+                                                    </tr>
+                                                  )
+                                                }) : ""
+                                            }
+                                          </>
+                                        )
+                                      })
+                                    }
+                                    <tr></tr>
+                                  </tbody>
+                                </table>
+                              </div>
+
+
                             </div>
                           </Paper>
                         </Grid>
@@ -6928,11 +7716,10 @@ const Profile = () => {
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
+                            className="paper-main-section partnership-main-section">
                             <div className="headerSection header-title">
                               <div className="header-search-section">
-                                {/* <FormControl
+                                <FormControl
                                   variant="standard"
                                   sx={{ width: "100%" }}
                                 >
@@ -6941,9 +7728,34 @@ const Profile = () => {
                                     label
                                     className="select-font-small"
                                     name="structure"
-                                    onChange={input9}
+                                    onChange={(e) => {
+                                      console.log(
+                                        "svalue",
+                                        structureList.data.filter(
+                                          (x) => x.structure_id == e.target.value
+                                        )[0].structure_name
+                                      );
+                                      getPartnershipMasterStructure(e.target.value);
+                                      partnershipMasterStructureData.structure_id = e.target.value;
+                                      partnershipMasterStructureData.structure_name = structureList.data.filter((x) => x.structure_id == e.target.value)[0].structure_name;
+                                      setStructureList((prevalue) => {
+                                        return {
+                                          ...prevalue,
+                                          structure_name: structureList.data.filter(
+                                            (x) => x.structure_id == e.target.value
+                                          )[0].structure_name,
+                                          structure_id: e.target.value,
+                                        };
+                                      });
+                                    }}
                                   >
-                                    <MenuItem value="1">Test</MenuItem>
+                                    {structureList.data.map((item) => {
+                                      return (
+                                        <MenuItem value={item.structure_id}>
+                                          {item.structure_name}
+                                        </MenuItem>
+                                      );
+                                    })}
                                   </Select>
                                 </FormControl>
                                 <Button
@@ -6952,7 +7764,7 @@ const Profile = () => {
                                   onClick={deleteStructureSubmit}
                                 >
                                   Structure Delete
-                                </Button> */}
+                                </Button>
                               </div>
                               <div className="groun-button">
                                 <Button
@@ -6964,21 +7776,6 @@ const Profile = () => {
                                 </Button>
                                 <Button
                                   variant="contained"
-                                  className="edit_master_structure"
-                                  onClick={openDialogbox}
-                                >
-                                  Edit Master Structure
-                                </Button>
-
-                                <Button
-                                  variant="contained"
-                                  className="add_shared_structure"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Shared Structure
-                                </Button>
-                                <Button
-                                  variant="contained"
                                   className="edit_structure"
                                   onClick={openDialogbox}
                                 >
@@ -6987,19 +7784,90 @@ const Profile = () => {
                               </div>
                             </div>
                             <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/sponsors_partnership_requests.php`}
-                                column={partnershipcolumn}
-                                userId={id}
-                                sort="2"
-                                refresh={updateDate.refresh}
-                              />
+                              {
+                                (partnershipMasterStructureData.structure_data.length > 0) ?
+                                  <div className="master-structure-section">
+                                    <div className="structureNameSection view-ib-content-section">
+                                      <label>STRUCTURE NAME</label>
+                                      <span>{partnershipMasterStructureData.structure_name}</span>
+                                    </div>
+                                    <div className="main-content-input">
+                                      <div className="ib-structure view-commission-content-section">
+                                        {
+                                          partnershipMasterStructureData.structure_data.map((item, index) => {
+                                            return (
+                                              <div className="group-structure-section">
+                                                <div className="main-section">
+                                                  <div className='main-section-title'>{item.ib_group_name}</div>
+                                                  <div className='main-section-input-element'>
+                                                    <div>
+                                                      {/* <span>Rebate</span> */}
+                                                      <input type='number' className="Rebate_amount" placeholder="Rebate" disabled value={item.group_rebate} />
+                                                    </div>
+                                                    <div>
+                                                      {/* <span>Commission</span> */}
+                                                      <input type='number' className="commission_amount" placeholder="Commission" disabled value={item.group_commission} />
+                                                    </div>
+                                                    {/* <div>
+                                                      {
+                                                        (item.ibGroup != undefined) ?
+                                                          <FormControl variant="standard">
+                                                            <Select
+                                                              label
+                                                              className="select-font-small"
+                                                              value={item.ib_group_level_id}
+                                                              name="title"
+                                                              disabled
+                                                            >
+                                                              <MenuItem value={0}>Select IB Group</MenuItem>
+                                                              {
+                                                                item.ibGroup.map((item1, index1) => {
+                                                                  return (
+                                                                    <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
+                                                                  );
+                                                                })
+                                                              }
+                                                            </Select>
+                                                          </FormControl> : ''
+                                                      }
+                                                    </div> */}
+                                                  </div>
+                                                  <div className='action-section'>
+                                                    <span onClick={(e) => { partnershipMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                                  </div>
+                                                </div>
+                                                <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
+                                                  {
+                                                    item.pair_data.map((item1, index1) => {
+                                                      return (
+                                                        <div className="pair-data">
+                                                          <div className='pair-data-title'>{item1.pair_name}</div>
+                                                          <div>
+                                                            <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled />
+                                                          </div>
+                                                          <div>
+                                                            <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled />
+                                                          </div>
+                                                        </div>
+                                                      );
+                                                    })
+                                                  }
+                                                </div>
+                                              </div>
+                                            );
+                                          })
+                                        }
+                                      </div>
+                                    </div>
+                                  </div> : ''
+                              }
+
                             </div>
                           </Paper>
                         </Grid>
                       </Grid>
                     </TabPanel>
-                    <TabPanel value={value} index={9} dir={theme.direction}>
+                    {/* <TabPanel value={value} index={9} dir={theme.direction}>
                       <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
                           <Paper
@@ -7010,12 +7878,42 @@ const Profile = () => {
                             <div className="headerSection header-title">
                               <p className="margin-0">Statement</p>
                             </div>
-                            {/* <br/> */}
                             <div className="bankDetailsTabSection">
                               <CommonTable
                                 url={`${Url}/datatable/activity_log_list.php`}
                                 column={activityColumn}
                                 sort="2"
+                              />
+                            </div>
+                          </Paper>
+                        </Grid>
+                      </Grid>
+                    </TabPanel> */}
+                    <TabPanel value={value} index={9} dir={theme.direction}>
+                    <Grid container spacing={3} className="grid-handle">
+                        <Grid item md={12} lg={12} xl={12}>
+                          <Paper
+                            elevation={2}
+                            style={{ borderRadius: "10px" }}
+                            className="paper-main-section"
+                          >
+                            <div className="headerSection header-title">
+                              <p className="margin-0">Notes</p>
+                              <Button
+                                variant="contained"
+                                className="add_note"
+                                onClick={openDialogbox}
+                              >
+                                Add Note
+                              </Button>
+                            </div>
+                            <div className="bankDetailsTabSection">
+                              <CommonTable
+                                url={`${Url}/datatable/notes_list.php`}
+                                column={noteColumn}
+                                userId={id}
+                                sort="2"
+                                refresh={refresh}
                               />
                             </div>
                           </Paper>

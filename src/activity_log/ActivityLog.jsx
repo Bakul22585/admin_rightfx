@@ -9,11 +9,13 @@ import { Url } from '../global';
 
 const ActivityLog = () => {
 
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [param, setParam] = useState("");
     const [searchBy, setSearchBy] = useState([
         {
           'label': 'USER NAME',
           'value': false,
-          'name': 'user_name'
+          'name': 'full_name'
         },
         {
           'label': 'IP ADDRESS',
@@ -59,7 +61,7 @@ const ActivityLog = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Activity Log</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -69,7 +71,7 @@ const ActivityLog = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' search={searchBy} />
+                                                <CommonTable url={`${Url}/datatable/activity_log_list.php`} column={activityColumn} sort='2' search={searchBy} searchWord={searchKeyword} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

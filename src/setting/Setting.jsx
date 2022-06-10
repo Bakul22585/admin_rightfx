@@ -68,12 +68,12 @@ const Setting = () => {
                     is_withdrawal_active: (res.data.settings_list.is_withdrawal_active == "0")? false: true,
                     is_transfer_active: (res.data.settings_list.is_transfer_active == "0") ? false : true,
                     transfer_wallet_to_wallet_charges: res.data.settings_list.transfer_wallet_to_wallet_charges,
-                    bank_ac_name: res.data.settings_list.bank_ac_name,
+                    /* bank_ac_name: res.data.settings_list.bank_ac_name,
                     bank_ac_number: res.data.settings_list.bank_ac_number,
                     bank_name: res.data.settings_list.bank_name,
                     bank_ifsc_code: res.data.settings_list.bank_ifsc_code,
                     upi_qr_code: res.data.settings_list.upi_qr_code,
-                    usdt_trc_20_qr_code: res.data.settings_list.usdt_trc_20_qr_code,
+                    usdt_trc_20_qr_code: res.data.settings_list.usdt_trc_20_qr_code, */
                     isloader: false,
                 });
                 console.log(form);
@@ -93,7 +93,7 @@ const Setting = () => {
         param.append("is_withdrawal_active", (form.is_withdrawal_active == true) ? "1" : "0");
         param.append("is_transfer_active", (form.is_transfer_active == true) ? "1" : "0");
         param.append("transfer_wallet_to_wallet_charges", form.transfer_wallet_to_wallet_charges);
-        param.append("bank_ac_name", form.bank_ac_name);
+        /* param.append("bank_ac_name", form.bank_ac_name);
         param.append("bank_ac_number", form.bank_ac_name);
         param.append("bank_name", form.bank_name);
         param.append("bank_ifsc_code", form.bank_ifsc_code);
@@ -102,7 +102,7 @@ const Setting = () => {
         }
         if (usdtSelectedFile) {
             param.append("usdt_trc_20_qr_code", form.usdt_trc_20_qr_code);
-        }
+        } */
         await axios.post(Url + "/ajaxfiles/settings_manage.php", param).then((res) => {
             if (res.data.message == "Session has been expired") {
                 localStorage.setItem("login", true);
@@ -118,7 +118,7 @@ const Setting = () => {
         });
     }
 
-    const onSelectFile = (e, flag) => {
+    /* const onSelectFile = (e, flag) => {
         if (flag == 'upi') {
             if (!e.target.files || e.target.files.length === 0) {
                 setUpiSelectedFile(undefined)
@@ -136,9 +136,9 @@ const Setting = () => {
             setForm({ ...form, usdt_trc_20_qr_code: e.target.files[0] });
             setUsdtSelectedFile(e.target.files[0])
         }
-    }
+    } */
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (!upiSelectedFile) {
             setUpiPreview(undefined)
             return
@@ -160,7 +160,7 @@ const Setting = () => {
         setUsdtPreview(objectUrl)
 
         return () => URL.revokeObjectURL(objectUrl)
-    }, [usdtSelectedFile])
+    }, [usdtSelectedFile]) */
 
     useEffect(() => {
         getSetting();
@@ -207,15 +207,15 @@ const Setting = () => {
                                                 <br />
                                                 <div className='input-section'>
                                                     <TextField label="Wallet to Wallet Transfer Charges ($)" variant="standard" sx={{ width: '100%' }} name='transfer_wallet_to_wallet_charges' onChange={input} value={form.transfer_wallet_to_wallet_charges} />
+                                                </div>
+                                                {/* <br />
+                                                <div className='input-section'>
                                                     <TextField label="Bank Account Name" variant="standard" sx={{ width: '100%' }} name='bank_ac_name' onChange={input} value={form.bank_ac_name} />
                                                     <TextField label="Bank Account Number" variant="standard" sx={{ width: '100%' }} name='bank_ac_number' onChange={input} value={form.bank_ac_number} />
-                                                </div>
-                                                <br />
-                                                <div className='input-section'>
                                                     <TextField label="Bank Name" variant="standard" sx={{ width: '100%' }} name='bank_name' onChange={input} value={form.bank_name} />
                                                     <TextField label="Bank IFSC Code" variant="standard" sx={{ width: '100%' }} name='bank_ifsc_code' onChange={input} value={form.bank_ifsc_code} />
-                                                </div>
-                                                <br />
+                                                </div> */}
+                                                {/* <br />
                                                 <div className='input-section qr-code-section'>
                                                     <label htmlFor="upi-contained-button-file" className='fileuploadButton'>
                                                         <Input accept="image/*" id="upi-contained-button-file" multiple type="file" onChange={(e) => onSelectFile(e, 'upi')} />
@@ -233,7 +233,7 @@ const Setting = () => {
                                                                 <i className="material-icons">backup</i>&nbsp;Upload
                                                             </Button>}
                                                     </label>
-                                                </div>
+                                                </div> */}
                                                 <br />
                                                 <div className='action-button-section'>
                                                     {(form.isloader)

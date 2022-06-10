@@ -91,6 +91,7 @@ const FAQEditor = () => {
         isLoader: '',
         faqId: '',
     });
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [searchBy, setSearchBy] = useState([
         {
           'label': 'QUESTIONS',
@@ -108,6 +109,7 @@ const FAQEditor = () => {
           'name': 'date'
         }
       ]);
+    const [param, setParam] = useState("");
     toast.configure();
 
     const column = [
@@ -435,7 +437,7 @@ const FAQEditor = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>FAQ Editor</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
@@ -445,7 +447,7 @@ const FAQEditor = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/faq_list.php`} column={column} sort='0' refresh={refresh} search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/faq_list.php`} column={column} sort='0' refresh={refresh} search={searchBy} searchWord={searchKeyword} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

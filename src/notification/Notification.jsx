@@ -23,10 +23,19 @@ const Notification = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [withoutButton, setWithoutButton] = useState([])
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchBy, setSearchBy] = useState([
+    {
+      'label': 'DESCRIPTION',
+      'value': false,
+      'name': 'description'
+    }
+  ]);
   const [page, setPage] = useState({
     index: "",
     totalPage: 0
   });
+  const [param, setParam] = useState("");
   const loader = useRef(null);
   var entriys = 0;
   useEffect(() => {
@@ -42,15 +51,8 @@ const Notification = () => {
     }
   }, []);
   useEffect(() => {
-    const option = {
-      root: null,
-      rootMargin: "20px",
-      threshold: 0,
-    };
-    console.log("page kjdlkjasdg");
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) observer.observe(loader.current);
-  }, [handleObserver]);
+    fatchdata(page.index, param.start_date, param.end_date, searchKeyword);
+  }, [param, searchKeyword]);
 
   const makeAsRead = async (item, index) => {
     // toast.error(item)
@@ -80,7 +82,7 @@ const Notification = () => {
   }
   console.log("withoutButton", withoutButton)
 
-  const fatchdata = async (start = 0) => {
+  const fatchdata = async (start = 0, start_date = '', end_date = '', search = '') => {
     console.log(start);
     // entriys = start;
     // page = start;
@@ -93,6 +95,17 @@ const Notification = () => {
     param.append("draw", 1);
     param.append("start", start);
     param.append("length", 10);
+    if (start_date != "") {
+      param.append("start_date", start_date);
+    }
+
+    if (end_date != "") {
+      param.append("start_date", end_date);
+    }
+
+    if (search != "") {
+      param.append("description", search);
+    }
     param.append("action", "list_notifications");
     await axios
       .post(`${Url}/datatable/notification_list.php`, param)
@@ -111,6 +124,17 @@ const Notification = () => {
         }
       });
   };
+
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0,
+    };
+    console.log("page kjdlkjasdg");
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loader.current) observer.observe(loader.current);
+  }, [handleObserver]);
   toast.configure();
   return (
     <div>
@@ -120,7 +144,7 @@ const Notification = () => {
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
                 <p className="main-heading">Notification</p>
-                <CommonFilter />
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
                 <br />
                 <Paper
                   elevation={2}

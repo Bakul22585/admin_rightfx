@@ -1,5 +1,5 @@
 import './leads.css';
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Theme, useTheme } from '@mui/material/styles';
 import { Autocomplete, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, Input, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -154,14 +154,14 @@ const nbaTeams = [
 
 const Leads = () => {
   const theme = useTheme();
-  const [checkStatus,setcheckStatus]=useState("");
+  const [checkStatus, setcheckStatus] = useState("");
 
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('md');
   const navigate = useNavigate();
   const [openTableMenus, setOpenTableMenus] = useState([]);
-  
+
   const [filterDate, setFilterDate] = useState("");
 
   const [filterData, setFilterData] = useState({});
@@ -169,8 +169,8 @@ const Leads = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [param, setParam] = useState({});
-  const[countryData,setCountryData]=useState([])
-  const[listManagers,setListManagers]=useState([])
+  const [countryData, setCountryData] = useState([])
+  const [listManagers, setListManagers] = useState([])
   const [form, setForm] = useState({
     customer_name: '',
     customer_mobile: '',
@@ -183,7 +183,7 @@ const Leads = () => {
     date: '',
     time: '',
     remark: '',
-    customer_country:'',
+    customer_country: '',
     isCustomerSendMail: true,
     isCustomerSendsms: true,
     isAssignSendsms: false,
@@ -212,13 +212,13 @@ const Leads = () => {
     lead_added_by: '',
     reference: ''
   });
-  const[cpData,setCpData]=useState({
-    cp_access:"",
-        demo_mt5:"",
-        isLoader:"",
-        refresh:false
+  const [cpData, setCpData] = useState({
+    cp_access: "",
+    demo_mt5: "",
+    isLoader: "",
+    refresh: false
   })
- 
+
   const [searchBy, setSearchBy] = useState([
     {
       'label': 'CUSTOMER',
@@ -252,37 +252,37 @@ const Leads = () => {
   Demo, 1234567890, demo@gmail.com, 000 demo society demo Nager Near demo market demo., Web, test, Low, 7475717273, 11-05-2022, 01:51 PM, Test
   Demo 1, 0987654321, demo1@gmail.com, 0 demo1 society demo1 Nager Near demo1 market demo1., Banner, test, High, 7475717273, 11-05-2022, 01:51 PM, Test`;
 
-const getcontry=()=>{
-  const param = new FormData();
-  // param.append('is_app', 1);
-  //          param.append('AADMIN_LOGIN_ID', 1); 
- axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
-   if (res.data.status == "error") {
-     // toast.error(res.data.message);
-   } else {
-     setCountryData(res.data.aaData)
-   }
- });
-}
-const getListManagers=()=>{
-  const param = new FormData();
-  // param.append('is_app', 1);
-  //          param.append('AADMIN_LOGIN_ID', 1); 
-           param.append('action',"list_managers"); 
+  const getcontry = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    //          param.append('AADMIN_LOGIN_ID', 1); 
+    axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
+      if (res.data.status == "error") {
+        // toast.error(res.data.message);
+      } else {
+        setCountryData(res.data.aaData)
+      }
+    });
+  }
+  const getListManagers = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    //          param.append('AADMIN_LOGIN_ID', 1); 
+    param.append('action', "list_managers");
 
- axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
-   if (res.data.status == "error") {
-     // toast.error(res.data.message);
-   } else {
-     console.log("res.data.managers",res.data.managers)
-    setListManagers(res.data.managers)
-   }
- });
-}
-useEffect(()=>{
-  getcontry()
-  getListManagers()
-},[])
+    axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
+      if (res.data.status == "error") {
+        // toast.error(res.data.message);
+      } else {
+        console.log("res.data.managers", res.data.managers)
+        setListManagers(res.data.managers)
+      }
+    });
+  }
+  useEffect(() => {
+    getcontry()
+    getListManagers()
+  }, [])
 
   const handleClickOpen = (e) => {
     setForm(
@@ -298,7 +298,7 @@ useEffect(()=>{
         date: '',
         time: '',
         remark: '',
-        customer_country:'',
+        customer_country: '',
         isCustomerSendMail: true,
         isCustomerSendsms: true,
         isAssignSendsms: false,
@@ -357,7 +357,7 @@ useEffect(()=>{
       lead_added_by: 'Test',
       reference: ''
     });
-    setParam({...param,'inquiry_id': e.inquiry_id});
+    setParam({ ...param, 'inquiry_id': e.inquiry_id });
     setDialogTitle('View Lead (' + e.customer_name + ')');
     setMaxWidth('lg');
     setOpen(true);
@@ -369,87 +369,85 @@ useEffect(()=>{
         <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
         {(form.isLoader) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitForm}>Add Lead</Button>}
       </div>;
-    }else if(dialogTitle == 'Are you sure?')
-    {
-      return(<div className='dialogMultipleActionButton'>  
-      <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-      {cpData.isLoader ? (
-            <Button
-              tabindex="0"
-              size="large"
-              className=" btn-gradient  btn-success addbankloder"
-              disabled
-            >
-              <svg class="spinner" viewBox="0 0 50 50">
-                <circle
-                  class="path"
-                  cx="25"
-                  cy="25"
-                  r="20"
-                  fill="none"
-                  stroke-width="5"
-                ></circle>
-              </svg>
-            </Button>
-          ) : (
-            <Button variant="contained" className='btn-gradient btn-success' onClick={completeLead}>Complete Lead</Button>
-          )}
-		  
+    } else if (dialogTitle == 'Are you sure?') {
+      return (<div className='dialogMultipleActionButton'>
+        <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+        {cpData.isLoader ? (
+          <Button
+            tabindex="0"
+            size="large"
+            className=" btn-gradient  btn-success addbankloder"
+            disabled
+          >
+            <svg class="spinner" viewBox="0 0 50 50">
+              <circle
+                class="path"
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                stroke-width="5"
+              ></circle>
+            </svg>
+          </Button>
+        ) : (
+          <Button variant="contained" className='btn-gradient btn-success' onClick={completeLead}>Complete Lead</Button>
+        )}
 
-</div>
-)
+
+      </div>
+      )
     }
   }
 
-  const completeLead=()=>{
-    if(cpData.cp_access==""){
+  const completeLead = () => {
+    if (cpData.cp_access == "") {
       toast.error("Select Cp Access")
-    }else if(cpData.cp_access =="1" && cpData.demo_mt5==""){
+    } else if (cpData.cp_access == "1" && cpData.demo_mt5 == "") {
       toast.error("Select Demo Account")
-    }else if(cpData.cp_access =="1" && cpData.demo_mt5=="1" && cpData.user_password==""){
+    } else if (cpData.cp_access == "1" && cpData.demo_mt5 == "1" && cpData.user_password == "") {
       toast.error("Enter Password")
-    }else{
+    } else {
       const param = new FormData();
-      setCpData((preValue)=>{
-return {
-  ...preValue,
-  isLoader:true,
-}
+      setCpData((preValue) => {
+        return {
+          ...preValue,
+          isLoader: true,
+        }
       })
       // param.append("is_app", 1);
       // param.append("AADMIN_LOGIN_ID", 1);
       param.append("cp_access", cpData.cp_access);
       param.append("leads_status", "1");
       param.append("inquiry_id", cpData.inquiry_id);
-      if(cpData.cp_access =="1"){
+      if (cpData.cp_access == "1") {
         param.append("demo_mt5", cpData.demo_mt5);
       }
-      if(cpData.cp_access =="1" && cpData.demo_mt5=="1" )
-      {
+      if (cpData.cp_access == "1" && cpData.demo_mt5 == "1") {
         param.append("user_password", cpData.user_password);
       }
       axios
         .post(Url + "/ajaxfiles/update_lead_status.php", param)
         .then((res) => {
           if (res.data.status == 'error') {
-            setCpData((preValue)=>{
+            setCpData((preValue) => {
               return {
                 ...preValue,
-                isLoader:false,
+                isLoader: false,
               }
-                    })
+            })
             toast.error(res.data.message);
-        } else {
-          setCpData((preValue)=>{
-            return {
-              ...preValue,
-              isLoader:false,
-              refresh:!cpData.refresh,
-            }
-              })
+          } else {
+            setCpData((preValue) => {
+              return {
+                ...preValue,
+                isLoader: false,
+                refresh: !cpData.refresh,
+              }
+            })
             toast.success(res.data.message)
             setOpen(false);
-        }
+          }
         });
     }
   }
@@ -512,12 +510,12 @@ return {
               label="Assign To Sales-Executive"
               name='assign'
             >
-            {
-              listManagers.map((item)=>{
-                return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
-              })
-            }
-              
+              {
+                listManagers.map((item) => {
+                  return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
+                })
+              }
+
             </Select>
           </FormControl>
         </div>
@@ -528,26 +526,26 @@ return {
         </div>
         <br />
         <div className='element'>
-        <FormControl variant="standard" sx={{ width: '100%' }} focused>
-                  <InputLabel id="demo-simple-select-standard-label">Country</InputLabel>
-                  <Select
-                    // value={age}
-                    onChange={input}
-                    label="Interest"
-                    name='customer_country'
-                    value={form.customer_country}
-                  >
-                {countryData.map((item) => {
-                                      return (
-                                        <MenuItem value={item.id}>
-                                          {item.nicename}
-                                        </MenuItem>
-                                      );
-                                    })}
-                   
-                  </Select>
-                </FormControl>
-                <br/>
+          <FormControl variant="standard" sx={{ width: '100%' }} focused>
+            <InputLabel id="demo-simple-select-standard-label">Country</InputLabel>
+            <Select
+              // value={age}
+              onChange={input}
+              label="Interest"
+              name='customer_country'
+              value={form.customer_country}
+            >
+              {countryData.map((item) => {
+                return (
+                  <MenuItem value={item.id}>
+                    {item.nicename}
+                  </MenuItem>
+                );
+              })}
+
+            </Select>
+          </FormControl>
+          <br />
           <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' onChange={input} />
         </div>
         <br />
@@ -664,8 +662,8 @@ return {
               </div>
               <br />
               <div className='element'>
-           
-               <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' value={newFollowupForm.remark} onChange={input1} />
+
+                <TextField label="Remarks" multiline variant="standard" focused sx={{ width: '100%' }} name='remark' value={newFollowupForm.remark} onChange={input1} />
               </div>
               <br />
               {/* <div className='checkboxSection' style={{ width: '100%' }}>
@@ -685,7 +683,7 @@ return {
           <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Follow Up History</p>
-              <CommonTable url={`${Url}/datatable/fetch_inquiey_master.php`} column={column} sort='0' filter={filterData} refresh={refresh} param={param}/>
+              <CommonTable url={`${Url}/datatable/fetch_inquiey_master.php`} column={column} sort='0' filter={filterData} refresh={refresh} param={param} />
             </Paper>
           </Grid>
           {/* <Grid item md={12} lg={12} xl={12} sm={12}>
@@ -696,54 +694,54 @@ return {
           </Grid> */}
         </Grid>
       </div>;
-    }else if(dialogTitle == 'Are you sure?'){
-return(
-  <div>
-  <div>
-  <FormControl variant="standard" sx={{ width: '100%' }} >
-<InputLabel id="demo-simple-select-standard-label">CP access</InputLabel>
-<Select
-  onChange={input3}
-  label="CP access"
-  name='cp_access'
->
-  <MenuItem value="1">Yes</MenuItem>
-  <MenuItem value="0">No</MenuItem>
- 
-</Select>
+    } else if (dialogTitle == 'Are you sure?') {
+      return (
+        <div>
+          <div>
+            <FormControl variant="standard" sx={{ width: '100%' }} >
+              <InputLabel id="demo-simple-select-standard-label">CP access</InputLabel>
+              <Select
+                onChange={input3}
+                label="CP access"
+                name='cp_access'
+              >
+                <MenuItem value="1">Yes</MenuItem>
+                <MenuItem value="0">No</MenuItem>
 
-</FormControl>
+              </Select>
 
-  </div> 
-  {
-                cpData.cp_access==1?
-              <div> 
-              <FormControl variant="standard" sx={{ width: '100%' }} >
-            <InputLabel id="demo-simple-select-standard-label">Demo Mt5</InputLabel>
-            <Select
-              onChange={input3}
-              label="Demo Mt5"
-              name='demo_mt5'
-            >
-              <MenuItem value="1">Yes</MenuItem>
-              <MenuItem value="0">No</MenuItem>
-             
-            </Select>
-          </FormControl>
-              </div>:""
-            }
-            {
-              cpData.demo_mt5=="1"?
-              <div> 
-              <FormControl variant="standard" sx={{ width: '100%' }} >
-            {/* <InputLabel id="demo-simple-select-standard-label">Password</InputLabel> */}
-            <TextField type='text' label="Password" multiline variant="standard" sx={{ width: '100%' }}  name='user_password' onChange={input3} />
+            </FormControl>
 
-          </FormControl>
-              </div>:""
-            }
-  </div>
-)
+          </div>
+          {
+            cpData.cp_access == 1 ?
+              <div>
+                <FormControl variant="standard" sx={{ width: '100%' }} >
+                  <InputLabel id="demo-simple-select-standard-label">Demo Mt5</InputLabel>
+                  <Select
+                    onChange={input3}
+                    label="Demo Mt5"
+                    name='demo_mt5'
+                  >
+                    <MenuItem value="1">Yes</MenuItem>
+                    <MenuItem value="0">No</MenuItem>
+
+                  </Select>
+                </FormControl>
+              </div> : ""
+          }
+          {
+            cpData.demo_mt5 == "1" ?
+              <div>
+                <FormControl variant="standard" sx={{ width: '100%' }} >
+                  {/* <InputLabel id="demo-simple-select-standard-label">Password</InputLabel> */}
+                  <TextField type='text' label="Password" multiline variant="standard" sx={{ width: '100%' }} name='user_password' onChange={input3} />
+
+                </FormControl>
+              </div> : ""
+          }
+        </div>
+      )
     }
   }
 
@@ -893,7 +891,7 @@ return(
       selector: row => {
         return <div>
           <Select
-          value={row.lead_assign_user_id}
+            value={row.lead_assign_user_id}
             displayEmpty
             inputProps={{
               "aria-label": "Without label",
@@ -902,12 +900,12 @@ return(
             name='assign_to'
             onChange={(e) => changeAssign(e, row)}
           >
-          {
-            listManagers.map((item)=>{
-             return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
-            })
-          }
-         </Select>
+            {
+              listManagers.map((item) => {
+                return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
+              })
+            }
+          </Select>
         </div>
       },
       reorder: true,
@@ -1110,44 +1108,45 @@ return(
       name: 'Action',
       button: true,
       cell: row => {
-        return<> {row.leads_status=="Completed" ? "":
-        <div>
-          <Button
-            id={`actionButton_${row.sr_no}`}
-            aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={(event) => handleContextClick(event, row.sr_no)}
-            style={{ color: 'black' }}
-          >
-            <i className="material-icons">more_horiz</i>
-          </Button>
-          <Menu
-            id={`basic-menu-${row.sr_no}`}
-            anchorEl={openTableMenus[row.sr_no]}
-            open={Boolean(openTableMenus[row.sr_no])}
-            onClose={(event) => handleContextClose(row.sr_no)}
-          >
-            <MenuItem className='completed' {...row} onClick={(e) => {
-            // actionMenuPopup(e, row)
-            setCpData({
-              cp_access:"",
-              demo_mt5:"",
-              user_password:"",
-              inquiry_id:row.inquiry_id,
-              leads_status:"Completed",
-              refresh:false,
-            })
-            setDialogTitle('Are you sure?');
-    setMaxWidth('md');
-    setOpen(true)}
-            }><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
-            {row.leads_status =="Completed" ?<></>:""}
-           
-          </Menu>
-        </div>
+        return <> {row.leads_status == "Completed" ? "" :
+          <div>
+            <Button
+              id={`actionButton_${row.sr_no}`}
+              aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={(event) => handleContextClick(event, row.sr_no)}
+              style={{ color: 'black' }}
+            >
+              <i className="material-icons">more_horiz</i>
+            </Button>
+            <Menu
+              id={`basic-menu-${row.sr_no}`}
+              anchorEl={openTableMenus[row.sr_no]}
+              open={Boolean(openTableMenus[row.sr_no])}
+              onClose={(event) => handleContextClose(row.sr_no)}
+            >
+              <MenuItem className='completed' {...row} onClick={(e) => {
+                // actionMenuPopup(e, row)
+                setCpData({
+                  cp_access: "",
+                  demo_mt5: "",
+                  user_password: "",
+                  inquiry_id: row.inquiry_id,
+                  leads_status: "Completed",
+                  refresh: false,
+                })
+                setDialogTitle('Are you sure?');
+                setMaxWidth('md');
+                setOpen(true)
+              }
+              }><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
+              {row.leads_status == "Completed" ? <></> : ""}
+
+            </Menu>
+          </div>
         }</>
-        
+
       },
       ignoreRowClick: true,
       allowOverflow: true,
@@ -1186,7 +1185,7 @@ return(
       ]
     }
   ];
-console.log("listManagers",listManagers)
+  console.log("listManagers", listManagers)
   const column = [
     {
       name: 'SR NO',
@@ -1219,7 +1218,7 @@ console.log("listManagers",listManagers)
     },
     {
       name: 'Added By',
-      selector: row =>  { return <span title={row.added_by}>{row.added_by}</span> },
+      selector: row => { return <span title={row.added_by}>{row.added_by}</span> },
       reorder: true,
       grow: 1,
     },
@@ -1302,8 +1301,8 @@ console.log("listManagers",listManagers)
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-        // param.append('is_app', 1);
-        //     param.append('AADMIN_LOGIN_ID', 1); 
+      // param.append('is_app', 1);
+      //     param.append('AADMIN_LOGIN_ID', 1); 
       param.append('customer_name', form.customer_name);
       param.append('customer_mobile', form.customer_mobile);
       param.append('customer_email', form.customer_email);
@@ -1322,20 +1321,20 @@ console.log("listManagers",listManagers)
         if (res.data.message == "Session has been expired") {
           localStorage.setItem("login", true);
           navigate("/");
-      }
+        }
         form.isLoader = false;
         setForm({ ...form });
         if (res.data.status == 'error') {
           toast.error(res.data.message);
         } else {
-         
-          setCpData((preValue)=>{
+
+          setCpData((preValue) => {
             return {
               ...preValue,
-              isLoader:true,
-              refresh:!cpData.refresh
+              isLoader: true,
+              refresh: !cpData.refresh
             }
-                  })
+          })
           toast.success(res.data.message);
           setOpen(false);
           setForm({
@@ -1350,7 +1349,7 @@ console.log("listManagers",listManagers)
             date: '',
             time: '',
             remark: '',
-            customer_country:'',
+            customer_country: '',
             isCustomerSendMail: true,
             isCustomerSendsms: true,
             isAssignSendsms: false,
@@ -1381,15 +1380,15 @@ console.log("listManagers",listManagers)
     });
   };
   const input3 = (event) => {
-    console.log(event.target.name,event.target.value)
+    console.log(event.target.name, event.target.value)
     const { name, value } = event.target;
     setCpData((prevalue) => {
-        return {
-            ...prevalue,
-            [name]: value,
-        };
+      return {
+        ...prevalue,
+        [name]: value,
+      };
     })
-    console.log("cpData",cpData)
+    console.log("cpData", cpData)
 
   }
 
@@ -1441,7 +1440,7 @@ console.log("listManagers",listManagers)
     // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "change_interest");
     param.append("inquiry_id", data.inquiry_id);
-    param.append("interest",e.target.value);
+    param.append("interest", e.target.value);
     axios
       .post(Url + "/ajaxfiles/change_lead_data.php", param)
       .then((res) => {
@@ -1464,7 +1463,7 @@ console.log("listManagers",listManagers)
                   onClose();
                 }}
               >
-               Yes, Apply it!
+                Yes, Apply it!
               </Button>
             </div>
           </div>
@@ -1480,13 +1479,14 @@ console.log("listManagers",listManagers)
     // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "change_assign_to");
     param.append("inquiry_id", data.inquiry_id);
-    param.append("lead_assign_user_id",e.target.value);
+    param.append("lead_assign_user_id", e.target.value);
     axios
       .post(Url + "/ajaxfiles/change_lead_data.php", param)
       .then((res) => {
         toast.success(res.data.message);
         setRefresh(!refresh)
-      });  }
+      });
+  }
   const changeFollowupDate = (e, data) => {
     console.log(e.target.value, data);
     confirmAlert({
@@ -1543,7 +1543,7 @@ console.log("listManagers",listManagers)
         if (res.data.message == "Session has been expired") {
           localStorage.setItem("login", true);
           navigate("/");
-      }
+        }
         newFollowupForm.isLoader = false;
         setNewFollowupForm({ ...newFollowupForm });
         if (res.data.status == 'error') {
@@ -1598,31 +1598,31 @@ console.log("listManagers",listManagers)
     } else if (e.target.classList.contains('completed')) {
       confirmAlert({
         customUI: ({ onClose }) => {
-          let cp_access=0
+          let cp_access = 0
           return (
             <div className='custom-ui'>
               <h1>Are you sure?</h1>
               <p>Do you want to completed this?</p>
               <div>
-              <FormControl variant="standard" sx={{ width: '100%' }} >
-            <InputLabel id="demo-simple-select-standard-label">CP access</InputLabel>
-            <Select
-              onChange={input3}
-              label="CP access"
-              name='cp_access'
-            >
-              <MenuItem value="1">Yes</MenuItem>
-              <MenuItem value="0">No</MenuItem>
-             
-            </Select>
-          
-          </FormControl>
-          
+                <FormControl variant="standard" sx={{ width: '100%' }} >
+                  <InputLabel id="demo-simple-select-standard-label">CP access</InputLabel>
+                  <Select
+                    onChange={input3}
+                    label="CP access"
+                    name='cp_access'
+                  >
+                    <MenuItem value="1">Yes</MenuItem>
+                    <MenuItem value="0">No</MenuItem>
+
+                  </Select>
+
+                </FormControl>
+
               </div>
               {
-                cpData.cp_access==1?
-              <div>dsadsdf  
-              {/* <FormControl variant="standard" sx={{ width: '100%' }} >
+                cpData.cp_access == 1 ?
+                  <div>dsadsdf
+                    {/* <FormControl variant="standard" sx={{ width: '100%' }} >
             <InputLabel id="demo-simple-select-standard-label">Demo Mt5</InputLabel>
             <Select
               onChange={input3}
@@ -1634,9 +1634,9 @@ console.log("listManagers",listManagers)
              
             </Select>
           </FormControl> */}
-              </div>:""
-            }
-            
+                  </div> : ""
+              }
+
               <div className='confirmation-alert-action-button'>
                 <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
                 <Button variant="contained" className='btn-gradient btn-success'
@@ -1696,7 +1696,7 @@ console.log("listManagers",listManagers)
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
         navigate("/");
-    }
+      }
       if (res.data.status == 'error') {
         toast.error(res.data.message);
       } else {
@@ -1716,7 +1716,7 @@ console.log("listManagers",listManagers)
               <Grid item md={12} lg={12} xl={12}>
                 <p className='main-heading'>Leads List</p>
 
-                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setFilterDate}   setcheckStatus={setcheckStatus}/>
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setFilterDate} setcheckStatus={setcheckStatus} />
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                   <div className='lead actionGroupButton'>
@@ -1737,7 +1737,7 @@ console.log("listManagers",listManagers)
                   </div>
                   <br />
                   {/* <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} /> */}
-                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={cpData.refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={filterDate}  checkStatus={checkStatus}/>
+                  <CommonTable url={`${Url}/datatable/fetch_lead.php`} column={depositColumn} sort='0' refresh={cpData.refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={filterDate} checkStatus={checkStatus} />
                 </Paper>
 
                 <BootstrapDialog

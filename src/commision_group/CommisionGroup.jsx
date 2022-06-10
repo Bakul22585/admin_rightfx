@@ -46,6 +46,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
 
   const [form, setForm] = useState({
     ib_group_level_id: "",
+    ib_group_main_id: "",
     group_name: "",
     ib_mt5group_name: "",
     ib_comapny_get: "",
@@ -258,6 +259,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
                   getMt5GroupName()
                   setDialogTitle('Edit');
                   setForm({
+                    ib_group_main_id: row.ib_group_main_id,
                     ib_group_level_id: row.ib_group_level_id,
                     group_name: row.group_name,
                     ib_mt5group_name: row.ib_mt5group_name,
@@ -393,6 +395,12 @@ const[mt5GroupName,setmt5GroupName]=useState([])
           </div>
         </div>
         <div className="view-content-element">
+          <h6 className="element-title">IB Group Type</h6>
+          <div className=" element-content">
+            <div className=" col s12">{viewData.ib_group_type}</div>
+          </div>
+        </div>
+        <div className="view-content-element">
           <h6 className="element-title">MT5 Group Name</h6>
           <div className=" element-content">
             <div className=" col s12">{viewData.ib_mt5group_name}</div>
@@ -517,6 +525,22 @@ const[mt5GroupName,setmt5GroupName]=useState([])
             </FormControl> */}
         </div>
         <div className="view-content-element">
+          <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>MT5 Group Name</InputLabel>
+              <Select
+                label
+                value={form.ib_group_main_id}
+                // className="select-font-small"
+                name="ib_group_main_id"
+                onChange={input}
+              >
+              {mt5GroupName.map((item)=>{
+                return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
+              })}
+              </Select>
+            </FormControl>
+        </div>
+        <div className="view-content-element">
           <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input}/>
         </div>
         <div className="view-content-element">
@@ -572,22 +596,24 @@ const[mt5GroupName,setmt5GroupName]=useState([])
           <TextField label="Group Name" variant="standard" sx={{ width: '100%' }} name='group_name' value={form.group_name} onChange={input}/>
         </div>
         <div className="view-content-element">
+          <FormControl variant="standard" sx={{ width: "100%" }}>
+            <InputLabel>IB Group Type</InputLabel>
+            <Select
+              label
+              value={form.ib_mt5group_name}
+              // className="select-font-small"
+              name="ib_group_type"
+              onChange={input}
+            >
+            {mt5GroupName.map((item)=>{
+              return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
+            })}
+            </Select>
+          </FormControl>
+        </div>
+        <div className="view-content-element">
           <TextField label="MT5 Group Name" variant="standard" sx={{ width: '100%' }} name='ib_mt5group_name' value={form.ib_mt5group_name} onChange={input}/>
-          {/* <FormControl variant="standard" sx={{ width: "100%" }}>
-              <InputLabel>MT5 Group Name</InputLabel>
-              <Select
-                label
-                value={form.ib_mt5group_name}
-                // className="select-font-small"
-                name="ib_mt5group_name"
-                onChange={input}
-              >
-              {mt5GroupName.map((item)=>{
-                return <MenuItem value={item.ib_group_main_id}>{item.ib_group_name}</MenuItem>
-              })}
-               <MenuItem value="0">Demo</MenuItem> 
-              </Select>
-            </FormControl> */}
+          
         </div>
         <div className="view-content-element">
           <TextField label="Execution" variant="standard" sx={{ width: '100%' }} name='execution' value={form.execution} onChange={input}/>
@@ -693,11 +719,12 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('action', 'add_ib_commission_group');
       // param.append('ib_group_level_id', form.ib_group_level_id);
       param.append('ib_group_name', form.group_name);
+      param.append('ib_group_main_id', form.ib_group_main_id);
       param.append('ib_mt5group_name', form.ib_mt5group_name);
       param.append('ib_comapny_get', form.ib_comapny_get);
       param.append('ib_company_passon', form.ib_company_passon);
@@ -771,10 +798,11 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('action', 'update_ib_commission_group');
       param.append('ib_group_level_id', form.ib_group_level_id);
+      param.append('ib_group_main_id', form.ib_group_main_id);
       param.append('group_name', form.group_name);
       param.append('ib_mt5group_name', form.ib_mt5group_name);
       param.append('ib_comapny_get', form.ib_comapny_get);
@@ -814,8 +842,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
   };
   const getMt5GroupName=()=>{
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    /* param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1); */
     param.append("action", "get_main_ib_groups");
     axios
       .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
@@ -829,6 +857,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
     getMt5GroupName()
     setForm({
       ib_group_level_id: "",
+      ib_group_main_id: "",
       group_name: "",
       ib_mt5group_name: "",
       ib_comapny_get: "",
@@ -862,8 +891,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
     if (flag == 'delete') {
         param.append('action', 'delete_ib_commission_group');
     }
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     param.append('ib_group_level_id', id.ib_group_level_id);
     await axios.post(`${Url}/ajaxfiles/ib_commission_group_manage.php`, param).then((res) => {
         if (res.data.message == "Session has been expired") {

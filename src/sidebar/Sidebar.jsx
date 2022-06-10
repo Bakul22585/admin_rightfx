@@ -221,9 +221,9 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/commision_group" onClick={CloseSidebar}>Commision Group</NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/ib_structure" onClick={CloseSidebar}>IB Structure</NavLink>
-                      </li>
+                      </li> */}
                       {/* <li>
                         <NavLink to="/generate_income" onClick={CloseSidebar}>Generate Income</NavLink>
                       </li> */}
@@ -238,14 +238,14 @@ const Sidebar = (prop) => {
                     MT5 Groups
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/copy_trading" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     add_chart
                     </span>
                     Copy Trading
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink className="nav-link-simple " to="/Deposit" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
@@ -270,14 +270,14 @@ const Sidebar = (prop) => {
                     IB Withdraw
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/ib_withdraw" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     file_upload
                     </span>
                     ib Withdraw
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <a
                     className={`trading ${open.trading ? "active" : ""}`}
@@ -395,14 +395,14 @@ const Sidebar = (prop) => {
                     Ticket
                     </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/plans" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     fact_check
                     </span>
                     Plans
                     </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink className="nav-link-simple " to="/currency_rate" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>

@@ -24,31 +24,32 @@ const PendingKYC = () => {
     });
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'EMAIL',
-          'value': false,
-          'name': 'email'
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'email'
         },
         {
-          'label': 'AADHAR NUMBER',
-          'value': false,
-          'name': 'aadhar_number'
+            'label': 'AADHAR NUMBER',
+            'value': false,
+            'name': 'aadhar_number'
         },
         {
-          'label': 'BANK ACCOUNT NO',
-          'value': false,
-          'name': 'bank_account_no'
+            'label': 'BANK ACCOUNT NO',
+            'value': false,
+            'name': 'bank_account_no'
         }
-      ]);
+    ]);
+
     const column = [
         {
             name: 'SR.NO',
@@ -120,25 +121,25 @@ const PendingKYC = () => {
         {
             name: "STATUS",
             selector: (row) => {
-              return (
-                <span
-                  title={row.status}
-                  className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-                    }`}
-                >
-                  {row.status == "1"
-                    ? "APPROVED"
-                    : row.status == "2"
-                      ? "REJECTED"
-                      : "PENDING"}
-                </span>
-              );
+                return (
+                    <span
+                        title={row.status}
+                        className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+                            }`}
+                    >
+                        {row.status == "1"
+                            ? "APPROVED"
+                            : row.status == "2"
+                                ? "REJECTED"
+                                : "PENDING"}
+                    </span>
+                );
             },
             sortable: true,
             reorder: true,
             wrap: true,
             grow: 1,
-          },
+        },
         {
             name: 'Action',
             button: true,
@@ -239,34 +240,34 @@ const PendingKYC = () => {
     const changeStatus = (status, data) => {
         console.log(status, data);
         if (status == 'approved') {
-            console.log("data",data)
+            console.log("data", data)
             const param = new FormData();
             // param.append("is_app", 1);
             // param.append("AADMIN_LOGIN_ID", 1);
             param.append("kyc_id", data.kyc_id);
             param.append("action", "approve_kyc");
             axios
-              .post(Url + "/ajaxfiles/kyc_manage.php", param)
-              .then((res) => {
-                setRefresh(!refresh)
-toast.success('KYC has been successfully completed.');         
-     });
-            
+                .post(Url + "/ajaxfiles/kyc_manage.php", param)
+                .then((res) => {
+                    setRefresh(!refresh)
+                    toast.success('KYC has been successfully completed.');
+                });
+
         } else if (status == 'rejected') {
-            console.log("data",data)
+            console.log("data", data)
             const param = new FormData();
             // param.append("is_app", 1);
             // param.append("AADMIN_LOGIN_ID", 1);
             param.append("kyc_id", data.kyc_id);
             param.append("action", "reject_kyc");
             axios
-              .post(Url + "/ajaxfiles/kyc_manage.php", param)
-              .then((res) => {
-                setRefresh(!refresh)
-                toast.success('KYC has been successfully rejected.');
-              });
-              
-            
+                .post(Url + "/ajaxfiles/kyc_manage.php", param)
+                .then((res) => {
+                    setRefresh(!refresh)
+                    toast.success('KYC has been successfully rejected.');
+                });
+
+
         }
     }
 
@@ -278,8 +279,8 @@ toast.success('KYC has been successfully completed.');
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Pending KYC</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
-                                <br/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
+                                <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
                                         <Button variant="contained" className='add-group' onClick={handleClickOpen}>Add</Button>
@@ -288,7 +289,7 @@ toast.success('KYC has been successfully completed.');
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} param={param} search={searchBy} searchWord={searchKeyword}/>
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} param={param} search={searchBy} searchWord={searchKeyword} />
                                             </Grid>
                                         </Grid>
                                     </CardContent>
