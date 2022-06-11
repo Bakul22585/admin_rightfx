@@ -11,29 +11,30 @@ const UserProfitAndLoss = () => {
         start_date: '',
         end_date: ''
     });
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'MT5 A/C NO.',
-          'value': false,
-          'name': 'mt5_acc_no'
+            'label': 'MT5 A/C NO.',
+            'value': false,
+            'name': 'mt5_acc_no'
         },
         {
-          'label': 'AMOUNT',
-          'value': false,
-          'name': 'amount'
+            'label': 'AMOUNT',
+            'value': false,
+            'name': 'amount'
         },
-      ]);
+    ]);
 
     const column = [
         {
@@ -58,7 +59,7 @@ const UserProfitAndLoss = () => {
         },
         {
             name: 'PROFIT & LOSS',
-            selector: row => { return <span title={row.profit_loss }>{row.profit_loss}</span> },
+            selector: row => { return <span title={row.profit_loss}>{row.profit_loss}</span> },
             sortable: true,
             reorder: true,
             wrap: true,
@@ -73,13 +74,13 @@ const UserProfitAndLoss = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Users Profit and Loss Report</p>
-                                <CommonFilter search={searchBy} setParam={setParam}/>
-                                <br/>
+                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
+                                <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/user_wise_filter_report.php`} column={column} sort='1' refresh={refresh} search={searchBy} param={param}/>
+                                                <CommonTable url={`${Url}/datatable/user_wise_filter_report.php`} column={column} sort='1' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

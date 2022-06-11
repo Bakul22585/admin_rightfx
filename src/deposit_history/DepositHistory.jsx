@@ -53,6 +53,7 @@ const DepositHistory = () => {
         end_date: ''
     });
     const navigate = useNavigate();
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
@@ -175,7 +176,7 @@ const DepositHistory = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Deposit Report</p>
-                                <CommonFilter search={searchBy} setParam={setParam}/>
+                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
                                 <br />
                                 
 
@@ -183,7 +184,7 @@ const DepositHistory = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} param={param}/>
+                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

@@ -38,7 +38,7 @@ const KycDocument = () => {
   });
   const [kycStatus, setKycStatus] = useState("");
   const [document, setDocument] = useState(false);
-  
+
   const [kycStatusMessage, setKycStatusMessage] = useState("");
   const [doc, setDoc] = useState({
     proof: "Proof of ID",
@@ -46,8 +46,8 @@ const KycDocument = () => {
     fontimg: "",
     backimg: "",
   });
-  console.log("doc backimg",doc.backimg);
-  console.log("backimg",backimg);
+  console.log("doc backimg", doc.backimg);
+  console.log("backimg", backimg);
 
   const onSubmit = () => {
     if (!doc.fontimg) {
@@ -74,7 +74,7 @@ const KycDocument = () => {
 
   const fatchKycStatus = async () => {
     const param = new FormData();
-   
+
     await axios
       .post(Url + "/ajaxfiles/get_kyc_status.php", param)
       .then((res) => {
@@ -123,7 +123,7 @@ const KycDocument = () => {
 
       const objectUrl = URL.createObjectURL(doc.fontimg);
       setFontimg(objectUrl);
-      console.log("objectUrl",objectUrl)
+      console.log("objectUrl", objectUrl)
 
       return () => URL.revokeObjectURL(objectUrl);
     }
@@ -138,7 +138,7 @@ const KycDocument = () => {
 
       const objectUrl = URL.createObjectURL(doc.backimg);
       setBackimg(objectUrl);
-      console.log("objectUrl",objectUrl)
+      console.log("objectUrl", objectUrl)
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [doc]);
@@ -164,291 +164,293 @@ const KycDocument = () => {
       <div className="app-content--inner">
         <div className="app-content--inner__wrapper mh-100-vh">
           <div style={{ opacity: 1 }}>
-          <Paper
-                      elevation={1}
-                      style={{ borderRadius: "10px" }}
-                      className="w-100 mb-5"
-                    >
-                      <div className="card-header font-weight-bold mb-0 text-dark h5">
-                        Upload New Document
-                      </div>
-                      <div className="card-body">
-                        <Grid container spacing={1} className="ml-n1">
-                          <Grid item sm={9} className="p-1">
-                            <FormControl className="w-100">
-                              <Select
-                                value={doc.proof}
-                                name="proof"
-                                label="Proof of ID"
-                                onChange={handleChange}
-                                displayEmpty
-                                inputProps={{ "aria-label": "Without label" }}
-                                input={<BootstrapInput />}
-                                className="mt-0 ml-0"
-                              >
-                                <MenuItem
-                                  value="Proof of ID"
-                                  onClick={() => {
-                                    setOption(true);
-                                  }}
-                                >
-                                  Proof of ID
-                                </MenuItem>
-
-                            
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                          <Grid item sm={3} className="p-1">
-                            {option && (
-                              <FormControl className="w-100">
-                                <Select
-                                  value={doc.id}
-                                  name="id"
-                                  label="ID"
-                                  onChange={handleChange}
-                                  inputProps={{ "aria-label": "Without label" }}
-                                  input={<BootstrapInput />}
-                                  className="mt-0 ml-0"
-                                >
-                                  <MenuItem value="id">ID</MenuItem>
-                                </Select>
-                              </FormControl>
-                            )}
-                           
-                          </Grid>
-                        </Grid>
-                        {doc.proof == "Proof of ID" ? (
-                          sendKycRequest.proof1 == false &&
-                          kycStatus.master_status == "0" ? (
-                            <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
-                              <h5 className="text-center font-weight-bold text-dark ">
-                                <div>
-                                  <InfoIcon
-                                    style={{
-                                      fontSize: "5rem",
-                                      color: "rgb(204 207 23)",
-                                      paddingBottom: "1rem",
-                                    }}
-                                  />
-                                </div>
-                                {kycStatusMessage}
-                              </h5>
-                            </div>
-                          ) : (
-                            ""
-                          )
-                        ) : (
-                          ""
-                        )}
-
-                        {doc.proof == "Proof of ID" ? (
-                          sendKycRequest.proof1 == false &&
-                          kycStatus.master_status == "1" ? (
-                            <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
-                              <h5 className="text-center font-weight-bold text-dark">
-                                <div>
-                                  <CheckCircleOutlineIcon
-                                    style={{
-                                      fontSize: "5rem",
-                                      color: "rgb(18 219 52)",
-                                      paddingBottom: "1rem",
-                                    }}
-                                  />
-                                </div>
-                                {kycStatusMessage}
-                              </h5>
-                            </div>
-                          ) : (
-                            ""
-                          )
-                        ) : (
-                          ""
-                        )}
-
-                        {doc.proof == "Proof of ID" ? (
-                          sendKycRequest.proof1 == false &&
-                          kycStatus.master_status == "2" ? (
-                            <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
-                              <h5 className="text-center font-weight-bold text-dark ">
-                                <div>
-                                  <CancelIcon
-                                    style={{
-                                      fontSize: "5rem",
-                                      color: "rgb(255 3 3)",
-                                      paddingBottom: "1rem",
-                                    }}
-                                  />
-                                </div>
-                                {kycStatusMessage}
-                              </h5>
-                            </div>
-                          ) : (
-                            ""
-                          )
-                        ) : (
-                          ""
-                        )}
-
-                       
-                       
-                        {option && (
-                          <Grid
-                            container
-                            spacing={7}
-                            className="mt-4 mb-2 justify-content-center"
-                            style={{ marginLeft: "-28px" }}
-                          >
-                            <Grid
-                              item
-                              sm={6}
-                              lg={4}
-                              className="d-flex flex-column align-items-center upload-zone p-4"
-                            >
-                              <h6 className="mb-3 font-size-xs font-weight-bold">
-                                FRONT SIDE*
-                              </h6>
-                              <div className="uploaderDropZone">
-                                <Input
-                                  accept="image/*"
-                                  id="FILE_FRONT_SIDE"
-                                  type="file"
-                                  name="fontimg"
-                                  // value={doc.fontimg}
-                                  onChange={(e) =>
-                                    setDoc((prevalue) => {
-                                      return {
-                                        ...prevalue,
-                                        fontimg: e.target.files[0],
-                                      };
-                                    })
-                                  }
-                                  style={{ display: "none" }}
-                                />
-
-                                {!fontimg ? (
-                                  <label
-                                    htmlFor="FILE_FRONT_SIDE"
-                                    className="text-dark font-weight-bold font-size-xs"
-                                  >
-                                    UPLOAD
-                                  </label>
-                                ) : (
-                                  <>
-                                    {!sendKycRequest.proof1 ? (
-                                      ""
-                                    ) : (
-                                      <button
-                                        className="bg-transparent p-0 border-0"
-                                        onClick={() =>
-                                          setDoc((prevalue) => {
-                                            return {
-                                              ...prevalue,
-                                              fontimg: "",
-                                            };
-                                          })
-                                        }
-                                      >
-                                        <CloseOutlinedIcon className="fontimgclose" />
-                                      </button>
-                                    )}
-                                    <img
-                                      src={fontimg}
-                                      className="deposit-upload-image-preview1"
-                                    />
-                                   
-                                  </>
-                                )}
-                              </div>
-                            </Grid>
-                            <Grid
-                              item
-                              sm={6}
-                              lg={4}
-                              className="d-flex flex-column align-items-center upload-zone p-4"
-                            >
-                              <h6 className="mb-3 font-size-xs font-weight-bold">
-                                BACK SIDE*
-                              </h6>
-                              <div className="uploaderDropZone">
-                                <input
-                                  accept="image/*"
-                                  id="FILE_BACK_SIDE"
-                                  type="file"
-                                  name="backimg"
-                                  // value={doc.backimg}
-                                  onChange={(e) =>
-                                    setDoc((prevalue) => {
-                                      return {
-                                        ...prevalue,
-                                        backimg: e.target.files[0],
-                                      };
-                                    })
-                                  }
-                                  style={{ display: "none" }}
-                                />
-
-                                {!backimg ? (
-                                  <label
-                                    htmlFor="FILE_BACK_SIDE"
-                                    className="text-dark font-weight-bold font-size-xs"
-                                  >
-                                    UPLOAD
-                                  </label>
-                                ) : (
-                                  <>
-                                    {!sendKycRequest.proof1 ? (
-                                      ""
-                                    ) : (
-                                      <button
-                                        className="bg-transparent p-0 border-0"
-                                        onClick={() =>
-                                          setDoc((prevalue) => {
-                                            return {
-                                              ...prevalue,
-                                              backimg: "",
-                                            };
-                                          })
-                                        }
-                                      >
-                                        <CloseOutlinedIcon className="fontimgclose" />
-                                      </button>
-                                    )}
-                                    <img
-                                      src={backimg}
-                                      className="deposit-upload-image-preview1"
-                                    />
-
-                                  
-                                  </>
-                                )}
-                              </div>
-                            </Grid>
-                            
-                          </Grid>
-                        )}
-
-                        <div
-                          className="text-dark font-size-xs d-flex justify-content-between align-items-center"
-                          style={{ marginTop: "100px" }}
+            <Paper
+              elevation={1}
+              style={{ borderRadius: "10px" }}
+              className="w-100 mb-5"
+            >
+              <div className="card-header font-weight-bold mb-0 text-dark h5">
+                Upload New Document
+              </div>
+              <div className="card-body">
+                <Grid container spacing={1} className="ml-n1">
+                  <Grid item sm={9} className="p-1">
+                    <FormControl className="w-100">
+                      <Select
+                        value={doc.proof}
+                        name="proof"
+                        label="Proof of ID"
+                        onChange={handleChange}
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                        input={<BootstrapInput />}
+                        className="mt-0 ml-0"
+                        disabled
+                      >
+                        <MenuItem
+                          value="Proof of ID"
+                          onClick={() => {
+                            setOption(true);
+                          }}
                         >
-                          <i>
-                            (Maximum size of document 5MB) Allow File Formats
-                            *jpg, *png, *pdf
-                          </i>
-                          <ColorButton
-                              onClick={onSubmit}
-                              variant="contained"
-                              disabled={!sendKycRequest}
-                              size="medium"
-                              className="p-3 pr-4 pl-4 text-center text-capitalize"
-                            >
-                              Save
-                            </ColorButton>
-                          
+                          Proof of ID
+                        </MenuItem>
+
+
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item sm={3} className="p-1">
+                    {option && (
+                      <FormControl className="w-100">
+                        <Select
+                          value={doc.id}
+                          name="id"
+                          label="ID"
+                          onChange={handleChange}
+                          inputProps={{ "aria-label": "Without label" }}
+                          input={<BootstrapInput />}
+                          className="mt-0 ml-0"
+                          disabled
+                        >
+                          <MenuItem value="id">ID</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
+
+                  </Grid>
+                </Grid>
+                {doc.proof == "Proof of ID" ? (
+                  sendKycRequest.proof1 == false &&
+                    kycStatus.master_status == "0" ? (
+                    <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
+                      <h5 className="text-center font-weight-bold text-dark ">
+                        <div>
+                          <InfoIcon
+                            style={{
+                              fontSize: "5rem",
+                              color: "rgb(204 207 23)",
+                              paddingBottom: "1rem",
+                            }}
+                          />
                         </div>
+                        {kycStatusMessage}
+                      </h5>
+                    </div>
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  ""
+                )}
+
+                {doc.proof == "Proof of ID" ? (
+                  sendKycRequest.proof1 == false &&
+                    kycStatus.master_status == "1" ? (
+                    <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
+                      <h5 className="text-center font-weight-bold text-dark">
+                        <div>
+                          <CheckCircleOutlineIcon
+                            style={{
+                              fontSize: "5rem",
+                              color: "rgb(18 219 52)",
+                              paddingBottom: "1rem",
+                            }}
+                          />
+                        </div>
+                        {kycStatusMessage}
+                      </h5>
+                    </div>
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  ""
+                )}
+
+                {doc.proof == "Proof of ID" ? (
+                  sendKycRequest.proof1 == false &&
+                    kycStatus.master_status == "2" ? (
+                    <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
+                      <h5 className="text-center font-weight-bold text-dark ">
+                        <div>
+                          <CancelIcon
+                            style={{
+                              fontSize: "5rem",
+                              color: "rgb(255 3 3)",
+                              paddingBottom: "1rem",
+                            }}
+                          />
+                        </div>
+                        {kycStatusMessage}
+                      </h5>
+                    </div>
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  ""
+                )}
+
+
+
+                {option && (
+                  <Grid
+                    container
+                    spacing={7}
+                    className="mt-4 mb-2 justify-content-center"
+                    style={{ marginLeft: "-28px" }}
+                  >
+                    <Grid
+                      item
+                      sm={6}
+                      lg={4}
+                      className="d-flex flex-column align-items-center upload-zone p-4"
+                    >
+                      <h6 className="mb-3 font-size-xs font-weight-bold">
+                        FRONT SIDE*
+                      </h6>
+                      <div className="uploaderDropZone">
+                        <Input
+                          accept="image/*"
+                          id="FILE_FRONT_SIDE"
+                          type="file"
+                          name="fontimg"
+                          // value={doc.fontimg}
+                          onChange={(e) =>
+                            setDoc((prevalue) => {
+                              return {
+                                ...prevalue,
+                                fontimg: e.target.files[0],
+                              };
+                            })
+                          }
+                          style={{ display: "none" }}
+                        />
+
+                        {!fontimg ? (
+                          <label
+                            htmlFor="FILE_FRONT_SIDE"
+                            className="text-dark font-weight-bold font-size-xs"
+                          >
+                            UPLOAD
+                          </label>
+                        ) : (
+                          <>
+                            {!sendKycRequest.proof1 ? (
+                              ""
+                            ) : (
+                              <button
+                                className="bg-transparent p-0 border-0"
+                                onClick={() =>
+                                  setDoc((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      fontimg: "",
+                                    };
+                                  })
+                                }
+                              >
+                                <CloseOutlinedIcon className="fontimgclose" />
+                              </button>
+                            )}
+                            <img
+                              src={fontimg}
+                              className="deposit-upload-image-preview1"
+                            />
+
+                          </>
+                        )}
                       </div>
-                    </Paper>  
+                    </Grid>
+                    <Grid
+                      item
+                      sm={6}
+                      lg={4}
+                      className="d-flex flex-column align-items-center upload-zone p-4"
+                    >
+                      <h6 className="mb-3 font-size-xs font-weight-bold">
+                        BACK SIDE*
+                      </h6>
+                      <div className="uploaderDropZone">
+                        <input
+                          accept="image/*"
+                          id="FILE_BACK_SIDE"
+                          type="file"
+                          name="backimg"
+                          // value={doc.backimg}
+                          onChange={(e) =>
+                            setDoc((prevalue) => {
+                              return {
+                                ...prevalue,
+                                backimg: e.target.files[0],
+                              };
+                            })
+                          }
+                          style={{ display: "none" }}
+                        />
+
+                        {!backimg ? (
+                          <label
+                            htmlFor="FILE_BACK_SIDE"
+                            className="text-dark font-weight-bold font-size-xs"
+                          >
+                            UPLOAD
+                          </label>
+                        ) : (
+                          <>
+                            {!sendKycRequest.proof1 ? (
+                              ""
+                            ) : (
+                              <button
+                                className="bg-transparent p-0 border-0"
+                                onClick={() =>
+                                  setDoc((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      backimg: "",
+                                    };
+                                  })
+                                }
+                              >
+                                <CloseOutlinedIcon className="fontimgclose" />
+                              </button>
+                            )}
+                            <img
+                              src={backimg}
+                              className="deposit-upload-image-preview1"
+                            />
+
+
+                          </>
+                        )}
+                      </div>
+                    </Grid>
+
+                  </Grid>
+                )}
+
+                <div
+                  className="text-dark font-size-xs d-flex justify-content-between align-items-center"
+                  style={{ marginTop: "100px" }}
+                >
+                  <i>
+                    (Maximum size of document 5MB) Allow File Formats
+                    *jpg, *png, *pdf
+                  </i>
+                  <ColorButton
+                    onClick={onSubmit}
+                    variant="contained"
+                    disabled={!sendKycRequest}
+                    size="medium"
+                    className="p-3 pr-4 pl-4 text-center text-capitalize"
+                  >
+                    Save
+                  </ColorButton>
+
+                </div>
+              </div>
+            </Paper>
           </div>
         </div>
       </div>

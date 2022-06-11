@@ -475,6 +475,7 @@ const Profile = () => {
   const [userData, setuserData] = useState({ isLoader: true, data: {} });
   const [filterData, setFilterData] = useState(null);
   const [mt5AccountList, setMt5AccountList] = useState([]);
+  const [salesList, setSalesList] = useState([])
   const [countryData, setCountryData] = useState({
     data: [],
   });
@@ -910,6 +911,15 @@ const Profile = () => {
       name: "Investor Password",
       selector: (row) => {
         return <span title={row.investor_pwd}>{row.investor_pwd}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: "Status",
+      selector: (row) => {
+        return <span title={(row.status == "1") ? "APPROVED" : (row.status == "2") ? "REJECTED" : "PENDING"} className={`text-color-${(row.status == "1") ? "green" : (row.status == "2") ? "red" : "yellow"}`}>{(row.status == "1") ? "APPROVED" : (row.status == "2") ? "REJECTED" : "PENDING"}</span>;
       },
       sortable: true,
       reorder: true,
@@ -1927,7 +1937,7 @@ const Profile = () => {
       setDialogTitle("Send Email");
       setsendMailForm({
         from: "",
-        to: "",
+        to: profileForm.email,
         subject: "",
         template_title: "",
         language: "",
@@ -2120,6 +2130,7 @@ const Profile = () => {
               onChange={input}
               sx={{ width: "100%" }}
               name="password"
+              helperText="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
             />
           </div>
           <div className="padingtopmy5create">
@@ -2166,6 +2177,7 @@ const Profile = () => {
                 className="select-font-small"
                 name="status"
                 onChange={input1}
+                value={Mt5AccessForm.status}
               >
                 <MenuItem value="1">Activate</MenuItem>
                 <MenuItem value="0">Deactivate</MenuItem>
@@ -2844,7 +2856,7 @@ const Profile = () => {
     } else if (dialogTitle == "Send Email") {
       return (
         <div>
-          <div>
+          {/* <div>
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>FROM</InputLabel>
               <Select
@@ -2857,7 +2869,7 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
+          <br /> */}
           <div>
             <TextField
               className="input-font-small"
@@ -2866,6 +2878,7 @@ const Profile = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="to"
+              value={sendMailForm.to}
               onChange={sendMailInput}
             />
           </div>
@@ -4581,6 +4594,8 @@ const Profile = () => {
       toast.error("Please select account option");
     } else if (createMt5Form.password == "") {
       toast.error("Please enter password");
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(createMt5Form.password)) {
+      toast.error("Please enter valid password. Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character");
     } else if (createMt5Form.confirm_password == "") {
       toast.error("Please enter confirm password");
     } else if (createMt5Form.confirm_password != createMt5Form.password) {
@@ -4627,7 +4642,38 @@ const Profile = () => {
         [name]: value,
       };
     });
+
+    if (name == "account_type") {
+      getMt5AccountStatus(value);
+    }
   };
+
+  const getMt5AccountStatus = (mt5ID) => {
+    const param = new FormData();
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("mt5_id", mt5ID);
+      param.append("action", "check_mt5_status");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            setMt5AccessForm((prevalue) => {
+              return {
+                ...prevalue,
+                ['status']: res.data.mt5_status,
+              };
+            });
+          }
+        });
+  }
 
   const Mt5AccountAccessSubmit = () => {
     console.log(Mt5AccessForm);
@@ -5187,9 +5233,8 @@ const Profile = () => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
-        (<MenuItem value="Very Low">Very Low</MenuItem>).data = res.data.aaData;
+        countryData.data = res.data.aaData;
         setCountryData({ ...countryData });
-        console.log("countryData", countryData);
       }
     });
   }, []);
@@ -5460,9 +5505,10 @@ const Profile = () => {
 
   const sendMailSubmit = () => {
     console.log(sendMailForm);
-    if (sendMailForm.from == "") {
+    /* if (sendMailForm.from == "") {
       toast.error("Please select from e-mail address");
-    } else if (sendMailForm.to == "") {
+    } else  */
+    if (sendMailForm.to == "") {
       toast.error("Please enter to e-mail address");
     } else if (sendMailForm.subject == "") {
       toast.error("Please enter subject");
@@ -5483,7 +5529,7 @@ const Profile = () => {
       // param.append("is_app", 1);
       // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
-      param.append("mail_from", sendMailForm.from);
+      // param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
       param.append("subject", sendMailForm.subject);
       param.append("template_title", sendMailForm.template_title);
@@ -5557,10 +5603,10 @@ const Profile = () => {
 
     if (noteForm.notes == "") {
       toast.error("Please enter note");
-    /* } else if (noteForm.call_status == "") {
-      toast.error("Please select call status");
-    } else if (noteForm.set_reminder == true && noteForm.date == "") {
-      toast.error("Please select date"); */
+      /* } else if (noteForm.call_status == "") {
+        toast.error("Please select call status");
+      } else if (noteForm.set_reminder == true && noteForm.date == "") {
+        toast.error("Please select date"); */
     } else {
       setNoteForm((prevalue) => {
         return {
@@ -6181,11 +6227,27 @@ const Profile = () => {
       });
   };
 
+  const getSalesList = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('action', "list_salesman");
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.status == "error") {
+        // toast.error(res.data.message);
+      } else {
+        setSalesList(res.data.managers)
+      }
+    });
+  }
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
     getMt5LivePackages();
     getAccountList();
+    getSalesList()
 
     const param = new FormData();
     // param.append("is_app", 1);
@@ -6202,7 +6264,7 @@ const Profile = () => {
         setLeverageForm(res.data.leverages);
       });
   }, []);
- 
+
 
   return (
     <div>
@@ -6218,6 +6280,11 @@ const Profile = () => {
             <div style={{ opacity: 1 }}>
               <Grid container>
                 <Grid item md={12} lg={12} xl={12}>
+                {
+                  (userData.data["user_status"] == "0") ? <div className="user-status-section">
+                    <span className={`text-color-red`}>{userData.data["user_status_msg"]}</span>
+                  </div> : ""
+                }
                   <div className="client-detail-header">
                     <div className="client-name">
                       <label>
@@ -6234,7 +6301,7 @@ const Profile = () => {
                     </div>
                     <div className="header-highlight">
                       <label>Total Accounts</label>
-                      <p>0</p>
+                      <p>{userData.data["total_mt5_accounts"]}</p>
                     </div>
                     <div className="header-highlight">
                       <label>Account Currency</label>
@@ -6242,11 +6309,11 @@ const Profile = () => {
                     </div>
                     <div className="header-highlight">
                       <label>Balance</label>
-                      <p>$ 0.00</p>
+                      <p>$ {userData.data["wallet_balance"]}</p>
                     </div>
                     <div className="header-highlight">
                       <label>Sales Agent</label>
-                      <p>Not Assigned</p>
+                      <p>{(userData.data["manager_name"] == "") ? "Not Assigned" : userData.data["manager_name"]}</p>
                     </div>
                   </div>
                   <br />
@@ -6612,8 +6679,11 @@ const Profile = () => {
                                     onChange={profileInput}
                                     name="sales_agent"
                                   >
-                                    <MenuItem value="1">Demo</MenuItem>
-                                    <MenuItem value="2">Test</MenuItem>
+                                    {
+                                      salesList.map((item) => {
+                                        return <MenuItem value={item.manager_id}>{item.manager_name}</MenuItem>
+                                      })
+                                    }
                                   </Select>
                                 </FormControl>
                               </div>
@@ -6803,13 +6873,13 @@ const Profile = () => {
                               <br />
                               <p className="group-header">Misc.</p>
                               <div className="mt5btngroup">
-                                <Button
+                                {/* <Button
                                   variant="contained"
                                   className="download_application btn-hover-css"
                                   onClick={openDialogbox}
                                 >
                                   Download Application
-                                </Button>
+                                </Button> */}
                                 <Button
                                   variant="contained"
                                   className="add_note btn-hover-css"
@@ -7890,7 +7960,7 @@ const Profile = () => {
                       </Grid>
                     </TabPanel> */}
                     <TabPanel value={value} index={9} dir={theme.direction}>
-                    <Grid container spacing={3} className="grid-handle">
+                      <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
                           <Paper
                             elevation={2}

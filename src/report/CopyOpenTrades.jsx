@@ -16,11 +16,12 @@ import { Url } from "../global";
 
 const CopyOpenTrades = () => {
   const [refresh, setRefresh] = useState(false);
-  const [resData,setResData]=useState({})
+  const [resData, setResData] = useState({})
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState({
     start_date: '',
     end_date: ''
-});
+  });
   const [searchBy, setSearchBy] = useState([
     {
       label: "DATE",
@@ -149,9 +150,9 @@ const CopyOpenTrades = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-              <p className="main-heading">Copy Trading Open Position Report</p>
+                <p className="main-heading">Copy Trading Open Position Report</p>
 
-              <div className="setBoxs">
+                <div className="setBoxs">
                   {" "}
                   <div className="row1 boxSection">
                     <div className="card padding-9 animate fadeLeft boxsize">
@@ -194,7 +195,7 @@ const CopyOpenTrades = () => {
                     </div>
                   </div>
                 </div>
-                <CommonFilter search={searchBy} setParam={setParam}/>
+                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
                 <br />
                 <Paper
                   elevation={2}
@@ -212,6 +213,7 @@ const CopyOpenTrades = () => {
                           param={param}
                           search={searchBy}
                           setResData={setResData}
+                          searchWord={searchKeyword}
                         />
                       </Grid>
                     </Grid>

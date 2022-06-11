@@ -556,3 +556,10 @@ text.highcharts-credits {
     color: white;
     border-radius: 10px;
 }
+.user-status-section {
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0;
+}

@@ -74,3 +74,8 @@
     transform: translateY(-2px);
     color: white;
 }
+.lead-completed-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

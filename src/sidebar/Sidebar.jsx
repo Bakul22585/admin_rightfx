@@ -153,14 +153,14 @@ const Sidebar = (prop) => {
                     Reminder
                     </NavLink>
                 </li> */}
-                <li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/list_request" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     fact_check
                     </span>
                     IB Requests List
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <a
                     className={`kyc ${open.kyc ? "active" : ""}`}
@@ -221,6 +221,9 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/commision_group" onClick={CloseSidebar}>Commision Group</NavLink>
                       </li>
+                      <li>
+                        <NavLink to="/list_request" onClick={CloseSidebar}>IB Requests List</NavLink>
+                      </li>
                       {/* <li>
                         <NavLink to="/ib_structure" onClick={CloseSidebar}>IB Structure</NavLink>
                       </li> */}
@@ -230,14 +233,14 @@ const Sidebar = (prop) => {
                     </ul>
                   </Collapse>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink className="nav-link-simple " to="/mt5_group" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
                     groups
                     </span>
                     MT5 Groups
                   </NavLink>
-                </li>
+                </li> */}
                 {/* <li>
                   <NavLink className="nav-link-simple " to="/copy_trading" onClick={CloseSidebar}>
                     <span className="material-icons" style={style}>
@@ -315,9 +318,9 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/trade_history" onClick={CloseSidebar}>Trade History</NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/trade_history_total" onClick={CloseSidebar}>Trade History Total</NavLink>
-                      </li>
+                      </li> */}
                       <li>
                         <NavLink to="/copy_open_trades" onClick={CloseSidebar}>Copy Open Trades</NavLink>
                       </li>
@@ -348,7 +351,7 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/ib_commisions" onClick={CloseSidebar}>IB Commisions</NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/Platforms/android" onClick={CloseSidebar}>Partnership Commisions</NavLink>
                       </li>
                       <li>
@@ -359,7 +362,7 @@ const Sidebar = (prop) => {
                       </li>
                       <li>
                         <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Accounts</NavLink>
-                      </li>
+                      </li> */}
                     </ul>
                   </Collapse>
                 </li>

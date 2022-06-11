@@ -123,6 +123,7 @@ const IBCommisions = () => {
     const [filterData, setFilterData] = useState({});
     const [dialogTitle, setDialogTitle] = useState('');
     const [selectedFile, setSelectedFile] = useState()
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [preview, setPreview] = useState();
     const [refresh, setRefresh] = useState(false);
     const [accountOption, setAccountOption] = useState([]);
@@ -648,7 +649,7 @@ const IBCommisions = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Admin IB Commissions</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                                 <br />
                                 {/* <Paper elevation={2} style={{ borderRadius: "10px" }}>
                                     <div className="card-header font-weight-bold text-dark border-bottom py-2">
@@ -732,7 +733,7 @@ const IBCommisions = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/admin_ib_commission_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/admin_ib_commission_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

@@ -216,7 +216,9 @@ const Leads = () => {
     cp_access: "",
     demo_mt5: "",
     isLoader: "",
-    refresh: false
+    refresh: false,
+    ibCommissionGroupList: [],
+    ib_group_id: '0'
   })
 
   const [searchBy, setSearchBy] = useState([
@@ -254,8 +256,8 @@ const Leads = () => {
 
   const getcontry = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    //          param.append('AADMIN_LOGIN_ID', 1); 
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.status == "error") {
         // toast.error(res.data.message);
@@ -266,8 +268,8 @@ const Leads = () => {
   }
   const getListManagers = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    //          param.append('AADMIN_LOGIN_ID', 1); 
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     param.append('action', "list_managers");
 
     axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
@@ -348,13 +350,13 @@ const Leads = () => {
       isLoader: false,
     });
     setLeadDetails({
-      customer_name: e.customer,
+      customer_name: e.customer_name,
       customer_mobile: e.customer_mobile,
       customer_email: e.customer_email,
       source_id: e.source,
       followup: e.followup_date,
       lead_added: e.added_datetime,
-      lead_added_by: 'Test',
+      lead_added_by: e.lead_assign_user_name,
       reference: ''
     });
     setParam({ ...param, 'inquiry_id': e.inquiry_id });
@@ -415,8 +417,8 @@ const Leads = () => {
           isLoader: true,
         }
       })
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      /* param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1); */
       param.append("cp_access", cpData.cp_access);
       param.append("leads_status", "1");
       param.append("inquiry_id", cpData.inquiry_id);
@@ -424,6 +426,9 @@ const Leads = () => {
         param.append("demo_mt5", cpData.demo_mt5);
       }
       if (cpData.cp_access == "1" && cpData.demo_mt5 == "1") {
+        param.append("ib_group_id", cpData.ib_group_id);
+      }
+      if (cpData.cp_access == "1" && cpData.demo_mt5 == "1" && cpData.ib_group_id != "0") {
         param.append("user_password", cpData.user_password);
       }
       axios
@@ -627,10 +632,10 @@ const Leads = () => {
                   <label>Current Followup:</label>
                   <p>{leadDetails.followup}</p>
                 </div>
-                <div className='user-details'>
+                {/* <div className='user-details'>
                   <label>Reference:</label>
                   <p>{leadDetails.reference}</p>
-                </div>
+                </div> */}
               </div>
             </Paper>
           </Grid>
@@ -696,7 +701,7 @@ const Leads = () => {
       </div>;
     } else if (dialogTitle == 'Are you sure?') {
       return (
-        <div>
+        <div className='lead-completed-section'>
           <div>
             <FormControl variant="standard" sx={{ width: '100%' }} >
               <InputLabel id="demo-simple-select-standard-label">CP access</InputLabel>
@@ -717,7 +722,7 @@ const Leads = () => {
             cpData.cp_access == 1 ?
               <div>
                 <FormControl variant="standard" sx={{ width: '100%' }} >
-                  <InputLabel id="demo-simple-select-standard-label">Demo Mt5</InputLabel>
+                  <InputLabel id="demo-simple-select-standard-label">Live Mt5</InputLabel>
                   <Select
                     onChange={input3}
                     label="Demo Mt5"
@@ -731,7 +736,28 @@ const Leads = () => {
               </div> : ""
           }
           {
-            cpData.demo_mt5 == "1" ?
+            cpData.demo_mt5 == 1 ?
+              <div>
+                <FormControl variant="standard" sx={{ width: '100%' }} >
+                  <InputLabel id="demo-simple-select-standard-label">IB Group</InputLabel>
+                  <Select
+                    onChange={input3}
+                    label="Demo Mt5"
+                    name='ib_group_id'
+                  >
+                    {
+                      cpData.ibCommissionGroupList.map((item) => {
+                        return (
+                          <MenuItem value={item.ib_group_id}>{item.ib_group_name}</MenuItem>
+                        );
+                      })
+                    }
+                  </Select>
+                </FormControl>
+              </div> : ""
+          }
+          {
+            cpData.ib_group_id != "0" ?
               <div>
                 <FormControl variant="standard" sx={{ width: '100%' }} >
                   {/* <InputLabel id="demo-simple-select-standard-label">Password</InputLabel> */}
@@ -1128,6 +1154,7 @@ const Leads = () => {
             >
               <MenuItem className='completed' {...row} onClick={(e) => {
                 // actionMenuPopup(e, row)
+                handleContextClose(row.sr_no)
                 setCpData({
                   cp_access: "",
                   demo_mt5: "",
@@ -1135,6 +1162,8 @@ const Leads = () => {
                   inquiry_id: row.inquiry_id,
                   leads_status: "Completed",
                   refresh: false,
+                  ibCommissionGroupList: [],
+                  ib_group_id: '0'
                 })
                 setDialogTitle('Are you sure?');
                 setMaxWidth('md');
@@ -1214,6 +1243,7 @@ const Leads = () => {
       selector: row => { return <span title={row.remarks}>{row.remarks}</span> },
       sortable: true,
       reorder: true,
+      wrap: true,
       grow: 1,
     },
     {
@@ -1222,7 +1252,7 @@ const Leads = () => {
       reorder: true,
       grow: 1,
     },
-    {
+    /* {
       name: 'Recording',
       button: true,
       cell: row => {
@@ -1231,7 +1261,7 @@ const Leads = () => {
       ignoreRowClick: true,
       allowOverflow: true,
       grow: 0.5,
-    }
+    } */
   ];
 
   const callColumn = [
@@ -1301,8 +1331,8 @@ const Leads = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      //     param.append('AADMIN_LOGIN_ID', 1); 
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('customer_name', form.customer_name);
       param.append('customer_mobile', form.customer_mobile);
       param.append('customer_email', form.customer_email);
@@ -1380,8 +1410,11 @@ const Leads = () => {
     });
   };
   const input3 = (event) => {
-    console.log(event.target.name, event.target.value)
     const { name, value } = event.target;
+    console.log("text ",name, value)
+    if (name == "demo_mt5" && value == "1") {
+      getIBCommissionGroup();
+    }
     setCpData((prevalue) => {
       return {
         ...prevalue,
@@ -1436,8 +1469,8 @@ const Leads = () => {
   const approveInterestStatus = (e, data) => {
     console.log(e.target.value, data);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    /* param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1); */
     param.append("action", "change_interest");
     param.append("inquiry_id", data.inquiry_id);
     param.append("interest", e.target.value);
@@ -1445,7 +1478,12 @@ const Leads = () => {
       .post(Url + "/ajaxfiles/change_lead_data.php", param)
       .then((res) => {
         toast.success(res.data.message);
-        setRefresh(!refresh)
+        setCpData((preValue) => {
+          return {
+            ...preValue,
+            refresh: !cpData.refresh
+          }
+        })
       });
   }
   const changeAssign = (e, data) => {
@@ -1475,18 +1513,58 @@ const Leads = () => {
   const approvechangeAssign = (e, data) => {
     console.log(e.target.value, data);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    /* param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1); */
     param.append("action", "change_assign_to");
     param.append("inquiry_id", data.inquiry_id);
     param.append("lead_assign_user_id", e.target.value);
     axios
       .post(Url + "/ajaxfiles/change_lead_data.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         toast.success(res.data.message);
-        setRefresh(!refresh)
+        setCpData((preValue) => {
+          return {
+            ...preValue,
+            refresh: !cpData.refresh
+          }
+        })
       });
   }
+
+  const getIBCommissionGroup = async() => {
+    const param = new FormData();
+    /* param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1); */
+    param.append("action", "get_default_ib_groups");
+    await axios
+      .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          // cpData.ibCommissionGroupList = res.data.data;
+          // setCpData({...cpData});
+          setCpData((prevalue) => {
+            return {
+              ...prevalue,
+              ['ibCommissionGroupList']: res.data.data,
+            };
+          })
+          console.log('ibCommissionGroupList', cpData);
+        }
+        /* toast.success(res.data.message);
+        setRefresh(!refresh) */
+      });
+  }
+
   const changeFollowupDate = (e, data) => {
     console.log(e.target.value, data);
     confirmAlert({
@@ -1532,8 +1610,8 @@ const Leads = () => {
     } else {
       newFollowupForm.isLoader = true;
       setNewFollowupForm({ ...newFollowupForm });
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1); 
+      /* param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1); */
       param.append('status_id', newFollowupForm.interest);
       param.append('lead_assign_user_id', newFollowupForm.lead_assign_user_id);
       param.append('remarks', newFollowupForm.remark);
@@ -1549,7 +1627,12 @@ const Leads = () => {
         if (res.data.status == 'error') {
           toast.error(res.data.message);
         } else {
-          setRefresh(!refresh);
+          setCpData((preValue) => {
+            return {
+              ...preValue,
+              refresh: !cpData.refresh
+            }
+          })
           toast.success(res.data.message);
           setNewFollowupForm({
             date: '',
@@ -1690,8 +1773,8 @@ const Leads = () => {
     } else if (status == 'rejected') {
       param.append('leads_status', 3);
     }
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1); 
+    /* param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1); */
     await axios.post(`${Url}/ajaxfiles/update_lead_status.php`, param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -1700,7 +1783,12 @@ const Leads = () => {
       if (res.data.status == 'error') {
         toast.error(res.data.message);
       } else {
-        setRefresh(!refresh);
+        setCpData((preValue) => {
+          return {
+            ...preValue,
+            refresh: !cpData.refresh
+          }
+        })
         toast.success(res.data.message);
       }
     });

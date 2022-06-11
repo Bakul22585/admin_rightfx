@@ -124,6 +124,7 @@ const Withdraw = () => {
     const [dialogTitle, setDialogTitle] = useState('');
     const [accountOption, setAccountOption] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [Form, setForm] = useState({
         account_type: '',
         account: '',
@@ -541,8 +542,8 @@ const Withdraw = () => {
     const fetchAccount = async (event, search) => {
         console.log(search);
         const param = new FormData();
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('search', search);
         param.append('type', Form.account_type);
         await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
@@ -579,8 +580,8 @@ const Withdraw = () => {
             setForm({ ...Form });
             const param = new FormData();
             param.append('action', 'add_withdraw');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
             param.append('user_id', Form.account);
             param.append('account_type', Form.account_type);
             param.append('payment_method', Form.payment_gateway);
@@ -621,8 +622,8 @@ const Withdraw = () => {
             setviewWithdrawForm({ ...viewWithdrawForm });
             const param = new FormData();
             param.append('action', 'view_update_withdrawal');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
             param.append('withdrawal_id', viewWithdrawForm.withdrawal_id);
             param.append('withdrawal_status', viewWithdrawForm.status);
             param.append('withdrawal_remarks', viewWithdrawForm.remark);
@@ -654,8 +655,8 @@ const Withdraw = () => {
         } else {
             param.append('action', 'reject_withdrawal');
         }
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('withdrawal_id', id);
         await axios.post(`${Url}/ajaxfiles/withdrawal_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -675,8 +676,8 @@ const Withdraw = () => {
         handleContextClose(id);
         const param = new FormData();
         param.append('action', 'view_withdrawal');
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('withdrawal_id', id);
         await axios.post(`${Url}/ajaxfiles/withdrawal_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -713,18 +714,17 @@ const Withdraw = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdrawal</p>
-                                <CommonFilter search={searchBy} />
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <div className='actionGroupButton'>
+                                    {/* <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={handleClickOpen}>Add</Button>
-                                        {/* <Button variant="contained" onClick={tableRefresh}>Refresh</Button> */}
                                     </div>
-                                    <br />
+                                    <br /> */}
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} />
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

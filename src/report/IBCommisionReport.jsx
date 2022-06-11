@@ -8,115 +8,116 @@ import { Url } from '../global';
 
 const IBCommisionReport = () => {
 
-    const [refresh, setRefresh] = useState(false);
-    const [resData,setResData]=useState({})
-    const [param, setParam] = useState({
-      start_date: '',
-      end_date: ''
+  const [refresh, setRefresh] = useState(false);
+  const [resData, setResData] = useState({})
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [param, setParam] = useState({
+    start_date: '',
+    end_date: ''
   });
-    const [searchBy, setSearchBy] = useState([
-        {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
-        },
-        {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
-        },
-        {
-          'label': 'MT5 A/C NO.',
-          'value': false,
-          'name': 'mt5_acc_no'
-        },
-        {
-          'label': 'AMOUNT',
-          'value': false,
-          'name': 'amount'
-        },
-      ]);
+  const [searchBy, setSearchBy] = useState([
+    {
+      'label': 'DATE',
+      'value': false,
+      'name': 'date'
+    },
+    {
+      'label': 'NAME',
+      'value': false,
+      'name': 'name'
+    },
+    {
+      'label': 'MT5 A/C NO.',
+      'value': false,
+      'name': 'mt5_acc_no'
+    },
+    {
+      'label': 'AMOUNT',
+      'value': false,
+      'name': 'amount'
+    },
+  ]);
 
-    const column = [
-        {
-            name: 'LOGIN',
-            selector: row => {
-                return <span>{row.name}</span>
-            },
-            sortable: true,
-            wrap: true,
-            reorder: true,
-            grow: 0.1,
-        },
-        {
-            name: 'IB GROUP ID',
-            selector: row => {
-                return <span title={row.ib_group_id}>{row.ib_group_id}</span>
-            },
-            sortable: true,
-            wrap: true,
-            reorder: true,
-            grow: 0.3,
-        },
-        {
-            name: 'DATE',
-            selector: row => { return <span title={row.added_datetime}>{row.added_datetime}</span> },
-            sortable: true,
-            reorder: true,
-            wrap: true,
-            grow: 0.5,
-        },
-        {
-            name: 'TRADE NO.',
-            selector: row => { return <span title={row.trade_no}>{row.trade_no}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.3,
-        },
-        {
-            name: 'SYMBOL',
-            selector: row => { return <span title={row.trade_symbol}>{row.trade_symbol}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.3,
-        },
-        {
-            name: 'TYPE',
-            selector: row => { return <span title={row.trade_type}>{row.trade_type}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.3,
-        },{
-            name: 'PRICE',
-            selector: row => { return <span title={row.ib_comission_amount}>{row.ib_comission_amount}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.3,
-        },{
-            name: 'LOT',
-            selector: row => { return <span title={row.trade_volume}>{row.trade_volume}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.3,
-        },{
-            name: 'CLOSE PRICE',
-            selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.3,
-        },
-																	
-    ];
+  const column = [
+    {
+      name: 'LOGIN',
+      selector: row => {
+        return <span>{row.name}</span>
+      },
+      sortable: true,
+      wrap: true,
+      reorder: true,
+      grow: 0.1,
+    },
+    {
+      name: 'IB GROUP ID',
+      selector: row => {
+        return <span title={row.ib_group_id}>{row.ib_group_id}</span>
+      },
+      sortable: true,
+      wrap: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: 'DATE',
+      selector: row => { return <span title={row.added_datetime}>{row.added_datetime}</span> },
+      sortable: true,
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
+    {
+      name: 'TRADE NO.',
+      selector: row => { return <span title={row.trade_no}>{row.trade_no}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: 'SYMBOL',
+      selector: row => { return <span title={row.trade_symbol}>{row.trade_symbol}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: 'TYPE',
+      selector: row => { return <span title={row.trade_type}>{row.trade_type}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    }, {
+      name: 'PRICE',
+      selector: row => { return <span title={row.ib_comission_amount}>{row.ib_comission_amount}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    }, {
+      name: 'LOT',
+      selector: row => { return <span title={row.trade_volume}>{row.trade_volume}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    }, {
+      name: 'CLOSE PRICE',
+      selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
 
-    return (
-        <div>
-            <div className="app-content--inner">
-                <div className="app-content--inner__wrapper mh-100-vh">
-                    <div style={{ opacity: 1 }}>
-                        <Grid container>
-                            <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>User IB Commissions</p>
-                                <div className="setBoxs">
+  ];
+
+  return (
+    <div>
+      <div className="app-content--inner">
+        <div className="app-content--inner__wrapper mh-100-vh">
+          <div style={{ opacity: 1 }}>
+            <Grid container>
+              <Grid item md={12} lg={12} xl={12}>
+                <p className='main-heading'>User IB Commissions</p>
+                <div className="setBoxs">
                   {" "}
                   <div className="row1 boxSection">
                     <div className="card padding-9 animate fadeLeft boxsize">
@@ -138,26 +139,26 @@ const IBCommisionReport = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
-                                <CommonFilter search={searchBy} setParam={setParam}/>
-                                <br/>
-                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <CardContent className="py-3">
-                                        <Grid container spacing={2}>
-                                            <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/user_ib_commission_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} setResData={setResData} param={param}/>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </div>
-                </div>
-            </div>
+                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
+                <br />
+                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                  <CardContent className="py-3">
+                    <Grid container spacing={2}>
+                      <Grid item sm={12} md={12} lg={12}>
+                        <CommonTable url={`${Url}/datatable/user_ib_commission_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} setResData={setResData} param={param} searchWord={searchKeyword}/>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Paper>
+              </Grid>
+            </Grid>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default IBCommisionReport

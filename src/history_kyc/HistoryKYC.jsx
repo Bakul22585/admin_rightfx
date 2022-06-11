@@ -77,6 +77,7 @@ const HistoryKYC = () => {
     const [selectedPassbookFile, setSelectedPassbookFile] = useState()
     const [previewPassbook, setPreviewPassbook] = useState();
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [checkStatus, setcheckStatus] = useState("");
     const [param, setParam] = useState({
         'kyc_status': '1'
     });
@@ -115,16 +116,6 @@ const HistoryKYC = () => {
             'label': 'EMAIL',
             'value': false,
             'name': 'email'
-        },
-        {
-            'label': 'AADHAR NUMBER',
-            'value': false,
-            'name': 'aadhar_number'
-        },
-        {
-            'label': 'BANK ACCOUNT NO',
-            'value': false,
-            'name': 'bank_account_no'
         }
     ]);
     toast.configure();
@@ -166,7 +157,7 @@ const HistoryKYC = () => {
             wrap: true,
             grow: 0.5,
         },
-        {
+        /* {
             name: 'AADHAR NUMBER',
             selector: row => { return <span title={row.aadhar_card_number}>{row.aadhar_card_number}</span> },
             sortable: true,
@@ -181,7 +172,7 @@ const HistoryKYC = () => {
             reorder: true,
             wrap: true,
             grow: 0.5,
-        },
+        }, */
         {
             name: 'STATUS',
             selector: row => { return <span className={`status-${(row.status == '1') ? 'active' : 'in-active'}`}>{(row.status == '1') ? 'Active' : 'In-Active'}</span> },
@@ -189,40 +180,39 @@ const HistoryKYC = () => {
             reorder: true,
             grow: 0.3,
         },
+        {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div>
+                    <Button
+                        id={`actionButton_${row.sr_no}`}
+                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleContextClick(event, row.sr_no)}
+                        {...row}
+                        style={{ color: 'rgb(144 145 139)' }}
+                    >
+                        <i className="material-icons">more_horiz</i>
+                    </Button>
+                    <Menu
+                        id={`basic-menu-${row.sr_no}`}
+                        anchorEl={openTableMenus[row.sr_no]}
+                        open={Boolean(openTableMenus[row.sr_no])}
+                        onClose={(event) => handleContextClose(row.sr_no)}
+                    >
+                        <MenuItem className='view' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons view" onClick={(event) => actionMenuPopup(event, row)}>receipt</i>&nbsp;&nbsp;View</MenuItem>
+                        {/* <MenuItem className='edit' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">visibility</i>&nbsp;&nbsp;Edit</MenuItem>
+                        {(row.status != '1') ? <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem> : ''}
+                        <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem> */}
 
-        // {
-        //     name: 'Action',
-        //     button: true,
-        //     cell: row => {
-        //         return <div>
-        //             <Button
-        //                 id={`actionButton_${row.sr_no}`}
-        //                 aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-        //                 aria-haspopup="true"
-        //                 aria-expanded={open ? 'true' : undefined}
-        //                 onClick={(event) => handleContextClick(event, row.sr_no)}
-        //                 {...row}
-        //                 style={{ color: 'rgb(144 145 139)' }}
-        //             >
-        //                 <i className="material-icons">more_horiz</i>
-        //             </Button>
-        //             <Menu
-        //                 id={`basic-menu-${row.sr_no}`}
-        //                 anchorEl={openTableMenus[row.sr_no]}
-        //                 open={Boolean(openTableMenus[row.sr_no])}
-        //                 onClose={(event) => handleContextClose(row.sr_no)}
-        //             >
-        //                 <MenuItem className='view' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
-        //                 <MenuItem className='edit' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons">visibility</i>&nbsp;&nbsp;Edit</MenuItem>
-        //                 {(row.status != '1') ? <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem> : ''}
-        //                 <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem>
-
-        //             </Menu>
-        //         </div>
-        //     },
-        //     ignoreRowClick: true,
-        //     allowOverflow: true
-        // }
+                    </Menu>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        }
     ];
 
     const handleContextClick = (event, index) => {
@@ -247,8 +237,8 @@ const HistoryKYC = () => {
         } else if (status == 'Edit KYC Details') {
             param.append('action', 'view_kyc');
         }
-         /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1);  */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1); 
         param.append('user_id', data.user_id);
         param.append('kyc_id', data.kyc_id);
         await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -429,10 +419,10 @@ const HistoryKYC = () => {
                             <label>{form.email}</label>
                         </div>
                         <div className='element'>
-                            <label>Aadhar Card Number :</label>
+                            <label>ID Number :</label>
                             <label>{form.aadhar_card_number}</label>
                         </div>
-                        <div className='element'>
+                        {/* <div className='element'>
                             <label>Bank Account Number :</label>
                             <label>{form.account_number}</label>
                         </div>
@@ -447,7 +437,7 @@ const HistoryKYC = () => {
                         <div className='element'>
                             <label>Bank IFSC Code :</label>
                             <label>{form.bank_ifsc_code}</label>
-                        </div>
+                        </div> */}
                         <div className='element'>
                             <label>Remark :</label>
                             <label>{form.remark}</label>
@@ -456,21 +446,21 @@ const HistoryKYC = () => {
                     <br />
                     <div className='view-image-section'>
                         {(form.aadhar_front_img != "") ? <div className='element'>
-                            <label>Aadhar Card Front Img :</label>
+                            <label>ID Front Img :</label>
                             {(form.aadhar_front_img != "")?<CustomImageModal image={`${form.aadhar_front_img}`} /> : ""}
                         </div> : ''}
                         {(form.aadhar_back_img != '') ? <div className='element'>
-                            <label>Aadhar Card Back Img :</label>
+                            <label>ID Back Img :</label>
                             {(form.aadhar_back_img != "") ? <CustomImageModal image={`${form.aadhar_back_img}`} /> : ""}
                         </div> : ''}
-                        {(form.pan_card_img != '') ? <div className='element'>
+                        {/* {(form.pan_card_img != '') ? <div className='element'>
                             <label>Pan Card Img :</label>
                             {(form.pan_card_img != "") ? <CustomImageModal image={`${form.pan_card_img}`} /> : ""}
                         </div> : ''}
                         {(form.passbook_img != '') ? <div className='element'>
                             <label>Passbook Img :</label>
                             {(form.passbook_img != "")? <CustomImageModal image={`${form.passbook_img}`} /> : ""}
-                        </div> : ''}
+                        </div> : ''} */}
                     </div>
                     {/* <br />
                     <div className='margeField'>
@@ -678,13 +668,13 @@ const HistoryKYC = () => {
             setForm({ ...form });
             const param = new FormData();
             param.append('action', 'update_kyc');
-             /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */ 
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1); 
             param.append('aadhar_card_number', form.aadhar_card_number);
-            param.append('bank_account_number', form.account_number);
+            /* param.append('bank_account_number', form.account_number);
             param.append('bank_name', form.bank_name);
             param.append('bank_holder_name', form.bank_holder_name);
-            param.append('bank_ifsc_code', form.bank_ifsc_code);
+            param.append('bank_ifsc_code', form.bank_ifsc_code); */
             param.append('kyc_status', form.status);
             param.append('feedback_remarks', form.remark);
             param.append('kyc_id', form.kyc_id);
@@ -751,8 +741,8 @@ const HistoryKYC = () => {
         if (status == 'approved') {
             const param = new FormData();
             param.append('action', 'approve_kyc');
-             /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1);  */
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1); 
             param.append('kyc_id', data.kyc_id);
 
             await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -770,8 +760,8 @@ const HistoryKYC = () => {
         } else if (status == 'rejected') {
             const param = new FormData();
             param.append('action', 'reject_kyc');
-             /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1);  */
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1); 
             param.append('kyc_id', data.kyc_id);
 
             await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -840,6 +830,14 @@ const HistoryKYC = () => {
 
     }, [selectedPassbookFile])
 
+    useEffect(() => {
+        console.log('checkStatus', checkStatus);
+        if (checkStatus != "" ) {
+            param.kyc_status = checkStatus;
+            setParam({...param});
+        }
+    }, [checkStatus])
+
     const onSelectFile = (e, flag) => {
         console.log(e, flag);
         if (flag == "aadhar_front") {
@@ -881,7 +879,7 @@ const HistoryKYC = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>History KYC</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setcheckStatus={setcheckStatus}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -891,7 +889,7 @@ const HistoryKYC = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} param={param} />
+                                                <CommonTable url={`${Url}/datatable/kyc_list.php`} column={column} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

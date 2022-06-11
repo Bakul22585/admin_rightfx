@@ -38,6 +38,7 @@ const PositionReport = () => {
       name: "amount",
     },
   ]);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [resData,setResData]=useState({})
   const [param, setParam] = useState({
     start_date: '',
@@ -222,7 +223,7 @@ const PositionReport = () => {
                   </div>{" "}
                 
                 </div>
-                <CommonFilter search={searchBy}  setParam={setParam}/>
+                <CommonFilter search={searchBy}  setParam={setParam} searchWord={setSearchKeyword}/>
                 <br />
                 <Paper
                   elevation={2}
@@ -240,6 +241,7 @@ const PositionReport = () => {
                           search={searchBy}
                           setResData={setResData}
                          param={param}
+                         searchWord={searchKeyword}
                         />
                       </Grid>
                     </Grid>

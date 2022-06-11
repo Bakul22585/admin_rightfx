@@ -19,6 +19,7 @@ const ListRequest = () => {
   const navigate = useNavigate();
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [openModel, setOpenModel] = useState(false);
+  const [isDefaultStructure, setIsDefaultStructure] = useState(true);
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
     sponsor_approve: "",
@@ -274,12 +275,12 @@ const ListRequest = () => {
   console.log("updateDate", updateDate)
   const viewRequest = async (prop) => {
     // setOpenModel(true);
-    console.log('prop',prop);
+    console.log('prop', prop);
     setIbData(prop);
     if (prop.sponsor_id == "0") {
       const param = new FormData();
-      /* param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1); */
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('action', 'get_default_structure');
       param.append('user_id', prop.requested_user_id);
       await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
@@ -291,6 +292,7 @@ const ListRequest = () => {
         if (res.data.status == 'error') {
           toast.error(res.data.message);
         } else {
+          setIsDefaultStructure(true);
           updateDate.structure_data = res.data.data;
           if (res.data.structure_id) {
             updateDate.structure_id = res.data.structure_id;
@@ -299,12 +301,43 @@ const ListRequest = () => {
           updateDate.remarks = prop.remarks;
           updateDate.admin_approve = prop.admin_approve;
           updateDate.structure_name = prop.structure_name;
-          
+
           setUpdateDate({ ...updateDate });
 
           console.log('form', updateDate);
           // setMaxWidth('md');
           // setDialogTitle('Add');
+          setOpenModel(true)
+        }
+      });
+    } else if (prop.sponsor_id != "0" && prop.structure_id != "0") {
+      const param = new FormData();
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('action', 'get_my_structure');
+      param.append('user_id', prop.requested_user_id);
+      param.append('structure_id', prop.structure_id);
+      await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+
+        if (res.data.status == 'error') {
+          toast.error(res.data.message);
+        } else {
+          setIsDefaultStructure(false);
+          updateDate.structure_data = res.data.data;
+          if (res.data.structure_id) {
+            updateDate.structure_id = res.data.structure_id;
+            updateDate.structure_name = res.data.structure_name;
+          }
+          updateDate.remarks = prop.remarks;
+          updateDate.admin_approve = prop.admin_approve;
+          updateDate.structure_name = prop.structure_name;
+
+          setUpdateDate({ ...updateDate });
+          console.log('form', updateDate);
           setOpenModel(true)
         }
       });
@@ -431,8 +464,8 @@ const ListRequest = () => {
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
     const param = new FormData();
-    /* param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1); */
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('requested_user_id', ibdata.requested_user_id);
     param.append('ib_application_id', ibdata.ib_application_id);
     param.append('remarks', updateDate.remarks);
@@ -679,7 +712,7 @@ const ListRequest = () => {
                                 <div className='main-section-input-element'>
                                   <div>
                                     {/* <span>Rebate</span> */}
-                                    <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
+                                    <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate} disabled={!isDefaultStructure}
                                       onChange={(e) => {
                                         updateDate.structure_data[index]['group_rebate'] = e.target.value;
                                         updateDate.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
@@ -692,7 +725,7 @@ const ListRequest = () => {
                                   </div>
                                   <div>
                                     {/* <span>Commission</span> */}
-                                    <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                                    <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission} disabled={!isDefaultStructure}
                                       onChange={(e) => {
                                         updateDate.structure_data[index]['group_commission'] = e.target.value;
                                         updateDate.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
@@ -704,28 +737,32 @@ const ListRequest = () => {
                                       }}
                                     />
                                   </div>
-                                  {/* <div>
-                                    {
-                                      (item.ibGroup != undefined) ?
-                                        <Autocomplete
-                                        className='autoComplete-input-remove-border'
-                                          disablePortal
-                                          options={item.ibGroup}
-                                          getOptionLabel={(option) => (option ? option.ib_group_name : "")}
-                                          onInputChange={(event, newInputValue) => {
-                                            // fetchAccount(event, newInputValue);
-                                          }}
-                                          onChange={(event, newValue) => {
-                                            updateDate.structure_data[index]['ib_group_level_id'] = newValue.ib_group_level_id;
-                                            setUpdateDate({
-                                              ...updateDate
-                                            });
-                                          }}
+                                  {
+                                    (isDefaultStructure) ?
+                                      <div>
+                                        {
+                                          (item.ibGroup != undefined) ?
+                                            <Autocomplete
+                                              className='autoComplete-input-remove-border'
+                                              disablePortal
+                                              options={item.ibGroup}
+                                              getOptionLabel={(option) => (option ? option.ib_group_name : "")}
+                                              onInputChange={(event, newInputValue) => {
+                                                // fetchAccount(event, newInputValue);
+                                              }}
+                                              onChange={(event, newValue) => {
+                                                updateDate.structure_data[index]['ib_group_level_id'] = newValue.ib_group_level_id;
+                                                setUpdateDate({
+                                                  ...updateDate
+                                                });
+                                              }}
 
-                                          renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%', border: '0px !important' }} />}
-                                        /> : ''
-                                    }
-                                  </div> */}
+                                              renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%', border: '0px !important' }} />}
+                                            /> : ''
+                                        }
+                                      </div> : ""
+                                  }
+
                                 </div>
                                 <div className='action-section'>
                                   <span onClick={(e) => { updateDate.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...updateDate }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
@@ -738,7 +775,7 @@ const ListRequest = () => {
                                       <div className="pair-data">
                                         <div className='pair-data-title'>{item1.pair_name}</div>
                                         <div>
-                                          <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
+                                          <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled={!isDefaultStructure}
                                             onChange={(e) => {
                                               updateDate.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
                                               setUpdateDate({
@@ -748,7 +785,7 @@ const ListRequest = () => {
                                           />
                                         </div>
                                         <div>
-                                          <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
+                                          <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled={!isDefaultStructure}
                                             onChange={(e) => {
                                               updateDate.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
                                               setUpdateDate({

@@ -37,7 +37,7 @@ const Ticket = () => {
     const column = [
         {
             name: 'Ticket ID',
-            selector: row => row.ticketID,
+            selector: row => row.ticketChatID,
             sortable: true,
             reorder: true,
             grow: 0.4,

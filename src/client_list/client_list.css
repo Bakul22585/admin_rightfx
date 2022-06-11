@@ -96,3 +96,9 @@
 .MuiInputBase-colorPrimary.table-dropdown .MuiSelect-select {
     font-size: 13px;
 }
+.actionButton .lead_close_status {
+    color: #cd1414;
+}
+.actionButton .lead_completed_status {
+    color: #00bf00;
+}

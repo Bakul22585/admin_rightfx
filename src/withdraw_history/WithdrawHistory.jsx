@@ -52,6 +52,7 @@ const WithdrawHistory = () => {
         end_date: ''
     });
     const navigate = useNavigate();
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
@@ -164,13 +165,13 @@ const WithdrawHistory = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdraw History</p>
-                                <CommonFilter search={searchBy} setParam={setParam}/>
+                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param}/>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

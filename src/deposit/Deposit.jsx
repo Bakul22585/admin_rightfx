@@ -127,6 +127,7 @@ const Deposit = () => {
     const [preview, setPreview] = useState();
     const [refresh, setRefresh] = useState(false);
     const [accountOption, setAccountOption] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [depositForm, setDepositForm] = useState({
         live_account: '',
         account: '',
@@ -142,37 +143,37 @@ const Deposit = () => {
     });
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'REFERENCE NO',
-          'value': false,
-          'name': 'reference_no'
+            'label': 'REFERENCE NO',
+            'value': false,
+            'name': 'reference_no'
         },
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'DATE',
+            'value': false,
+            'name': 'date'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'WALLET CODE',
-          'value': false,
-          'name': 'wallet_code'
+            'label': 'WALLET CODE',
+            'value': false,
+            'name': 'wallet_code'
         },
         {
-          'label': 'PAYMENT METHOD',
-          'value': false,
-          'name': 'payment_method'
+            'label': 'PAYMENT METHOD',
+            'value': false,
+            'name': 'payment_method'
         },
         {
-          'label': 'AMOUNT',
-          'value': false,
-          'name': 'amount'
+            'label': 'AMOUNT',
+            'value': false,
+            'name': 'amount'
         },
-      ]);
-      const [viewDepositForm, setviewDepositForm] = useState({
+    ]);
+    const [viewDepositForm, setviewDepositForm] = useState({
         date: '',
         name: '',
         email: '',
@@ -321,7 +322,7 @@ const Deposit = () => {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
                 {(depositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={depositFormSubmit}>Add</Button>}
-                
+
             </div>;
         } else if (dialogTitle == 'Reject') {
             return <div className='dialogMultipleActionButton'>
@@ -342,7 +343,7 @@ const Deposit = () => {
         }
     }
 
-    const depositFormSubmit = async() => {
+    const depositFormSubmit = async () => {
         console.log(depositForm);
         if (depositForm.live_account == '') {
             toast.error('Please select account type');
@@ -364,11 +365,11 @@ const Deposit = () => {
             toast.error('Please enter note');
         } else {
             depositForm.isLoader = true;
-            setDepositForm({...depositForm});
+            setDepositForm({ ...depositForm });
             const param = new FormData();
             param.append('action', 'add_deposit');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
             param.append('user_id', depositForm.account);
             param.append('deposit_to', depositForm.deposit_to);
             param.append('payment_method', depositForm.payment_gateway);
@@ -382,7 +383,7 @@ const Deposit = () => {
                     navigate("/");
                 }
                 depositForm.isLoader = false;
-                setDepositForm({...depositForm});
+                setDepositForm({ ...depositForm });
                 if (res.data.status == 'error') {
                     toast.error(res.data.message);
                 } else {
@@ -394,7 +395,7 @@ const Deposit = () => {
         }
     }
 
-    const submitUpdate = async() => {
+    const submitUpdate = async () => {
         console.log(depositForm);
         if (viewDepositForm.amount == '') {
             toast.error('Please enter amount');
@@ -402,11 +403,11 @@ const Deposit = () => {
             toast.error('Please enter remark');
         } else {
             viewDepositForm.isLoader = true;
-            setviewDepositForm({...viewDepositForm});
+            setviewDepositForm({ ...viewDepositForm });
             const param = new FormData();
             param.append('action', 'view_update_deposit');
-            /* param.append('is_app', 1);
-            param.append('AADMIN_LOGIN_ID', 1); */
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
             param.append('deposit_id', viewDepositForm.deposit_id);
             param.append('amount', viewDepositForm.amount);
             param.append('deposit_remarks', viewDepositForm.remark);
@@ -417,7 +418,7 @@ const Deposit = () => {
                     navigate("/");
                 }
                 viewDepositForm.isLoader = false;
-                setviewDepositForm({...viewDepositForm});
+                setviewDepositForm({ ...viewDepositForm });
                 if (res.data.status == 'error') {
                     toast.error(res.data.message);
                 } else {
@@ -461,8 +462,8 @@ const Deposit = () => {
                             setDepositForm((prevalue) => {
                                 return {
                                     ...prevalue,
-                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' '+ newValue['user_last_name'] : '',
-                                    'account': (newValue != null) ? newValue['user_id']: ''
+                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' ' + newValue['user_last_name'] : '',
+                                    'account': (newValue != null) ? newValue['user_id'] : ''
                                 };
                             });
                         }}
@@ -554,21 +555,21 @@ const Deposit = () => {
         } else if (dialogTitle == "Update Deposit Request") {
             return <div>
                 <div className='update-withdraw-request-section'>
-                    <TextField label="Date" variant="standard" sx={{ width: '100%' }} name='date' value={viewDepositForm.date} onChange={input1} focused disabled/>
-                    <TextField label="Name" variant="standard" sx={{ width: '100%' }} name='name' value={viewDepositForm.name} onChange={input1} focused disabled/>
-                    <TextField label="Email" variant="standard" sx={{ width: '100%' }} name='email' value={viewDepositForm.email} onChange={input1} focused disabled/>
+                    <TextField label="Date" variant="standard" sx={{ width: '100%' }} name='date' value={viewDepositForm.date} onChange={input1} focused disabled />
+                    <TextField label="Name" variant="standard" sx={{ width: '100%' }} name='name' value={viewDepositForm.name} onChange={input1} focused disabled />
+                    <TextField label="Email" variant="standard" sx={{ width: '100%' }} name='email' value={viewDepositForm.email} onChange={input1} focused disabled />
                 </div>
-                <br/>
+                <br />
                 <div className='update-withdraw-request-section'>
-                    <TextField label="Phone" variant="standard" sx={{ width: '100%' }} name='phone' value={viewDepositForm.phone} onChange={input1} focused disabled/>
-                    <TextField label="Method" variant="standard" sx={{ width: '100%' }} name='deposit_method' value={viewDepositForm.deposit_method} onChange={input1} focused disabled/>
-                    <TextField label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={viewDepositForm.amount} onChange={input1} focused/>
+                    <TextField label="Phone" variant="standard" sx={{ width: '100%' }} name='phone' value={viewDepositForm.phone} onChange={input1} focused disabled />
+                    <TextField label="Method" variant="standard" sx={{ width: '100%' }} name='deposit_method' value={viewDepositForm.deposit_method} onChange={input1} focused disabled />
+                    <TextField label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={viewDepositForm.amount} onChange={input1} focused />
                 </div>
-                <br/>
+                <br />
                 <div className='update-withdraw-request-section'>
-                    <TextField label="Remark" variant="standard" sx={{ width: '100%' }} name='remark' value={viewDepositForm.remark} onChange={input1} focused/>
+                    <TextField label="Remark" variant="standard" sx={{ width: '100%' }} name='remark' value={viewDepositForm.remark} onChange={input1} focused />
                     {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
-                    <FormControl variant="standard" sx={{ width: '100%' }} focused disabled>
+                    <FormControl variant="standard" sx={{ width: '100%' }} focused>
                         <InputLabel>Status</InputLabel>
                         <Select
                             value={viewDepositForm.status}
@@ -664,15 +665,15 @@ const Deposit = () => {
         // setOpen(true);
     };
 
-    const handleAction = async(id, flag) => {
+    const handleAction = async (id, flag) => {
         const param = new FormData();
         if (flag == "approve") {
             param.append('action', 'approve_deposite');
         } else {
             param.append('action', 'reject_deposite');
         }
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('deposit_id', id);
         await axios.post(`${Url}/ajaxfiles/deposit_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -688,11 +689,11 @@ const Deposit = () => {
         });
     }
 
-    const viewDeposit = async(id) => {
+    const viewDeposit = async (id) => {
         const param = new FormData();
         param.append('action', 'view_deposit');
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('deposit_id', id);
         await axios.post(`${Url}/ajaxfiles/deposit_manage.php`, param).then((res) => {
             if (res.data.message == "Session has been expired") {
@@ -738,7 +739,7 @@ const Deposit = () => {
             setSelectedFile(undefined)
             return
         }
-        setDepositForm({...depositForm, file: e.target.files[0]});
+        setDepositForm({ ...depositForm, file: e.target.files[0] });
         setSelectedFile(e.target.files[0])
     }
 
@@ -760,8 +761,8 @@ const Deposit = () => {
     const fetchAccount = async (event, search) => {
         console.log(search);
         const param = new FormData();
-        /* param.append('is_app', 1);
-        param.append('AADMIN_LOGIN_ID', 1); */
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
         param.append('search', search);
         param.append('type', depositForm.live_account);
         await axios.post(`${Url}/ajaxfiles/fetch_user_account.php`, param).then((res) => {
@@ -795,18 +796,18 @@ const Deposit = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Deposit</p>
-                                <CommonFilter search={searchBy} setParam={setParam}/>
+                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
                                 <br />
-                              
+
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <div className='actionGroupButton'>
+                                    {/* <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={handleClickOpen}>Add</Button>
                                     </div>
-                                    <br />
+                                    <br /> */}
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} param={param}/>
+                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

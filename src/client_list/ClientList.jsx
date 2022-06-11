@@ -1,5 +1,5 @@
 import './client_list.css';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Theme, useTheme } from '@mui/material/styles';
 import { Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -26,6 +26,7 @@ import CommonFilter from '../common/CommonFilter';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { Url } from '../global';
+import axios from 'axios';
 
 const CssTextField = styled(TextField)({
 });
@@ -64,35 +65,35 @@ const CssTextField = styled(TextField)({
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
-      marginTop: theme.spacing(0),
+        marginTop: theme.spacing(0),
     },
     "& .MuiInputBase-input": {
-      // borderRadius: 9,
-      position: "relative",
-      backgroundColor: theme.palette.background.paper,
-      // border: "1px solid #ced4da",
-      fontSize: 16,
-      padding: "8px 26px 8px 10px",
-      // transition: theme.transitions.create(["border-color", "box-shadow"]),
-      // Use the system font instead of the default Roboto font.
-      fontFamily: [
-        "-apple-system",
-        "BlinkMacSystemFont",
-        '"Segoe UI"',
-        "Roboto",
-        '"Helvetica Neue"',
-        "Arial",
-        "sans-serif",
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(","),
-      "&:focus": {
         // borderRadius: 9,
-        borderColor: "#80bdff",
-      },
+        position: "relative",
+        backgroundColor: theme.palette.background.paper,
+        // border: "1px solid #ced4da",
+        fontSize: 16,
+        padding: "8px 26px 8px 10px",
+        // transition: theme.transitions.create(["border-color", "box-shadow"]),
+        // Use the system font instead of the default Roboto font.
+        fontFamily: [
+            "-apple-system",
+            "BlinkMacSystemFont",
+            '"Segoe UI"',
+            "Roboto",
+            '"Helvetica Neue"',
+            "Arial",
+            "sans-serif",
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(","),
+        "&:focus": {
+            // borderRadius: 9,
+            borderColor: "#80bdff",
+        },
     },
-  }));
+}));
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -185,6 +186,7 @@ const ClientList = () => {
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [filterData, setFilterData] = useState({});
     const [filterSection, setFilterSection] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [filterBy, setFilterBy] = useState('');
     const [clientSearch, setClientSearch] = useState('');
     const [searchKeyword, setSearchKeyword] = useState("");
@@ -210,11 +212,6 @@ const ClientList = () => {
             'label': 'WALLET ID',
             'value': false,
             'name': 'wallet_code'
-        },
-        {
-            'label': 'GROUP LEVEL',
-            'value': false,
-            'name': 'group_level'
         },
         {
             'label': 'NAME',
@@ -247,6 +244,7 @@ const ClientList = () => {
             'name': 'user_added_datetime'
         },
     ]);
+    const [salesList, setSalesList] = useState([])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -342,14 +340,6 @@ const ClientList = () => {
             grow: 0.1,
         },
         {
-            name: 'GROUP LEVEL',
-            selector: row => { return <span title={row.group_level}>{row.group_level}</span> },
-            sortable: true,
-            reorder: true,
-            wrap: true,
-            grow: 0.5,
-        },
-        {
             name: 'NAME',
             selector: row => { return <a className='linkColor' title={row.name} onClick={(event) => gotoProfile(row)}>{row.name}</a> },
             sortable: true,
@@ -395,14 +385,17 @@ const ClientList = () => {
                         className='table-dropdown'
                         input={<BootstrapInput />}
                         name='interest'
+                        value={row.manager_id}
                         onChange={(e) => changeSales(e, row)}
                     >
-                        <MenuItem value="1">Demo</MenuItem>
-                        <MenuItem value="2">Test</MenuItem>
+                        {
+                            salesList.map((item) => {
+                                return <MenuItem value={item.manager_id}>{item.manager_name}</MenuItem>
+                            })
+                        }
                     </Select>
                 </div>
             },
-            sortable: true,
             reorder: true,
             wrap: true,
             grow: 1,
@@ -427,6 +420,19 @@ const ClientList = () => {
             wrap: true,
             grow: 1.2,
         },
+        {
+            name: 'Lead Close',
+            button: true,
+            cell: row => {
+                return <div className='actionButton'>
+                    {
+                        row.lead_user == "1" ? <Button className={`${(row.lead_closed == "0") ? 'lead_close_status' : 'lead_completed_status'}`} onClick={(e) => changeLeadStatus(row)}>{(row.lead_closed == "0") ? <i className="material-icons">cancel</i> : <i className="material-icons">check_circle</i>}</Button> : ""
+                    }
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        }
         /* {
             name: 'Action',
             button: true,
@@ -544,7 +550,7 @@ const ClientList = () => {
                             <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
                             <Button variant="contained" className='btn-gradient btn-success'
                                 onClick={() => {
-                                    toast.success('Sales person has been successfully updated.');
+                                    changeUserSales(data,e.target.value);
                                     onClose();
                                 }}
                             >
@@ -556,6 +562,91 @@ const ClientList = () => {
             }
         });
     }
+
+    const changeLeadStatus = (data) => {
+        if (data.lead_closed == "0") {
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to close lead status ?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-success'
+                                    onClick={() => {
+                                        closeLead(data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Lead Close!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
+        }
+    }
+
+    const closeLead = async (data) => {
+        const param = new FormData();
+        /* param.append('is_app', 1);
+        param.append('AADMIN_LOGIN_ID', 1); */
+        param.append('action', 'change_lead_status');
+        param.append('user_id', data.user_id);
+        param.append('lead_closed', 1);
+
+        await axios.post(`${Url}/ajaxfiles/update_user_profile.php`, param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+
+            if (res.data.message == "error") {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+                setRefresh(!refresh);
+            }
+        });
+    }
+
+    const getSalesList = () => {
+        const param = new FormData();
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
+        param.append('action', "list_salesman");
+
+        axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+            if (res.data.status == "error") {
+                // toast.error(res.data.message);
+            } else {
+                setSalesList(res.data.managers)
+            }
+        });
+    }
+
+    const changeUserSales = (row, managerId) => {
+        const param = new FormData();
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
+        param.append('action', "assign_salesman");
+        param.append('user_id', row.user_id);
+        param.append('manager_id', managerId);
+
+        axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                setRefresh(!refresh);
+            }
+        });
+    }
+
+    useEffect(() => {
+        getSalesList()
+    }, [])
 
     return (
         <div>
@@ -575,7 +666,7 @@ const ClientList = () => {
                                         <Button variant="contained">All</Button>
                                     </div>
                                     <br /> */}
-                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' filter={filterData} search={searchBy} searchWord={searchKeyword} />
+                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} />
                                 </Paper>
 
                                 <BootstrapDialog
