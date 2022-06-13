@@ -271,7 +271,7 @@ const Withdraw = () => {
                         open={Boolean(openTableMenus[row.withdrawal_id])}
                         onClose={(event) => handleContextClose(row.withdrawal_id)}
                     >
-                        {(row.status == "1") ?
+                        {(row.status != "0") ?
                             <MenuItem className='view' {...row} onClick={(event) => viewWithdrawl(row.withdrawal_id)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                             : <div><MenuItem className='view' {...row} onClick={(event) => viewWithdrawl(row.withdrawal_id)}><i className="material-icons">receipt</i>&nbsp;&nbsp;View</MenuItem>
                                 <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row.withdrawal_id)}><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Approved</MenuItem>
@@ -410,18 +410,19 @@ const Withdraw = () => {
                 <div className='update-withdraw-request-section'>
                     <TextField id="standard-basic" label="Phone" variant="standard" sx={{ width: '100%' }} name='phone' value={viewWithdrawForm.phone} onChange={input1} focused disabled/>
                     <TextField id="standard-basic" label="Method" variant="standard" sx={{ width: '100%' }} name='withdraw_method' value={viewWithdrawForm.withdraw_method} onChange={input1} focused disabled/>
-                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={viewWithdrawForm.amount} onChange={input1} focused/>
+                    <TextField id="standard-basic" label="Amount" variant="standard" sx={{ width: '100%' }} name='amount' value={viewWithdrawForm.amount} onChange={input1} focused disabled={(viewWithdrawForm.status == "0") ? false : true}/>
                 </div>
                 <br/>
                 <div className='update-withdraw-request-section'>
-                    <TextField id="standard-basic" label="Remark" variant="standard" sx={{ width: '100%' }} name='remark' value={viewWithdrawForm.remark} onChange={input1} focused/>
+                    <TextField id="standard-basic" label="Remark" variant="standard" sx={{ width: '100%' }} name='remark' value={viewWithdrawForm.remark} onChange={input1} focused disabled={(viewWithdrawForm.status == "0") ? false : true}/>
                     {/* <TextField id="standard-basic" label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewWithdrawForm.status} onChange={input1} focused/> */}
                     <FormControl variant="standard" sx={{ width: '100%' }} focused>
                         <InputLabel>Status</InputLabel>
                         <Select
                             value={viewWithdrawForm.status}
                             name='status'
-                            onChange={input1}>
+                            onChange={input1}
+                            disabled={(viewWithdrawForm.status == "0") ? false : true}>
                             <MenuItem value='0'>Pending</MenuItem>
                             <MenuItem value='1'>Approve</MenuItem>
                             <MenuItem value='2'>Reject</MenuItem>
