@@ -563,3 +563,19 @@ text.highcharts-credits {
     font-weight: 600;
     margin: 10px 0;
 }
+.preview-image-section {
+    position: relative;
+}
+.preview-image-section button.image-delete-btn {
+    position: absolute;
+    right: -10px;
+    top: -5px;
+    z-index: 1;
+}
+.element-section {
+    display: flex;
+    gap: 10px;
+}
+.element-section label {
+    font-weight: 600;
+}

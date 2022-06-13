@@ -486,7 +486,7 @@ const Profile = () => {
     backimg: "",
   });
   const [walletBal, setWalletBal] = useState("");
-  const [profileForm, setProfileForm] = useState({
+  var [profileForm, setProfileForm] = useState({
     title: "",
     first_name: "",
     last_name: "",
@@ -579,11 +579,13 @@ const Profile = () => {
   const [linkClientForm, setLinkClientForm] = useState({
     client: "",
     structure: "",
+    list: []
   });
   const [linkIBForm, setLinkIBForm] = useState({
     master_account: "",
     customer_name: "",
     structure: "",
+    list: []
   });
   const [sendMailForm, setsendMailForm] = useState({
     from: "",
@@ -1316,6 +1318,9 @@ const Profile = () => {
   const [openModel, setOpenModel] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [getStructuresList, setGetStructuresList] = useState([]);
+  const [viewCpPassword, setViewCpPassword] = useState({
+    'cp_password': ''
+  });
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
     sponsor_approve: "",
@@ -1923,16 +1928,41 @@ const Profile = () => {
       setLinkClientForm({
         client: "",
         structure: "",
+        list: []
       });
+      getLinkClientList();
     } else if (e.target.classList.contains("link_ib")) {
       setDialogTitle("Link To IB");
       setLinkIBForm({
         master_account: "",
         customer_name: "",
         structure: "",
+        list: []
       });
+      getIBUserList();
     } else if (e.target.classList.contains("unlink_ib")) {
-      setDialogTitle("Unlink IB");
+      // setDialogTitle("Unlink IB");
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Are you sure?</h1>
+              <p>Do you want to unlink IB?</p>
+              <div className='confirmation-alert-action-button'>
+                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                <Button variant="contained" className='btn-gradient btn-danger'
+                  onClick={() => {
+                    unlinkIB();
+                    onClose();
+                  }}
+                >
+                  Yes, Unlink IB!
+                </Button>
+              </div>
+            </div>
+          );
+        }
+      });
     } else if (e.target.classList.contains("send_email")) {
       setDialogTitle("Send Email");
       setsendMailForm({
@@ -1950,8 +1980,10 @@ const Profile = () => {
       setCpAccessForm({
         status: "",
       });
+      getCpAccessSetting();
     } else if (e.target.classList.contains("view_cp_password")) {
       setDialogTitle("View Control Panel Access Password");
+      viewCPPassword();
     } else if (e.target.classList.contains("download_application")) {
       setDialogTitle("Download Client PDF");
     } else if (e.target.classList.contains("add_note")) {
@@ -2038,14 +2070,16 @@ const Profile = () => {
         isLoader: "",
       });
     }
-    setOpen(true);
+    if (!e.target.classList.contains("unlink_ib")) {
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  console.log("masterStructureData", masterStructureData);
+  // console.log("masterStructureData", masterStructureData);
   const handleContextClick = (event, index) => {
     console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
@@ -2795,11 +2829,17 @@ const Profile = () => {
                 name="client"
                 onChange={linkClientInput}
               >
-                <MenuItem value="Mehul">Mehul</MenuItem>
+                {
+                  linkClientForm.list?.map((item) => {
+                    return (
+                      <MenuItem value={item.client_id}>{item.client_name}</MenuItem>
+                    )
+                  })
+                }
               </Select>
             </FormControl>
           </div>
-          <br />
+          {/* <br />
           <div>
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Structure</InputLabel>
@@ -2812,13 +2852,13 @@ const Profile = () => {
                 <MenuItem value="Test">Test</MenuItem>
               </Select>
             </FormControl>
-          </div>
+          </div> */}
         </div>
       );
     } else if (dialogTitle == "Link To IB") {
       return (
         <div>
-          <div className="margeField">
+          {/* <div className="margeField">
             <TextField
               className="input-font-small"
               label="Master Account ID"
@@ -2836,17 +2876,24 @@ const Profile = () => {
               onChange={linkIBInput}
             />
           </div>
-          <br />
+          <br /> */}
           <div>
-            <FormControl variant="standard" sx={{ width: "50%" }}>
-              <InputLabel>Structure</InputLabel>
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>IB User</InputLabel>
               <Select
                 label
                 className="select-font-small"
-                name="structure"
+                name="customer_name"
                 onChange={linkIBInput}
               >
-                <MenuItem value="test">Test</MenuItem>
+                {/* <MenuItem value="test">Test</MenuItem> */}
+                {
+                  linkIBForm.list?.map((item) => {
+                    return (
+                      <MenuItem value={item.sponser_id}>{item.sponser_name}</MenuItem>
+                    )
+                  })
+                }
               </Select>
             </FormControl>
           </div>
@@ -2942,16 +2989,23 @@ const Profile = () => {
                 label
                 className="select-font-small"
                 name="status"
+                value={cpAccessForm.status}
                 onChange={input7}
               >
-                <MenuItem value="true">Active</MenuItem>
-                <MenuItem value="false">Blocked</MenuItem>
+                <MenuItem value="1">Active</MenuItem>
+                <MenuItem value="0">Blocked</MenuItem>
               </Select>
             </FormControl>
           </div>
         </div>
       );
     } else if (dialogTitle == "View Control Panel Access Password") {
+      return <div>
+        <div className="element-section">
+          <label>CP Password :</label>
+          <span>{viewCpPassword.cp_password}</span>
+        </div>
+      </div>;
     } else if (dialogTitle == "Download Client PDF") {
     } else if (dialogTitle == "Add New Note") {
       return (
@@ -4554,6 +4608,18 @@ const Profile = () => {
           )}
         </div>
       );
+    } else if (dialogTitle == "View Control Panel Access Password") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+        </div>
+      );
     }
   };
 
@@ -4650,29 +4716,29 @@ const Profile = () => {
 
   const getMt5AccountStatus = (mt5ID) => {
     const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
-      param.append("user_id", id);
-      param.append("mt5_id", mt5ID);
-      param.append("action", "check_mt5_status");
-      axios
-        .post(Url + "/ajaxfiles/update_user_profile.php", param)
-        .then((res) => {
-          if (res.data.message == "Session has been expired") {
-            localStorage.setItem("login", true);
-            navigate("/");
-          }
-          if (res.data.status == "error") {
-            toast.error(res.data.message);
-          } else {
-            setMt5AccessForm((prevalue) => {
-              return {
-                ...prevalue,
-                ['status']: res.data.mt5_status,
-              };
-            });
-          }
-        });
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    param.append("mt5_id", mt5ID);
+    param.append("action", "check_mt5_status");
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          setMt5AccessForm((prevalue) => {
+            return {
+              ...prevalue,
+              ['status']: res.data.mt5_status,
+            };
+          });
+        }
+      });
   }
 
   const Mt5AccountAccessSubmit = () => {
@@ -5458,14 +5524,29 @@ const Profile = () => {
   };
 
   const linkClientSubmit = () => {
-    console.timeLog(linkClientForm);
+    console.log(linkClientForm);
     if (linkClientForm.client == "") {
       toast.error("Please select client");
-    } else if (linkClientForm.structure == "") {
-      toast.error("Please select structure");
     } else {
-      toast.success("Client has been linked to structure");
-      setOpen(false);
+      const param = new FormData();
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('user_id', id);
+      param.append('client_id', linkClientForm.client);
+      param.append('action', 'link_client');
+
+      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          setOpen(false);
+        }
+      });
     }
   };
 
@@ -5481,15 +5562,28 @@ const Profile = () => {
 
   const linkIBFormSubmit = () => {
     console.log(linkIBForm);
-    if (linkIBForm.master_account == "") {
+    if (linkIBForm.customer_name == "") {
       toast.error("Please enter master account id");
-    } else if (linkIBForm.customer_name == "") {
-      toast.error("Please enter customer name");
-    } else if (linkIBForm.structure == "") {
-      toast.error("Please select structure");
     } else {
-      toast.success("IB has been linked to account number");
-      setOpen(false);
+      const param = new FormData();
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('user_id', id);
+      param.append('sponsor_id', linkIBForm.customer_name);
+      param.append('action', 'link_ib');
+
+      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          setOpen(false);
+        }
+      });
     }
   };
 
@@ -5579,8 +5673,25 @@ const Profile = () => {
     if (cpAccessForm.status == "") {
       toast.error("Please select control panel access");
     } else {
-      toast.success("control panel access has been successfully updated");
-      setOpen(false);
+      const param = new FormData();
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('user_id', id);
+      param.append('action', "update_cp_access");
+      param.append('user_status', cpAccessForm.status);
+
+      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          setOpen(false);
+        }
+      });
     }
   };
 
@@ -5598,6 +5709,7 @@ const Profile = () => {
       };
     });
   };
+
   const noteSubmit = () => {
     console.log(noteForm);
 
@@ -6197,6 +6309,7 @@ const Profile = () => {
             login_block: res.data.data.login_block,
             user_status: res.data.data.user_status,
           });
+          console.log('setProfileForm', profileForm);
         }
       });
   };
@@ -6234,10 +6347,117 @@ const Profile = () => {
     param.append('action', "list_salesman");
 
     axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         // toast.error(res.data.message);
       } else {
         setSalesList(res.data.managers)
+      }
+    });
+  }
+
+  const getLinkClientList = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('action', "list_clients");
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        linkClientForm.list = res.data.data;
+        setLinkClientForm({ ...linkClientForm });
+      }
+    });
+  }
+
+  const getIBUserList = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('action', "list_ib_users");
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        linkIBForm.list = res.data.data;
+        setLinkIBForm({ ...linkIBForm });
+      }
+    });
+  }
+
+  const unlinkIB = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('user_id', id);
+    param.append('action', "inlink_ib");
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
+      }
+    });
+  }
+
+  const viewCPPassword = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('user_id', id);
+    param.append('action', "view_cp_password");
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        viewCpPassword.cp_password = res.data.view_password;
+        setViewCpPassword({ ...viewCpPassword });
+      }
+    });
+  }
+
+  const getCpAccessSetting = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('user_id', id);
+    param.append('action', "view_cp_access");
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        cpAccessForm.status = res.data.login_block;
+        setCpAccessForm({ ...cpAccessForm });
+        console.log("cpAccessForm", cpAccessForm);
       }
     });
   }
@@ -6280,11 +6500,11 @@ const Profile = () => {
             <div style={{ opacity: 1 }}>
               <Grid container>
                 <Grid item md={12} lg={12} xl={12}>
-                {
-                  (userData.data["user_status"] == "0") ? <div className="user-status-section">
-                    <span className={`text-color-red`}>{userData.data["user_status_msg"]}</span>
-                  </div> : ""
-                }
+                  {
+                    (userData.data["user_status"] == "0") ? <div className="user-status-section">
+                      <span className={`text-color-red`}>{userData.data["user_status_msg"]}</span>
+                    </div> : ""
+                  }
                   <div className="client-detail-header">
                     <div className="client-name">
                       <label>
@@ -6465,7 +6685,7 @@ const Profile = () => {
                                   >
                                     {countryData.data.map((item) => {
                                       return (
-                                        <MenuItem value={item.id}>
+                                        <MenuItem value={item.nicename}>
                                           {item.nicename}
                                         </MenuItem>
                                       );
@@ -6490,7 +6710,7 @@ const Profile = () => {
                                   >
                                     {countryData.data.map((item) => {
                                       return (
-                                        <MenuItem value={item.id}>
+                                        <MenuItem value={item.nicename}>
                                           {item.nicename}
                                         </MenuItem>
                                       );
@@ -6790,57 +7010,54 @@ const Profile = () => {
                                 </Button>
                               </div>
                               <br />
-                              {
+                              <p className="group-header">IB</p>
+                              <div className="mt5btngroup">
+                                {
+                                  userData.data.is_ib_account == "1" ? <>
+                                    <Button
+                                      variant="contained"
+                                      className="add_master_structure btn-hover-css"
+                                      onClick={openDialogbox}>
+                                      Add Master Structure
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      className="edit_master_structure btn-hover-css"
+                                      onClick={openDialogbox}>
+                                      Edit Master Structure
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      className="link_client btn-hover-css"
+                                      onClick={openDialogbox}>
+                                      Link Client
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      className="unlink_ib btn-hover-css"
+                                      onClick={openDialogbox}>
+                                      Unlink IB
+                                    </Button>
+                                  </> : ""
+                                }
+                                {
+                                  userData.data.is_ib_account == "0" ? <>
+                                    <Button
+                                      variant="contained"
+                                      className="link_ib btn-hover-css"
+                                      onClick={openDialogbox}>
+                                      Link To IB
+                                    </Button>
+                                  </> : ""
+                                }
+                              </div>
+                              {/* {
                                 userData.data.is_ib_account == "0" ? "" :
                                   <>
-                                    <p className="group-header">IB</p>
                                     <div className="mt5btngroup">
-
-                                      <Button
-                                        variant="contained"
-                                        className="add_master_structure btn-hover-css"
-                                        onClick={openDialogbox}
-                                      >
-                                        Add Master Structure
-                                      </Button>
-                                      <Button
-                                        variant="contained"
-                                        className="edit_master_structure btn-hover-css"
-                                        onClick={openDialogbox}
-                                      >
-                                        Edit Master Structure
-                                      </Button>
-                                      {/* <Button
-                                        variant="contained"
-                                        className="add_shared_structure btn-hover-css"
-                                        onClick={openDialogbox}
-                                      >
-                                        Add Shared Structure
-                                      </Button> */}
-                                      <Button
-                                        variant="contained"
-                                        className="link_client btn-hover-css"
-                                        onClick={openDialogbox}
-                                      >
-                                        Link Client
-                                      </Button>
-                                      <Button
-                                        variant="contained"
-                                        className="link_ib btn-hover-css"
-                                        onClick={openDialogbox}
-                                      >
-                                        Link To IB
-                                      </Button>
-                                      <Button
-                                        variant="contained"
-                                        className="unlink_ib btn-hover-css"
-                                        onClick={openDialogbox}
-                                      >
-                                        Unlink IB
-                                      </Button>
                                     </div>
                                   </>
-                              }
+                              } */}
                               <br />
                               <p className="group-header">Communication</p>
                               <div className="mt5btngroup">
@@ -7127,7 +7344,7 @@ const Profile = () => {
                         className="grid-handle panding-left-right-3px"
                       >
                         <Grid item md={12} lg={12} xl={12}>
-                          <KycDocument />
+                          <KycDocument id={id} />
                           {/* <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}

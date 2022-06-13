@@ -318,7 +318,12 @@ const Withdraw = () => {
         } else if (dialogTitle == 'Update Withdrawal Request') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                {(viewWithdrawForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>}
+                {
+                    (viewWithdrawForm.status == "0") ?
+                    (viewWithdrawForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button> 
+                    : ""
+                }
+                {/* {(viewWithdrawForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>} */}
 
             </div>;
         }

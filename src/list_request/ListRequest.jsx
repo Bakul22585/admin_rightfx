@@ -17,6 +17,7 @@ import '../commision_group/commision_group.css';
 const ListRequest = () => {
 
   const navigate = useNavigate();
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [openModel, setOpenModel] = useState(false);
   const [isDefaultStructure, setIsDefaultStructure] = useState(true);
@@ -512,24 +513,44 @@ const ListRequest = () => {
   };
   const [searchBy, setSearchBy] = useState([
     {
+      'label': 'USER NAME',
+      'value': false,
+      'name': 'requested_user_name'
+    },
+    {
       'label': 'DATE',
       'value': false,
       'name': 'date'
     },
     {
-      'label': 'NAME',
+      'label': 'ACQUIRE CLIENT',
       'value': false,
-      'name': 'name'
+      'name': 'acquire_client'
     },
     {
-      'label': 'INVESTMENT TILL MONTHS',
+      'label': 'COUNTRY',
       'value': false,
-      'name': 'investment_till_months'
+      'name': 'countries'
     },
     {
-      'label': 'AUTO WITHDRAWAL MONTHS',
+      'label': 'Sponsor Name',
       'value': false,
-      'name': 'auto_withdrawal_months'
+      'name': 'sponsor_name'
+    },
+    {
+      'label': 'EMAIL',
+      'value': false,
+      'name': 'user_email'
+    },
+    {
+      'label': 'STRUCTURE NAME',
+      'value': false,
+      'name': 'structure_name'
+    },
+    {
+      'label': 'REMARK',
+      'value': false,
+      'name': 'remarks'
     }
   ]);
 
@@ -554,10 +575,10 @@ const ListRequest = () => {
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
                 <p className='main-heading'>IB Request List</p>
-                <CommonFilter search={searchBy} />
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                  <CommonTable url={`${Url}/datatable/partnership_requests.php`} column={partnershipcolumn} sort='0' search={searchBy} refresh={updateDate.refresh} />
+                  <CommonTable url={`${Url}/datatable/partnership_requests.php`} column={partnershipcolumn} sort='0' search={searchBy} refresh={updateDate.refresh} searchWord={searchKeyword} />
                 </Paper>
               </Grid>
             </Grid>

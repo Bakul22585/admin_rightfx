@@ -542,7 +542,7 @@ const Leads = () => {
             >
               {countryData.map((item) => {
                 return (
-                  <MenuItem value={item.id}>
+                  <MenuItem value={item.nicename}>
                     {item.nicename}
                   </MenuItem>
                 );

@@ -337,7 +337,12 @@ const Deposit = () => {
         } else if (dialogTitle == 'Update Deposit Request') {
             return <div className='dialogMultipleActionButton'>
                 <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                {(viewDepositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>}
+                {
+                    (viewDepositForm.status == "0") ?
+                    (viewDepositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>
+                    : ""
+                }
+                {/* {(viewDepositForm.isLoader == true) ? <Button variant="contained" className='btn-gradient btn-success' disabled><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={submitUpdate}>Update</Button>} */}
 
             </div>;
         }

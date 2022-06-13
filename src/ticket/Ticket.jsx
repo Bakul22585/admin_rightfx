@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const Ticket = () => {
 
     const navigate = useNavigate()
+    const [searchKeyword, setSearchKeyword] = useState("");
     const [searchBy, setSearchBy] = useState([
         {
           'label': 'Ticket Title',
@@ -41,6 +42,7 @@ const Ticket = () => {
             sortable: true,
             reorder: true,
             grow: 0.4,
+            wrap: true,
         },
         {
             name: 'Ticket Title',
@@ -48,6 +50,7 @@ const Ticket = () => {
             sortable: true,
             reorder: true,
             grow: 1,
+            wrap: true,
         },
         {
             name: 'Subject',
@@ -55,6 +58,7 @@ const Ticket = () => {
             sortable: true,
             reorder: true,
             grow: 1,
+            wrap: true,
         },
         {
             name: 'Message',
@@ -62,6 +66,7 @@ const Ticket = () => {
             sortable: true,
             reorder: true,
             grow: 1,
+            wrap: true,
         },
         {
             name: 'Status',
@@ -69,6 +74,7 @@ const Ticket = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'Date',
@@ -76,6 +82,7 @@ const Ticket = () => {
             sortable: true,
             reorder: true,
             grow: 1,
+            wrap: true,
         },
         {
             name: 'Action',
@@ -105,7 +112,7 @@ const Ticket = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Ticket</p>
-                                <CommonFilter search={searchBy}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -115,7 +122,7 @@ const Ticket = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/ticket_list.php`} column={column} sort='0'  search={searchBy}/>
+                                                <CommonTable url={`${Url}/datatable/ticket_list.php`} column={column} sort='0'  search={searchBy} searchWord={searchKeyword}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>
