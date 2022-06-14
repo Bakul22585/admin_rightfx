@@ -24,24 +24,54 @@ const CopyOpenTrades = () => {
   });
   const [searchBy, setSearchBy] = useState([
     {
-      label: "DATE",
-      value: false,
-      name: "date",
-    },
-    {
       label: "NAME",
       value: false,
       name: "name",
     },
     {
-      label: "MT5 A/C NO.",
+      label: "LOGIN",
       value: false,
-      name: "mt5_acc_no",
+      name: "mt5",
     },
     {
-      label: "AMOUNT",
+      label: "EQUITY",
       value: false,
-      name: "amount",
+      name: "equity",
+    },
+    {
+      label: "MT5 BALANCE",
+      value: false,
+      name: "mt_balance",
+    },
+    {
+      label: "TRADE PROFIT",
+      value: false,
+      name: "profit",
+    },
+    {
+      label: "TOTAL LOT",
+      value: false,
+      name: "trade_volume",
+    },
+    {
+      label: "PROFIT",
+      value: false,
+      name: "profit",
+    },
+    {
+      label: "LOT",
+      value: false,
+      name: "volume",
+    },
+    {
+      label: "EXPERT POSITION ID",
+      value: false,
+      name: "expert_position_id",
+    },
+    {
+      label: "COMMENT",
+      value: false,
+      name: "comment",
     },
   ]);
 

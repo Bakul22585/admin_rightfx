@@ -102,11 +102,6 @@ const FAQEditor = () => {
           'label': 'ANSWER',
           'value': false,
           'name': 'answer'
-        },
-        {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
         }
       ]);
     const [param, setParam] = useState("");

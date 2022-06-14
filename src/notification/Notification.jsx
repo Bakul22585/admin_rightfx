@@ -45,13 +45,14 @@ const Notification = () => {
     const target = entries[0];
     if (target.isIntersecting) {
       console.log("page", page);
-      if (page.totalPage - 10 > page.index) {
+      console.log("pages", page.totalPage, page.index, page.totalPage, "searchKeyword "+ searchKeyword);
+      if (page.totalPage - 10 > page.index && page.totalPage > 0) {
         fatchdata(page.index + 10);
       }
     }
   }, []);
   useEffect(() => {
-    fatchdata(page.index, param.start_date, param.end_date, searchKeyword);
+    fatchdata(page.index, param.start_date, param.end_date);
   }, [param, searchKeyword]);
 
   const makeAsRead = async (item, index) => {
@@ -80,18 +81,17 @@ const Notification = () => {
       }
     });
   }
-  console.log("withoutButton", withoutButton)
 
-  const fatchdata = async (start = 0, start_date = '', end_date = '', search = '') => {
+  const fatchdata = async (start = 0, start_date = '', end_date = '') => {
     console.log(start);
     // entriys = start;
     // page = start;
     page.index = start;
     setPage({ ...page });
-    console.log("api page", page);
+    console.log("api page", page, "searchKeyword "+ searchKeyword);
     const param = new FormData();
-    /* param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1); */
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("draw", 1);
     param.append("start", start);
     param.append("length", 10);
@@ -100,11 +100,11 @@ const Notification = () => {
     }
 
     if (end_date != "") {
-      param.append("start_date", end_date);
+      param.append("end_date", end_date);
     }
 
-    if (search != "") {
-      param.append("description", search);
+    if (searchKeyword != "") {
+      param.append("description", searchKeyword);
     }
     param.append("action", "list_notifications");
     await axios
@@ -117,10 +117,17 @@ const Notification = () => {
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
-          page.totalPage = res.data.iTotalRecords
-          setPage({ ...page })
-          //   setData(...data,res.data.aaData);
-          setData((prev) => [...prev, ...res.data.aaData]);
+          page.totalPage = res.data.iTotalRecords;
+          setPage({ ...page });
+          if (res.data.aaData.length == 0) {
+            setData([...res.data.aaData]);
+          } else {
+            if (searchKeyword != "") {
+              setData([...res.data.aaData]);
+            } else {
+              setData((prev) => [...prev, ...res.data.aaData]);
+            }
+          }
         }
       });
   };

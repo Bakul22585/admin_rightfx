@@ -62,11 +62,6 @@ const DepositHistory = () => {
           'name': 'reference_no'
         },
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
-        },
-        {
           'label': 'NAME',
           'value': false,
           'name': 'name'

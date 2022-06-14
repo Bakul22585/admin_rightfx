@@ -16,24 +16,49 @@ const TradeHistory = () => {
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
-        },
-        {
           'label': 'NAME',
           'value': false,
           'name': 'name'
         },
         {
-          'label': 'MT5 A/C NO.',
+          'label': 'LOGIN',
           'value': false,
-          'name': 'mt5_acc_no'
+          'name': 'mt5'
         },
         {
-          'label': 'AMOUNT',
+          'label': 'TRADE NO',
           'value': false,
-          'name': 'amount'
+          'name': 'order'
+        },
+        {
+          'label': 'SYMBOL',
+          'value': false,
+          'name': 'symbol'
+        },
+        {
+          'label': 'PRICE',
+          'value': false,
+          'name': 'price'
+        },
+        {
+          'label': 'PROFIT',
+          'value': false,
+          'name': 'profit'
+        },
+        {
+          'label': 'LOT',
+          'value': false,
+          'name': 'volume'
+        },
+        {
+          'label': 'EXPERT POSITION ID',
+          'value': false,
+          'name': 'expert_position_id'
+        },
+        {
+          'label': 'COMMENT',
+          'value': false,
+          'name': 'comment'
         },
       ]);
 

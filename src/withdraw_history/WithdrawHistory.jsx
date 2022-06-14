@@ -56,11 +56,6 @@ const WithdrawHistory = () => {
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
-        },
-        {
           'label': 'NAME',
           'value': false,
           'name': 'name'

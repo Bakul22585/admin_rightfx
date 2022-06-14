@@ -121,6 +121,9 @@ const IBCommisions = () => {
     const [maxWidth, setMaxWidth] = useState('sm');
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [filterData, setFilterData] = useState({});
+    const [resData, setResData] = useState({});
+    const [param, setParam] = useState({});
+    const [userList, setUserList] = useState([]);
     const [dialogTitle, setDialogTitle] = useState('');
     const [selectedFile, setSelectedFile] = useState()
     const [searchKeyword, setSearchKeyword] = useState("");
@@ -142,36 +145,46 @@ const IBCommisions = () => {
     });
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'REFERENCE NO',
-          'value': false,
-          'name': 'reference_no'
+            'label': 'NAME',
+            'value': false,
+            'name': 'name'
         },
         {
-          'label': 'DATE',
-          'value': false,
-          'name': 'date'
+            'label': 'IB GROUP ID',
+            'value': false,
+            'name': 'ib_group_id'
         },
         {
-          'label': 'NAME',
-          'value': false,
-          'name': 'name'
+            'label': 'TRADE NO',
+            'value': false,
+            'name': 'trade_no'
         },
         {
-          'label': 'WALLET CODE',
-          'value': false,
-          'name': 'wallet_code'
+            'label': 'SYMBOL',
+            'value': false,
+            'name': 'trade_symbol'
         },
         {
-          'label': 'PAYMENT METHOD',
-          'value': false,
-          'name': 'payment_method'
+            'label': 'TYPE',
+            'value': false,
+            'name': 'trade_type'
         },
         {
-          'label': 'AMOUNT',
-          'value': false,
-          'name': 'amount'
+            'label': 'CLOSE PRICE',
+            'value': false,
+            'name': 'trade_close_price'
         },
-      ]);
+        {
+            'label': 'VOLUME',
+            'value': false,
+            'name': 'trade_close_price'
+        },
+        {
+            'label': 'IB COMISSION AMOUNT',
+            'value': false,
+            'name': 'ib_comission_amount'
+        },
+    ]);
     toast.configure();
 
     const columns = [
@@ -180,7 +193,6 @@ const IBCommisions = () => {
             selector: row => {
                 return <span>{row.sr_no}</span>
             },
-            sortable: true,
             reorder: true,
             wrap: true,
             grow: 0.1,
@@ -196,7 +208,7 @@ const IBCommisions = () => {
             wrap: true,
         },
         {
-            name: 'IB GROUP id',
+            name: 'IB GROUP',
             selector: row => { return <span title={row.ib_group_id}>{row.ib_group_id}</span> },
             sortable: true,
             reorder: true,
@@ -204,7 +216,7 @@ const IBCommisions = () => {
             wrap: true,
         },
         {
-            name: 'TRADE NO.',
+            name: 'TRADE NO',
             selector: row => { return <span title={row.trade_no}>{row.trade_no}</span> },
             sortable: true,
             reorder: true,
@@ -212,7 +224,7 @@ const IBCommisions = () => {
             wrap: true,
         },
         {
-            name: 'TRADE SYMBOL',
+            name: 'SYMBOL',
             selector: row => { return <span title={row.trade_symbol}>{row.trade_symbol}</span> },
             sortable: true,
             reorder: true,
@@ -220,7 +232,7 @@ const IBCommisions = () => {
             wrap: true,
         },
         {
-            name: 'TRADE TYPE',
+            name: 'TYPE',
             selector: row => { return <span title={row.trade_type}>{row.trade_type}</span> },
             sortable: true,
             reorder: true,
@@ -228,19 +240,11 @@ const IBCommisions = () => {
             wrap: true,
         },
         {
-            name: 'TRADE CLOSE PRICE',
+            name: 'CLOSE PRICE',
             selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
             sortable: true,
             reorder: true,
             grow: 0.2,
-            wrap: true,
-        },
-        {
-            name: 'ADDED DATETIME',
-            selector: row => { return <span title={row.added_datetime}>{row.added_datetime}</span> },
-            sortable: true,
-            reorder: true,
-            grow: 0.5,
             wrap: true,
         },
         {
@@ -250,19 +254,21 @@ const IBCommisions = () => {
             reorder: true,
             grow: 0.5,
             wrap: true,
-        },{
-            name: 'TRADE VOLUME',
+        },
+        {
+            name: 'VOLUME',
             selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
             sortable: true,
             reorder: true,
             grow: 0.2,
             wrap: true,
-        },{
+        },
+        {
             name: 'IB COMISSION AMOUNT',
             selector: row => { return <span title={row.ib_comission_amount}>{row.ib_comission_amount}</span> },
             sortable: true,
             reorder: true,
-            grow: 0.2,
+            grow: 0.3,
             wrap: true,
         },
     ];
@@ -300,7 +306,7 @@ const IBCommisions = () => {
         }
     }
 
-    const depositFormSubmit = async() => {
+    const depositFormSubmit = async () => {
         console.log(depositForm);
         if (depositForm.live_account == '') {
             toast.error('Please select account type');
@@ -322,7 +328,7 @@ const IBCommisions = () => {
             toast.error('Please enter note');
         } else {
             depositForm.isLoader = true;
-            setDepositForm({...depositForm});
+            setDepositForm({ ...depositForm });
             const param = new FormData();
             param.append('action', 'add_deposit');
             /* param.append('is_app', 1);
@@ -336,7 +342,7 @@ const IBCommisions = () => {
             param.append('note', depositForm.note);
             await axios.post(`${Url}/ajaxfiles/user_manage.php`, param).then((res) => {
                 depositForm.isLoader = false;
-                setDepositForm({...depositForm});
+                setDepositForm({ ...depositForm });
                 if (res.data.status == 'error') {
                     toast.error(res.data.message);
                 } else {
@@ -380,8 +386,8 @@ const IBCommisions = () => {
                             setDepositForm((prevalue) => {
                                 return {
                                     ...prevalue,
-                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' '+ newValue['user_last_name'] : '',
-                                    'account': (newValue != null) ? newValue['user_id']: ''
+                                    'customer_name': (newValue != null) ? newValue['user_first_name'] + ' ' + newValue['user_last_name'] : '',
+                                    'account': (newValue != null) ? newValue['user_id'] : ''
                                 };
                             });
                         }}
@@ -601,12 +607,18 @@ const IBCommisions = () => {
         return () => URL.revokeObjectURL(objectUrl)
     }, [selectedFile])
 
+    useEffect(() => {
+        if (resData.all_commission_users) {
+            setUserList([...resData.all_commission_users]);
+        }
+    }, [resData])
+
     const onSelectFile = e => {
         if (!e.target.files || e.target.files.length === 0) {
             setSelectedFile(undefined)
             return
         }
-        setDepositForm({...depositForm, file: e.target.files[0]});
+        setDepositForm({ ...depositForm, file: e.target.files[0] });
         setSelectedFile(e.target.files[0])
     }
 
@@ -649,7 +661,7 @@ const IBCommisions = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Admin IB Commissions</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} userlist={userList} setParam={setParam}/>
                                 <br />
                                 {/* <Paper elevation={2} style={{ borderRadius: "10px" }}>
                                     <div className="card-header font-weight-bold text-dark border-bottom py-2">
@@ -733,7 +745,7 @@ const IBCommisions = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/admin_ib_commission_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} searchWord={searchKeyword}/>
+                                                <CommonTable url={`${Url}/datatable/admin_ib_commission_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} searchWord={searchKeyword} setResData={setResData} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

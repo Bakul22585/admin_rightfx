@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardContent, FormControl, Grid, MenuItem, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -15,26 +15,47 @@ const IBCommisionReport = () => {
     start_date: '',
     end_date: ''
   });
+  const [userList, setUserList] = useState([]);
   const [searchBy, setSearchBy] = useState([
     {
-      'label': 'DATE',
-      'value': false,
-      'name': 'date'
-    },
-    {
-      'label': 'NAME',
+      'label': 'LOGIN',
       'value': false,
       'name': 'name'
     },
     {
-      'label': 'MT5 A/C NO.',
+      'label': 'IB GROUP ID',
       'value': false,
-      'name': 'mt5_acc_no'
+      'name': 'ib_group_id'
     },
     {
-      'label': 'AMOUNT',
+      'label': 'TRADE NO',
       'value': false,
-      'name': 'amount'
+      'name': 'trade_no'
+    },
+    {
+      'label': 'SYMBOL',
+      'value': false,
+      'name': 'trade_symbol'
+    },
+    {
+      'label': 'TYPE',
+      'value': false,
+      'name': 'trade_type'
+    },
+    {
+      'label': 'PRICE',
+      'value': false,
+      'name': 'ib_comission_amount'
+    },
+    {
+      'label': 'LOT',
+      'value': false,
+      'name': 'trade_volume'
+    },
+    {
+      'label': 'CLOSE PRICE',
+      'value': false,
+      'name': 'trade_close_price'
     },
   ]);
 
@@ -109,6 +130,12 @@ const IBCommisionReport = () => {
 
   ];
 
+  useEffect(() => {
+    if (resData.all_commission_users) {
+        setUserList([...resData.all_commission_users]);
+    }
+}, [resData])
+
   return (
     <div>
       <div className="app-content--inner">
@@ -141,7 +168,7 @@ const IBCommisionReport = () => {
                   </div>
 
                 </div>
-                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
+                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} userlist={userList}/>
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                   <CardContent className="py-3">

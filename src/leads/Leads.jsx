@@ -219,7 +219,10 @@ const Leads = () => {
     refresh: false,
     ibCommissionGroupList: [],
     ib_group_id: '0'
-  })
+  });
+  const [doc, setDoc] = useState({
+    file: "",
+  });
 
   const [searchBy, setSearchBy] = useState([
     {
@@ -250,9 +253,9 @@ const Leads = () => {
 
   toast.configure();
   const interest = ['Very Low', 'Low', 'Average', 'High', 'Very High'];
-  var csvData = `Customer Name, Customer Mobile, Customer Email, Customer Address, Source, Source Description, Interest, Assign To Sales Executive, Follow Up Date, Follow Up Time, Remark
-  Demo, 1234567890, demo@gmail.com, 000 demo society demo Nager Near demo market demo., Web, test, Low, 7475717273, 11-05-2022, 01:51 PM, Test
-  Demo 1, 0987654321, demo1@gmail.com, 0 demo1 society demo1 Nager Near demo1 market demo1., Banner, test, High, 7475717273, 11-05-2022, 01:51 PM, Test`;
+  var csvData = `Customer Name, Customer Mobile, Customer Email, Customer Address, Customer Country, Source, Source Description, Interest, Assign To Sales Executive, Follow Up Date, Follow Up Time, Remark
+  Demo, 1234567890, demo@gmail.com, 000 demo society demo Nager Near demo market demo., India,  Web, test, Low, 7475717273, 11-05-2022, 01:51 PM, Test
+  Demo 1, 0987654321, demo1@gmail.com, 0 demo1 society demo1 Nager Near demo1 market demo1., India, Banner, test, High, 7475717273, 11-05-2022, 01:51 PM, Test`;
 
   const getcontry = () => {
     const param = new FormData();
@@ -1411,7 +1414,7 @@ const Leads = () => {
   };
   const input3 = (event) => {
     const { name, value } = event.target;
-    console.log("text ",name, value)
+    console.log("text ", name, value)
     if (name == "demo_mt5" && value == "1") {
       getIBCommissionGroup();
     }
@@ -1535,7 +1538,7 @@ const Leads = () => {
       });
   }
 
-  const getIBCommissionGroup = async() => {
+  const getIBCommissionGroup = async () => {
     const param = new FormData();
     /* param.append("is_app", 1);
     param.append("AADMIN_LOGIN_ID", 1); */
@@ -1794,7 +1797,25 @@ const Leads = () => {
     });
   }
 
-
+  const handleAction = async () => {
+    console.log("doc", doc);
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('import_lead_file', doc.file);
+    await axios.post(`${Url}/ajaxfiles/import_leads.php`, param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == 'error') {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
+        setRefresh(!refresh);
+      }
+    });
+  }
   return (
     <div>
       <div className="app-content--inner">
@@ -1813,7 +1834,32 @@ const Leads = () => {
                         <i className="material-icons">cloud_download</i>&nbsp;Export
                       </a>
                       <label htmlFor="contained-button-file" className='fileuploadButton'>
-                        <input accept=".csv" id="contained-button-file" type="file" />
+                        <input accept=".csv" id="contained-button-file" type="file" onChange={(e) => {
+                          doc.file = e.target.files[0];
+                          setDoc({...doc});
+                          confirmAlert({
+                            customUI: ({ onClose }) => {
+                              return (
+                                <div className='custom-ui'>
+                                  <h1>Are you sure?</h1>
+                                  <p>Do you want to import leads file?</p>
+                                  <div className='confirmation-alert-action-button'>
+                                    <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                    <Button variant="contained" className='btn-gradient btn-success'
+                                      onClick={() => {
+                                        handleAction();
+                                        onClose();
+                                      }}
+                                    >
+                                      Yes, Import it!
+                                    </Button>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          });
+                        }
+                        } />
                         <Button variant="contained" component="span">
                           <i className="material-icons">backup</i>&nbsp;Import
                         </Button>

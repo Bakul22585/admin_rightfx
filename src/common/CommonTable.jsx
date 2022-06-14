@@ -4,6 +4,8 @@ import axios from 'axios';
 import TextField from "@mui/material/TextField";
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CssTextField = styled(TextField)({
 });
@@ -67,6 +69,7 @@ const CommonTable = (prop) => {
     const [anchorEl, setAnchorEl] = React.useState([]);
     const open = Boolean(anchorEl);
     const cancelTokenSource = axios.CancelToken.source();
+    toast.configure();
 
     const handleClientPageChange = page => {
         console.log("page", page);
@@ -178,7 +181,12 @@ const CommonTable = (prop) => {
                     localStorage.setItem("login", true);
                     navigate("/");
                 }
-            } else {
+            }
+            
+            if (res.data['status'] == "error") {
+                toast.error(res.data.message);
+                setClientLoading(false);
+            }else {
                 setClientData(res.data.aaData);
                 setClientTotalRows(res.data.iTotalRecords);
                 setClientLoading(false);

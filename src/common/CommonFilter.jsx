@@ -265,6 +265,7 @@ const CommonFilter = (prop) => {
 
                           {prop.salesAgent ? <MenuItem value="Sales">Sales</MenuItem> : ""}
                           {prop.setcheckStatus ? <MenuItem value="Status">Status</MenuItem> : ""}
+                          {prop.userlist ? <MenuItem value="Users">Users</MenuItem> : ""}
 
                           {/* <MenuItem value="Account Type">Account Type</MenuItem> */}
                           {/* <MenuItem value="IB">IB</MenuItem> */}
@@ -513,6 +514,40 @@ const CommonFilter = (prop) => {
                               <MenuItem value="0">Pending</MenuItem>
                               <MenuItem value="1">Completed</MenuItem>
                               <MenuItem value="2">Rejected</MenuItem>
+                            </Select>
+                          </FormControl>
+
+                        ) : ""
+                      }
+                      {
+                        filterBy == "Users" ? (
+                          <FormControl
+                            sx={{ m: 1, width: 300 }}
+                            className="multipleSelect"
+                          >
+                            <InputLabel id="demo-multiple-chip-label">
+                              Users
+                            </InputLabel>
+                            <Select
+                              onChange={(e) => {
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    ...prevalue,
+                                    user_id: e.target.value,
+                                  };
+                                })
+                              }}
+                              input={<BootstrapInput />}
+                              sx={{ width: "200px" }}
+                            >
+                              {
+                                prop.userlist.map((item) => {
+                                  return (
+                                    <MenuItem value={item.user_id}>{item.name}</MenuItem>
+                                  );
+                                })
+                              }
+
                             </Select>
                           </FormControl>
 

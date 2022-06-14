@@ -21,11 +21,6 @@ const ActivityLog = () => {
           'label': 'IP ADDRESS',
           'value': false,
           'name': 'ip_address'
-        },
-        {
-          'label': 'DATETIME',
-          'value': false,
-          'name': 'datetime'
         }
       ]);
 

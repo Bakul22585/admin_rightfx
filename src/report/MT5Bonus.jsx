@@ -15,9 +15,9 @@ const PartnershipWithdraw = () => {
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
-          'label': 'DATE',
+          'label': 'REFERENCE NO',
           'value': false,
-          'name': 'date'
+          'name': 'refrence_no'
         },
         {
           'label': 'NAME',
@@ -25,12 +25,17 @@ const PartnershipWithdraw = () => {
           'name': 'name'
         },
         {
-          'label': 'MT5 A/C NO.',
+          'label': 'WALLET CODE',
           'value': false,
-          'name': 'mt5_acc_no'
+          'name': 'wallet_code'
         },
         {
-          'label': 'AMOUNT',
+          'label': 'PAYMENT METHOD',
+          'value': false,
+          'name': 'method'
+        },
+        {
+          'label': 'BONUS AMOUNT',
           'value': false,
           'name': 'amount'
         },

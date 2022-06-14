@@ -2992,8 +2992,8 @@ const Profile = () => {
                 value={cpAccessForm.status}
                 onChange={input7}
               >
-                <MenuItem value="1">Active</MenuItem>
-                <MenuItem value="0">Blocked</MenuItem>
+                <MenuItem value="0">Active</MenuItem>
+                <MenuItem value="1">Blocked</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -5409,9 +5409,25 @@ const Profile = () => {
     } else if (employmentDetailsForm.industry == "") {
       toast.error("Please select employment industry");
     } else {
-      toast.success(
-        "Employment details information has been updated successfully."
-      );
+      const param = new FormData();
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('user_id', id);
+      param.append('employment_status', employmentDetailsForm.status);
+      param.append('inudstry', employmentDetailsForm.industry);
+      param.append('action', 'update_employement_status');
+
+      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+        }
+      });
     }
   };
 
@@ -6262,7 +6278,11 @@ const Profile = () => {
           // setuserData({...res.data.data});
           // console.log(userData);
           setuserData({ ...userData });
-          console.log(userData);
+          console.log("userData",userData);
+          setEmploymentDetailsForm({
+            status: userData.data['employment_status'],
+            industry: userData.data['inudstry'],
+          });
         }
       });
   };
@@ -7177,7 +7197,7 @@ const Profile = () => {
                                       <Select
                                         label
                                         className="select-font-small"
-                                        // value={age}
+                                        value={employmentDetailsForm.status}
                                         onChange={employementInput}
                                         name="status"
                                       >
@@ -7217,7 +7237,7 @@ const Profile = () => {
                                       <Select
                                         label
                                         className="select-font-small"
-                                        // value={age}
+                                        value={employmentDetailsForm.industry}
                                         onChange={employementInput}
                                         name="industry"
                                       >

@@ -1,8 +1,9 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   CardContent,
   FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Paper,
   Select,
@@ -13,14 +14,56 @@ import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
 import { Url } from "../global";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  "label + &": {
+    marginTop: theme.spacing(0),
+  },
+  "& .MuiInputBase-input": {
+    borderRadius: 9,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    padding: "8px 26px 8px 10px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      borderRadius: 9,
+      borderColor: "#80bdff",
+    },
+  },
+}));
 
 const PositionReport = () => {
+
+  const navigate = useNavigate();
   const [refresh, setRefresh] = useState(false);
   const [searchBy, setSearchBy] = useState([
     {
-      label: "DATE",
+      label: "LOGIN",
       value: false,
-      name: "date",
+      name: "trade_login",
+    },
+    {
+      label: "SYMBOL",
+      value: false,
+      name: "trade_symbol",
     },
     {
       label: "NAME",
@@ -28,22 +71,54 @@ const PositionReport = () => {
       name: "name",
     },
     {
-      label: "MT5 A/C NO.",
+      label: "TRADE NO",
       value: false,
-      name: "mt5_acc_no",
+      name: "trade_no",
     },
     {
-      label: "AMOUNT",
+      label: "TIME",
       value: false,
-      name: "amount",
+      name: "trade_time",
+    },
+    {
+      label: "TYPE",
+      value: false,
+      name: "trade_type",
+    },
+    {
+      label: "LOT",
+      value: false,
+      name: "trade_volume",
+    },
+    {
+      label: "TRADE PRICE",
+      value: false,
+      name: "trade_open_rate",
+    },
+    {
+      label: "T/P",
+      value: false,
+      name: "trade_t_p",
+    },
+    {
+      label: "CURRENT PRICE",
+      value: false,
+      name: "trade_curr_rate",
+    },
+    {
+      label: "PROFIT",
+      value: false,
+      name: "trade_profit",
     },
   ]);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [resData,setResData]=useState({})
+  const [resData, setResData] = useState({})
+  const [mt5AccountList, setMt5AccountList] = useState([]);
   const [param, setParam] = useState({
     start_date: '',
     end_date: ''
-});
+  });
+  toast.configure();
   const column = [
     {
       name: "LOGIN",
@@ -94,69 +169,92 @@ const PositionReport = () => {
       grow: 0.3,
     },
     {
-        name: "TYPE",
-        selector: (row) => {
-          return <span title={row.trade_type}>{row.trade_type}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      name: "TYPE",
+      selector: (row) => {
+        return <span title={row.trade_type}>{row.trade_type}</span>;
       },
-      {
-        name: "LOT",
-        selector: (row) => {
-          return <span title={row.trade_volume}>{row.trade_volume}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "LOT",
+      selector: (row) => {
+        return <span title={row.trade_volume}>{row.trade_volume}</span>;
       },
-      {
-        name: "TRADE PRICE	",
-        selector: (row) => {
-          return <span title={row.trade_open_rate}>{row.trade_open_rate}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "TRADE PRICE",
+      selector: (row) => {
+        return <span title={row.trade_open_rate}>{row.trade_open_rate}</span>;
       },
-      {
-        name: "S/L",
-        selector: (row) => {
-          return <span title={row.trade_s_l}>{row.trade_s_l}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "S/L",
+      selector: (row) => {
+        return <span title={row.trade_s_l}>{row.trade_s_l}</span>;
       },
-      {
-        name: "T/P",
-        selector: (row) => {
-          return <span title={row.trade_t_p}>{row.trade_t_p}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "T/P",
+      selector: (row) => {
+        return <span title={row.trade_t_p}>{row.trade_t_p}</span>;
       },
-      {
-        name: "CURRENT PRICE",
-        selector: (row) => {
-          return <span title={row.trade_curr_rate}>{row.trade_curr_rate}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "CURRENT PRICE",
+      selector: (row) => {
+        return <span title={row.trade_curr_rate}>{row.trade_curr_rate}</span>;
       },
-      {
-        name: "PROFIT",
-        selector: (row) => {
-          return <span title={row.trade_profit}>{row.trade_profit}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.3,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "PROFIT",
+      selector: (row) => {
+        return <span title={row.trade_profit}>{row.trade_profit}</span>;
       },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
   ];
+
+  const getMt5AccountList = async() => {
+    const param = new FormData();
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
+    await axios.post(`${Url}/ajaxfiles/position_mt5_list.php`, param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == 'error') {
+        toast.error(res.data.message);
+      } else {
+        if (res.data.status != "error") {
+          setMt5AccountList([...res.data.mt5_acc_no_list]);
+        }
+      }
+    });
+  }
+
+  useEffect(() => {
+    getMt5AccountList();
+  }, [])
   return (
     <div>
       <div className="app-content--inner">
@@ -164,7 +262,7 @@ const PositionReport = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-              <p className="main-heading">Position Report</p>
+                <p className="main-heading">Position Report</p>
                 <div className="setBoxs">
                   {" "}
                   <div className="row1 boxSection">
@@ -221,9 +319,45 @@ const PositionReport = () => {
                       </div>
                     </div>
                   </div>{" "}
-                
+
                 </div>
-                <CommonFilter search={searchBy}  setParam={setParam} searchWord={setSearchKeyword}/>
+                {/* <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} /> */}
+                <Paper
+                  elevation={2}
+                  style={{ borderRadius: "10px" }}
+                  className="pending-all-15px"
+                >
+                  <CardContent className="py-3">
+                    <Grid container spacing={2}>
+                      <Grid item sm={12} md={12} lg={12}>
+                        <FormControl
+                          sx={{ m: 1, width: "100%" }}
+                          className="multipleSelect"
+                        >
+                          <InputLabel id="demo-multiple-chip-label">
+                            MT5 Account
+                          </InputLabel>
+                          <Select
+                            input={<BootstrapInput />}
+                            sx={{ width: "100%" }}
+                            onChange={(e) => {
+                                console.log(e.target.value);
+                                param.mt5_acc_no = e.target.value;
+                                setParam({...param})
+                              }}>
+                            {
+                                mt5AccountList.map((item) => {
+                                  return (
+                                    <MenuItem value={item.mt5_account_id}>{item.mt5_name}</MenuItem>
+                                  );
+                                })
+                              }
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Paper>
                 <br />
                 <Paper
                   elevation={2}
@@ -240,8 +374,8 @@ const PositionReport = () => {
                           refresh={refresh}
                           search={searchBy}
                           setResData={setResData}
-                         param={param}
-                         searchWord={searchKeyword}
+                          param={param}
+                          searchWord={searchKeyword}
                         />
                       </Grid>
                     </Grid>

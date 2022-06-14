@@ -15,24 +15,19 @@ const UserProfitAndLoss = () => {
     const [refresh, setRefresh] = useState(false);
     const [searchBy, setSearchBy] = useState([
         {
-            'label': 'DATE',
-            'value': false,
-            'name': 'date'
-        },
-        {
             'label': 'NAME',
             'value': false,
             'name': 'name'
         },
         {
-            'label': 'MT5 A/C NO.',
+            'label': 'MT5 ACCOUNT ID',
             'value': false,
-            'name': 'mt5_acc_no'
+            'name': 'mt5'
         },
         {
-            'label': 'AMOUNT',
+            'label': 'PROFIT & LOSS',
             'value': false,
-            'name': 'amount'
+            'name': 'profit_loss'
         },
     ]);
 
