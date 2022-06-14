@@ -33,27 +33,40 @@ const Notification = () => {
   ]);
   const [page, setPage] = useState({
     index: "",
-    totalPage: 0
+    totalPage: 0,
+    search: ""
   });
   const [param, setParam] = useState("");
   const loader = useRef(null);
-  var entriys = 0;
+  var search = "";
   useEffect(() => {
     fatchdata();
   }, []);
   const handleObserver = useCallback((entries) => {
+    console.log("pages console", page, "searchKeyword " + searchKeyword, entries[0]);
     const target = entries[0];
+    console.log("isIntersecting", target.isIntersecting);
     if (target.isIntersecting) {
       console.log("page", page);
-      console.log("pages", page.totalPage, page.index, page.totalPage, "searchKeyword "+ searchKeyword);
+      console.log("pages", page.totalPage, page.index, page.totalPage);
       if (page.totalPage - 10 > page.index && page.totalPage > 0) {
-        fatchdata(page.index + 10);
+        fatchdata(page.index + 10, param.start_date, param.end_date);
       }
     }
   }, []);
   useEffect(() => {
+    if (searchKeyword != "") {
+      page.index = 0;
+    }
+    setPage({ ...page });
     fatchdata(page.index, param.start_date, param.end_date);
-  }, [param, searchKeyword]);
+  }, [param]);
+
+  useEffect(() => {
+    /* console.log("searchKeyword", searchKeyword);
+    setPage({ ...page, search: searchKeyword }); */
+    fatchdata(page.index, param.start_date, param.end_date);
+  }, [searchKeyword]);
 
   const makeAsRead = async (item, index) => {
     // toast.error(item)
@@ -138,7 +151,7 @@ const Notification = () => {
       rootMargin: "20px",
       threshold: 0,
     };
-    console.log("page kjdlkjasdg");
+    console.log("page kjdlkjasdg", page, searchKeyword);
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
   }, [handleObserver]);

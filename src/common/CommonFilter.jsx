@@ -261,8 +261,8 @@ const CommonFilter = (prop) => {
                           sx={{ width: "200px" }}
                         >
                           <MenuItem value="">None</MenuItem>
-                          <MenuItem value="Date">Date</MenuItem>
-
+                          
+                          {prop.date ? "" : <MenuItem value="Date">Date</MenuItem>}
                           {prop.salesAgent ? <MenuItem value="Sales">Sales</MenuItem> : ""}
                           {prop.setcheckStatus ? <MenuItem value="Status">Status</MenuItem> : ""}
                           {prop.userlist ? <MenuItem value="Users">Users</MenuItem> : ""}

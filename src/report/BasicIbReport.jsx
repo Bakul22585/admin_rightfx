@@ -203,7 +203,7 @@ const BasicIbReport = () => {
               <Grid item md={12} lg={12} xl={12}>
                 <p className="main-heading">All In One IB Report</p>
 
-                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} />
+                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} date={true}/>
                 <br />
                 <Paper
                   elevation={2}

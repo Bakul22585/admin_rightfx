@@ -228,6 +228,7 @@ const BasicReport = () => {
       selector: (row) => {
         return <span title={row.register_date}>{row.register_date}</span>;
       },
+      wrap: true,
       reorder: true,
       grow: 0.3,
     }, {
@@ -235,6 +236,7 @@ const BasicReport = () => {
       selector: (row) => {
         return <span title={row.mt5_group_name}>{row.mt5_group_name}</span>;
       },
+      wrap: true,
       reorder: true,
       grow: 0.3,
     }, {
@@ -242,6 +244,7 @@ const BasicReport = () => {
       selector: (row) => {
         return <span title={row.sales_person_name}>{row.sales_person_name}</span>;
       },
+      wrap: true,
       reorder: true,
       grow: 0.3,
     }, {
@@ -249,6 +252,7 @@ const BasicReport = () => {
       selector: (row) => {
         return <span title={row.rebate}>{row.rebate}</span>;
       },
+      wrap: true,
       reorder: true,
       grow: 0.3,
     }, {
@@ -256,6 +260,7 @@ const BasicReport = () => {
       selector: (row) => {
         return <span title={row.ib_name}>{row.ib_name}</span>;
       },
+      wrap: true,
       reorder: true,
       grow: 0.3,
     }, {

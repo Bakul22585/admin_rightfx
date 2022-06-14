@@ -125,6 +125,7 @@ const Withdraw = () => {
     const [accountOption, setAccountOption] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [param, setParam] = useState({});
     const [Form, setForm] = useState({
         account_type: '',
         account: '',
@@ -149,11 +150,6 @@ const Withdraw = () => {
         isLoader: false
     });
     const [searchBy, setSearchBy] = useState([
-        {
-            'label': 'DATE',
-            'value': false,
-            'name': 'date'
-        },
         {
             'label': 'NAME',
             'value': false,
@@ -720,7 +716,7 @@ const Withdraw = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdrawal</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -730,7 +726,7 @@ const Withdraw = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} />
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} searchWord={searchKeyword} param={param}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>
