@@ -2157,7 +2157,7 @@ const Profile = () => {
           )}
           <div className="padingtopmy5create">
             <TextField
-              className="input-font-small"
+              className="input-font-small hint-color-red"
               type="password"
               label="Password"
               variant="standard"
