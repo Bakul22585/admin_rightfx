@@ -495,11 +495,18 @@ text.highcharts-credits {
 .master-structure-section .ib-structure.view-commission-content-section .group-structure-section .main-section .main-section-title {
     min-width: 120px;
 }
+.partnership-section {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
 .partnership-main-section .master-structure-section {
-    width: 50%;
+    width: 49%;
+    min-width: 450px;
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
     padding: 10px;
-    margin: 15px 0;
+    margin: 0;
     border-radius: 10px;
     gap: 0px;
 }
@@ -581,4 +588,38 @@ text.highcharts-credits {
 }
 .hint-color-red .MuiFormHelperText-root {
     color: red;
+}
+.master-structure-section .user-links {
+    display: flex;
+    flex-direction: column;
+}
+.master-structure-section .user-links .user-link-header, .master-structure-section .user-links .user-link-body {
+    display: grid;
+    grid-template-columns: 150px auto;
+    align-items: center;
+    padding: 5px
+}
+.master-structure-section .user-links .user-link-header label {
+    font-size: 14px;
+}
+.master-structure-section .user-links .user-link-body {
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 2px dashed gray;
+}
+.master-structure-section .user-links .user-link-body .link-section {
+    display: flex;
+    word-break: break-all;
+}
+.downline-table {
+    padding: 10px 20px;
+}
+.downline-table table {
+    width: 100%;
+}
+.downline-table table tbody tr {
+    border-bottom: 1px dashed slategray;
+}
+.downline-table table tr td {
+    padding: 10px 0;
 }

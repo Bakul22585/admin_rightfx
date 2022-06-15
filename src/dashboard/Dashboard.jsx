@@ -22,7 +22,7 @@ import Chart from "react-apexcharts";
 import CommonFilter from "../common/CommonFilter";
 import { Url } from "../global";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 const WorldMap = require("react-world-map");
 
 var data: [string, number][] = [
@@ -425,21 +425,6 @@ const Dashboard = (prop) => {
         console.log("asd", res.data);
         setFullData(res.data);
         setPageLoader(false);
-
-        // data.forEach((item) => {
-        //   var count = res.data.countrywise_leads.filter(
-        //     (y) => y.country == item[0]
-        //   );
-        //   if (count.length > 0) {
-        //     item[1] = Number(count[0]["inquiry_counts"]);
-        //   } else {
-        //     item[1] = 0;
-        //   }
-        // });
-        // console.log("county data", options.series[0]['data']);
-        // leadwise.options={...options}
-        // setLeadWise({...leadwise})
-        facthMapData()
       }
     });
   }, []);
@@ -456,7 +441,6 @@ const Dashboard = (prop) => {
           item[1] = 0;
         }
       });
-      console.log("county data", options.series[0]['data']);
       leadwise.options = { ...options }
       setLeadWise({ ...leadwise })
     } else {
@@ -470,13 +454,17 @@ const Dashboard = (prop) => {
           item[1] = 0;
         }
       });
-      console.log("county data", options.series[0]['data']);
       leadwise.options = { ...options }
       setLeadWise({ ...leadwise })
     }
 
   }
-  console.log("fullData", fullData);
+
+  useEffect(() => {
+    if (fullData.countrywise_leads) {
+      facthMapData();
+    }
+  },[fullData])
 
   return (
     <div>
@@ -838,32 +826,38 @@ const Dashboard = (prop) => {
                                 <Grid item sm={12} md={12} lg={12}>
                                   <div className="leadsContentSection">
                                     <div className="allLeadsNumner">
-                                      <b>
-                                        {
-                                          fullData.lead_count_request
-                                            .total_lead_count_request
-                                        }
-                                      </b>
-                                      <p>All</p>
+                                      <NavLink to="/leads_list">
+                                        <b>
+                                          {
+                                            fullData.lead_count_request
+                                              .total_lead_count_request
+                                          }
+                                        </b>
+                                        <p>All</p>
+                                      </NavLink>
                                     </div>
                                     <div className="leadRightContentSection">
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.lead_count_request
-                                              .assigned_leads
-                                          }
-                                        </span>
-                                        <p>New</p>
+                                        <NavLink to="/leads_list">
+                                          <span>
+                                            {
+                                              fullData.lead_count_request
+                                                .assigned_leads
+                                            }
+                                          </span>
+                                          <p>New</p>
+                                        </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.lead_count_request
-                                              .unassigned_leads
-                                          }
-                                        </span>
-                                        <p>Unassigned</p>
+                                        <NavLink to="/leads_list">
+                                          <span>
+                                            {
+                                              fullData.lead_count_request
+                                                .unassigned_leads
+                                            }
+                                          </span>
+                                          <p>Unassigned</p>
+                                        </NavLink>
                                       </div>
                                     </div>
                                   </div>
@@ -882,32 +876,38 @@ const Dashboard = (prop) => {
                                 <Grid item sm={12} md={12} lg={12}>
                                   <div className="leadsContentSection">
                                     <div className="allLeadsNumner">
-                                      <b>
-                                        {
-                                          fullData.manager_assign
-                                            .total_user_counts
-                                        }
-                                      </b>
-                                      <p>All</p>
+                                      <NavLink to="/client_list">
+                                        <b>
+                                          {
+                                            fullData.manager_assign
+                                              .total_user_counts
+                                          }
+                                        </b>
+                                        <p>All</p>
+                                      </NavLink>
                                     </div>
                                     <div className="leadRightContentSection">
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.manager_assign
-                                              .assigned_managers
-                                          }
-                                        </span>
-                                        <p>New</p>
+                                        <NavLink to="/client_list">
+                                          <span>
+                                            {
+                                              fullData.manager_assign
+                                                .assigned_managers
+                                            }
+                                          </span>
+                                          <p>New</p>
+                                        </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.manager_assign
-                                              .unassigned_managers
-                                          }
-                                        </span>
-                                        <p>Unassigned</p>
+                                        <NavLink to="/client_list">
+                                          <span>
+                                            {
+                                              fullData.manager_assign
+                                                .unassigned_managers
+                                            }
+                                          </span>
+                                          <p>Unassigned</p>
+                                        </NavLink>
                                       </div>
                                     </div>
                                   </div>
@@ -927,49 +927,59 @@ const Dashboard = (prop) => {
                                   <div className="leadsContentSection kyc-document">
                                     <div className="leadRightContentSection">
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.requests.kyc_request
-                                              .kyc_pending_request
-                                          }
-                                        </span>
-                                        <p>Pending Approval</p>
+                                        <NavLink to="/pending_kyc">
+                                          <span>
+                                            {
+                                              fullData.requests.kyc_request
+                                                .kyc_pending_request
+                                            }
+                                          </span>
+                                          <p>Pending Approval</p>
+                                        </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.requests.kyc_request
-                                              .kyc_appoved_request
-                                          }
-                                        </span>
-                                        <p>Approval (Unfunded)</p>
+                                        <NavLink to="/history_kyc">
+                                          <span>
+                                            {
+                                              fullData.requests.kyc_request
+                                                .kyc_appoved_request
+                                            }
+                                          </span>
+                                          <p>Approval (Unfunded)</p>
+                                        </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.requests.kyc_request
-                                              .kyc_rejected_request
-                                          }
-                                        </span>
-                                        <p>Rejected KYC</p>
+                                        <NavLink to="/pending_kyc">
+                                          <span>
+                                            {
+                                              fullData.requests.kyc_request
+                                                .kyc_rejected_request
+                                            }
+                                          </span>
+                                          <p>Rejected KYC</p>
+                                        </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.requests.kyc_request
-                                              .missing_kyc
-                                          }
-                                        </span>
-                                        <p>Missing KYC</p>
+                                        <NavLink to="/pending_kyc">
+                                          <span>
+                                            {
+                                              fullData.requests.kyc_request
+                                                .missing_kyc
+                                            }
+                                          </span>
+                                          <p>Missing KYC</p>
+                                        </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <span>
-                                          {
-                                            fullData.requests.kyc_request
-                                              .total_kyc_request
-                                          }
-                                        </span>
-                                        <p>Total KYC</p>
+                                        <NavLink to="/history_kyc">
+                                          <span>
+                                            {
+                                              fullData.requests.kyc_request
+                                                .total_kyc_request
+                                            }
+                                          </span>
+                                          <p>Total KYC</p>
+                                        </NavLink>
                                       </div>
                                     </div>
                                   </div>

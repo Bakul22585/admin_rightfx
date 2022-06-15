@@ -1,6 +1,6 @@
 import "./profile.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import * as Highcharts from "highcharts/highmaps";
 import HighchartsReact from "highcharts-react-official";
 import CreateIcon from "@mui/icons-material/Create";
@@ -52,7 +52,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import mapDataWorld from "@highcharts/map-collection/custom/world.geo.json";
 import Chart from "react-apexcharts";
-import { Url } from "../global";
+import { Url, ClientUrl } from "../global";
 import KycDocument from "./KycDocument";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -509,6 +509,7 @@ const Profile = () => {
     sales_agent: "",
     login_block: "",
     user_status: "",
+    wallet_code: "",
   });
   const [createMt5Form, setCreateMt5Form] = useState({
     account_type: "",
@@ -688,6 +689,18 @@ const Profile = () => {
     structure_name: "",
     structure_id: "",
   });
+  const [myTraderData, setMyTraderData] = useState({
+    data: {},
+    structure_name: "",
+    structure_id: "",
+  });
+  const [myChildTraderData, setMyChildTraderData] = useState({
+    data: {},
+    parent_name: "",
+    parent_id: "",
+  });
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState('sm');
 
   const depositColumn = [
     {
@@ -1321,6 +1334,11 @@ const Profile = () => {
   const [viewCpPassword, setViewCpPassword] = useState({
     'cp_password': ''
   });
+  const [changePassword, setChangePassword] = useState({
+    'password': '',
+    'new_password': '',
+    isLoader: false
+  });
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
     sponsor_approve: "",
@@ -1818,6 +1836,9 @@ const Profile = () => {
       });
       getMasterStructureList();
     }
+    if (newValue == 10) {
+      getMyTraders();
+    }
   };
 
   const handleChangeIndex = (index) => {
@@ -2060,14 +2081,21 @@ const Profile = () => {
           },
         ],
       });
-    } else if (e.target.classList.contains("change_password")) {
-      setDialogTitle("Change Password");
+    } else if (e.target.classList.contains("change_mt5_password")) {
+      setDialogTitle("Change MT5 Password");
       setChangeAccountPasswordForm({
         mt5_id: "",
         new_password: "",
         confirm_password: "",
         password_type: "",
         isLoader: "",
+      });
+    } else if (e.target.classList.contains("change_password")) {
+      setDialogTitle("Change Password");
+      setChangePassword({
+        'password': '',
+        'new_password': '',
+        isLoader: false
       });
     }
     if (!e.target.classList.contains("unlink_ib")) {
@@ -4039,7 +4067,7 @@ const Profile = () => {
         </div>
 
       );
-    } else if (dialogTitle == "Change Password") {
+    } else if (dialogTitle == "Change MT5 Password") {
       return (
         <div>
           <div>
@@ -4097,6 +4125,91 @@ const Profile = () => {
               onChange={input5}
             />
           </div>
+        </div>
+      );
+    } else if (dialogTitle == "Change Password") {
+      return (
+        <div>
+          <div className="padingtopmy5create">
+            <TextField
+              className="input-font-small"
+              label="Password"
+              type="password"
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="password"
+              onChange={changePasswordInput}
+            />
+          </div>
+          <div className="padingtopmy5create">
+            <TextField
+              className="input-font-small"
+              type="password"
+              label="Confirm Password"
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="new_password"
+              onChange={changePasswordInput}
+            />
+          </div>
+        </div>
+      );
+    } else if (dialogTitle == "My Trader") {
+      return (
+        <div className="bankDetailsTabSection downline-table">
+          <table>
+            <thead>
+              <tr>
+                <th>SR.NO</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>MT Code</th>
+                <th>Deposit</th>
+                <th>Withdraw</th>
+                <th>Team Deposit</th>
+                <th>Team Withdraw</th>
+                <th>Balance</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                (myChildTraderData.data.data != undefined) ? myChildTraderData.data.data.map((item) => {
+                  return (
+                    <tr>
+                      <td>{item.sr_no}</td>
+                      <td>{item.name}</td>
+                      <td>{item.user_email}</td>
+                      <td>{item.mt5_acc_ids}</td>
+                      <td>{item.deposit_amount}</td>
+                      <td>{item.withdrawal_amount}</td>
+                      <td>{item.total_deposit}</td>
+                      <td>{item.total_withdraw}</td>
+                      <td>{item.wallet_balance}</td>
+                      <td>
+                        <Button
+                          variant="contained"
+                          className="add_note"
+                          onClick={(e) => getMyChildTrader(item.client_id)}>
+                          View
+                        </Button>
+                      </td>
+                    </tr>
+                  )
+                }) : ""
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="4"><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total'] : ""}</b></td>
+                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_user_deposit'] : ""}</b></td>
+                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_user_withdraw'] : ""}</b></td>
+                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_total_user_deposit'] : ""}</b></td>
+                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_total_user_withdraw'] : ""}</b></td>
+                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_user_wallet'] : ""}</b></td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       );
     }
@@ -4568,7 +4681,7 @@ const Profile = () => {
           </Button>
         </div>
       );
-    } else if (dialogTitle == "Change Password") {
+    } else if (dialogTitle == "Change MT5 Password") {
       return (
         <div className="dialogMultipleActionButton">
           <Button
@@ -4618,6 +4731,46 @@ const Profile = () => {
           >
             Cancel
           </Button>
+        </div>
+      );
+    } else if (dialogTitle == "Change Password") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {changePassword.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={changeCRMAccountPasswordSubmit}
+            >
+              Submit
+            </Button>
+          )}
         </div>
       );
     }
@@ -4965,6 +5118,16 @@ const Profile = () => {
     });
   };
 
+  const changePasswordInput = (event) => {
+    const { name, value } = event.target;
+    setChangePassword((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
   const changeAccountPasswordSubmit = () => {
     console.log(changeAccountPasswordForm);
     if (changeAccountPasswordForm.mt5_id == "") {
@@ -4999,6 +5162,51 @@ const Profile = () => {
         changeAccountPasswordForm.confirm_password
       );
       param.append("action", "change_mt5_password");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          setChangeAccountPasswordForm((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+            };
+          });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
+    }
+  };
+
+  const changeCRMAccountPasswordSubmit = () => {
+    console.log(changePassword);
+    if (changePassword.password == "") {
+      toast.error("Please enter Password");
+    } else if (changePassword.new_password == "") {
+      toast.error("Please enter Confirm password");
+    } else if (changePassword.password !== changePassword.new_password) {
+      toast.error("Confirm password must be the same as password");
+    } else {
+      setChangePassword((preValue) => {
+        return {
+          ...preValue,
+          isLoader: true,
+        };
+      });
+      const param = new FormData();
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("password", changePassword.password);
+      param.append("confirm_password", changePassword.new_password);
+      param.append("action", "change_password");
       axios
         .post(Url + "/ajaxfiles/update_user_profile.php", param)
         .then((res) => {
@@ -6278,7 +6486,7 @@ const Profile = () => {
           // setuserData({...res.data.data});
           // console.log(userData);
           setuserData({ ...userData });
-          console.log("userData",userData);
+          console.log("userData", userData);
           setEmploymentDetailsForm({
             status: userData.data['employment_status'],
             industry: userData.data['inudstry'],
@@ -6328,6 +6536,7 @@ const Profile = () => {
             sales_agent: res.data.data.manager_id,
             login_block: res.data.data.login_block,
             user_status: res.data.data.user_status,
+            wallet_code: res.data.data.wallet_code,
           });
           console.log('setProfileForm', profileForm);
         }
@@ -6482,6 +6691,51 @@ const Profile = () => {
     });
   }
 
+  const getMyTraders = () => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('user_id', id);
+
+    axios.post(Url + "/ajaxfiles/my_traders.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        myTraderData.data = res.data;
+        setMyTraderData({ ...myTraderData });
+        console.log("myTraderData", myTraderData.data.data);
+      }
+    });
+  }
+
+  const getMyChildTrader = (childId) => {
+    const param = new FormData();
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('user_id', id);
+    param.append('client_id', childId);
+
+    axios.post(Url + "/ajaxfiles/sponser_mt_data_ajax.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        myChildTraderData.data = res.data;
+        setMyChildTraderData({ ...myChildTraderData });
+        setDialogTitle("My Trader");
+        setMaxWidth('lg');
+        setOpen(true);
+      }
+    });
+  }
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
@@ -6503,7 +6757,7 @@ const Profile = () => {
         }
         setLeverageForm(res.data.leverages);
       });
-  }, []);
+  }, [id]);
 
 
   return (
@@ -6543,10 +6797,16 @@ const Profile = () => {
                       <label>Total Accounts</label>
                       <p>{userData.data["total_mt5_accounts"]}</p>
                     </div>
-                    <div className="header-highlight">
-                      <label>Account Currency</label>
-                      <p>USD</p>
-                    </div>
+                    {
+                      (userData.data['sponsor_id'] == 0) ? <div className="header-highlight">
+                        <label>Account Currency</label>
+                        <p>USD</p>
+                      </div> : <div className="header-highlight">
+                        <label>Partnership</label>
+                        <p>Level: {userData.data['user_level']} | Parent: <NavLink to={`/profile/${userData.data['sponsor_id']}`}>{userData.data['sponsor_name']}</NavLink></p>
+                      </div>
+                    }
+
                     <div className="header-highlight">
                       <label>Balance</label>
                       <p>$ {userData.data["wallet_balance"]}</p>
@@ -6588,6 +6848,9 @@ const Profile = () => {
 
                     {/* <Tab label="STATEMENT" /> */}
                     <Tab label="NOTES" />
+                    {
+                      userData.data.is_ib_account == "0" ? "" : <Tab label="DOWNLINE" />
+                    }
                   </Tabs>
                   <SwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -7023,11 +7286,12 @@ const Profile = () => {
                                 </Button>
                                 <Button
                                   variant="contained"
-                                  className="change_password btn-hover-css"
+                                  className="change_mt5_password btn-hover-css"
                                   onClick={openDialogbox}
                                 >
-                                  Change Password
+                                  Change MT5 Password
                                 </Button>
+
                               </div>
                               <br />
                               <p className="group-header">IB</p>
@@ -7105,6 +7369,13 @@ const Profile = () => {
                                   onClick={openDialogbox}
                                 >
                                   View CP Password
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  className="change_password btn-hover-css"
+                                  onClick={openDialogbox}
+                                >
+                                  Change Password
                                 </Button>
                               </div>
                               <br />
@@ -7974,7 +8245,7 @@ const Profile = () => {
                                                   <i class={`fa fa-angle-${(item.is_collapse) ? 'up' : 'down'}`} onClick={(e) => {
                                                     referralData.data[index].is_collapse = !item.is_collapse;
                                                     setReferralData({ ...referralData });
-                                                  }}></i>{item.structure_name}
+                                                  }}></i>{item.ib_group_name}
                                                 </div>
                                               </td>
                                               <td>{item.client_type}</td>
@@ -8093,29 +8364,30 @@ const Profile = () => {
                             <div className="bankDetailsTabSection">
                               {
                                 (partnershipMasterStructureData.structure_data.length > 0) ?
-                                  <div className="master-structure-section">
-                                    <div className="structureNameSection view-ib-content-section">
-                                      <label>STRUCTURE NAME</label>
-                                      <span>{partnershipMasterStructureData.structure_name}</span>
-                                    </div>
-                                    <div className="main-content-input">
-                                      <div className="ib-structure view-commission-content-section">
-                                        {
-                                          partnershipMasterStructureData.structure_data.map((item, index) => {
-                                            return (
-                                              <div className="group-structure-section">
-                                                <div className="main-section">
-                                                  <div className='main-section-title'>{item.ib_group_name}</div>
-                                                  <div className='main-section-input-element'>
-                                                    <div>
-                                                      {/* <span>Rebate</span> */}
-                                                      <input type='number' className="Rebate_amount" placeholder="Rebate" disabled value={item.group_rebate} />
-                                                    </div>
-                                                    <div>
-                                                      {/* <span>Commission</span> */}
-                                                      <input type='number' className="commission_amount" placeholder="Commission" disabled value={item.group_commission} />
-                                                    </div>
-                                                    {/* <div>
+                                  <div className="partnership-section">
+                                    <div className="master-structure-section">
+                                      <div className="structureNameSection view-ib-content-section">
+                                        <label>STRUCTURE NAME</label>
+                                        <span>{partnershipMasterStructureData.structure_name}</span>
+                                      </div>
+                                      <div className="main-content-input">
+                                        <div className="ib-structure view-commission-content-section">
+                                          {
+                                            partnershipMasterStructureData.structure_data.map((item, index) => {
+                                              return (
+                                                <div className="group-structure-section">
+                                                  <div className="main-section">
+                                                    <div className='main-section-title'>{item.ib_group_name}</div>
+                                                    <div className='main-section-input-element'>
+                                                      <div>
+                                                        {/* <span>Rebate</span> */}
+                                                        <input type='number' className="Rebate_amount" placeholder="Rebate" disabled value={item.group_rebate} />
+                                                      </div>
+                                                      <div>
+                                                        {/* <span>Commission</span> */}
+                                                        <input type='number' className="commission_amount" placeholder="Commission" disabled value={item.group_commission} />
+                                                      </div>
+                                                      {/* <div>
                                                       {
                                                         (item.ibGroup != undefined) ?
                                                           <FormControl variant="standard">
@@ -8138,35 +8410,65 @@ const Profile = () => {
                                                           </FormControl> : ''
                                                       }
                                                     </div> */}
+                                                    </div>
+                                                    <div className='action-section'>
+                                                      <span onClick={(e) => { partnershipMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                                    </div>
                                                   </div>
-                                                  <div className='action-section'>
-                                                    <span onClick={(e) => { partnershipMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                                  <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
+                                                    {
+                                                      item.pair_data.map((item1, index1) => {
+                                                        return (
+                                                          <div className="pair-data">
+                                                            <div className='pair-data-title'>{item1.pair_name}</div>
+                                                            <div>
+                                                              <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled />
+                                                            </div>
+                                                            <div>
+                                                              <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled />
+                                                            </div>
+                                                          </div>
+                                                        );
+                                                      })
+                                                    }
                                                   </div>
                                                 </div>
-                                                <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                                                  {
-                                                    item.pair_data.map((item1, index1) => {
-                                                      return (
-                                                        <div className="pair-data">
-                                                          <div className='pair-data-title'>{item1.pair_name}</div>
-                                                          <div>
-                                                            <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled />
-                                                          </div>
-                                                          <div>
-                                                            <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled />
-                                                          </div>
-                                                        </div>
-                                                      );
-                                                    })
-                                                  }
-                                                </div>
-                                              </div>
-                                            );
-                                          })
-                                        }
+                                              );
+                                            })
+                                          }
+                                        </div>
                                       </div>
                                     </div>
-                                  </div> : ''
+                                    <div className="master-structure-section">
+                                      <div className="structureNameSection view-ib-content-section">
+                                        <h4 style={{ fontWeight: 600 }}>IB Dedicated Links</h4>
+                                        {/* <label>STRUCTURE NAME</label>
+                                        <span>{partnershipMasterStructureData.structure_name}</span> */}
+                                      </div>
+                                      <div className="user-links">
+                                        <div className="user-link-header">
+                                          <label>Link Type</label>
+                                          <label>Link</label>
+                                        </div>
+                                        <div className="user-link-body">
+                                          <label>Register</label>
+                                          <div className="link-section">
+                                            <a href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`} target='_blank'>{ClientUrl + `/register/sponsor/${profileForm.wallet_code}`}</a>
+                                            <button className="copy_link" onClick={(e) => {
+                                              navigator.clipboard.writeText(ClientUrl + `/register/sponsor/${profileForm.wallet_code}`).then(function () {
+                                                console.log('Async: Copying to clipboard was successful!');
+                                                toast.success('The sponsor link has been successfully copying');
+                                              }, function (err) {
+                                                console.error('Async: Could not copy text: ', err);
+                                                toast.error('The sponsor link Could not copy, Please try again');
+                                              });
+                                            }}><span className="blinking"><i className="material-icons">content_copy</i></span></button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  : ''
                               }
 
                             </div>
@@ -8227,6 +8529,83 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </TabPanel>
+                    <TabPanel value={value} index={10} dir={theme.direction}>
+                      <Grid container spacing={3} className="grid-handle">
+                        <Grid item md={12} lg={12} xl={12}>
+                          <Paper
+                            elevation={2}
+                            style={{ borderRadius: "10px" }}
+                            className="paper-main-section"
+                          >
+                            <div className="headerSection header-title">
+                              <p className="margin-0">Downline</p>
+                              {/* <Button
+                                variant="contained"
+                                className="add_note"
+                                onClick={openDialogbox}
+                              >
+                                Add Note
+                              </Button> */}
+                            </div>
+                            <div className="bankDetailsTabSection downline-table">
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>SR.NO</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>MT Code</th>
+                                    <th>Deposit</th>
+                                    <th>Withdraw</th>
+                                    <th>Team Deposit</th>
+                                    <th>Team Withdraw</th>
+                                    <th>Balance</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {
+                                    (myTraderData.data.data != undefined) ? myTraderData.data.data.map((item) => {
+                                      return (
+                                        <tr>
+                                          <td>{item.sr_no}</td>
+                                          <td>{item.name}</td>
+                                          <td>{item.user_email}</td>
+                                          <td>{item.mt5_acc_ids}</td>
+                                          <td>{item.deposit_amount}</td>
+                                          <td>{item.withdrawal_amount}</td>
+                                          <td>{item.total_deposit}</td>
+                                          <td>{item.total_withdraw}</td>
+                                          <td>{item.wallet_balance}</td>
+                                          <td>
+                                            <Button
+                                              variant="contained"
+                                              className="add_note"
+                                              onClick={(e) => getMyChildTrader(item.client_id)}>
+                                              View
+                                            </Button>
+                                          </td>
+                                        </tr>
+                                      )
+                                    }) : ""
+                                  }
+                                </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td colSpan="4"><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total'] : ""}</b></td>
+                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_deposit'] : ""}</b></td>
+                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_withdraw'] : ""}</b></td>
+                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_total_user_deposit'] : ""}</b></td>
+                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_total_user_withdraw'] : ""}</b></td>
+                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_wallet'] : ""}</b></td>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </Paper>
+                        </Grid>
+                      </Grid>
+                    </TabPanel>
                   </SwipeableViews>
                   {/* </Box> */}
                 </Grid>
@@ -8237,6 +8616,8 @@ const Profile = () => {
                 aria-labelledby="customized-dialog-title"
                 open={open}
                 className="modalWidth100"
+                fullWidth={fullWidth}
+                maxWidth={maxWidth}
               >
                 <BootstrapDialogTitle
                   id="customized-dialog-title"

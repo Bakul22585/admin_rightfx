@@ -40,10 +40,10 @@
     justify-content: end;
     gap: 10px;
 }
-.modalWidth100 .MuiPaper-root{
+/* .modalWidth100 .MuiPaper-root{
     width: 100%;
     max-width: 800px;
-}
+} */
 .elementSection {
     margin-bottom: 15px;
     display: flex;
