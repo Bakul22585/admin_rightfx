@@ -39,12 +39,16 @@ const Notification = () => {
   const [param, setParam] = useState("");
   const loader = useRef(null);
   var search = "";
+
+  toast.configure();
+
   useEffect(() => {
     fatchdata();
   }, []);
+
   const handleObserver = useCallback((entries) => {
     console.log("pages console", page, "searchKeyword " + searchKeyword, entries[0]);
-    const target = entries[0];
+    /* const target = entries[0];
     console.log("isIntersecting", target.isIntersecting);
     if (target.isIntersecting) {
       console.log("page", page);
@@ -52,21 +56,20 @@ const Notification = () => {
       if (page.totalPage - 10 > page.index && page.totalPage > 0) {
         fatchdata(page.index + 10, param.start_date, param.end_date);
       }
-    }
+    } */
   }, []);
+
   useEffect(() => {
     if (searchKeyword != "") {
       page.index = 0;
     }
     setPage({ ...page });
     fatchdata(page.index, param.start_date, param.end_date);
-  }, [param]);
+  }, [param, searchKeyword]);
 
-  useEffect(() => {
-    /* console.log("searchKeyword", searchKeyword);
-    setPage({ ...page, search: searchKeyword }); */
+  /* useEffect(() => {
     fatchdata(page.index, param.start_date, param.end_date);
-  }, [searchKeyword]);
+  }, [searchKeyword]); */
 
   const makeAsRead = async (item, index) => {
     // toast.error(item)
@@ -96,9 +99,6 @@ const Notification = () => {
   }
 
   const fatchdata = async (start = 0, start_date = '', end_date = '') => {
-    console.log(start);
-    // entriys = start;
-    // page = start;
     page.index = start;
     setPage({ ...page });
     console.log("api page", page, "searchKeyword "+ searchKeyword);
@@ -155,7 +155,19 @@ const Notification = () => {
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
   }, [handleObserver]);
-  toast.configure();
+
+  /* function handleScroll() { 
+    
+    var isAtBottom = document.documentElement.scrollHeight - document.documentElement.scrollTop <= document.documentElement.clientHeight; 
+    
+    if (isAtBottom) { 
+      console.log("isAtBottom", isAtBottom);
+    } 
+    
+  }
+  
+
+  window.addEventListener("scroll", handleScroll); */
   return (
     <div>
       <div className="app-content--inner">

@@ -172,7 +172,7 @@ const CommonFilter = (prop) => {
     });
     return checkbox;
   };
-  console.log("filter prop", prop);
+  // console.log("filter prop", prop);
   return (
     <div>
       <Grid container>

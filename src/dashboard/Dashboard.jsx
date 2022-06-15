@@ -405,6 +405,10 @@ const Dashboard = (prop) => {
   const [selected, onSelect] = useState(null);
   const [fullData, setFullData] = useState({});
   const [pageLoader, setPageLoader] = useState(true);
+  const [leadwise, setLeadWise] = useState({
+    options: options,
+    active: true
+  })
   useEffect(() => {
     if (localStorage.getItem("login") == "true") {
       prop.setLogin("true");
@@ -421,9 +425,57 @@ const Dashboard = (prop) => {
         console.log("asd", res.data);
         setFullData(res.data);
         setPageLoader(false);
+
+        // data.forEach((item) => {
+        //   var count = res.data.countrywise_leads.filter(
+        //     (y) => y.country == item[0]
+        //   );
+        //   if (count.length > 0) {
+        //     item[1] = Number(count[0]["inquiry_counts"]);
+        //   } else {
+        //     item[1] = 0;
+        //   }
+        // });
+        // console.log("county data", options.series[0]['data']);
+        // leadwise.options={...options}
+        // setLeadWise({...leadwise})
+        facthMapData()
       }
     });
   }, []);
+
+  const facthMapData = () => {
+    if (leadwise.active) {
+      data.forEach((item) => {
+        var count = fullData.countrywise_leads.filter(
+          (y) => y.country == item[0]
+        );
+        if (count.length > 0) {
+          item[1] = Number(count[0]["inquiry_counts"]);
+        } else {
+          item[1] = 0;
+        }
+      });
+      console.log("county data", options.series[0]['data']);
+      leadwise.options = { ...options }
+      setLeadWise({ ...leadwise })
+    } else {
+      data.forEach((item) => {
+        var count = fullData.countrywise_users.filter(
+          (y) => y.country == item[0]
+        );
+        if (count.length > 0) {
+          item[1] = Number(count[0]["user_counts"]);
+        } else {
+          item[1] = 0;
+        }
+      });
+      console.log("county data", options.series[0]['data']);
+      leadwise.options = { ...options }
+      setLeadWise({ ...leadwise })
+    }
+
+  }
   console.log("fullData", fullData);
 
   return (
@@ -464,17 +516,27 @@ const Dashboard = (prop) => {
                                 <ButtonGroup
                                   disableElevation
                                   variant="contained"
-                                  className="action-group-button"
+
                                 >
-                                  <Button>Leads</Button>
-                                  <Button className="button-group-off">
+                                  <Button className={`${leadwise.active ? "action-group-button" : "button-group-off"}`} onClick={() => {
+                                    leadwise.active = true
+                                    setLeadWise({ ...leadwise })
+                                    facthMapData()
+                                  }}>Leads</Button>
+                                  <Button className={`${!leadwise.active ? "action-button-group" : "button-group-off"}`}
+                                    onClick={() => {
+                                      leadwise.active = false
+                                      setLeadWise({ ...leadwise })
+                                      facthMapData()
+                                    }}>
                                     Clients
                                   </Button>
                                 </ButtonGroup>
                               </div>
+
                               <div className="chartSection">
                                 <HighchartsReact
-                                  options={options}
+                                  options={leadwise.options}
                                   highcharts={Highcharts}
                                   constructorType={"mapChart"}
                                 />

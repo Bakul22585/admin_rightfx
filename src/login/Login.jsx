@@ -124,6 +124,7 @@ export default function Login1(prop) {
                                 <CssTextField
                                     id="standard-search"
                                     label="Email address"
+                                    className="Text-font-white"
                                     sx={{ width: "100%" }}
                                     variant="standard"
                                     name="email"
@@ -138,6 +139,7 @@ export default function Login1(prop) {
                                     label="Password"
                                     type="password"
                                     name="password"
+                                    className="Text-font-white"
                                     autoComplete="current-password"
                                     variant="standard"
                                     sx={{ width: "100%" }}

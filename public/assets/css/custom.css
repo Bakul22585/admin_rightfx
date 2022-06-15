@@ -17807,3 +17807,9 @@ input[type=number] {
 .MuiTextField-root .MuiInput-underline::after, .MuiFormControl-root .MuiInput-underline::after {
   border-bottom: 2px solid #cccccc !important;
 }
+.MuiInputBase-formControl:hover:not(.Mui-disabled):before {
+  border-bottom: 0px solid white !important;
+} 
+.MuiFormControl-root.Text-font-white .Mui-focused, .MuiFormControl-root.Text-font-white .Mui-focused {
+  color: white !important;
+}
