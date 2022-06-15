@@ -321,9 +321,9 @@ const Sidebar = (prop) => {
                       {/* <li>
                         <NavLink to="/trade_history_total" onClick={CloseSidebar}>Trade History Total</NavLink>
                       </li> */}
-                      <li>
+                      {/* <li>
                         <NavLink to="/copy_open_trades" onClick={CloseSidebar}>Copy Open Trades</NavLink>
-                      </li>
+                      </li> */}
                       <li>
                         <NavLink to="/ib_commision_report" onClick={CloseSidebar}>IB Commision</NavLink>
                       </li>
