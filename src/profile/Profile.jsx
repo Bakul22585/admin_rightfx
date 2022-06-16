@@ -691,8 +691,8 @@ const Profile = () => {
   });
   const [myTraderData, setMyTraderData] = useState({
     data: {},
-    structure_name: "",
-    structure_id: "",
+    user_name: "",
+    user_id: "",
   });
   const [myChildTraderData, setMyChildTraderData] = useState({
     data: {},
@@ -701,6 +701,12 @@ const Profile = () => {
   });
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('sm');
+  const [myStructureData, setMyStructureData] = useState({
+    structure_name: "",
+    structure_data: [],
+    structure_id: "",
+    isLoader: false,
+  });
 
   const depositColumn = [
     {
@@ -1364,8 +1370,8 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1412,8 +1418,8 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_my_structure");
     axios
@@ -1528,8 +1534,8 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_mt5_account_list");
 
     axios
@@ -1546,8 +1552,8 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "list_my_structures");
 
     axios
@@ -1568,8 +1574,8 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
-    // param1.append("is_app", 1);
-    // param1.append("AADMIN_LOGIN_ID", 1);
+    param1.append("is_app", 1);
+    param1.append("AADMIN_LOGIN_ID", 1);
     param1.append("user_id", id);
 
     if (res !== null) {
@@ -1593,15 +1599,9 @@ const Profile = () => {
   };
 
   const forinloop = () => {
-    console.log("masterStructureData123", masterStructureData);
 
     var html = [];
     for (let x in masterStructureData.pair_data) {
-      console.log(
-        "masterStructureData[0].pair_data",
-        masterStructureData.pair_data[x],
-        x
-      );
       html.push(
         <div className="structureInputSection">
           <hr className="solid" />
@@ -1614,10 +1614,6 @@ const Profile = () => {
             <Grid item md={8} lg={8} xl={8}>
               <Grid container spacing={1}>
                 {masterStructureData.pair_data[x].map((item1, index1) => {
-                  console.log(
-                    "item1",
-                    masterStructureData["pair_data"][x][index1]["rebate"]
-                  );
                   return (
                     <>
                       <Grid item md={4} lg={4} xl={4}>
@@ -1633,16 +1629,6 @@ const Profile = () => {
                             masterStructureData["pair_data"][x][index1][
                               "rebate"
                             ] = e.target.value;
-                            console.log(
-                              "enter in loop",
-                              e.target.value,
-                              x,
-                              masterStructureData["pair_data"][x][index1][
-                              "rebate"
-                              ],
-                              item1.rebate,
-                              masterStructureData
-                            );
                             setMasterStructureData({
                               ...masterStructureData,
                             });
@@ -1679,8 +1665,8 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     if (res) {
       param.append("structure_id", res);
@@ -1696,10 +1682,8 @@ const Profile = () => {
           localStorage.setItem("login", true);
           navigate("/");
         }
-        console.log("ras.data.data", res.data.data);
         newMasterStructureData.structure_data = res.data.data;
         setNewMasterStructureData({ ...newMasterStructureData });
-        console.log('newMasterStructureData', newMasterStructureData);
         // setMasterStructureData(res.data.data); 
         // setStructureList((preValue) => {
         //   return {
@@ -1708,13 +1692,12 @@ const Profile = () => {
         //   };
         // });
       });
-    console.log("masterStructureData", masterStructureData);
   };
 
   const getPartnershipMasterStructure = (res) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     if (res) {
       param.append("structure_id", res);
@@ -1730,7 +1713,6 @@ const Profile = () => {
           localStorage.setItem("login", true);
           navigate("/");
         }
-        console.log("ras.data.data", resData.data.data);
         if (res) {
           partnershipMasterStructureData.structure_data = resData.data.data;
           setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
@@ -1738,14 +1720,13 @@ const Profile = () => {
           newPartnershipMasterStructureData.structure_data = resData.data.data;
           setNewPartnershipMasterStructureData({ ...newPartnershipMasterStructureData });
         }
-        console.log('partnershipMasterStructureData', partnershipMasterStructureData);
       });
   };
 
   const getBankList = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "view_bank_details");
     axios
@@ -1762,8 +1743,8 @@ const Profile = () => {
   const getwalletBalance = () => {
     if (transactionForm.account == "Wallet") {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "view_balance");
       axios
@@ -1780,8 +1761,8 @@ const Profile = () => {
 
   const getMtBalance = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("from_mt5_account_id", transactionForm.from_mt5_account_id);
     param.append("action", "view_mt5_balance");
@@ -1796,8 +1777,8 @@ const Profile = () => {
 
   const getMt5LivePackages = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     axios
       .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
@@ -1812,7 +1793,6 @@ const Profile = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    console.log("newValue", newValue);
     if (newValue == 7) {
       setReferralData({
         data: [],
@@ -1836,8 +1816,11 @@ const Profile = () => {
       });
       getMasterStructureList();
     }
-    if (newValue == 10) {
+    if (newValue == 11) {
       getMyTraders();
+    }
+    if (newValue == 9) {
+      getMyAssignedStructure();
     }
   };
 
@@ -1846,10 +1829,6 @@ const Profile = () => {
   };
 
   const openDialogbox = (e, row) => {
-    console.log(row, e.target.classList);
-    console.log(e.target.getAttribute("class"));
-    console.log(e.target.classList.contains("createMt5"));
-    console.log(e.target.classList.contains("edit_structure"));
     if (e.target.classList.contains("createMt5")) {
       setDialogTitle("Create MT5 Account");
       setCreateMt5Form({
@@ -2017,7 +1996,6 @@ const Profile = () => {
         isLoader: false,
       });
     } else if (e.target.classList.contains("add_bank")) {
-      console.log("row", row);
       if (row) {
         setDialogTitle("Edit Account");
         setBankAccountForm({
@@ -2109,7 +2087,6 @@ const Profile = () => {
 
   // console.log("masterStructureData", masterStructureData);
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -2122,7 +2099,6 @@ const Profile = () => {
   };
 
   const gotoProfile = (e) => {
-    console.log("goto profile page", e);
     navigate("/profile/" + e.name);
   };
 
@@ -2545,12 +2521,6 @@ const Profile = () => {
                 className="select-font-small"
                 name="Structure"
                 onChange={(e) => {
-                  console.log(
-                    "svalue",
-                    structureList.data.filter(
-                      (x) => x.structure_id == e.target.value
-                    )[0].structure_name
-                  );
                   getMasterStructure(e.target.value);
                   newMasterStructureData.structure_id = e.target.value;
                   newMasterStructureData.structure_name = structureList.data.filter((x) => x.structure_id == e.target.value)[0].structure_name;
@@ -4154,9 +4124,17 @@ const Profile = () => {
           </div>
         </div>
       );
-    } else if (dialogTitle == "My Trader") {
+    } else if (dialogTitle == myTraderData.user_name) {
       return (
         <div className="bankDetailsTabSection downline-table">
+          {
+            (myChildTraderData.parent_id != "") ? <div>
+            <Button variant="contained" className="add_note" onClick={(e) => {
+              getMyChildTrader(myChildTraderData.parent_id)
+            }}><i className="material-icons">arrow_back_ios</i></Button>
+          </div> : ""
+          }
+          
           <table>
             <thead>
               <tr>
@@ -4190,13 +4168,20 @@ const Profile = () => {
                         <Button
                           variant="contained"
                           className="add_note"
-                          onClick={(e) => getMyChildTrader(item.client_id)}>
+                          onClick={(e) => {
+                            myTraderData.user_name = item.name;
+                            myTraderData.user_id = item.client_id;
+                            setMyTraderData({...myTraderData});
+                            getMyChildTrader(item.client_id)
+                          }}>
                           View
                         </Button>
                       </td>
                     </tr>
                   )
-                }) : ""
+                }) : <tr>
+                      <td className="text-center" colSpan={10}>Recored not found</td>
+                    </tr>
               }
             </tbody>
             <tfoot>
@@ -4773,6 +4758,18 @@ const Profile = () => {
           )}
         </div>
       );
+    } else if (dialogTitle == myTraderData.user_name) {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+        </div>
+      )
     }
   };
 
@@ -4797,10 +4794,9 @@ const Profile = () => {
   };
 
   const createMt5AccountSubmit = () => {
-    console.log(createMt5Form);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
 
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
@@ -4869,8 +4865,8 @@ const Profile = () => {
 
   const getMt5AccountStatus = (mt5ID) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("mt5_id", mt5ID);
     param.append("action", "check_mt5_status");
@@ -4895,8 +4891,6 @@ const Profile = () => {
   }
 
   const Mt5AccountAccessSubmit = () => {
-    console.log(Mt5AccessForm);
-
     if (Mt5AccessForm.account_type == "") {
       toast.error("Please select account type");
     } else if (Mt5AccessForm.status == "") {
@@ -4909,8 +4903,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -4969,8 +4963,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -5012,7 +5006,6 @@ const Profile = () => {
   };
 
   const resetAccountPasswordSubmit = () => {
-    console.log(linkAccountForm);
     if (resetMt5PasswordForm.mt5_id == "") {
       toast.error("Please select account");
     } else {
@@ -5023,8 +5016,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -5064,8 +5057,6 @@ const Profile = () => {
   };
 
   const changeLeverageSubmit = () => {
-    console.log(changeLeverageForm);
-
     if (changeLeverageForm.account == "") {
       toast.error("Please select account");
     } else if (changeLeverageForm.leverage == "") {
@@ -5078,8 +5069,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -5129,7 +5120,6 @@ const Profile = () => {
   };
 
   const changeAccountPasswordSubmit = () => {
-    console.log(changeAccountPasswordForm);
     if (changeAccountPasswordForm.mt5_id == "") {
       toast.error("Please Select MT5 Account");
     } else if (changeAccountPasswordForm.password_type == "") {
@@ -5151,8 +5141,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -5186,7 +5176,6 @@ const Profile = () => {
   };
 
   const changeCRMAccountPasswordSubmit = () => {
-    console.log(changePassword);
     if (changePassword.password == "") {
       toast.error("Please enter Password");
     } else if (changePassword.new_password == "") {
@@ -5201,8 +5190,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("password", changePassword.password);
       param.append("confirm_password", changePassword.new_password);
@@ -5241,8 +5230,6 @@ const Profile = () => {
   };
 
   const masterStructureSubmit1 = () => {
-    console.log(masterStructureData.length);
-
     var error = false;
     if (newMasterStructureData.structure_data.length > 0) {
       if (newMasterStructureData.structure_name == "") {
@@ -5250,7 +5237,6 @@ const Profile = () => {
         error = true;
       } else {
         newMasterStructureData.structure_data.forEach(element => {
-          console.log(element.ib_group_name, element.group_rebate);
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5296,10 +5282,9 @@ const Profile = () => {
       }
     }
 
-    console.log("masterStructureDataon function", newMasterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
     param.append("structure_name", newMasterStructureData.structure_name);
@@ -5322,8 +5307,6 @@ const Profile = () => {
   };
 
   const partnerMasterStructureSubmit = () => {
-    console.log(masterStructureData.length);
-
     var error = false;
     if (partnershipMasterStructureData.structure_data.length > 0) {
       if (partnershipMasterStructureData.structure_name == "") {
@@ -5331,7 +5314,6 @@ const Profile = () => {
         error = true;
       } else {
         partnershipMasterStructureData.structure_data.forEach(element => {
-          console.log(element.ib_group_name, element.group_rebate);
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5377,10 +5359,9 @@ const Profile = () => {
       }
     }
 
-    console.log("masterStructureDataon function", partnershipMasterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(partnershipMasterStructureData.structure_data));
     param.append("structure_name", partnershipMasterStructureData.structure_name);
@@ -5404,8 +5385,6 @@ const Profile = () => {
   };
 
   const masterStructureSubmit = () => {
-    console.log(masterStructureData.length);
-
     var error = false;
     if (newMasterStructureData.structure_data.length > 0) {
       if (newMasterStructureData.structure_name == "") {
@@ -5413,7 +5392,6 @@ const Profile = () => {
         error = true;
       } else {
         newMasterStructureData.structure_data.forEach(element => {
-          console.log(element.ib_group_name, element.group_rebate);
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5459,11 +5437,9 @@ const Profile = () => {
       }
     }
 
-    console.log("masterStructureDataon function", newMasterStructureData);
-    console.log("masterStructureDataon function", masterStructureData);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
     param.append("structure_name", newMasterStructureData.structure_name);
@@ -5497,8 +5473,8 @@ const Profile = () => {
 
   useEffect(() => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -5514,7 +5490,6 @@ const Profile = () => {
   }, []);
 
   const profileSubmit = async () => {
-    console.log(profileForm);
     if (profileForm.title == "") {
       toast.error("Please select title");
     } else if (profileForm.first_name == "") {
@@ -5557,8 +5532,8 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -5610,16 +5585,14 @@ const Profile = () => {
   };
 
   const employmentDetailsSubmit = () => {
-    console.log(employmentDetailsForm);
-
     if (employmentDetailsForm.status == "") {
       toast.error("Please select employment status");
     } else if (employmentDetailsForm.industry == "") {
       toast.error("Please select employment industry");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('employment_status', employmentDetailsForm.status);
       param.append('inudstry', employmentDetailsForm.industry);
@@ -5704,7 +5677,6 @@ const Profile = () => {
   };
 
   const deleteEditStructureIB = (e, index) => {
-    console.log(index);
     editSharedStructureForm.list.splice(index, 1);
     setEditSharedStructureForm({ ...editSharedStructureForm });
   };
@@ -5716,7 +5688,6 @@ const Profile = () => {
   };
 
   const deleteStructureIB = (e, index) => {
-    console.log(index);
     sharedStructureForm.list.splice(index, 1);
     setSharedStructureForm({ ...sharedStructureForm });
   };
@@ -5748,13 +5719,12 @@ const Profile = () => {
   };
 
   const linkClientSubmit = () => {
-    console.log(linkClientForm);
     if (linkClientForm.client == "") {
       toast.error("Please select client");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('client_id', linkClientForm.client);
       param.append('action', 'link_client');
@@ -5785,13 +5755,12 @@ const Profile = () => {
   };
 
   const linkIBFormSubmit = () => {
-    console.log(linkIBForm);
     if (linkIBForm.customer_name == "") {
       toast.error("Please enter master account id");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('sponsor_id', linkIBForm.customer_name);
       param.append('action', 'link_ib');
@@ -5822,7 +5791,6 @@ const Profile = () => {
   };
 
   const sendMailSubmit = () => {
-    console.log(sendMailForm);
     /* if (sendMailForm.from == "") {
       toast.error("Please select from e-mail address");
     } else  */
@@ -5844,8 +5812,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       // param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -5893,13 +5861,12 @@ const Profile = () => {
   };
 
   const cpAccessSubmit = () => {
-    console.log(cpAccessForm);
     if (cpAccessForm.status == "") {
       toast.error("Please select control panel access");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      param.append('is_app', 1);
+      param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('action', "update_cp_access");
       param.append('user_status', cpAccessForm.status);
@@ -5935,8 +5902,6 @@ const Profile = () => {
   };
 
   const noteSubmit = () => {
-    console.log(noteForm);
-
     if (noteForm.notes == "") {
       toast.error("Please enter note");
       /* } else if (noteForm.call_status == "") {
@@ -5951,8 +5916,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("is_app", 1);
+      param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -5993,7 +5958,6 @@ const Profile = () => {
   };
 
   const bankAccountSubmit = async (prop) => {
-    console.log(bankAccountForm);
     if (prop) {
       if (bankAccountForm.name == "") {
         toast.error("Please enter beneficiary name");
@@ -6005,8 +5969,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
@@ -6064,8 +6028,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "add_user_bank");
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
@@ -6094,7 +6058,6 @@ const Profile = () => {
   };
 
   const transactionInput = (event) => {
-    console.log("transactionForm", transactionForm);
     const { name, value } = event.target;
     if (name == "type") {
       setTransactionForm({
@@ -6136,7 +6099,6 @@ const Profile = () => {
   };
 
   const transactionSubmit = async () => {
-    console.log(transactionForm);
     if (transactionForm.type == "") {
       toast.error("Please select transaction type");
     } else if (transactionForm.type == "DEPOSIT") {
@@ -6165,8 +6127,8 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         param.append("action", "add_deposit");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
         param.append("payment_method", transactionForm.payment);
@@ -6227,8 +6189,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_withdraw");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
         if (transactionForm.crypto_name) {
@@ -6293,8 +6255,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_transfer");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", userData.data["user_id"]);
         param.append("from_transfer", transactionForm.account);
         param.append("to_transfer", transactionForm.account_to);
@@ -6345,8 +6307,8 @@ const Profile = () => {
         toast.error("Please enter note");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("is_app", 1);
+        param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("action", "add_mt5_bonus");
         param.append("credit_type", transactionForm.credit_type);
@@ -6382,8 +6344,6 @@ const Profile = () => {
   };
 
   const linkCampaignSubmit = () => {
-    console.log(linkCampaignForm);
-
     if (linkCampaignForm.account == "") {
       toast.error("Please select account");
     } else if (linkCampaignForm.campaign == "") {
@@ -6421,8 +6381,8 @@ const Profile = () => {
                   onClick={async () => {
                     onClose();
                     const param = new FormData();
-                    // param.append("is_app", 1);
-                    // param.append("AADMIN_LOGIN_ID", 1);
+                    param.append("is_app", 1);
+                    param.append("AADMIN_LOGIN_ID", 1);
                     param.append("user_id", id);
                     param.append("action", 'delete_master_structure');
                     param.append("structure_id", partnershipMasterStructureData.structure_id);
@@ -6464,8 +6424,8 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     userData.isLoader = true;
     setuserData({ ...userData });
@@ -6481,12 +6441,8 @@ const Profile = () => {
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
-          // console.log(res.data.data);
           userData.data = res.data.data;
-          // setuserData({...res.data.data});
-          // console.log(userData);
           setuserData({ ...userData });
-          console.log("userData", userData);
           setEmploymentDetailsForm({
             status: userData.data['employment_status'],
             industry: userData.data['inudstry'],
@@ -6497,8 +6453,8 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_general_information");
     await axios
@@ -6538,15 +6494,14 @@ const Profile = () => {
             user_status: res.data.data.user_status,
             wallet_code: res.data.data.wallet_code,
           });
-          console.log('setProfileForm', profileForm);
         }
       });
   };
 
   const getReferralData = async (structure_id) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("structure_id", structure_id);
     param.append("action", "my_referrals");
@@ -6564,15 +6519,14 @@ const Profile = () => {
         } else {
           referralData.data = res.data.data;
           setReferralData({ ...referralData });
-          console.log('referralData', referralData);
         }
       });
   };
 
   const getSalesList = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('action', "list_salesman");
 
     axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
@@ -6590,8 +6544,8 @@ const Profile = () => {
 
   const getLinkClientList = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
 
     param.append('action', "list_clients");
@@ -6612,8 +6566,8 @@ const Profile = () => {
 
   const getIBUserList = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('action', "list_ib_users");
 
     axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
@@ -6632,10 +6586,10 @@ const Profile = () => {
 
   const unlinkIB = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
-    param.append('action', "inlink_ib");
+    param.append('action', "unlink_ib");
 
     axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
@@ -6652,8 +6606,8 @@ const Profile = () => {
 
   const viewCPPassword = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('action', "view_cp_password");
 
@@ -6673,8 +6627,8 @@ const Profile = () => {
 
   const getCpAccessSetting = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('action', "view_cp_access");
 
@@ -6688,15 +6642,14 @@ const Profile = () => {
       } else {
         cpAccessForm.status = res.data.login_block;
         setCpAccessForm({ ...cpAccessForm });
-        console.log("cpAccessForm", cpAccessForm);
       }
     });
   }
 
   const getMyTraders = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
 
     axios.post(Url + "/ajaxfiles/my_traders.php", param).then((res) => {
@@ -6709,15 +6662,14 @@ const Profile = () => {
       } else {
         myTraderData.data = res.data;
         setMyTraderData({ ...myTraderData });
-        console.log("myTraderData", myTraderData.data.data);
       }
     });
   }
 
   const getMyChildTrader = (childId) => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('client_id', childId);
 
@@ -6730,12 +6682,36 @@ const Profile = () => {
         toast.error(res.data.message);
       } else {
         myChildTraderData.data = res.data;
+        myChildTraderData.parent_id = res.data.back_links;
         setMyChildTraderData({ ...myChildTraderData });
-        setDialogTitle("My Trader");
+        setDialogTitle(myTraderData.user_name);
         setMaxWidth('lg');
         setOpen(true);
       }
     });
+  }
+
+  const getMyAssignedStructure = () => {
+    const param = new FormData();
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
+    param.append("user_id", id);
+    param.append("action", "get_my_assigned_structure");
+    axios
+      .post(Url + "/ajaxfiles/master_structure_manage.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (resData.data.status == "error") {
+          toast.error(resData.data.message);
+        } else {
+          myStructureData.structure_data = resData.data.data;
+          myStructureData.structure_name = resData.data.structure_name;
+          setMyStructureData({ ...myStructureData });
+        }
+      });
   }
 
   useEffect(() => {
@@ -6746,8 +6722,8 @@ const Profile = () => {
     getSalesList()
 
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_leverages");
     axios
@@ -6800,12 +6776,16 @@ const Profile = () => {
                       <p>{userData.data["total_mt5_accounts"]}</p>
                     </div>
                     {
-                      (userData.data['sponsor_id'] == 0) ? <div className="header-highlight">
+                      (userData.data['user_level'] == "USD") ? <div className="header-highlight">
                         <label>Account Currency</label>
                         <p>USD</p>
-                      </div> : <div className="header-highlight">
+                      </div> :
+                      (userData.data['user_level'] == "Master")? <div className="header-highlight">
                         <label>Partnership</label>
-                        <p>Level: {userData.data['user_level']} | Parent: <NavLink to={`/profile/${userData.data['sponsor_id']}`}>{userData.data['sponsor_name']}</NavLink></p>
+                        <p>Level: {userData.data['user_level']}</p>
+                      </div>: <div className="header-highlight">
+                        <label>Partnership</label>
+                        <p>Level: {userData.data['user_level']} | Parent: <NavLink className='linkColor' title={userData.data['sponsor_name']} to={`/profile/${userData.data['sponsor_id']}`}>{userData.data['sponsor_name']}</NavLink></p>
                       </div>
                     }
 
@@ -6830,11 +6810,9 @@ const Profile = () => {
                   >
                     <Tab
                       label="PROFILE PAGE"
-                      onClick={() => console.log("working tab")}
                     />
                     <Tab
                       label="BANK DETAILS"
-                      onClick={() => console.log("working tab")}
                     />
                     <Tab label="DOCUMENTS" />
                     <Tab label="ACCOUNTS" />
@@ -6847,8 +6825,9 @@ const Profile = () => {
                     {
                       userData.data.is_ib_account == "0" ? "" : <Tab label="PARTNERSHIP" />
                     }
-
-                    {/* <Tab label="STATEMENT" /> */}
+                    {
+                      userData.data.is_ib_account == "0" ? "" : <Tab label="MY STRUCTURE" />
+                    }
                     <Tab label="NOTES" />
                     {
                       userData.data.is_ib_account == "0" ? "" : <Tab label="DOWNLINE" />
@@ -7381,6 +7360,17 @@ const Profile = () => {
                                 </Button>
                               </div>
                               <br />
+                              <p className="group-header">Pamm</p>
+                              <div className="mt5btngroup">
+                                <Button
+                                  variant="contained"
+                                  className="pamm_access btn-hover-css"
+                                  onClick={openDialogbox}
+                                >
+                                  Pamm Access
+                                </Button>
+                              </div>
+                              <br />
                               <p className="group-header">Misc.</p>
                               <div className="mt5btngroup">
                                 {/* <Button
@@ -7418,7 +7408,7 @@ const Profile = () => {
                       </Grid>
                       <br />
                       <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={6} lg={6} xl={6}>
+                        {/* <Grid item md={6} lg={6} xl={6}>
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
@@ -7442,7 +7432,7 @@ const Profile = () => {
                               </Grid>
                             </div>
                           </Paper>
-                        </Grid>
+                        </Grid> */}
                         <Grid item md={6} lg={6} xl={6}>
                           <Paper
                             elevation={2}
@@ -7589,7 +7579,7 @@ const Profile = () => {
                                 control={
                                   <Checkbox defaultChecked name="declaration" />
                                 }
-                                label="By clicking here I give my consent for Exiniti to contact me for marketing purposes. You can opt out at any time. For further details please see ourMarketing and Communication Policy Statement."
+                                label="By clicking here I give my consent for RightFx to contact me for marketing purposes. You can opt out at any time. For further details please see ourMarketing and Communication Policy Statement."
                               />
                               {/* <div className='element'>
                                                         </div> */}
@@ -8309,12 +8299,6 @@ const Profile = () => {
                                     className="select-font-small"
                                     name="structure"
                                     onChange={(e) => {
-                                      console.log(
-                                        "svalue",
-                                        structureList.data.filter(
-                                          (x) => x.structure_id == e.target.value
-                                        )[0].structure_name
-                                      );
                                       getPartnershipMasterStructure(e.target.value);
                                       partnershipMasterStructureData.structure_id = e.target.value;
                                       partnershipMasterStructureData.structure_name = structureList.data.filter((x) => x.structure_id == e.target.value)[0].structure_name;
@@ -8458,10 +8442,8 @@ const Profile = () => {
                                             <a href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`} target='_blank'>{ClientUrl + `/register/sponsor/${profileForm.wallet_code}`}</a>
                                             <button className="copy_link" onClick={(e) => {
                                               navigator.clipboard.writeText(ClientUrl + `/register/sponsor/${profileForm.wallet_code}`).then(function () {
-                                                console.log('Async: Copying to clipboard was successful!');
                                                 toast.success('The sponsor link has been successfully copying');
                                               }, function (err) {
-                                                console.error('Async: Could not copy text: ', err);
                                                 toast.error('The sponsor link Could not copy, Please try again');
                                               });
                                             }}><span className="blinking"><i className="material-icons">content_copy</i></span></button>
@@ -8478,29 +8460,81 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </TabPanel>
-                    {/* <TabPanel value={value} index={9} dir={theme.direction}>
+                    <TabPanel value={value} index={9} dir={theme.direction}>
                       <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
+                            className="paper-main-section partnership-main-section">
                             <div className="headerSection header-title">
-                              <p className="margin-0">Statement</p>
+                              <div className="header-search-section">
+                                <p class="margin-0">My Structure</p>
+                              </div>
                             </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/activity_log_list.php`}
-                                column={activityColumn}
-                                sort="2"
-                              />
+                            <div className="bankDetailsTabSection getMyStructure">
+                              {
+                                (myStructureData.structure_data.length > 0) ?
+                                  <div className="partnership-section">
+                                    <div className="master-structure-section">
+                                      <div className="structureNameSection view-ib-content-section">
+                                        <label>{myStructureData.structure_name}</label>
+                                        {/* <span>{myStructureData.structure_name}</span> */}
+                                      </div>
+                                      <div className="main-content-input">
+                                        <div className="ib-structure view-commission-content-section">
+                                          {
+                                            myStructureData.structure_data.map((item, index) => {
+                                              return (
+                                                <div className="group-structure-section">
+                                                  <div className="main-section">
+                                                    <div className='main-section-title'>{item.ib_group_name}</div>
+                                                    <div className='main-section-input-element'>
+                                                      <div>
+                                                        <input type='number' className="Rebate_amount" placeholder="Rebate" disabled value={item.group_rebate} />
+                                                      </div>
+                                                      <div>
+                                                        <input type='number' className="commission_amount" placeholder="Commission" disabled value={item.group_commission} />
+                                                      </div>
+                                                    </div>
+                                                    <div className='action-section'>
+                                                      <span onClick={(e) => { myStructureData.structure_data[index]['is_visible'] = !item.is_visible; setMyStructureData({ ...myStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
+                                                    {
+                                                      item.pair_data.map((item1, index1) => {
+                                                        return (
+                                                          <div className="pair-data">
+                                                            <div className='pair-data-title'>{item1.pair_name}</div>
+                                                            <div>
+                                                              <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled />
+                                                            </div>
+                                                            <div>
+                                                              <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled />
+                                                            </div>
+                                                          </div>
+                                                        );
+                                                      })
+                                                    }
+                                                  </div>
+                                                </div>
+                                              );
+                                            })
+                                          }
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  : <label className="text-center" style={{width: '100%'}}>STRUCTURE Has Been Not Assigned</label>
+                              }
+
                             </div>
                           </Paper>
                         </Grid>
                       </Grid>
-                    </TabPanel> */}
-                    <TabPanel value={value} index={9} dir={theme.direction}>
+                    </TabPanel>
+                    <TabPanel value={value} index={10} dir={theme.direction}>
                       <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
                           <Paper
@@ -8531,7 +8565,7 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </TabPanel>
-                    <TabPanel value={value} index={10} dir={theme.direction}>
+                    <TabPanel value={value} index={11} dir={theme.direction}>
                       <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
                           <Paper
@@ -8583,13 +8617,20 @@ const Profile = () => {
                                             <Button
                                               variant="contained"
                                               className="add_note"
-                                              onClick={(e) => getMyChildTrader(item.client_id)}>
+                                              onClick={(e) => {
+                                                myTraderData.user_name = item.name;
+                                                myTraderData.user_id = item.client_id;
+                                                setMyTraderData({...myTraderData});
+                                                getMyChildTrader(item.client_id)
+                                              }}>
                                               View
                                             </Button>
                                           </td>
                                         </tr>
                                       )
-                                    }) : ""
+                                    }) : <tr>
+                                          <td className="text-center" colSpan={10}>Recored not found</td>
+                                        </tr>
                                   }
                                 </tbody>
                                 <tfoot>

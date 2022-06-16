@@ -280,7 +280,7 @@ const BasicReport = () => {
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
                 <p className="main-heading">All In One Report</p>
-                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} salesAgent={setSalesAgent} />
+                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} salesAgent={setSalesAgent}/>
                 <br />
                 <Paper
                   elevation={2}

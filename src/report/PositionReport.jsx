@@ -235,8 +235,8 @@ const PositionReport = () => {
 
   const getMt5AccountList = async() => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    param.append('is_app', 1);
+    param.append('AADMIN_LOGIN_ID', 1);
     await axios.post(`${Url}/ajaxfiles/position_mt5_list.php`, param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -340,6 +340,7 @@ const PositionReport = () => {
                           <Select
                             input={<BootstrapInput />}
                             sx={{ width: "100%" }}
+                            value={param.mt5_acc_no}
                             onChange={(e) => {
                                 console.log(e.target.value);
                                 param.mt5_acc_no = e.target.value;

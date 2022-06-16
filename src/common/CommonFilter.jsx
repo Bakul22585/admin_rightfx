@@ -250,7 +250,8 @@ const CommonFilter = (prop) => {
                                             label="MT5 Account"
                                         /> */}
                     </div>
-                    <div className="filterBy">
+                    {
+                      (prop.isShowFilterBy) ? "" :<div className="filterBy">
                       <b class="mb-2 d-block">Filter By :</b>
                       <FormControl>
                         <Select
@@ -554,6 +555,8 @@ const CommonFilter = (prop) => {
                         ) : ""
                       }
                     </div>
+                    }
+                    
                   </div>
                 ) : (
                   ""

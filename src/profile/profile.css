@@ -623,3 +623,9 @@ text.highcharts-credits {
 .downline-table table tr td {
     padding: 10px 0;
 }
+.text-center {
+    text-align: center;
+}
+.bankDetailsTabSection.getMyStructure .partnership-section .master-structure-section {
+    width: 100%;
+}

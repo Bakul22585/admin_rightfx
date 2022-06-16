@@ -301,7 +301,7 @@ const Sidebar = (prop) => {
                         <NavLink to="/basic_report" onClick={CloseSidebar}>All In One Report</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/basic_ib_report" onClick={CloseSidebar}>All In One Ib Report</NavLink>
+                        <NavLink to="/basic_ib_report" onClick={CloseSidebar}>All In One IB Report</NavLink>
                       </li>
                       <li>
                         <NavLink to="/deposit_report" onClick={CloseSidebar}>Deposit</NavLink>

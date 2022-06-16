@@ -8,7 +8,7 @@ import CommonTable from '../common/CommonTable';
 import { ColorButton } from '../common/CustomElement';
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
 import { Box } from '@mui/system';
 import Dialog from '@mui/material/Dialog';
@@ -401,6 +401,15 @@ const ClientList = () => {
             grow: 1,
         },
         {
+            name: 'IB Name',
+            selector: row => {
+                return (row.sponsor_id != "0") ? <NavLink className='linkColor' title={row.sponsor_name} to={`/profile/${row.sponsor_id}`}>{row.sponsor_name}</NavLink>: ""
+            },
+            reorder: true,
+            wrap: true,
+            grow: 1,
+        },
+        {
             name: 'KYC',
             selector: row => {
                 return <div>
@@ -432,7 +441,21 @@ const ClientList = () => {
             },
             ignoreRowClick: true,
             allowOverflow: true
-        }
+        },
+        {
+            name: 'Is Pamm',
+            button: true,
+            cell: row => {
+                return <div className="button-1 button r">
+                <input type="checkbox" className="checkbox" />
+                <div className="knobs"></div>
+                <div className="layer"></div>
+              </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        },
+        
         /* {
             name: 'Action',
             button: true,
