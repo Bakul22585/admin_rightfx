@@ -283,6 +283,31 @@ const Sidebar = (prop) => {
                 </li> */}
                 <li>
                   <a
+                    className={`marketing ${open.marketing ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <span className="material-icons" style={style}>
+                    link
+                    </span>
+                    Marketing
+                    <span className="sidebar-icon-indicator">
+
+                      {open.marketing ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.marketing} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/link" onClick={CloseSidebar}>Link</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/target" onClick={CloseSidebar}>Target</NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
+                <li>
+                  <a
                     className={`trading ${open.trading ? "active" : ""}`}
                     onClick={handleClick}
                   >

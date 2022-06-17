@@ -5001,6 +5001,7 @@ const Profile = () => {
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
+            getUserDetails();
             toast.success(res.data.message);
             setOpen(false);
           }
@@ -5124,6 +5125,7 @@ const Profile = () => {
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
+            getUserDetails();
             toast.success(res.data.message);
             setOpen(false);
             getAccountList();
@@ -5178,6 +5180,7 @@ const Profile = () => {
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
+            getUserDetails();
             toast.success(res.data.message);
             setOpen(false);
           }
@@ -5329,6 +5332,7 @@ const Profile = () => {
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
+            getUserDetails();
             toast.success(res.data.message);
             setOpen(false);
           }
@@ -5996,6 +6000,7 @@ const Profile = () => {
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
+          getUserDetails();
           toast.success(res.data.message);
           setOpen(false);
         }

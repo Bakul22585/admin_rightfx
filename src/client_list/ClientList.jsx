@@ -234,22 +234,12 @@ const ClientList = () => {
             'value': false,
             'name': 'user_password'
         },
-        {
-            'label': 'KYC',
-            'value': false,
-            'name': 'kyc'
-        },
-        {
-            'label': 'DATE',
-            'value': false,
-            'name': 'user_added_datetime'
-        },
     ]);
     const [salesList, setSalesList] = useState([])
     const [param, setParam] = useState({
         filter: id
     });
-
+    toast.configure();
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -670,7 +660,7 @@ const ClientList = () => {
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Client List</p>
 
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} />
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} kycStatus={true}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>

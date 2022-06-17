@@ -267,6 +267,7 @@ const CommonFilter = (prop) => {
                             {prop.salesAgent ? <MenuItem value="Sales">Sales</MenuItem> : ""}
                             {prop.setcheckStatus ? <MenuItem value="Status">Status</MenuItem> : ""}
                             {prop.userlist ? <MenuItem value="Users">Users</MenuItem> : ""}
+                            {prop.kycStatus ? <MenuItem value="kycStatus">KYC Status</MenuItem> : ""}
                             {prop.ibList ? <MenuItem value="sponsor">Sponsor</MenuItem> : ""}
                             {prop.ibList ? <MenuItem value="admin">Admin</MenuItem> : ""}
                             {/* {
@@ -320,11 +321,11 @@ const CommonFilter = (prop) => {
                             sx={{ m: 1, width: 300 }}
                             className="multipleSelect"
                           >
-                            <InputLabel id="demo-multiple-chip-label">
+                            <InputLabel>
                               Select Sales
                             </InputLabel>
                             <Select
-                              labelId="demo-multiple-chip-label"
+                              labe
                               id="demo-multiple-chip"
 
                               value={personName}
@@ -346,11 +347,11 @@ const CommonFilter = (prop) => {
                             sx={{ m: 1, width: 300 }}
                             className="multipleSelect"
                           >
-                            <InputLabel id="demo-multiple-chip-label">
+                            <InputLabel>
                               Select Country
                             </InputLabel>
                             <Select
-                              labelId="demo-multiple-chip-label"
+                              labe
                               id="demo-multiple-chip"
                               multiple
                               value={personName}
@@ -414,11 +415,11 @@ const CommonFilter = (prop) => {
                               sx={{ m: 1, width: 300 }}
                               className="multipleSelect"
                             >
-                              <InputLabel id="demo-multiple-chip-label">
+                              <InputLabel>
                                 Select IB
                               </InputLabel>
                               <Select
-                                labelId="demo-multiple-chip-label"
+                                labe
                                 id="demo-multiple-chip"
                                 multiple
                                 value={personName}
@@ -459,11 +460,11 @@ const CommonFilter = (prop) => {
                               sx={{ m: 1, width: 300 }}
                               className="multipleSelect"
                             >
-                              <InputLabel id="demo-multiple-chip-label">
+                              <InputLabel>
                                 Select Source
                               </InputLabel>
                               <Select
-                                labelId="demo-multiple-chip-label"
+                                labe
                                 id="demo-multiple-chip"
                                 multiple
                                 value={sourceName}
@@ -506,7 +507,7 @@ const CommonFilter = (prop) => {
                               sx={{ m: 1, width: 300 }}
                               className="multipleSelect"
                             >
-                              <InputLabel id="demo-multiple-chip-label">
+                              <InputLabel>
                                 Status
                               </InputLabel>
                               <Select
@@ -534,7 +535,7 @@ const CommonFilter = (prop) => {
                               sx={{ m: 1, width: 300 }}
                               className="multipleSelect"
                             >
-                              <InputLabel id="demo-multiple-chip-label">
+                              <InputLabel>
                                 Users
                               </InputLabel>
                               <Select
@@ -568,7 +569,7 @@ const CommonFilter = (prop) => {
                               sx={{ m: 1, width: 300 }}
                               className="multipleSelect"
                             >
-                              <InputLabel id="demo-multiple-chip-label">
+                              <InputLabel>
                                 Admin Status
                               </InputLabel>
                               <Select
@@ -599,7 +600,7 @@ const CommonFilter = (prop) => {
                               sx={{ m: 1, width: 300 }}
                               className="multipleSelect"
                             >
-                              <InputLabel id="demo-multiple-chip-label">
+                              <InputLabel>
                                 Sponsor Status
                               </InputLabel>
                               <Select
@@ -609,6 +610,36 @@ const CommonFilter = (prop) => {
                                       ...prevalue,
                                       sponsor_status: e.target.value,
                                       admin_status: "",
+                                    };
+                                  })
+                                }}
+                                input={<BootstrapInput />}
+                                sx={{ width: "200px" }}
+                              >
+                                <MenuItem >Select Option</MenuItem>
+                                <MenuItem value="0">Pending</MenuItem>
+                                <MenuItem value="1">Completed</MenuItem>
+                                <MenuItem value="2">Rejected</MenuItem>
+                              </Select>
+                            </FormControl>
+
+                          ) : ""
+                        }
+                        {
+                          filterBy == "kycStatus" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
+                            >
+                              <InputLabel>
+                                KYC Status
+                              </InputLabel>
+                              <Select
+                                onChange={(e) => {
+                                  prop.setParam((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      user_kyc_status: e.target.value,
                                     };
                                   })
                                 }}

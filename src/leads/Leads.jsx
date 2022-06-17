@@ -1,5 +1,5 @@
 import './leads.css';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Theme, useTheme } from '@mui/material/styles';
 import { Autocomplete, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, Input, InputLabel, Menu, MenuItem, OutlinedInput, Paper, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -156,6 +156,7 @@ const Leads = () => {
 
   const { id } = useParams();
   const theme = useTheme();
+  const LeadRef = useRef();
   const [checkStatus, setcheckStatus] = useState("");
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -259,8 +260,8 @@ const Leads = () => {
 
   const getcontry = () => {
     const param = new FormData();
-    /* param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1); */
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.status == "error") {
         // toast.error(res.data.message);
@@ -272,8 +273,8 @@ const Leads = () => {
 
   const getListManagers = () => {
     const param = new FormData();
-    /* param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1); */
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('action', "list_managers");
 
     axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
@@ -422,8 +423,8 @@ const Leads = () => {
           isLoader: true,
         }
       })
-      /* param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1); */
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("cp_access", cpData.cp_access);
       param.append("leads_status", "1");
       param.append("inquiry_id", cpData.inquiry_id);
@@ -1336,8 +1337,8 @@ const Leads = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      /* param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1); */
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('customer_name', form.customer_name);
       param.append('customer_mobile', form.customer_mobile);
       param.append('customer_email', form.customer_email);
@@ -1475,8 +1476,8 @@ const Leads = () => {
   const approveInterestStatus = (e, data) => {
     console.log(e.target.value, data);
     const param = new FormData();
-    /* param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1); */
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "change_interest");
     param.append("inquiry_id", data.inquiry_id);
     param.append("interest", e.target.value);
@@ -1520,8 +1521,8 @@ const Leads = () => {
   const approvechangeAssign = (e, data) => {
     console.log(e.target.value, data);
     const param = new FormData();
-    /* param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1); */
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "change_assign_to");
     param.append("inquiry_id", data.inquiry_id);
     param.append("lead_assign_user_id", e.target.value);
@@ -1544,8 +1545,8 @@ const Leads = () => {
 
   const getIBCommissionGroup = async () => {
     const param = new FormData();
-    /* param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1); */
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_default_ib_groups");
     await axios
       .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
@@ -1617,8 +1618,8 @@ const Leads = () => {
     } else {
       newFollowupForm.isLoader = true;
       setNewFollowupForm({ ...newFollowupForm });
-      /* param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1); */
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('status_id', newFollowupForm.interest);
       param.append('lead_assign_user_id', newFollowupForm.lead_assign_user_id);
       param.append('remarks', newFollowupForm.remark);
@@ -1634,12 +1635,7 @@ const Leads = () => {
         if (res.data.status == 'error') {
           toast.error(res.data.message);
         } else {
-          setCpData((preValue) => {
-            return {
-              ...preValue,
-              refresh: !cpData.refresh
-            }
-          })
+          setRefresh(!refresh);
           toast.success(res.data.message);
           setNewFollowupForm({
             date: '',
@@ -1780,8 +1776,8 @@ const Leads = () => {
     } else if (status == 'rejected') {
       param.append('leads_status', 3);
     }
-    /* param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1); */
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     await axios.post(`${Url}/ajaxfiles/update_lead_status.php`, param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -1814,9 +1810,15 @@ const Leads = () => {
       }
       if (res.data.status == 'error') {
         toast.error(res.data.message);
+        LeadRef.current.value = "";
       } else {
         toast.success(res.data.message);
-        setRefresh(!refresh);
+        setCpData((preValue) => {
+          return {
+            ...preValue,
+            refresh: !cpData.refresh
+          }
+        })
       }
     });
   }
@@ -1839,7 +1841,7 @@ const Leads = () => {
                         <i className="material-icons">cloud_download</i>&nbsp;Export
                       </a>
                       <label htmlFor="contained-button-file" className='fileuploadButton'>
-                        <input accept=".csv" id="contained-button-file" type="file" onChange={(e) => {
+                        <input accept=".csv" id="contained-button-file" type="file" ref={LeadRef} onChange={(e) => {
                           doc.file = e.target.files[0];
                           setDoc({...doc});
                           confirmAlert({
@@ -1849,7 +1851,10 @@ const Leads = () => {
                                   <h1>Are you sure?</h1>
                                   <p>Do you want to import leads file?</p>
                                   <div className='confirmation-alert-action-button'>
-                                    <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                    <Button variant="contained" className='cancelButton' onClick={(e) => {
+                                      LeadRef.current.value = "";
+                                      onClose();
+                                    }}>No</Button>
                                     <Button variant="contained" className='btn-gradient btn-success'
                                       onClick={() => {
                                         handleAction();

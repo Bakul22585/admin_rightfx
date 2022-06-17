@@ -166,7 +166,7 @@ const WithdrawHistory = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword}/>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword} csv="datatable/withdraw_list_export.php"/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

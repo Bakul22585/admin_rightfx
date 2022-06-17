@@ -222,6 +222,7 @@ const BasicIbReport = () => {
                           param={param}
                           searchWord={searchKeyword}
                           setResData={setResData}
+                          csv="datatable/basic_ib_report_export.php"
                         />
                       </Grid>
                     </Grid>

@@ -93,6 +93,10 @@
 .tableSearchField {
     display: flex;
     justify-content: end;
+    align-items: center;
+}
+.tableSearchField.space-between {
+    justify-content: space-between;
 }
 .tableImg {
     width: 150px;

@@ -300,6 +300,7 @@ const BasicReport = () => {
                           searchWord={searchKeyword}
                           setResData={setResData}
                           salesAgent={salesAgent}
+                          csv="datatable/basic_reports_export.php"
                         />
                       </Grid>
                     </Grid>

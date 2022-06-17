@@ -177,7 +177,7 @@ const IBCommisions = () => {
         {
             'label': 'VOLUME',
             'value': false,
-            'name': 'trade_close_price'
+            'name': 'trade_volume'
         },
         {
             'label': 'IB COMISSION AMOUNT',
@@ -257,7 +257,7 @@ const IBCommisions = () => {
         },
         {
             name: 'VOLUME',
-            selector: row => { return <span title={row.trade_close_price}>{row.trade_close_price}</span> },
+            selector: row => { return <span title={row.trade_close_price}>{row.trade_volume}</span> },
             sortable: true,
             reorder: true,
             grow: 0.2,

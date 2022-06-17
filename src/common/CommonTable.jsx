@@ -6,6 +6,7 @@ import styled, { keyframes } from 'styled-components';
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Url } from '../global';
 
 const CssTextField = styled(TextField)({
 });
@@ -67,6 +68,7 @@ const CommonTable = (prop) => {
     const [clientSearch, setClientSearch] = useState('');
     const [openTableMenus, setOpenTableMenus] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState([]);
+    var [link, setLink] = React.useState("");
     const open = Boolean(anchorEl);
     const cancelTokenSource = axios.CancelToken.source();
     toast.configure();
@@ -201,7 +203,61 @@ const CommonTable = (prop) => {
 
     useEffect(() => {
         fetchClient(0);
-        console.log('useEffect', prop);
+        // console.log('useEffect', prop);
+        var Link = Url +'/' + prop.csv+`?sort=${clientDir}&column=${clientSort}`;
+        if (prop.param) {
+            for (const key in prop.param) {
+                Link += `&${key}=${prop.param[key]}`;
+            }
+        }
+        if (clientSearch.trim() != '') {
+            Link += `&search=${clientSearch.trim()}`;
+        }
+        if (prop.searchWord != "" && prop.searchWord != undefined) {
+            if (prop.search.filter((x) => x.value == true).length == 0) {
+                Link += `&search=${prop.searchWord}`;
+            } else {
+                var columns = prop.search.filter((x) => x.value == true).map((x) => {
+                    return x.name;
+                }).join(',');
+                Link += `&columns=${columns}`;
+                Link += `&columnSearch=${prop.searchWord}`;
+            }
+        }
+        if(prop.userId){
+            Link += `&user_id=${prop.userId}`;
+        }
+        if (prop.level) {
+            Link += `&level_id=${prop.level}`;
+        }
+        if(prop.checkStatus){
+            Link += `&status=${prop.checkStatus}`;
+        }
+        if(prop.salesAgent)
+        {
+            Link += `&manager_id=${prop.salesAgent}`;
+        }
+        if (prop.filter) {
+            if (prop.filter.deposit_from) {
+                Link += `&start_date=${prop.filter.deposit_from}`;
+            }
+            if (prop.filter.deposit_to) {
+                Link += `&end_date=${prop.filter.deposit_to}`;
+            }
+            if (prop.filter.deposit_status) {
+                Link += `&deposit_status=${prop.filter.deposit_status}`;
+            }
+            if (prop.filter.withdraw_from) {
+                Link += `&start_date=${prop.filter.withdraw_from}`;
+            }
+            if (prop.filter.withdraw_to) {
+                Link += `&end_date=${prop.filter.withdraw_to}`;
+            }
+            if (prop.filter.withdraw_status) {
+                Link += `&withdrawal_status=${prop.filter.withdraw_status}`;
+            }
+        }
+        setLink(Link);
     }, [clientPerPage,
         clientSort,
         clientDir,
@@ -218,7 +274,11 @@ const CommonTable = (prop) => {
     // console.log("common table",prop);
     return (
         <div>
-            <div className='tableSearchField'>
+            <div className={`tableSearchField ${(prop.csv) ? "space-between" : ""}`}>
+                {
+                    (prop.csv) ? <a href={link} className='btn-export-style' target="_blank">CSV</a> : ""
+                }
+                
                 <CssTextField
                     id="standard-search"
                     label="Search"

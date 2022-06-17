@@ -377,6 +377,7 @@ const PositionReport = () => {
                           setResData={setResData}
                           param={param}
                           searchWord={searchKeyword}
+                          csv="datatable/position_list_export.php"
                         />
                       </Grid>
                     </Grid>

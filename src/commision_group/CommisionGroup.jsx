@@ -848,7 +848,13 @@ const[mt5GroupName,setmt5GroupName]=useState([])
     axios
       .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
       .then((res) => {
-        setmt5GroupName(res.data.data)
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status != "error") {
+          setmt5GroupName(res.data.data)
+        }
       });
   
   }
