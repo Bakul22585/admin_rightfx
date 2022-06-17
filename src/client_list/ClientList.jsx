@@ -8,7 +8,7 @@ import CommonTable from '../common/CommonTable';
 import { ColorButton } from '../common/CustomElement';
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate, useParams } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
 import { Box } from '@mui/system';
 import Dialog from '@mui/material/Dialog';
@@ -179,6 +179,7 @@ const source = [
 
 const ClientList = () => {
 
+    const { id } = useParams();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
@@ -245,6 +246,9 @@ const ClientList = () => {
         },
     ]);
     const [salesList, setSalesList] = useState([])
+    const [param, setParam] = useState({
+        filter: id
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -442,20 +446,6 @@ const ClientList = () => {
             ignoreRowClick: true,
             allowOverflow: true
         },
-        {
-            name: 'Is Pamm',
-            button: true,
-            cell: row => {
-                return <div className="button-1 button r">
-                <input type="checkbox" className="checkbox" />
-                <div className="knobs"></div>
-                <div className="layer"></div>
-              </div>
-            },
-            ignoreRowClick: true,
-            allowOverflow: true
-        },
-        
         /* {
             name: 'Action',
             button: true,
@@ -689,7 +679,7 @@ const ClientList = () => {
                                         <Button variant="contained">All</Button>
                                     </div>
                                     <br /> */}
-                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} />
+                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={param}/>
                                 </Paper>
 
                                 <BootstrapDialog

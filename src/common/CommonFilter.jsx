@@ -251,141 +251,9 @@ const CommonFilter = (prop) => {
                                         /> */}
                     </div>
                     {
-                      (prop.isShowFilterBy) ? "" :<div className="filterBy">
-                      <b class="mb-2 d-block">Filter By :</b>
-                      <FormControl>
-                        <Select
-                          label="Category"
-                          value={filterBy}
-                          onChange={filterByChange}
-                          input={<BootstrapInput />}
-                          sx={{ width: "200px" }}
-                        >
-                          <MenuItem value="">None</MenuItem>
-                          
-                          {prop.date ? "" : <MenuItem value="Date">Date</MenuItem>}
-                          {prop.salesAgent ? <MenuItem value="Sales">Sales</MenuItem> : ""}
-                          {prop.setcheckStatus ? <MenuItem value="Status">Status</MenuItem> : ""}
-                          {prop.userlist ? <MenuItem value="Users">Users</MenuItem> : ""}
-
-                          {/* <MenuItem value="Account Type">Account Type</MenuItem> */}
-                          {/* <MenuItem value="IB">IB</MenuItem> */}
-                          {/*<MenuItem value="Source">Source</MenuItem>*/}
-                        </Select>
-                      </FormControl>
-                      {filterBy == "Date" ? (
-                        <>
-                          <FormControl>
-                            <label className="small font-weight-bold text-dark">
-                              From
-                            </label>
-                            <BootstrapInput
-                              type="date"
-                              onChange={(e) => {
-                                prop.setParam((prevalue) => {
-                                  return {
-                                    ...prevalue,
-                                    start_date: e.target.value,
-                                  };
-                                });
-                              }}
-                            ></BootstrapInput>
-                          </FormControl>
-                          <FormControl>
-                            <label className="small font-weight-bold text-dark">
-                              To
-                            </label>
-                            <BootstrapInput type="date"
-                              onChange={(e) => {
-                                prop.setParam((prevalue) => {
-                                  return {
-                                    ...prevalue,
-                                    end_date: e.target.value,
-                                  };
-                                });
-                              }}
-                            ></BootstrapInput>
-                          </FormControl>
-                        </>
-                      ) : filterBy == "Sales" ? (
-                        <FormControl
-                          sx={{ m: 1, width: 300 }}
-                          className="multipleSelect"
-                        >
-                          <InputLabel id="demo-multiple-chip-label">
-                            Select Sales
-                          </InputLabel>
-                          <Select
-                            labelId="demo-multiple-chip-label"
-                            id="demo-multiple-chip"
-
-                            value={personName}
-                            onChange={(e) => {
-                              prop.salesAgent(e.target.value)
-                              setPersonName(e.target.value)
-                              console.log("e.tarhet", e.target.value)
-                            }}
-                          >
-                            {
-                              listManagers.map((item) => {
-                                return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
-                              })
-                            }
-                          </Select>
-                        </FormControl>
-                      ) : filterBy == "Country" ? (
-                        <FormControl
-                          sx={{ m: 1, width: 300 }}
-                          className="multipleSelect"
-                        >
-                          <InputLabel id="demo-multiple-chip-label">
-                            Select Country
-                          </InputLabel>
-                          <Select
-                            labelId="demo-multiple-chip-label"
-                            id="demo-multiple-chip"
-                            multiple
-                            value={personName}
-                            input={
-                              <OutlinedInput
-                                id="select-multiple-chip"
-                                label="Select Country"
-                              />
-                            }
-                            renderValue={(selected) => (
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: 0.5,
-                                }}
-                              >
-                                {selected.map((value) => (
-                                  <Chip key={value} label={value} />
-                                ))}
-                              </Box>
-                            )}
-                            MenuProps={MenuProps}
-                          >
-                            {names.map((name) => (
-                              <MenuItem
-                                key={name}
-                                value={name}
-                              // style={getStyles(name, personName, theme)}
-                              >
-                                {name}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      ) : filterBy == "Account Type" ? (
-                        <FormControl
-                          sx={{ m: 1, width: 300 }}
-                          className="multipleSelect"
-                        >
-                          <label className="small font-weight-bold text-dark">
-                            Account Type
-                          </label>
+                      (prop.isShowFilterBy) ? "" : <div className="filterBy">
+                        <b class="mb-2 d-block">Filter By :</b>
+                        <FormControl>
                           <Select
                             label="Category"
                             value={filterBy}
@@ -393,21 +261,93 @@ const CommonFilter = (prop) => {
                             input={<BootstrapInput />}
                             sx={{ width: "200px" }}
                           >
-                            <MenuItem value="Individual">Individual</MenuItem>
-                            <MenuItem value="Individual-IB">
-                              Individual-IB
-                            </MenuItem>
-                            <MenuItem value="Corporate">Corporate</MenuItem>
+                            <MenuItem value="">None</MenuItem>
+
+                            {prop.date ? "" : <MenuItem value="Date">Date</MenuItem>}
+                            {prop.salesAgent ? <MenuItem value="Sales">Sales</MenuItem> : ""}
+                            {prop.setcheckStatus ? <MenuItem value="Status">Status</MenuItem> : ""}
+                            {prop.userlist ? <MenuItem value="Users">Users</MenuItem> : ""}
+                            {prop.ibList ? <MenuItem value="sponsor">Sponsor</MenuItem> : ""}
+                            {prop.ibList ? <MenuItem value="admin">Admin</MenuItem> : ""}
+                            {/* {
+                              prop.ibList ? <>
+                                <MenuItem value="sponsor">Sponsor</MenuItem>
+                                <MenuItem value="admin">Admin</MenuItem>
+                              </> : ""
+                            } */}
+
+                            {/* <MenuItem value="Account Type">Account Type</MenuItem> */}
+                            {/* <MenuItem value="IB">IB</MenuItem> */}
+                            {/*<MenuItem value="Source">Source</MenuItem>*/}
                           </Select>
                         </FormControl>
-                      )
-                        : filterBy == "IB" ? (
+                        {filterBy == "Date" ? (
+                          <>
+                            <FormControl>
+                              <label className="small font-weight-bold text-dark">
+                                From
+                              </label>
+                              <BootstrapInput
+                                type="date"
+                                onChange={(e) => {
+                                  prop.setParam((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      start_date: e.target.value,
+                                    };
+                                  });
+                                }}
+                              ></BootstrapInput>
+                            </FormControl>
+                            <FormControl>
+                              <label className="small font-weight-bold text-dark">
+                                To
+                              </label>
+                              <BootstrapInput type="date"
+                                onChange={(e) => {
+                                  prop.setParam((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      end_date: e.target.value,
+                                    };
+                                  });
+                                }}
+                              ></BootstrapInput>
+                            </FormControl>
+                          </>
+                        ) : filterBy == "Sales" ? (
                           <FormControl
                             sx={{ m: 1, width: 300 }}
                             className="multipleSelect"
                           >
                             <InputLabel id="demo-multiple-chip-label">
-                              Select IB
+                              Select Sales
+                            </InputLabel>
+                            <Select
+                              labelId="demo-multiple-chip-label"
+                              id="demo-multiple-chip"
+
+                              value={personName}
+                              onChange={(e) => {
+                                prop.salesAgent(e.target.value)
+                                setPersonName(e.target.value)
+                                console.log("e.tarhet", e.target.value)
+                              }}
+                            >
+                              {
+                                listManagers.map((item) => {
+                                  return <MenuItem value={item.lead_assign_user_id}>{item.manager_name}</MenuItem>
+                                })
+                              }
+                            </Select>
+                          </FormControl>
+                        ) : filterBy == "Country" ? (
+                          <FormControl
+                            sx={{ m: 1, width: 300 }}
+                            className="multipleSelect"
+                          >
+                            <InputLabel id="demo-multiple-chip-label">
+                              Select Country
                             </InputLabel>
                             <Select
                               labelId="demo-multiple-chip-label"
@@ -417,7 +357,7 @@ const CommonFilter = (prop) => {
                               input={
                                 <OutlinedInput
                                   id="select-multiple-chip"
-                                  label="Select IB"
+                                  label="Select Country"
                                 />
                               }
                               renderValue={(selected) => (
@@ -446,117 +386,247 @@ const CommonFilter = (prop) => {
                               ))}
                             </Select>
                           </FormControl>
-                        ) : filterBy == "Source" ? (
+                        ) : filterBy == "Account Type" ? (
                           <FormControl
                             sx={{ m: 1, width: 300 }}
                             className="multipleSelect"
                           >
-                            <InputLabel id="demo-multiple-chip-label">
-                              Select Source
-                            </InputLabel>
+                            <label className="small font-weight-bold text-dark">
+                              Account Type
+                            </label>
                             <Select
-                              labelId="demo-multiple-chip-label"
-                              id="demo-multiple-chip"
-                              multiple
-                              value={sourceName}
-                              input={
-                                <OutlinedInput
-                                  id="select-multiple-chip"
-                                  label="Select Source"
-                                />
-                              }
-                              renderValue={(selected) => (
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    gap: 0.5,
-                                  }}
-                                >
-                                  {selected.map((value) => (
-                                    <Chip key={value} label={value} />
-                                  ))}
-                                </Box>
-                              )}
-                              MenuProps={MenuProps}
-                            >
-                              {source.map((name) => (
-                                <MenuItem
-                                  key={name}
-                                  value={name}
-                                // style={getStyles(name, personName, theme)}
-                                >
-                                  {name}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        ) : ""}
-                      {
-                        filterBy == "Status" ? (
-                          <FormControl
-                            sx={{ m: 1, width: 300 }}
-                            className="multipleSelect"
-                          >
-                            <InputLabel id="demo-multiple-chip-label">
-                              Status
-                            </InputLabel>
-                            <Select
-                              value={checkStatus}
-                              onChange={(e) => {
-                                console.log("e.target.value", e.target.value)
-                                setcheckStatus(e.target.value)
-                                prop.setcheckStatus(e.target.value)
-                              }}
+                              label="Category"
+                              value={filterBy}
+                              onChange={filterByChange}
                               input={<BootstrapInput />}
                               sx={{ width: "200px" }}
                             >
-                              <MenuItem >Select Option</MenuItem>
-                              <MenuItem value="0">Pending</MenuItem>
-                              <MenuItem value="1">Completed</MenuItem>
-                              <MenuItem value="2">Rejected</MenuItem>
+                              <MenuItem value="Individual">Individual</MenuItem>
+                              <MenuItem value="Individual-IB">
+                                Individual-IB
+                              </MenuItem>
+                              <MenuItem value="Corporate">Corporate</MenuItem>
                             </Select>
                           </FormControl>
-
-                        ) : ""
-                      }
-                      {
-                        filterBy == "Users" ? (
-                          <FormControl
-                            sx={{ m: 1, width: 300 }}
-                            className="multipleSelect"
-                          >
-                            <InputLabel id="demo-multiple-chip-label">
-                              Users
-                            </InputLabel>
-                            <Select
-                              onChange={(e) => {
-                                prop.setParam((prevalue) => {
-                                  return {
-                                    ...prevalue,
-                                    user_id: e.target.value,
-                                  };
-                                })
-                              }}
-                              input={<BootstrapInput />}
-                              sx={{ width: "200px" }}
+                        )
+                          : filterBy == "IB" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
                             >
-                              {
-                                prop.userlist.map((item) => {
-                                  return (
-                                    <MenuItem value={item.user_id}>{item.name}</MenuItem>
-                                  );
-                                })
-                              }
+                              <InputLabel id="demo-multiple-chip-label">
+                                Select IB
+                              </InputLabel>
+                              <Select
+                                labelId="demo-multiple-chip-label"
+                                id="demo-multiple-chip"
+                                multiple
+                                value={personName}
+                                input={
+                                  <OutlinedInput
+                                    id="select-multiple-chip"
+                                    label="Select IB"
+                                  />
+                                }
+                                renderValue={(selected) => (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexWrap: "wrap",
+                                      gap: 0.5,
+                                    }}
+                                  >
+                                    {selected.map((value) => (
+                                      <Chip key={value} label={value} />
+                                    ))}
+                                  </Box>
+                                )}
+                                MenuProps={MenuProps}
+                              >
+                                {names.map((name) => (
+                                  <MenuItem
+                                    key={name}
+                                    value={name}
+                                  // style={getStyles(name, personName, theme)}
+                                  >
+                                    {name}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          ) : filterBy == "Source" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
+                            >
+                              <InputLabel id="demo-multiple-chip-label">
+                                Select Source
+                              </InputLabel>
+                              <Select
+                                labelId="demo-multiple-chip-label"
+                                id="demo-multiple-chip"
+                                multiple
+                                value={sourceName}
+                                input={
+                                  <OutlinedInput
+                                    id="select-multiple-chip"
+                                    label="Select Source"
+                                  />
+                                }
+                                renderValue={(selected) => (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexWrap: "wrap",
+                                      gap: 0.5,
+                                    }}
+                                  >
+                                    {selected.map((value) => (
+                                      <Chip key={value} label={value} />
+                                    ))}
+                                  </Box>
+                                )}
+                                MenuProps={MenuProps}
+                              >
+                                {source.map((name) => (
+                                  <MenuItem
+                                    key={name}
+                                    value={name}
+                                  // style={getStyles(name, personName, theme)}
+                                  >
+                                    {name}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          ) : ""}
+                        {
+                          filterBy == "Status" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
+                            >
+                              <InputLabel id="demo-multiple-chip-label">
+                                Status
+                              </InputLabel>
+                              <Select
+                                value={checkStatus}
+                                onChange={(e) => {
+                                  console.log("e.target.value", e.target.value)
+                                  setcheckStatus(e.target.value)
+                                  prop.setcheckStatus(e.target.value)
+                                }}
+                                input={<BootstrapInput />}
+                                sx={{ width: "200px" }}
+                              >
+                                <MenuItem >Select Option</MenuItem>
+                                <MenuItem value="0">Pending</MenuItem>
+                                <MenuItem value="1">Completed</MenuItem>
+                                <MenuItem value="2">Rejected</MenuItem>
+                              </Select>
+                            </FormControl>
 
-                            </Select>
-                          </FormControl>
+                          ) : ""
+                        }
+                        {
+                          filterBy == "Users" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
+                            >
+                              <InputLabel id="demo-multiple-chip-label">
+                                Users
+                              </InputLabel>
+                              <Select
+                                onChange={(e) => {
+                                  prop.setParam((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      user_id: e.target.value,
+                                    };
+                                  })
+                                }}
+                                input={<BootstrapInput />}
+                                sx={{ width: "200px" }}
+                              >
+                                {
+                                  prop.userlist.map((item) => {
+                                    return (
+                                      <MenuItem value={item.user_id}>{item.name}</MenuItem>
+                                    );
+                                  })
+                                }
 
-                        ) : ""
-                      }
-                    </div>
+                              </Select>
+                            </FormControl>
+
+                          ) : ""
+                        }
+                        {
+                          filterBy == "admin" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
+                            >
+                              <InputLabel id="demo-multiple-chip-label">
+                                Admin Status
+                              </InputLabel>
+                              <Select
+                                onChange={(e) => {
+                                  prop.setParam((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      admin_status: e.target.value,
+                                      sponsor_status: "",
+                                    };
+                                  })
+                                }}
+                                input={<BootstrapInput />}
+                                sx={{ width: "200px" }}
+                              >
+                                <MenuItem >Select Option</MenuItem>
+                                <MenuItem value="0">Pending</MenuItem>
+                                <MenuItem value="1">Completed</MenuItem>
+                                <MenuItem value="2">Rejected</MenuItem>
+                              </Select>
+                            </FormControl>
+
+                          ) : ""
+                        }
+                        {
+                          filterBy == "sponsor" ? (
+                            <FormControl
+                              sx={{ m: 1, width: 300 }}
+                              className="multipleSelect"
+                            >
+                              <InputLabel id="demo-multiple-chip-label">
+                                Sponsor Status
+                              </InputLabel>
+                              <Select
+                                onChange={(e) => {
+                                  prop.setParam((prevalue) => {
+                                    return {
+                                      ...prevalue,
+                                      sponsor_status: e.target.value,
+                                      admin_status: "",
+                                    };
+                                  })
+                                }}
+                                input={<BootstrapInput />}
+                                sx={{ width: "200px" }}
+                              >
+                                <MenuItem >Select Option</MenuItem>
+                                <MenuItem value="0">Pending</MenuItem>
+                                <MenuItem value="1">Completed</MenuItem>
+                                <MenuItem value="2">Rejected</MenuItem>
+                              </Select>
+                            </FormControl>
+
+                          ) : ""
+                        }
+                      </div>
                     }
-                    
+
                   </div>
                 ) : (
                   ""

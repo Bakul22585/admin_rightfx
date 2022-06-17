@@ -414,8 +414,8 @@ const Dashboard = (prop) => {
       prop.setLogin("true");
     }
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/ajaxfiles/dashboard.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -838,7 +838,7 @@ const Dashboard = (prop) => {
                                     </div>
                                     <div className="leadRightContentSection">
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/leads_list">
+                                        <NavLink to="/leads_list/new">
                                           <span>
                                             {
                                               fullData.lead_count_request
@@ -849,7 +849,7 @@ const Dashboard = (prop) => {
                                         </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/leads_list">
+                                        <NavLink to="/leads_list/unassigned">
                                           <span>
                                             {
                                               fullData.lead_count_request
@@ -888,7 +888,7 @@ const Dashboard = (prop) => {
                                     </div>
                                     <div className="leadRightContentSection">
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/client_list">
+                                        <NavLink to="/client_list/new">
                                           <span>
                                             {
                                               fullData.manager_assign
@@ -899,7 +899,7 @@ const Dashboard = (prop) => {
                                         </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/client_list">
+                                        <NavLink to="/client_list/unassigned">
                                           <span>
                                             {
                                               fullData.manager_assign
@@ -927,7 +927,7 @@ const Dashboard = (prop) => {
                                   <div className="leadsContentSection kyc-document">
                                     <div className="leadRightContentSection">
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/pending_kyc">
+                                        <NavLink to="/pending_kyc/pending">
                                           <span>
                                             {
                                               fullData.requests.kyc_request
@@ -938,18 +938,18 @@ const Dashboard = (prop) => {
                                         </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/history_kyc">
+                                        <NavLink to="/history_kyc/approved">
                                           <span>
                                             {
                                               fullData.requests.kyc_request
                                                 .kyc_appoved_request
                                             }
                                           </span>
-                                          <p>Approval (Unfunded)</p>
+                                          <p>Approval KYC</p>
                                         </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/pending_kyc">
+                                        <NavLink to="/history_kyc/rejected">
                                           <span>
                                             {
                                               fullData.requests.kyc_request
@@ -960,7 +960,7 @@ const Dashboard = (prop) => {
                                         </NavLink>
                                       </div>
                                       <div className="roundedShapeContent">
-                                        <NavLink to="/pending_kyc">
+                                        <NavLink to="/client_list/missing">
                                           <span>
                                             {
                                               fullData.requests.kyc_request

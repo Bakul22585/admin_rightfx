@@ -613,6 +613,7 @@ text.highcharts-credits {
 }
 .downline-table {
     padding: 10px 20px;
+    overflow-x: auto;
 }
 .downline-table table {
     width: 100%;

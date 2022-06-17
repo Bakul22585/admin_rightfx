@@ -7,7 +7,7 @@ import InputBase from "@mui/material/InputBase";
 import CommonTable from '../common/CommonTable';
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -153,17 +153,18 @@ const nbaTeams = [
 ];
 
 const Leads = () => {
+
+  const { id } = useParams();
   const theme = useTheme();
   const [checkStatus, setcheckStatus] = useState("");
-
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('md');
   const navigate = useNavigate();
   const [openTableMenus, setOpenTableMenus] = useState([]);
-
-  const [filterDate, setFilterDate] = useState("");
-
+  const [filterDate, setFilterDate] = useState({
+    filter: id
+  });
   const [filterData, setFilterData] = useState({});
   const [dialogTitle, setDialogTitle] = useState('');
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -223,7 +224,6 @@ const Leads = () => {
   const [doc, setDoc] = useState({
     file: "",
   });
-
   const [searchBy, setSearchBy] = useState([
     {
       'label': 'CUSTOMER',
@@ -269,6 +269,7 @@ const Leads = () => {
       }
     });
   }
+
   const getListManagers = () => {
     const param = new FormData();
     /* param.append('is_app', 1);
@@ -284,6 +285,7 @@ const Leads = () => {
       }
     });
   }
+
   useEffect(() => {
     getcontry()
     getListManagers()
@@ -315,10 +317,10 @@ const Leads = () => {
     setMaxWidth('md');
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
-
 
   const handleContextClick = (event, index) => {
     console.log(event.currentTarget.getAttribute('id'), index);
@@ -1217,7 +1219,7 @@ const Leads = () => {
       ]
     }
   ];
-  console.log("listManagers", listManagers)
+  
   const column = [
     {
       name: 'SR NO',
@@ -1412,6 +1414,7 @@ const Leads = () => {
       };
     });
   };
+
   const input3 = (event) => {
     const { name, value } = event.target;
     console.log("text ", name, value)
@@ -1489,6 +1492,7 @@ const Leads = () => {
         })
       });
   }
+
   const changeAssign = (e, data) => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -1816,6 +1820,7 @@ const Leads = () => {
       }
     });
   }
+
   return (
     <div>
       <div className="app-content--inner">

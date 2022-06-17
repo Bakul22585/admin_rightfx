@@ -81,9 +81,12 @@ const App = () => {
                 <Route exact path="/employees" element={<Employees />} />
                 <Route exact path="/role_management" element={<RoleManagement />} />
                 <Route exact path="/client_list" element={<ClientList />} />
+                <Route exact path="/client_list/:id" element={<ClientList />} />
                 <Route exact path="/list_request" element={<ListRequest />} />
                 <Route exact path="/pending_kyc" element={<PendingKYC />} />
+                <Route exact path="/pending_kyc/:id" element={<PendingKYC />} />
                 <Route exact path="/history_kyc" element={<HistoryKYC />} />
+                <Route exact path="/history_kyc/:id" element={<HistoryKYC />} />
                 <Route exact path="/commision_group" element={<CommisionGroup />} />
                 {/* <Route exact path="/generate_income" element={<GenerateIncome />} /> */}
                 <Route exact path="/mt5_group" element={<Mt5Group />} />
@@ -106,6 +109,7 @@ const App = () => {
                 <Route exact path="/createRole/:id" element={<CreateRole />} />
                 <Route exact path="/createRole" element={<CreateRole />} />
                 <Route exact path="/leads_list" element={<Leads />} />
+                <Route exact path="/leads_list/:id" element={<Leads />} />
                 <Route exact path="/reminder" element={<Remainder />} />
                 <Route exact path="/ib_commisions" element={<IBCommisions />} />
                 <Route exact path="/copy_trading" element={<CopyTrading />} />

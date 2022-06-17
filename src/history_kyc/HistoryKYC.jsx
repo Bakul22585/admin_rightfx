@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Url } from '../global';
 import CustomImageModal from '../common/CustomImageModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -61,6 +61,7 @@ const ITEM_PADDING_TOP = 8;
 
 const HistoryKYC = () => {
 
+    const {id} = useParams();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
@@ -79,7 +80,8 @@ const HistoryKYC = () => {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [checkStatus, setcheckStatus] = useState("");
     const [param, setParam] = useState({
-        'kyc_status': '1'
+        'kyc_status': (id == "" )?'1' : '',
+        'filter': id
     });
     const [form, setForm] = useState({
         name: '',

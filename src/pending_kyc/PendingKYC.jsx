@@ -16,7 +16,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -61,6 +61,7 @@ const ITEM_PADDING_TOP = 8;
 
 const PendingKYC = () => {
 
+    const {id} = useParams();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
@@ -79,7 +80,8 @@ const PendingKYC = () => {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [checkStatus, setcheckStatus] = useState("");
     const [param, setParam] = useState({
-        'kyc_status': ''
+        'kyc_status': '',
+        'filter': id
     });
     const [searchBy, setSearchBy] = useState([
         {

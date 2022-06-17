@@ -693,6 +693,7 @@ const Profile = () => {
     data: {},
     user_name: "",
     user_id: "",
+    main_user_name: "",
   });
   const [myChildTraderData, setMyChildTraderData] = useState({
     data: {},
@@ -1345,6 +1346,10 @@ const Profile = () => {
     'new_password': '',
     isLoader: false
   });
+  const [pammAccess, setPammAccess] = useState({
+    status: '',
+    isLoader: false
+  });
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
     sponsor_approve: "",
@@ -1370,8 +1375,8 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1418,8 +1423,8 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_my_structure");
     axios
@@ -1534,8 +1539,8 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "get_mt5_account_list");
 
     axios
@@ -1552,8 +1557,8 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("action", "list_my_structures");
 
     axios
@@ -1574,8 +1579,8 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
-    param1.append("is_app", 1);
-    param1.append("AADMIN_LOGIN_ID", 1);
+    // param1.append("is_app", 1);
+    // param1.append("AADMIN_LOGIN_ID", 1);
     param1.append("user_id", id);
 
     if (res !== null) {
@@ -1665,8 +1670,8 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     if (res) {
       param.append("structure_id", res);
@@ -1696,8 +1701,8 @@ const Profile = () => {
 
   const getPartnershipMasterStructure = (res) => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     if (res) {
       param.append("structure_id", res);
@@ -1725,8 +1730,8 @@ const Profile = () => {
 
   const getBankList = () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "view_bank_details");
     axios
@@ -1743,8 +1748,8 @@ const Profile = () => {
   const getwalletBalance = () => {
     if (transactionForm.account == "Wallet") {
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "view_balance");
       axios
@@ -1761,8 +1766,8 @@ const Profile = () => {
 
   const getMtBalance = () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("from_mt5_account_id", transactionForm.from_mt5_account_id);
     param.append("action", "view_mt5_balance");
@@ -1777,8 +1782,8 @@ const Profile = () => {
 
   const getMt5LivePackages = () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     axios
       .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
@@ -2073,6 +2078,12 @@ const Profile = () => {
       setChangePassword({
         'password': '',
         'new_password': '',
+        isLoader: false
+      });
+    } else if (e.target.classList.contains("pamm_access")) {
+      setDialogTitle("Pamm Access");
+      setPammAccess({
+        status: userData.data['is_pamm'],
         isLoader: false
       });
     }
@@ -4124,14 +4135,14 @@ const Profile = () => {
           </div>
         </div>
       );
-    } else if (dialogTitle == myTraderData.user_name) {
+    } else if (dialogTitle == myTraderData.user_name || dialogTitle == myTraderData.main_user_name) {
       return (
         <div className="bankDetailsTabSection downline-table">
           {
             (myChildTraderData.parent_id != "") ? <div>
-            <Button variant="contained" className="add_note" onClick={(e) => {
+            <Button onClick={(e) => {
               getMyChildTrader(myChildTraderData.parent_id)
-            }}><i className="material-icons">arrow_back_ios</i></Button>
+            }}><i className="material-icons">arrow_back_ios</i>Back</Button>
           </div> : ""
           }
           
@@ -4141,6 +4152,7 @@ const Profile = () => {
                 <th>SR.NO</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>IB Account</th>
                 <th>MT Code</th>
                 <th>Deposit</th>
                 <th>Withdraw</th>
@@ -4158,6 +4170,7 @@ const Profile = () => {
                       <td>{item.sr_no}</td>
                       <td>{item.name}</td>
                       <td>{item.user_email}</td>
+                      <td>{(item.is_ib_account == "1") ? "Yes" : "No"}</td>
                       <td>{item.mt5_acc_ids}</td>
                       <td>{item.deposit_amount}</td>
                       <td>{item.withdrawal_amount}</td>
@@ -4165,7 +4178,8 @@ const Profile = () => {
                       <td>{item.total_withdraw}</td>
                       <td>{item.wallet_balance}</td>
                       <td>
-                        <Button
+                        {
+                          (item.is_ib_account == "1" && item.has_downline == true) ? <Button
                           variant="contained"
                           className="add_note"
                           onClick={(e) => {
@@ -4175,7 +4189,9 @@ const Profile = () => {
                             getMyChildTrader(item.client_id)
                           }}>
                           View
-                        </Button>
+                        </Button> : ""
+                        }
+                        
                       </td>
                     </tr>
                   )
@@ -4195,6 +4211,26 @@ const Profile = () => {
               </tr>
             </tfoot>
           </table>
+        </div>
+      );
+    } else if (dialogTitle == "Pamm Access") {
+      return (
+        <div>
+          <div>
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                label
+                className="select-font-small"
+                name="status"
+                value={pammAccess.status}
+                onChange={pammAccessInput}
+              >
+                <MenuItem value="0">Disable</MenuItem>
+                <MenuItem value="1">Enable</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </div>
       );
     }
@@ -4758,7 +4794,7 @@ const Profile = () => {
           )}
         </div>
       );
-    } else if (dialogTitle == myTraderData.user_name) {
+    } else if (dialogTitle == myTraderData.user_name || dialogTitle == myTraderData.main_user_name) {
       return (
         <div className="dialogMultipleActionButton">
           <Button
@@ -4770,6 +4806,46 @@ const Profile = () => {
           </Button>
         </div>
       )
+    } else if (dialogTitle == "Pamm Access") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {pammAccess.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={pammAccessSubmit}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
+      );
     }
   };
 
@@ -4795,8 +4871,8 @@ const Profile = () => {
 
   const createMt5AccountSubmit = () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
 
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
@@ -4865,8 +4941,8 @@ const Profile = () => {
 
   const getMt5AccountStatus = (mt5ID) => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("mt5_id", mt5ID);
     param.append("action", "check_mt5_status");
@@ -4903,8 +4979,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -4963,8 +5039,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -5005,6 +5081,16 @@ const Profile = () => {
     });
   };
 
+  const pammAccessInput = (event) => {
+    const { name, value } = event.target;
+    setPammAccess((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
   const resetAccountPasswordSubmit = () => {
     if (resetMt5PasswordForm.mt5_id == "") {
       toast.error("Please select account");
@@ -5016,8 +5102,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -5069,8 +5155,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -5141,8 +5227,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -5190,8 +5276,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("password", changePassword.password);
       param.append("confirm_password", changePassword.new_password);
@@ -5209,6 +5295,37 @@ const Profile = () => {
               isLoader: false,
             };
           });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
+    }
+  };
+
+  const pammAccessSubmit = () => {
+    if (pammAccess.status == "") {
+      toast.error("Please select status");
+    } else {
+      pammAccess.isLoader = true;
+      setPammAccess({...pammAccess});
+      const param = new FormData();
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
+      param.append("user_id", id);
+      param.append("is_pamm", pammAccess.status);
+      param.append("action", "update_is_pamm");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          pammAccess.isLoader = false;
+          setPammAccess({...pammAccess});
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
@@ -5283,8 +5400,8 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
     param.append("structure_name", newMasterStructureData.structure_name);
@@ -5360,8 +5477,8 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(partnershipMasterStructureData.structure_data));
     param.append("structure_name", partnershipMasterStructureData.structure_name);
@@ -5438,8 +5555,8 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
     param.append("structure_name", newMasterStructureData.structure_name);
@@ -5473,8 +5590,8 @@ const Profile = () => {
 
   useEffect(() => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -5532,8 +5649,8 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -5591,8 +5708,8 @@ const Profile = () => {
       toast.error("Please select employment industry");
     } else {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('employment_status', employmentDetailsForm.status);
       param.append('inudstry', employmentDetailsForm.industry);
@@ -5723,8 +5840,8 @@ const Profile = () => {
       toast.error("Please select client");
     } else {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('client_id', linkClientForm.client);
       param.append('action', 'link_client');
@@ -5759,8 +5876,8 @@ const Profile = () => {
       toast.error("Please enter master account id");
     } else {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('sponsor_id', linkIBForm.customer_name);
       param.append('action', 'link_ib');
@@ -5812,8 +5929,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       // param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -5865,8 +5982,8 @@ const Profile = () => {
       toast.error("Please select control panel access");
     } else {
       const param = new FormData();
-      param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1);
+      // param.append('is_app', 1);
+      // param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
       param.append('action', "update_cp_access");
       param.append('user_status', cpAccessForm.status);
@@ -5916,8 +6033,8 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1);
+      // param.append("is_app", 1);
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -5969,8 +6086,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
@@ -6028,8 +6145,8 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("action", "add_user_bank");
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
@@ -6127,8 +6244,8 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         param.append("action", "add_deposit");
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
         param.append("payment_method", transactionForm.payment);
@@ -6189,8 +6306,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_withdraw");
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
         if (transactionForm.crypto_name) {
@@ -6255,8 +6372,8 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_transfer");
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", userData.data["user_id"]);
         param.append("from_transfer", transactionForm.account);
         param.append("to_transfer", transactionForm.account_to);
@@ -6307,8 +6424,8 @@ const Profile = () => {
         toast.error("Please enter note");
       } else {
         const param = new FormData();
-        param.append("is_app", 1);
-        param.append("AADMIN_LOGIN_ID", 1);
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
         param.append("user_id", id);
         param.append("action", "add_mt5_bonus");
         param.append("credit_type", transactionForm.credit_type);
@@ -6381,8 +6498,8 @@ const Profile = () => {
                   onClick={async () => {
                     onClose();
                     const param = new FormData();
-                    param.append("is_app", 1);
-                    param.append("AADMIN_LOGIN_ID", 1);
+                    // param.append("is_app", 1);
+                    // param.append("AADMIN_LOGIN_ID", 1);
                     param.append("user_id", id);
                     param.append("action", 'delete_master_structure');
                     param.append("structure_id", partnershipMasterStructureData.structure_id);
@@ -6424,8 +6541,8 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     userData.isLoader = true;
     setuserData({ ...userData });
@@ -6453,8 +6570,8 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_general_information");
     await axios
@@ -6500,8 +6617,8 @@ const Profile = () => {
 
   const getReferralData = async (structure_id) => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("structure_id", structure_id);
     param.append("action", "my_referrals");
@@ -6525,8 +6642,8 @@ const Profile = () => {
 
   const getSalesList = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('action', "list_salesman");
 
     axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
@@ -6544,8 +6661,8 @@ const Profile = () => {
 
   const getLinkClientList = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
       param.append('user_id', id);
 
     param.append('action', "list_clients");
@@ -6566,8 +6683,8 @@ const Profile = () => {
 
   const getIBUserList = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('action', "list_ib_users");
 
     axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
@@ -6586,8 +6703,8 @@ const Profile = () => {
 
   const unlinkIB = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('action', "unlink_ib");
 
@@ -6606,8 +6723,8 @@ const Profile = () => {
 
   const viewCPPassword = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('action', "view_cp_password");
 
@@ -6627,8 +6744,8 @@ const Profile = () => {
 
   const getCpAccessSetting = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('action', "view_cp_access");
 
@@ -6648,8 +6765,8 @@ const Profile = () => {
 
   const getMyTraders = () => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
 
     axios.post(Url + "/ajaxfiles/my_traders.php", param).then((res) => {
@@ -6668,8 +6785,8 @@ const Profile = () => {
 
   const getMyChildTrader = (childId) => {
     const param = new FormData();
-    param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1);
+    // param.append('is_app', 1);
+    // param.append('AADMIN_LOGIN_ID', 1);
     param.append('user_id', id);
     param.append('client_id', childId);
 
@@ -6684,7 +6801,11 @@ const Profile = () => {
         myChildTraderData.data = res.data;
         myChildTraderData.parent_id = res.data.back_links;
         setMyChildTraderData({ ...myChildTraderData });
-        setDialogTitle(myTraderData.user_name);
+        if (res.data.back_links == "") {
+          setDialogTitle(myTraderData.main_user_name);
+        } else {
+          setDialogTitle(myTraderData.user_name);
+        }
         setMaxWidth('lg');
         setOpen(true);
       }
@@ -6693,8 +6814,8 @@ const Profile = () => {
 
   const getMyAssignedStructure = () => {
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_my_assigned_structure");
     axios
@@ -6722,8 +6843,8 @@ const Profile = () => {
     getSalesList()
 
     const param = new FormData();
-    param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1);
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
     param.append("user_id", id);
     param.append("action", "get_leverages");
     axios
@@ -8575,13 +8696,6 @@ const Profile = () => {
                           >
                             <div className="headerSection header-title">
                               <p className="margin-0">Downline</p>
-                              {/* <Button
-                                variant="contained"
-                                className="add_note"
-                                onClick={openDialogbox}
-                              >
-                                Add Note
-                              </Button> */}
                             </div>
                             <div className="bankDetailsTabSection downline-table">
                               <table>
@@ -8590,6 +8704,7 @@ const Profile = () => {
                                     <th>SR.NO</th>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>IB Account</th>
                                     <th>MT Code</th>
                                     <th>Deposit</th>
                                     <th>Withdraw</th>
@@ -8607,6 +8722,7 @@ const Profile = () => {
                                           <td>{item.sr_no}</td>
                                           <td>{item.name}</td>
                                           <td>{item.user_email}</td>
+                                          <td>{(item.is_ib_account == "1") ? "Yes" : "No"}</td>
                                           <td>{item.mt5_acc_ids}</td>
                                           <td>{item.deposit_amount}</td>
                                           <td>{item.withdrawal_amount}</td>
@@ -8614,17 +8730,20 @@ const Profile = () => {
                                           <td>{item.total_withdraw}</td>
                                           <td>{item.wallet_balance}</td>
                                           <td>
-                                            <Button
+                                            {
+                                              (item.is_ib_account == "1" && item.has_downline == true) ? <Button
                                               variant="contained"
                                               className="add_note"
                                               onClick={(e) => {
                                                 myTraderData.user_name = item.name;
+                                                myTraderData.main_user_name = item.name;
                                                 myTraderData.user_id = item.client_id;
                                                 setMyTraderData({...myTraderData});
                                                 getMyChildTrader(item.client_id)
                                               }}>
                                               View
-                                            </Button>
+                                            </Button> : ""
+                                            }
                                           </td>
                                         </tr>
                                       )
@@ -8635,7 +8754,7 @@ const Profile = () => {
                                 </tbody>
                                 <tfoot>
                                   <tr>
-                                    <td colSpan="4"><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total'] : ""}</b></td>
+                                    <td colSpan="5"><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total'] : ""}</b></td>
                                     <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_deposit'] : ""}</b></td>
                                     <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_withdraw'] : ""}</b></td>
                                     <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_total_user_deposit'] : ""}</b></td>

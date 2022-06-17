@@ -41,6 +41,7 @@ const ListRequest = () => {
     });
   };
   const [ibdata, setIbData] = useState("");
+  const [param, setParam] = useState({});
   const partnershipcolumn = [
     {
       name: "SR.NO",
@@ -575,10 +576,10 @@ const ListRequest = () => {
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
                 <p className='main-heading'>IB Request List</p>
-                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword} ibList={true} setParam={setParam}/>
                 <br />
                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                  <CommonTable url={`${Url}/datatable/partnership_requests.php`} column={partnershipcolumn} sort='0' search={searchBy} refresh={updateDate.refresh} searchWord={searchKeyword} />
+                  <CommonTable url={`${Url}/datatable/partnership_requests.php`} column={partnershipcolumn} sort='0' search={searchBy} refresh={updateDate.refresh} searchWord={searchKeyword} param={param}/>
                 </Paper>
               </Grid>
             </Grid>
