@@ -250,7 +250,7 @@ const Header = (prop) => {
     navigate("/myAccount");
   }
 
-  const changePasswordSubmit = async() => {
+  const changePasswordSubmit = async () => {
     if (form.current_password == "") {
       toast.error('Please enter current password');
     } else if (form.new_password == "") {
@@ -261,18 +261,20 @@ const Header = (prop) => {
       toast.error('Confirm password must be same like to password');
     } else {
       form.isLoader = true;
-      setForm({...form});
+      setForm({ ...form });
       const param = new FormData();
       // param.append("is_app", 1);
       // param.append("AADMIN_LOGIN_ID", 1)
-      param.append("current_password", form.current_password);
+      param.append("old_password", form.current_password);
       param.append("new_password", form.new_password);
       param.append("confirm_password", form.confirm_password);
-      await axios.post(Url + '/ajaxfiles/logout.php', param).then((res) => {
-        localStorage.setItem("login", true);
-        prop.setLogin("true");
-        navigate("/login");
+      param.append("action", 'update_password');
 
+      await axios.post(Url + '/ajaxfiles/profile_update.php', param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -284,15 +286,15 @@ const Header = (prop) => {
   }
 
   const input = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
     setForm((prevalue) => {
-        return {
-          ...prevalue,
-          [name]: value,
-        };
+      return {
+        ...prevalue,
+        [name]: value,
+      };
     })
-}
+  }
 
   return (
     <div className="app-header app-header--shadow app-header--opacity-bg">
@@ -424,24 +426,24 @@ const Header = (prop) => {
               <Button variant="contained" className='cancelButton' onClick={CloseDialogbox}>Cancel</Button>
               {
                 (form.isLoader) ? <Button
-              tabindex="0"
-              size="large"
-              className=" btn-gradient createMt5Formloder"
-              disabled
-            >
-              <svg class="spinner" viewBox="0 0 50 50">
-                <circle
-                  class="path"
-                  cx="25"
-                  cy="25"
-                  r="20"
-                  fill="none"
-                  stroke-width="5"
-                ></circle>
-              </svg>
-            </Button> : <Button variant="contained" className='btn-gradient' onClick={changePasswordSubmit}>Change Password</Button>
+                  tabindex="0"
+                  size="large"
+                  className=" btn-gradient createMt5Formloder"
+                  disabled
+                >
+                  <svg class="spinner" viewBox="0 0 50 50">
+                    <circle
+                      class="path"
+                      cx="25"
+                      cy="25"
+                      r="20"
+                      fill="none"
+                      stroke-width="5"
+                    ></circle>
+                  </svg>
+                </Button> : <Button variant="contained" className='btn-gradient' onClick={changePasswordSubmit}>Change Password</Button>
               }
-              
+
             </div>
           </DialogActions>
         </BootstrapDialog>

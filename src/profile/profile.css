@@ -630,3 +630,6 @@ text.highcharts-credits {
 .bankDetailsTabSection.getMyStructure .partnership-section .master-structure-section {
     width: 100%;
 }
+.editor-section-border .rdw-editor-wrapper .rdw-editor-main {
+    min-height: 200px;
+}

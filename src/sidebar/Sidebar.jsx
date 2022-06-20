@@ -283,6 +283,44 @@ const Sidebar = (prop) => {
                 </li> */}
                 <li>
                   <a
+                    className={`pamm ${open.pamm ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <img src='assets/img/pamm.png' className="sidebar-menu-img"/>
+                    Pamm
+                    <span className="sidebar-icon-indicator">
+
+                      {open.pamm ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.pamm} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/pamm_dashboard" onClick={CloseSidebar}>Dashboard</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/pamm_user_management" onClick={CloseSidebar}>User Management</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/pamm_mm_management" onClick={CloseSidebar}>MM Management</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/target" onClick={CloseSidebar}>Transaction</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/target" onClick={CloseSidebar}>Content Management</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/pamm_investor_request" onClick={CloseSidebar}>Investor Requests</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/pamm_activity_log" onClick={CloseSidebar}>Activity Log</NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
+                <li>
+                  <a
                     className={`marketing ${open.marketing ? "active" : ""}`}
                     onClick={handleClick}
                   >

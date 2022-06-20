@@ -164,3 +164,9 @@
     opacity: 0;
   }
 }
+.app-sidebar--light .sidebar-navigation ul li > a.active > .sidebar-menu-img, 
+.app-sidebar--light .sidebar-navigation ul li > a:hover > .sidebar-menu-img {
+}
+.app-sidebar--light .sidebar-navigation ul li > a > .sidebar-menu-img {
+  width: 25px;
+}

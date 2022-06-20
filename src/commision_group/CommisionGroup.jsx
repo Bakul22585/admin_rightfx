@@ -43,6 +43,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
   const [dialogTitle, setDialogTitle] = useState("");
   const [openModel, setOpenModel] = useState(false);
   const [viewData, setViewData] = useState({});
+  const [param, setParam] = useState({});
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const [form, setForm] = useState({
     ib_group_level_id: "",
@@ -922,7 +924,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
                 <p className="main-heading">Commision Group</p>
-                <CommonFilter search={searchBy} />
+                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
                 <br />
                 <Paper
                   elevation={2}
@@ -939,6 +941,8 @@ const[mt5GroupName,setmt5GroupName]=useState([])
                     sort="0"
                     search={searchBy}
                     refresh={refresh}
+                    param={param}
+                    searchWord={searchKeyword}
                   />
                 </Paper>
               </Grid>

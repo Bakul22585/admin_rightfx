@@ -85,11 +85,6 @@ const PendingKYC = () => {
     });
     const [searchBy, setSearchBy] = useState([
         {
-            'label': 'DATE',
-            'value': false,
-            'name': 'date'
-        },
-        {
             'label': 'NAME',
             'value': false,
             'name': 'name'
@@ -839,7 +834,7 @@ const PendingKYC = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Pending KYC</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}  setcheckStatus={setcheckStatus}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}  setcheckStatus={setcheckStatus} setParam={setParam}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>

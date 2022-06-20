@@ -1,0 +1,912 @@
+import './pamm.css';
+import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import CommonFilter from '../common/CommonFilter';
+import CommonTable from '../common/CommonTable';
+import { Url } from '../global';
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogActions from "@mui/material/DialogActions";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    "& .MuiDialogContent-root": {
+        padding: theme.spacing(2),
+    },
+    "& .MuiDialogActions-root": {
+        padding: theme.spacing(1),
+    },
+}));
+
+export interface DialogTitleProps {
+    id: string;
+    children?: React.ReactNode;
+    onClose: () => void;
+}
+
+const BootstrapDialogTitle = (props: DialogTitleProps) => {
+    const { children, onClose, ...other } = props;
+
+    return (
+        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+            {children}
+            {onClose ? (
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </DialogTitle>
+    );
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MmManagement = () => {
+
+    const navigate = useNavigate();
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [param, setParam] = useState("");
+    const [open, setOpen] = useState(false);
+    const [dialogTitle, setDialogTitle] = useState("");
+    const [fullWidth, setFullWidth] = useState(true);
+    const [maxWidth, setMaxWidth] = useState('md');
+    const [refresh, setRefresh] = useState(false);
+    const [countryData, setCountryData] = useState({
+        data: [],
+    });
+    const [form, setForm] = useState({
+        isLoader: false,
+        id: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        mobile: "",
+        gender: "",
+        dob: "",
+        address: "",
+        country: "",
+        state: "",
+        city: "",
+        status: "",
+        password: "",
+        confirm_password: "",
+        additional_email: "",
+        additional_contact_number: "",
+    })
+    const [searchBy, setSearchBy] = useState([
+        {
+            'label': 'USER NAME',
+            'value': false,
+            'name': 'name'
+        },
+        {
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'user_email'
+        },
+        {
+            'label': 'MOBILE',
+            'value': false,
+            'name': 'user_phone'
+        },
+        {
+            'label': 'PASSWORD',
+            'value': false,
+            'name': 'user_visible_password'
+        },
+    ]);
+    toast.configure();
+    const column = [
+        {
+            name: 'SR NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'USER NAME',
+            selector: row => {
+                return <span title={row.name}>{row.name}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'EMAIL',
+            selector: row => {
+                return <span title={row.user_email}>{row.user_email}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'MOBILE',
+            selector: row => {
+                return <span title={row.user_phone}>{row.user_phone}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'PASSWORD',
+            selector: row => {
+                return <span title={row.user_visible_password}>{row.user_visible_password}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'STATUS',
+            selector: row => {
+                return <span title={(row.user_status == "0") ? "Pending": "Approve"}>{(row.user_status == "0") ? "Pending": "Approve"}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'DATE',
+            selector: row => {
+                return <span title={row.user_added_datetime}>{row.user_added_datetime}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div className='actionButtonGroup'>
+                    <Button
+                        className='btn-edit'
+                        onClick={(event) => edit(row)}
+                        {...row}
+                        style={{ color: 'rgb(144 145 139)' }}>
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </Button>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        }
+    ];
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const openDialogbox = (e, row) => {
+        if (e.target.classList.contains("add")) {
+            setDialogTitle('Add');
+            setForm({
+                isLoader: false,
+                id: "",
+                first_name: "",
+                last_name: "",
+                email: "",
+                mobile: "",
+                gender: "",
+                dob: "",
+                address: "",
+                country: "",
+                state: "",
+                city: "",
+                status: "",
+                password: "",
+                confirm_password: "",
+                additional_email: "",
+                additional_contact_number: "",
+            });
+        }
+        setOpen(true);
+    }
+
+    const manageContent = () => {
+        if (dialogTitle == "Add") {
+            return (
+                <div className='mmManagement-section'>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="First Name"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="first_name"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Last Name"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="last_name"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Email"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="email"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Mobile"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="mobile"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                            <InputLabel>Gender</InputLabel>
+                            <Select
+                                label
+                                className="select-font-small"
+                                name="gender"
+                                onChange={input}
+                            >
+                                <MenuItem value="male">Male</MenuItem>
+                                <MenuItem value="female">Female</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Date Of Birth"
+                            type="date"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="dob"
+                            focused
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Address"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="address"
+                            multiline
+                        />
+                    </div>
+                    <div className="input-element">
+                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                            <InputLabel>Country</InputLabel>
+                            <Select
+                                label
+                                className="select-font-small"
+                                name="country"
+                                onChange={input}
+                            >
+                                {
+                                    countryData.data.map((item) => {
+                                        return (
+                                            <MenuItem value={item.id}>{item.nicename}</MenuItem>
+                                        )
+                                    })
+                                }
+                                {/* <MenuItem value="male">Male</MenuItem>
+                                <MenuItem value="female">Female</MenuItem> */}
+                            </Select>
+                        </FormControl>
+
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="State"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="state"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="City"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="city"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                            <InputLabel>Status</InputLabel>
+                            <Select
+                                label
+                                className="select-font-small"
+                                name="status"
+                                onChange={input}
+                            >
+                                <MenuItem value="0">Pending</MenuItem>
+                                <MenuItem value="1">Approve</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Password"
+                            type="password"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="password"
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Confirm Password"
+                            type="password"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="confirm_password"
+                        />
+                    </div>
+                </div>
+            );
+        } else if (dialogTitle == "Edit") {
+            return (
+                <div className='mmManagement-section'>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="First Name"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="first_name"
+                            value={form.first_name}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Last Name"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="last_name"
+                            value={form.last_name}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Email"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="email"
+                            value={form.email}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Additional Email"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="additional_email"
+                            value={form.additional_email}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Mobile"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="mobile"
+                            value={form.mobile}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Additional Contact Number"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="additional_contact_number"
+                            value={form.additional_contact_number}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                            <InputLabel>Gender</InputLabel>
+                            <Select
+                                label
+                                className="select-font-small"
+                                name="gender"
+                                onChange={input}
+                                value={form.gender}
+                            >
+                                <MenuItem value="male">Male</MenuItem>
+                                <MenuItem value="female">Female</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Date Of Birth"
+                            type="date"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="dob"
+                            value={form.dob}
+                            focused
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="Address"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="address"
+                            value={form.address}
+                            multiline
+                        />
+                    </div>
+                    <div className="input-element">
+                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                            <InputLabel>Country</InputLabel>
+                            <Select
+                                label
+                                className="select-font-small"
+                                name="user_country"
+                                onChange={input}
+                                value={form.country}
+                            >
+                                {
+                                    countryData.data.map((item) => {
+                                        return (
+                                            <MenuItem value={item.id}>{item.nicename}</MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="State"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="state"
+                            value={form.state}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <TextField
+                            className="input-font-small"
+                            label="City"
+                            variant="standard"
+                            onChange={input}
+                            sx={{ width: "100%" }}
+                            name="city"
+                            value={form.city}
+                        />
+                    </div>
+                    <div className="input-element">
+                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                            <InputLabel>Status</InputLabel>
+                            <Select
+                                label
+                                className="select-font-small"
+                                name="user_status"
+                                onChange={input}
+                                value={form.status}
+                            >
+                                <MenuItem value="0">Pending</MenuItem>
+                                <MenuItem value="1">Approve</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    const manageDialogActionButton = () => {
+        if (dialogTitle == "Add") {
+            return (
+                <div className="dialogMultipleActionButton">
+                    <Button
+                        variant="contained"
+                        className="cancelButton"
+                        onClick={handleClose}
+                    >
+                        Cancel
+                    </Button>
+
+                    {form.isLoader ? (
+                        <Button
+                            tabindex="0"
+                            size="large"
+                            className=" btn-gradient  btn-success createMt5Formloder"
+                            disabled
+                        >
+                            <svg class="spinner" viewBox="0 0 50 50">
+                                <circle
+                                    class="path"
+                                    cx="25"
+                                    cy="25"
+                                    r="20"
+                                    fill="none"
+                                    stroke-width="5"
+                                ></circle>
+                            </svg>
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            className="btn-gradient btn-success"
+                            onClick={formSubmit}
+                        >
+                            Create
+                        </Button>
+                    )}
+                </div>
+            );
+        } else if (dialogTitle == "Edit") {
+            return (
+                <div className="dialogMultipleActionButton">
+                    <Button
+                        variant="contained"
+                        className="cancelButton"
+                        onClick={handleClose}
+                    >
+                        Cancel
+                    </Button>
+
+                    {form.isLoader ? (
+                        <Button
+                            tabindex="0"
+                            size="large"
+                            className=" btn-gradient  btn-success createMt5Formloder"
+                            disabled
+                        >
+                            <svg class="spinner" viewBox="0 0 50 50">
+                                <circle
+                                    class="path"
+                                    cx="25"
+                                    cy="25"
+                                    r="20"
+                                    fill="none"
+                                    stroke-width="5"
+                                ></circle>
+                            </svg>
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            className="btn-gradient btn-success"
+                            onClick={updateFormSubmit}
+                        >
+                            Update
+                        </Button>
+                    )}
+                </div>
+            );
+        }
+    }
+
+    const input = (e) => {
+        const { name, value } = e.target;
+
+        setForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        })
+    }
+
+    const formSubmit = async() => {
+        console.log("form", form);
+        if (form.first_name == "") {
+            toast.error('Please enter first name');
+        } else if (form.last_name == "") {
+            toast.error('Please enter last name');
+        } else if (form.email == "") {
+            toast.error('Please enter email');
+        } else if (form.mobile == "") {
+            toast.error('Please enter mobile number');
+        } else if (form.gender == "") {
+            toast.error('Please select gender');
+        } else if (form.dob == "") {
+            toast.error('Please select date of birth');
+        } else if (form.address == "") {
+            toast.error('Please enter address');
+        } else if (form.country == "") {
+            toast.error('Please select country');
+        } else if (form.state == "") {
+            toast.error('Please select state');
+        } else if (form.city == "") {
+            toast.error('Please select city');
+        } else if (form.status == "") {
+            toast.error('Please select status');
+        } else if (form.password == "") {
+            toast.error('Please enter password');
+        } else if (form.confirm_password == "") {
+            toast.error('Please enter confirm password');
+        } else if (form.confirm_password != form.password) {
+            toast.error('Confirm password must be same like to password');
+        } else {
+            form.isLoader = true;
+            setForm({...form});
+            const param = new FormData();
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1); 
+            param.append('user_first_name', form.first_name); 
+            param.append('user_last_name', form.last_name); 
+            param.append('user_email', form.email); 
+            param.append('user_phone', form.mobile); 
+            param.append('gender', form.gender); 
+            param.append('dob', form.dob); 
+            param.append('city', form.city); 
+            param.append('state', form.state); 
+            param.append('user_country', form.country); 
+            param.append('address', form.address); 
+            param.append('user_password', form.password); 
+            param.append('user_conf_password', form.confirm_password); 
+            param.append('user_status ', form.status); 
+
+            await axios.post(`${Url}/ajaxfiles/pamm/create_pamm.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    toast.success(res.data.message);
+                    setOpen(false);
+                    setRefresh(!refresh);
+                    console.log(form);
+                }
+            });
+        }
+    }
+
+    const updateFormSubmit = async() => {
+        console.log("form", form);
+        if (form.first_name == "") {
+            toast.error('Please enter first name');
+        } else if (form.last_name == "") {
+            toast.error('Please enter last name');
+        } else if (form.email == "") {
+            toast.error('Please enter email');
+        } else if (form.mobile == "") {
+            toast.error('Please enter mobile number');
+        } else if (form.gender == "") {
+            toast.error('Please select gender');
+        } else if (form.dob == "") {
+            toast.error('Please select date of birth');
+        } else if (form.address == "") {
+            toast.error('Please enter address');
+        } else if (form.country == "") {
+            toast.error('Please select country');
+        } else if (form.state == "") {
+            toast.error('Please select state');
+        } else if (form.city == "") {
+            toast.error('Please select city');
+        } else if (form.status == "") {
+            toast.error('Please select status');
+        } else if (form.password == "") {
+            toast.error('Please enter password');
+        } else if (form.confirm_password == "") {
+            toast.error('Please enter confirm password');
+        } else if (form.confirm_password != form.password) {
+            toast.error('Confirm password must be same like to password');
+        } else {
+            form.isLoader = true;
+            setForm({...form});
+            const param = new FormData();
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1); 
+            param.append('action', 'update_manager_details'); 
+            param.append('user_id', form.id); 
+            param.append('user_first_name', form.first_name); 
+            param.append('user_last_name', form.last_name); 
+            param.append('user_email', form.email); 
+            param.append('user_phone', form.mobile); 
+            param.append('gender', form.gender); 
+            param.append('dob', form.dob); 
+            param.append('city', form.city); 
+            param.append('state', form.state); 
+            param.append('user_country', form.country); 
+            param.append('address', form.address); 
+            param.append('user_password', form.password); 
+            param.append('user_conf_password', form.confirm_password); 
+            param.append('user_status ', form.status); 
+            param.append('additional_email', form.additional_email); 
+            param.append('additional_contact_number', form.additional_contact_number); 
+
+            await axios.post(`${Url}/ajaxfiles/pamm/mm_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    toast.success(res.data.message);
+                    setOpen(false);
+                    setRefresh(!refresh);
+                    console.log(form);
+                }
+            });
+        }
+    }
+
+    const getCountry = () => {
+        const param = new FormData();
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
+        axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+        }
+        if (res.data.status == "error") {
+            toast.error(res.data.message);
+        } else {
+            countryData.data = res.data.aaData;
+            setCountryData({ ...countryData });
+        }
+        });
+    }
+
+    const edit = (data) => {
+        const param = new FormData();
+        // param.append("is_app", 1);
+        // param.append("AADMIN_LOGIN_ID", 1);
+        param.append("action", "view_manager_details");
+        param.append("user_id", data.user_id);
+        axios.post(Url + "/ajaxfiles/pamm/mm_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+        }
+        if (res.data.status == "error") {
+            toast.error(res.data.message);
+        } else {
+            setForm({
+                isLoader: false,
+                id: data.user_id,
+                first_name: res.data.data.user_first_name,
+                last_name: res.data.data.user_last_name,
+                email: res.data.data.user_email,
+                mobile: res.data.data.user_phone,
+                gender: res.data.data.gender,
+                dob: res.data.data.dob,
+                address: res.data.data.address,
+                country: res.data.data.user_country,
+                state: res.data.data.state,
+                city: res.data.data.city,
+                status: res.data.data.user_status,
+                password: res.data.data.user_visible_password,
+                confirm_password: res.data.data.user_visible_password,
+                additional_email: "",
+                additional_contact_number: "",
+            })
+            console.log("form", form);
+            setOpen(true);
+            setDialogTitle('Edit');
+        }
+        });
+    }
+
+    useEffect(() => {
+        getCountry();
+    }, [])
+
+    return (
+        <div>
+            <div className="app-content--inner">
+                <div className="app-content--inner__wrapper mh-100-vh">
+                    <div style={{ opacity: 1 }}>
+                        <Grid container>
+                            <Grid item md={12} lg={12} xl={12}>
+                                <p className='main-heading'>Money Manager Management</p>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
+                                <br />
+                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                                    <div className='actionGroupButton'>
+                                        <Button variant="contained" className="add" onClick={openDialogbox}>Add</Button>
+                                    </div>
+                                    <br />
+                                    <CardContent className="py-3">
+                                        <Grid container spacing={2}>
+                                            <Grid item sm={12} md={12} lg={12}>
+                                                <CommonTable url={`${Url}/datatable/pamm/money_manager_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+
+                        <BootstrapDialog
+                            onClose={handleClose}
+                            aria-labelledby="customized-dialog-title"
+                            open={open}
+                            className="modalWidth100"
+                            fullWidth={fullWidth}
+                            maxWidth={maxWidth}
+                        >
+                            <BootstrapDialogTitle
+                                id="customized-dialog-title"
+                                className="dialogTitle"
+                                onClose={handleClose}
+                            >
+                                {dialogTitle}
+                            </BootstrapDialogTitle>
+                            <DialogContent dividers>{manageContent()}</DialogContent>
+                            <DialogActions>{manageDialogActionButton()}</DialogActions>
+                        </BootstrapDialog>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default MmManagement

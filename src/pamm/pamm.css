@@ -1,0 +1,8 @@
+.mmManagement-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.mmManagement-section .input-element {
+    width: 49%;
+}

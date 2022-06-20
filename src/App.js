@@ -49,6 +49,12 @@ import BasicIbReport from './report/BasicIbReport';
 import IBStructure from './commision_group/ib_structure';
 import Link from './marketing/Link';
 import Target from './marketing/Target';
+import MenuSetting from './setting/MenuSetting';
+import PammDashboard from './pamm/PammDashboard';
+import PammActivityLog from './pamm/PammActivityLog';
+import MmManagement from './pamm/MmManagement';
+import InvestorRequest from './pamm/InvestorRequest';
+import PammUser from './pamm/PammUser';
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -79,7 +85,7 @@ const App = () => {
             <div className="app-content">
               <Routes >
                 <Route exact path="/" element={<Dashboard setLogin={setLogin}/>} />
-                <Route path="*" element={<Navigate to="dashboard" replace />} />
+                <Route path="*" element={<Navigate to="dashboard" replace setLogin={setLogin}/>} />
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/employees" element={<Employees />} />
                 <Route exact path="/role_management" element={<RoleManagement />} />
@@ -134,8 +140,13 @@ const App = () => {
                 <Route exact path="/ib_structure" element={<IBStructure/>} />
                 <Route exact path="/link" element={<Link/>} />
                 <Route exact path="/target" element={<Target/>} />
+                <Route exact path="/menu_setting" element={<MenuSetting/>} />
+                <Route exact path="/pamm_dashboard" element={<PammDashboard/>} />
+                <Route exact path="/pamm_activity_log" element={<PammActivityLog/>} />
+                <Route exact path="/pamm_mm_management" element={<MmManagement/>} />
+                <Route exact path="/pamm_investor_request" element={<InvestorRequest/>} />
+                <Route exact path="/pamm_user_management" element={<PammUser/>} />
 
-                
               </Routes>
               {/* <Footer /> */}
             </div>
