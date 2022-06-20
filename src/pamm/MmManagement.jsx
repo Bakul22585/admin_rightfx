@@ -1,5 +1,5 @@
 import './pamm.css';
-import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
+import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tab, Tabs, Typography, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import CommonFilter from '../common/CommonFilter';
 import CommonTable from '../common/CommonTable';
@@ -15,6 +15,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import SwipeableViews from 'react-swipeable-views';
+import { useTheme } from '@emotion/react';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
@@ -54,20 +56,49 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
         </DialogTitle>
     );
 };
+interface TabPanelProps {
+    children?: React.ReactNode;
+    dir?: string;
+    index: number;
+    value: number;
+}
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+            className="panding-left-right-0"
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
 const MmManagement = () => {
 
+    const theme = useTheme();
     const navigate = useNavigate();
     const [searchKeyword, setSearchKeyword] = useState("");
-    const [param, setParam] = useState("");
+    const [param, setParam] = useState({});
     const [open, setOpen] = useState(false);
     const [dialogTitle, setDialogTitle] = useState("");
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('md');
     const [refresh, setRefresh] = useState(false);
+    const [value, setValue] = useState(0);
     const [countryData, setCountryData] = useState({
         data: [],
     });
@@ -164,7 +195,12 @@ const MmManagement = () => {
         {
             name: 'STATUS',
             selector: row => {
-                return <span title={(row.user_status == "0") ? "Pending": "Approve"}>{(row.user_status == "0") ? "Pending": "Approve"}</span>
+                return <span title={(row.user_status == "0") ? "Pending": "Approve"} className={`text-color-${row.user_status == "1"
+                ? "green"
+                : row.user_status == "2"
+                  ? "red"
+                  : "yellow"
+                }`}>{(row.user_status == "0") ? "Pending": "Approve"}</span>
             },
             wrap: true,
             sortable: true,
@@ -199,6 +235,14 @@ const MmManagement = () => {
             allowOverflow: true
         }
     ];
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const handleChangeIndex = (index) => {
+        setValue(index);
+    };
 
     const handleClose = () => {
         setOpen(false);
@@ -866,21 +910,57 @@ const MmManagement = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Money Manager Management</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
-                                <br />
-                                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                    <div className='actionGroupButton'>
-                                        <Button variant="contained" className="add" onClick={openDialogbox}>Add</Button>
-                                    </div>
-                                    <br />
-                                    <CardContent className="py-3">
-                                        <Grid container spacing={2}>
-                                            <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/pamm/money_manager_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Paper>
+                                <Tabs
+                                    value={value}
+                                    onChange={handleChange}
+                                    variant="scrollable"
+                                    scrollButtons="auto"
+                                    aria-label="scrollable auto tabs example"
+                                    className="tabsBar"
+                                >
+                                    <Tab label="MONEY MANAGER LIST" />
+                                    <Tab label="MONEY MANAGER KYC LIST" />
+                                </Tabs>
+                                <SwipeableViews
+                                    axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                                    index={value}
+                                    onChangeIndex={handleChangeIndex}
+                                >
+                                    <TabPanel value={value} index={0} dir={theme.direction}>
+                                        <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
+                                        <br />
+                                        <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                                            <div className='actionGroupButton'>
+                                                <Button variant="contained" className="add" onClick={openDialogbox}>Add</Button>
+                                            </div>
+                                            <br />
+                                            <CardContent className="py-3">
+                                                <Grid container spacing={2}>
+                                                    <Grid item sm={12} md={12} lg={12}>
+                                                        <CommonTable url={`${Url}/datatable/pamm/money_manager_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
+                                                    </Grid>
+                                                </Grid>
+                                            </CardContent>
+                                        </Paper>
+                                    </TabPanel>
+                                    <TabPanel value={value} index={1} dir={theme.direction}>
+                                    <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
+                                        <br />
+                                        <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
+                                            <div className='actionGroupButton'>
+                                                <Button variant="contained" className="add" onClick={openDialogbox}>Add</Button>
+                                            </div>
+                                            <br />
+                                            <CardContent className="py-3">
+                                                <Grid container spacing={2}>
+                                                    <Grid item sm={12} md={12} lg={12}>
+                                                        <CommonTable url={`${Url}/datatable/pamm/mm_kyc_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
+                                                    </Grid>
+                                                </Grid>
+                                            </CardContent>
+                                        </Paper>
+                                    </TabPanel>
+                                </SwipeableViews>
                             </Grid>
                         </Grid>
 
