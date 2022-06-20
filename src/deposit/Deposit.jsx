@@ -128,6 +128,7 @@ const Deposit = () => {
     const [refresh, setRefresh] = useState(false);
     const [accountOption, setAccountOption] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [checkStatus, setcheckStatus] = useState("");
     const [depositForm, setDepositForm] = useState({
         live_account: '',
         account: '',
@@ -803,7 +804,7 @@ const Deposit = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Deposit</p>
-                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
+                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} setcheckStatus={setcheckStatus}/>
                                 <br />
 
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
@@ -814,7 +815,7 @@ const Deposit = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword}/>
+                                                <CommonTable url={`${Url}/datatable/deposit_list.php`} column={columns} sort='2' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword} checkStatus={checkStatus}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

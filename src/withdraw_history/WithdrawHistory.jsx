@@ -54,6 +54,7 @@ const WithdrawHistory = () => {
     const navigate = useNavigate();
     const [searchKeyword, setSearchKeyword] = useState("");
     const [refresh, setRefresh] = useState(false);
+    const [checkStatus, setcheckStatus] = useState("");
     const [searchBy, setSearchBy] = useState([
         {
           'label': 'NAME',
@@ -160,13 +161,13 @@ const WithdrawHistory = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Withdraw History</p>
-                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
+                                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} setcheckStatus={setcheckStatus}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword} csv="datatable/withdraw_list_export.php"/>
+                                                <CommonTable url={`${Url}/datatable/withdraw_list.php`} column={columns} sort='1' refresh={refresh} search={searchBy} param={param} searchWord={searchKeyword} checkStatus={checkStatus} csv="datatable/withdraw_list_export.php"/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>
