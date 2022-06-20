@@ -132,10 +132,28 @@ const PammUser = () => {
             'value': false,
             'name': 'manager_name'
         },
+    ]);
+
+    const [clientPasswordSearchBy, setClientPasswordSearchBy] = useState([
         {
-            'label': 'MANAGER NAME',
+            'label': 'USER NAME',
             'value': false,
-            'name': 'manager_name'
+            'name': 'name'
+        },
+        {
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'user_email'
+        },
+        {
+            'label': 'MOBILE',
+            'value': false,
+            'name': 'user_phone'
+        },
+        {
+            'label': 'Password',
+            'value': false,
+            'name': 'user_visible_password'
         },
     ]);
     const [form, setForm] = useState({
@@ -157,6 +175,7 @@ const PammUser = () => {
         data: [],
     });
     toast.configure();
+
     const column = [
         {
             name: 'SR NO',
@@ -272,6 +291,83 @@ const PammUser = () => {
             ignoreRowClick: true,
             allowOverflow: true
         }
+    ];
+
+    const clientPasswordColumn = [
+        {
+            name: 'SR NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'USER NAME',
+            selector: row => {
+                return <span title={row.name}>{row.name}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'EMAIL',
+            selector: row => {
+                return <span title={row.user_email}>{row.user_email}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'MOBILE',
+            selector: row => {
+                return <span title={row.user_phone}>{row.user_phone}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'ACCOUNT TYPE',
+            selector: row => {
+                return <span title={row.account_type}>{row.account_type}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'PASSWORD',
+            selector: row => {
+                return <span title={row.user_visible_password}>{row.user_visible_password}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        /* {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div className='actionButtonGroup'>
+                    <Button
+                        className='btn-edit'
+                        onClick={(event) => edit(row)}
+                        {...row}
+                        style={{ color: 'rgb(144 145 139)' }}>
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </Button>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        } */
     ];
 
     const handleClose = () => {
@@ -712,7 +808,7 @@ const PammUser = () => {
                                         </Paper>
                                     </TabPanel>
                                     <TabPanel value={value} index={1} dir={theme.direction}>
-                                        <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
+                                        <CommonFilter search={clientPasswordSearchBy} searchWord={setSearchKeyword} setParam={setParam} />
                                         <br />
                                         <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                             {/* <div className='actionGroupButton'>
@@ -722,7 +818,7 @@ const PammUser = () => {
                                             <CardContent className="py-3">
                                                 <Grid container spacing={2}>
                                                     <Grid item sm={12} md={12} lg={12}>
-                                                        <CommonTable url={`${Url}/datatable/pamm/pamm_client_password_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} />
+                                                        <CommonTable url={`${Url}/datatable/pamm/pamm_client_password_list.php`} column={clientPasswordColumn} sort='2' search={clientPasswordSearchBy} searchWord={searchKeyword} param={param} />
                                                     </Grid>
                                                 </Grid>
                                             </CardContent>

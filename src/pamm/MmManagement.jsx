@@ -1,5 +1,5 @@
 import './pamm.css';
-import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tab, Tabs, Typography, Box } from '@mui/material';
+import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tab, Tabs, Typography, Box, Menu, Input } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import CommonFilter from '../common/CommonFilter';
 import CommonTable from '../common/CommonTable';
@@ -17,6 +17,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@emotion/react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import CustomImageModal from '../common/CustomImageModal';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
@@ -92,6 +95,7 @@ const MmManagement = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [openTableMenus, setOpenTableMenus] = useState([]);
     const [param, setParam] = useState({});
     const [open, setOpen] = useState(false);
     const [dialogTitle, setDialogTitle] = useState("");
@@ -99,6 +103,10 @@ const MmManagement = () => {
     const [maxWidth, setMaxWidth] = useState('md');
     const [refresh, setRefresh] = useState(false);
     const [value, setValue] = useState(0);
+    const [selectedAadharCardFrontFile, setSelectedAadharCardFrontFile] = useState()
+    const [previewAadharCardFront, setPreviewAadharCardFront] = useState();
+    const [selectedAadharCardBackFile, setSelectedAadharCardBackFile] = useState()
+    const [previewAadharCardBack, setPreviewAadharCardBack] = useState();
     const [countryData, setCountryData] = useState({
         data: [],
     });
@@ -121,6 +129,18 @@ const MmManagement = () => {
         additional_email: "",
         additional_contact_number: "",
     })
+    const [kycForm, setKycForm] = useState({
+        isLoader: false,
+        id: "",
+        name: "",
+        id_number: "",
+        back_image: "",
+        front_image: "",
+        email: "",
+        feedback_remarks: "",
+        feedback_remarks: "",
+        status: "",
+    });
     const [searchBy, setSearchBy] = useState([
         {
             'label': 'USER NAME',
@@ -141,6 +161,23 @@ const MmManagement = () => {
             'label': 'PASSWORD',
             'value': false,
             'name': 'user_visible_password'
+        },
+    ]);
+    const [kycSearchBy, setKycSearchBy] = useState([
+        {
+            'label': 'USER NAME',
+            'value': false,
+            'name': 'name'
+        },
+        {
+            'label': 'EMAIL',
+            'value': false,
+            'name': 'user_email'
+        },
+        {
+            'label': 'ID NUMBER',
+            'value': false,
+            'name': 'aadhar_card_number'
         },
     ]);
     toast.configure();
@@ -195,12 +232,12 @@ const MmManagement = () => {
         {
             name: 'STATUS',
             selector: row => {
-                return <span title={(row.user_status == "0") ? "Pending": "Approve"} className={`text-color-${row.user_status == "1"
-                ? "green"
-                : row.user_status == "2"
-                  ? "red"
-                  : "yellow"
-                }`}>{(row.user_status == "0") ? "Pending": "Approve"}</span>
+                return <span title={(row.user_status == "0") ? "Pending" : "Approve"} className={`text-color-${row.user_status == "1"
+                    ? "green"
+                    : row.user_status == "2"
+                        ? "red"
+                        : "yellow"
+                    }`}>{(row.user_status == "0") ? "Pending" : "Approve"}</span>
             },
             wrap: true,
             sortable: true,
@@ -235,6 +272,239 @@ const MmManagement = () => {
             allowOverflow: true
         }
     ];
+    const kycColumn = [
+        {
+            name: 'SR NO',
+            selector: row => row.sr_no,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'USER NAME',
+            selector: row => {
+                return <span title={row.name}>{row.name}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'EMAIL',
+            selector: row => {
+                return <span title={row.email}>{row.email}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'ID NUMBER',
+            selector: row => {
+                return <span title={row.aadhar_card_number}>{row.aadhar_card_number}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 1,
+        },
+        {
+            name: 'STATUS',
+            selector: row => {
+                return <span title={(row.status == "0") ? "Pending" : (row.status == "1") ? "Approve" : "Rejected"} className={`text-color-${row.status == "1"
+                    ? "green"
+                    : row.status == "2"
+                        ? "red"
+                        : "yellow"
+                    }`}>{(row.status == "0") ? "Pending" : (row.status == "1") ? "Approve" : "Rejected"}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.4,
+        },
+        {
+            name: 'DATE',
+            selector: row => {
+                return <span title={row.added_datetime}>{row.added_datetime}</span>
+            },
+            wrap: true,
+            sortable: true,
+            reorder: true,
+            grow: 0.5,
+        },
+        {
+            name: 'Action',
+            button: true,
+            cell: row => {
+                return <div>
+                    <Button
+                        id={`actionButton_${row.sr_no}`}
+                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleContextClick(event, row.sr_no)}
+                        {...row}
+                        style={{ color: 'rgb(144 145 139)' }}
+                    >
+                        <i className="material-icons">more_horiz</i>
+                    </Button>
+                    <Menu
+                        id={`basic-menu-${row.sr_no}`}
+                        anchorEl={openTableMenus[row.sr_no]}
+                        open={Boolean(openTableMenus[row.sr_no])}
+                        onClose={(event) => handleContextClose(row.sr_no)}
+                    >
+                        <MenuItem className='view' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="material-icons view" onClick={(event) => actionMenuPopup(event, row)}>receipt</i>&nbsp;&nbsp;View</MenuItem>
+                        <MenuItem className='edit' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="edit material-icons">visibility</i>&nbsp;&nbsp;Edit</MenuItem>
+                        {(row.status != '1') ? <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="approve material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem> : ''}
+                        <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="reject material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem>
+
+                    </Menu>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        }
+    ];
+
+    const handleContextClick = (event, index) => {
+        console.log(event.currentTarget.getAttribute('id'), index);
+        let tableMenus = [...openTableMenus];
+        tableMenus[index] = event.currentTarget;
+        setOpenTableMenus(tableMenus);
+    };
+
+    const handleContextClose = (index) => {
+        let tableMenus = [...openTableMenus];
+        tableMenus[index] = null;
+        setOpenTableMenus(tableMenus);
+    };
+
+    const actionMenuPopup = (e, data) => {
+        handleContextClose(data.sr_no);
+        if (e.target.classList.contains('reject')) {
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to rejected this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-danger'
+                                    onClick={() => {
+                                        changeStatus('rejected', data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Reject it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
+        } else if (e.target.classList.contains('approve')) {
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to approved this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-success'
+                                    onClick={() => {
+                                        changeStatus('approved', data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Approve it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
+        } else if (e.target.classList.contains('view') || e.target.classList.contains('edit')) {
+            const param = new FormData();
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
+            param.append("kyc_id", data.kyc_id);
+            param.append("action", "view_kyc");
+            axios
+                .post(Url + "/ajaxfiles/pamm/mm_kyc_manage.php", param)
+                .then((res) => {
+                    if (res.data.message == "Session has been expired") {
+                        localStorage.setItem("login", true);
+                        navigate("/");
+                    }
+
+                    if (res.data.status == "error") {
+                        toast.error(res.data.message);
+                    } else {
+                        setKycForm((prevalue) => {
+                            return {
+                                ...prevalue,
+                                id: data.kyc_id,
+                                name: res.data.kyc_data.name,
+                                id_number: res.data.kyc_data.aadhar_card_number,
+                                back_image: res.data.kyc_data.aadhar_card_back_image,
+                                front_image: res.data.kyc_data.aadhar_card_front_image,
+                                email: res.data.kyc_data.email,
+                                feedback_remarks: res.data.kyc_data.feedback_remarks,
+                                status: res.data.kyc_data.aadharcard_status,
+                                isLoader: false
+                            }
+                        });
+                        if (e.target.classList.contains('edit')) {
+                            setDialogTitle('Edit KYC Details');
+                        } else {
+                            setDialogTitle('View KYC Details');
+                        }
+
+                        setOpen(true);
+                    }
+                });
+        }
+    };
+
+    const changeStatus = (status, data) => {
+        console.log(status, data);
+        if (status == 'approved') {
+            console.log("data", data)
+            const param = new FormData();
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
+            param.append("kyc_id", data.kyc_id);
+            param.append("action", "approve_kyc");
+            axios
+                .post(Url + "/ajaxfiles/pamm/mm_kyc_manage.php", param)
+                .then((res) => {
+                    setRefresh(!refresh)
+                    toast.success(res.data.message);
+                });
+
+        } else if (status == 'rejected') {
+            console.log("data", data)
+            const param = new FormData();
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
+            param.append("kyc_id", data.kyc_id);
+            param.append("action", "reject_kyc");
+            axios
+                .post(Url + "/ajaxfiles/pamm/mm_kyc_manage.php", param)
+                .then((res) => {
+                    setRefresh(!refresh)
+                    toast.success(res.data.message);
+                });
+
+
+        }
+    }
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -593,7 +863,7 @@ const MmManagement = () => {
                             <Select
                                 label
                                 className="select-font-small"
-                                name="user_status"
+                                name="status"
                                 onChange={input}
                                 value={form.status}
                             >
@@ -604,6 +874,109 @@ const MmManagement = () => {
                     </div>
                 </div>
             );
+        } else if (dialogTitle == 'View KYC Details') {
+            if (kycForm.isLoader == true) {
+                return <div className='popup-loader'>
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle
+                            class="path"
+                            cx="25"
+                            cy="25"
+                            r="20"
+                            fill="none"
+                            stroke-width="5"
+                        ></circle>
+                    </svg>
+                </div>
+            } else {
+                return <div>
+                    <div className='view-margeField'>
+                        <div className='element'>
+                            <label>Name :</label>
+                            <label>{kycForm.name}</label>
+                        </div>
+                        <div className='element'>
+                            <label>Email :</label>
+                            <label>{kycForm.email}</label>
+                        </div>
+                        <div className='element'>
+                            <label>ID Number :</label>
+                            <label>{kycForm.id_number}</label>
+                        </div>
+                        <div className='element'>
+                            <label>Remark :</label>
+                            <label>{kycForm.feedback_remarks}</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div className='view-image-section'>
+                        {(kycForm.front_image != "") ? <div className='element'>
+                            <label>ID Front Img :</label>
+                            {(kycForm.front_image != "") ? <CustomImageModal image={`${kycForm.front_image}`} /> : ""}
+                        </div> : ''}
+                        {(kycForm.back_image != '') ? <div className='element'>
+                            <label>ID Back Img :</label>
+                            {(kycForm.back_image != "") ? <CustomImageModal image={`${kycForm.back_image}`} /> : ""}
+                        </div> : ''}
+                    </div>
+                </div>;
+            }
+        } else if (dialogTitle == 'Edit KYC Details') {
+            return <div>
+                <div className='view-margeField'>
+                    {/* <div className='element'>
+                            <TextField label="First Name" variant="standard" sx={{ width: '100%' }} onChange={input} value={form.first_name} name='first_name' disabled />
+                        </div> */}
+                    <div className='element'>
+                        <TextField label="Name" variant="standard" sx={{ width: '100%' }} onChange={kycInput} value={kycForm.name} name='name' disabled />
+                    </div>
+                    <div className='element'>
+                        <TextField label="Email" variant="standard" sx={{ width: '100%' }} onChange={kycInput} value={kycForm.email} name='email' disabled />
+                    </div>
+                    <div className='element'>
+                        <TextField label="ID Number" variant="standard" sx={{ width: '100%' }} onChange={kycInput} value={kycForm.id_number} name='id_number' />
+                    </div>
+                    <div className='element'>
+                        <TextField label="Remark" variant="standard" sx={{ width: '100%' }} onChange={kycInput} name='feedback_remarks' value={kycForm.feedback_remarks} />
+                    </div>
+                    <div className='element'>
+                        <FormControl variant="standard" sx={{ width: '100%' }}>
+                            <InputLabel id="demo-simple-select-standard-label">Status</InputLabel>
+                            <Select
+                                label="Status"
+                                name='status'
+                                value={kycForm.status}
+                                onChange={kycInput}>
+                                <MenuItem value='0'>Pending</MenuItem>
+                                <MenuItem value='1'>Approved</MenuItem>
+                                <MenuItem value='2'>Rejected</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                </div>
+                <br />
+                <div className='view-image-section'>
+                    <div className='element'>
+                        <label>ID Front Img :</label>
+                        <label htmlFor="contained-button-file" className='fileuploadButton'>
+                            <Input accept="image/*" id="contained-button-file" type="file" onChange={(e) => onSelectFile(e, 'aadhar_front')} />
+                            {selectedAadharCardFrontFile
+                                ? <img src={previewAadharCardFront} className='deposit-upload-image-preview' />
+                                : (kycForm.front_image != "") ? <img src={kycForm.front_image} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>
+                            }
+                        </label>
+                    </div>
+                    <div className='element'>
+                        <label>ID Back Img :</label>
+                        <label htmlFor="contained-button-file_back" className='fileuploadButton'>
+                            <Input accept="image/*" id="contained-button-file_back" type="file" onChange={(e) => onSelectFile(e, 'aadhar_back')} />
+                            {selectedAadharCardBackFile
+                                ? <img src={previewAadharCardBack} className='deposit-upload-image-preview' />
+                                : (kycForm.back_image != '') ? <img src={kycForm.back_image} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
+                        </label>
+                    </div>
+                </div>
+            </div>;
         }
     }
 
@@ -688,6 +1061,34 @@ const MmManagement = () => {
                     )}
                 </div>
             );
+        } else if (dialogTitle == 'View KYC Details') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+            </div>;
+        } else if (dialogTitle == 'Edit KYC Details') {
+            return <div className='dialogMultipleActionButton'>
+                <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
+                {
+                    (kycForm.isLoader) ? <Button
+                        tabindex="0"
+                        size="large"
+                        className=" btn-gradient  btn-success createMt5Formloder"
+                        disabled
+                    >
+                        <svg class="spinner" viewBox="0 0 50 50">
+                            <circle
+                                class="path"
+                                cx="25"
+                                cy="25"
+                                r="20"
+                                fill="none"
+                                stroke-width="5"
+                            ></circle>
+                        </svg>
+                    </Button> : <Button variant="contained" className='btn-gradient btn-success' onClick={kycFormSubmit}>Update</Button>
+                }
+
+            </div>;
         }
     }
 
@@ -702,7 +1103,18 @@ const MmManagement = () => {
         })
     }
 
-    const formSubmit = async() => {
+    const kycInput = (e) => {
+        const { name, value } = e.target;
+
+        setKycForm((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        })
+    }
+
+    const formSubmit = async () => {
         console.log("form", form);
         if (form.first_name == "") {
             toast.error('Please enter first name');
@@ -734,23 +1146,23 @@ const MmManagement = () => {
             toast.error('Confirm password must be same like to password');
         } else {
             form.isLoader = true;
-            setForm({...form});
+            setForm({ ...form });
             const param = new FormData();
             // param.append('is_app', 1);
             // param.append('AADMIN_LOGIN_ID', 1); 
-            param.append('user_first_name', form.first_name); 
-            param.append('user_last_name', form.last_name); 
-            param.append('user_email', form.email); 
-            param.append('user_phone', form.mobile); 
-            param.append('gender', form.gender); 
-            param.append('dob', form.dob); 
-            param.append('city', form.city); 
-            param.append('state', form.state); 
-            param.append('user_country', form.country); 
-            param.append('address', form.address); 
-            param.append('user_password', form.password); 
-            param.append('user_conf_password', form.confirm_password); 
-            param.append('user_status ', form.status); 
+            param.append('user_first_name', form.first_name);
+            param.append('user_last_name', form.last_name);
+            param.append('user_email', form.email);
+            param.append('user_phone', form.mobile);
+            param.append('gender', form.gender);
+            param.append('dob', form.dob);
+            param.append('city', form.city);
+            param.append('state', form.state);
+            param.append('user_country', form.country);
+            param.append('address', form.address);
+            param.append('user_password', form.password);
+            param.append('user_conf_password', form.confirm_password);
+            param.append('user_status ', form.status);
 
             await axios.post(`${Url}/ajaxfiles/pamm/create_pamm.php`, param).then((res) => {
                 if (res.data.message == "Session has been expired") {
@@ -769,7 +1181,7 @@ const MmManagement = () => {
         }
     }
 
-    const updateFormSubmit = async() => {
+    const updateFormSubmit = async () => {
         console.log("form", form);
         if (form.first_name == "") {
             toast.error('Please enter first name');
@@ -801,27 +1213,27 @@ const MmManagement = () => {
             toast.error('Confirm password must be same like to password');
         } else {
             form.isLoader = true;
-            setForm({...form});
+            setForm({ ...form });
             const param = new FormData();
             // param.append('is_app', 1);
             // param.append('AADMIN_LOGIN_ID', 1); 
-            param.append('action', 'update_manager_details'); 
-            param.append('user_id', form.id); 
-            param.append('user_first_name', form.first_name); 
-            param.append('user_last_name', form.last_name); 
-            param.append('user_email', form.email); 
-            param.append('user_phone', form.mobile); 
-            param.append('gender', form.gender); 
-            param.append('dob', form.dob); 
-            param.append('city', form.city); 
-            param.append('state', form.state); 
-            param.append('user_country', form.country); 
-            param.append('address', form.address); 
-            param.append('user_password', form.password); 
-            param.append('user_conf_password', form.confirm_password); 
-            param.append('user_status ', form.status); 
-            param.append('additional_email', form.additional_email); 
-            param.append('additional_contact_number', form.additional_contact_number); 
+            param.append('action', 'update_manager_details');
+            param.append('user_id', form.id);
+            param.append('user_first_name', form.first_name);
+            param.append('user_last_name', form.last_name);
+            param.append('user_email', form.email);
+            param.append('user_phone', form.mobile);
+            param.append('gender', form.gender);
+            param.append('dob', form.dob);
+            param.append('city', form.city);
+            param.append('state', form.state);
+            param.append('user_country', form.country);
+            param.append('address', form.address);
+            param.append('user_password', form.password);
+            param.append('user_conf_password', form.confirm_password);
+            param.append('user_status ', form.status);
+            param.append('additional_email', form.additional_email);
+            param.append('additional_contact_number', form.additional_contact_number);
 
             await axios.post(`${Url}/ajaxfiles/pamm/mm_manage.php`, param).then((res) => {
                 if (res.data.message == "Session has been expired") {
@@ -845,16 +1257,16 @@ const MmManagement = () => {
         // param.append("is_app", 1);
         // param.append("AADMIN_LOGIN_ID", 1);
         axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-            localStorage.setItem("login", true);
-            navigate("/");
-        }
-        if (res.data.status == "error") {
-            toast.error(res.data.message);
-        } else {
-            countryData.data = res.data.aaData;
-            setCountryData({ ...countryData });
-        }
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                countryData.data = res.data.aaData;
+                setCountryData({ ...countryData });
+            }
         });
     }
 
@@ -865,38 +1277,138 @@ const MmManagement = () => {
         param.append("action", "view_manager_details");
         param.append("user_id", data.user_id);
         axios.post(Url + "/ajaxfiles/pamm/mm_manage.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-            localStorage.setItem("login", true);
-            navigate("/");
-        }
-        if (res.data.status == "error") {
-            toast.error(res.data.message);
-        } else {
-            setForm({
-                isLoader: false,
-                id: data.user_id,
-                first_name: res.data.data.user_first_name,
-                last_name: res.data.data.user_last_name,
-                email: res.data.data.user_email,
-                mobile: res.data.data.user_phone,
-                gender: res.data.data.gender,
-                dob: res.data.data.dob,
-                address: res.data.data.address,
-                country: res.data.data.user_country,
-                state: res.data.data.state,
-                city: res.data.data.city,
-                status: res.data.data.user_status,
-                password: res.data.data.user_visible_password,
-                confirm_password: res.data.data.user_visible_password,
-                additional_email: "",
-                additional_contact_number: "",
-            })
-            console.log("form", form);
-            setOpen(true);
-            setDialogTitle('Edit');
-        }
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                setForm({
+                    isLoader: false,
+                    id: data.user_id,
+                    first_name: res.data.data.user_first_name,
+                    last_name: res.data.data.user_last_name,
+                    email: res.data.data.user_email,
+                    mobile: res.data.data.user_phone,
+                    gender: res.data.data.gender,
+                    dob: res.data.data.dob,
+                    address: res.data.data.address,
+                    country: res.data.data.user_country,
+                    state: res.data.data.state,
+                    city: res.data.data.city,
+                    status: res.data.data.user_status,
+                    password: res.data.data.user_visible_password,
+                    confirm_password: res.data.data.user_visible_password,
+                    additional_email: "",
+                    additional_contact_number: "",
+                })
+                console.log("form", form);
+                setOpen(true);
+                setDialogTitle('Edit');
+            }
         });
     }
+
+    const onSelectFile = (e, flag) => {
+
+        if (flag == "aadhar_front") {
+            if (!e.target.files || e.target.files.length === 0) {
+                setPreviewAadharCardFront(undefined)
+                return
+            }
+
+            setSelectedAadharCardFrontFile(e.target.files[0])
+        } else if (flag == "aadhar_back") {
+            if (!e.target.files || e.target.files.length === 0) {
+                setPreviewAadharCardBack(undefined)
+                return
+            }
+
+            setSelectedAadharCardBackFile(e.target.files[0])
+        }
+    }
+
+    const kycFormSubmit = async () => {
+        if (kycForm.feedback_remarks == "") {
+            toast.error('Please enter remark');
+        } else if (kycForm.status == '') {
+            toast.error('Please select status');
+        } else {
+            kycForm.isLoader = true;
+            setKycForm({ ...kycForm });
+            const param = new FormData();
+            param.append('action', 'update_kyc');
+            // param.append('is_app', 1);
+            // param.append('AADMIN_LOGIN_ID', 1);
+            param.append('aadhar_card_number', kycForm.id_number);
+            param.append('kyc_status', kycForm.status);
+            param.append('feedback_remarks', kycForm.feedback_remarks);
+            param.append('kyc_id', kycForm.id);
+            // param.append('user_id', kycForm.user_id);
+
+            if (selectedAadharCardFrontFile) {
+                param.append('aadhar_card_front_image', selectedAadharCardFrontFile);
+            }
+
+            if (selectedAadharCardBackFile) {
+                param.append('aadhar_card_back_image', selectedAadharCardBackFile);
+            }
+
+            await axios.post(`${Url}/ajaxfiles/pamm/mm_kyc_manage.php`, param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                kycForm.isLoader = false;
+                setKycForm({ ...kycForm });
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    setRefresh(!refresh);
+                    toast.success(res.data.message);
+                    setOpen(false);
+                    setKycForm({
+                        isLoader: false,
+                        id: "",
+                        name: "",
+                        id_number: "",
+                        back_image: "",
+                        front_image: "",
+                        email: "",
+                        feedback_remarks: "",
+                        feedback_remarks: "",
+                        status: "",
+                    });
+                }
+            });
+        }
+    }
+
+    useEffect(() => {
+        console.log('aadhar front');
+        if (!selectedAadharCardFrontFile) {
+            setPreviewAadharCardFront(undefined)
+            return
+        }
+        const objectUrl = URL.createObjectURL(selectedAadharCardFrontFile)
+        setPreviewAadharCardFront(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [selectedAadharCardFrontFile])
+
+    useEffect(() => {
+        console.log('aadhar back');
+        if (!selectedAadharCardBackFile) {
+            setPreviewAadharCardBack(undefined)
+            return
+        }
+        const objectUrl = URL.createObjectURL(selectedAadharCardBackFile)
+        setPreviewAadharCardBack(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+
+    }, [selectedAadharCardBackFile])
 
     useEffect(() => {
         getCountry();
@@ -937,24 +1449,24 @@ const MmManagement = () => {
                                             <CardContent className="py-3">
                                                 <Grid container spacing={2}>
                                                     <Grid item sm={12} md={12} lg={12}>
-                                                        <CommonTable url={`${Url}/datatable/pamm/money_manager_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
+                                                        <CommonTable url={`${Url}/datatable/pamm/money_manager_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh} />
                                                     </Grid>
                                                 </Grid>
                                             </CardContent>
                                         </Paper>
                                     </TabPanel>
                                     <TabPanel value={value} index={1} dir={theme.direction}>
-                                    <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
+                                        <CommonFilter search={kycSearchBy} searchWord={setSearchKeyword} setParam={setParam} />
                                         <br />
                                         <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                                            <div className='actionGroupButton'>
+                                            {/* <div className='actionGroupButton'>
                                                 <Button variant="contained" className="add" onClick={openDialogbox}>Add</Button>
                                             </div>
-                                            <br />
+                                            <br /> */}
                                             <CardContent className="py-3">
                                                 <Grid container spacing={2}>
                                                     <Grid item sm={12} md={12} lg={12}>
-                                                        <CommonTable url={`${Url}/datatable/pamm/mm_kyc_list.php`} column={column} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
+                                                        <CommonTable url={`${Url}/datatable/pamm/mm_kyc_list.php`} column={kycColumn} sort='2' search={kycSearchBy} searchWord={searchKeyword} param={param} refresh={refresh} />
                                                     </Grid>
                                                 </Grid>
                                             </CardContent>
