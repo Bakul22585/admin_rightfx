@@ -72,7 +72,7 @@ const Target = () => {
         ac_target: '',
         money_in_target: '',
         id: '',
-        isLoder: false
+        isLoader: false
     });
     const [searchBy, setSearchBy] = useState([
         {
@@ -384,7 +384,7 @@ const Target = () => {
         } else if (form.money_in_target == "") {
             toast.error('Please enter money in target');
         } else {
-            form.isLoder = true;
+            form.isLoader = true;
             setForm({...form});
             const param = new FormData();
             // param.append("is_app", 1);
@@ -400,7 +400,7 @@ const Target = () => {
                         localStorage.setItem("login", true);
                         navigate("/");
                     }
-                    form.isLoder = false;
+                    form.isLoader = false;
                     setForm({...form});
                     if (res.data.status == "error") {
                         toast.error(res.data.message);
@@ -425,7 +425,7 @@ const Target = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className='main-heading'>Target</p>
+                                <p className='main-heading'>Salesman</p>
                                 <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>

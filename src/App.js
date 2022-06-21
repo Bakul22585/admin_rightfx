@@ -139,7 +139,7 @@ const App = () => {
                 <Route exact path="/basic_ib_report" element={<BasicIbReport/>} />
                 <Route exact path="/ib_structure" element={<IBStructure/>} />
                 <Route exact path="/link" element={<Link/>} />
-                <Route exact path="/target" element={<Target/>} />
+                <Route exact path="/Salesman" element={<Target/>} />
                 <Route exact path="/menu_setting" element={<MenuSetting/>} />
                 <Route exact path="/pamm_dashboard" element={<PammDashboard/>} />
                 <Route exact path="/pamm_activity_log" element={<PammActivityLog/>} />

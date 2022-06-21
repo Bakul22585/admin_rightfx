@@ -40,3 +40,8 @@
     border-top: 1px solid hsla(0, .4%, 50%, .3);
     padding: 5px;
 }
+.table-loader {
+    display: flex;
+    justify-content: center;
+    padding: 0px;
+}

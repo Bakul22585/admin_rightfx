@@ -304,12 +304,12 @@ const Sidebar = (prop) => {
                       <li>
                         <NavLink to="/pamm_mm_management" onClick={CloseSidebar}>MM Management</NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/target" onClick={CloseSidebar}>Transaction</NavLink>
                       </li>
                       <li>
                         <NavLink to="/target" onClick={CloseSidebar}>Content Management</NavLink>
-                      </li>
+                      </li> */}
                       <li>
                         <NavLink to="/pamm_investor_request" onClick={CloseSidebar}>Investor Requests</NavLink>
                       </li>
@@ -339,7 +339,7 @@ const Sidebar = (prop) => {
                         <NavLink to="/link" onClick={CloseSidebar}>Link</NavLink>
                       </li>
                       <li>
-                        <NavLink to="/target" onClick={CloseSidebar}>Target</NavLink>
+                        <NavLink to="/Salesman" onClick={CloseSidebar}>Salesman</NavLink>
                       </li>
                     </ul>
                   </Collapse>

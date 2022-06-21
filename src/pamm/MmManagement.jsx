@@ -181,6 +181,7 @@ const MmManagement = () => {
         },
     ]);
     toast.configure();
+
     const column = [
         {
             name: 'SR NO',
@@ -272,6 +273,7 @@ const MmManagement = () => {
             allowOverflow: true
         }
     ];
+    
     const kycColumn = [
         {
             name: 'SR NO',

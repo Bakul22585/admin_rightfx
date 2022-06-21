@@ -1,4 +1,4 @@
-import { Button, CardContent, Grid, Paper } from '@mui/material'
+import { Button, CardContent, Grid, Menu, MenuItem, Paper } from '@mui/material'
 import React, { useState } from 'react'
 import CommonFilter from '../common/CommonFilter'
 import CommonTable from '../common/CommonTable'
@@ -14,6 +14,9 @@ const InvestorRequest = () => {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [param, setParam] = useState("");
     const [refresh, setRefresh] = useState(false);
+    const [isLoader, setIsLoader] = useState(false);
+    const [openTableMenus, setOpenTableMenus] = useState([]);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     toast.configure();
     const [searchBy, setSearchBy] = useState([
@@ -115,7 +118,12 @@ const InvestorRequest = () => {
         {
             name: 'STATUS',
             selector: row => {
-                return <span title={(row.status == "0") ? "Pending" : (row.status == "1") ? "Approved" : "Rejected"}>{(row.status == "0") ? "Pending" : (row.status == "1") ? "Approved" : "Rejected"}</span>
+                return <span title={(row.status == "0") ? "Pending" : (row.status == "1") ? "Approved" : "Rejected"} className={`text-color-${row.status == "1"
+                    ? "green"
+                    : row.status == "2"
+                        ? "red"
+                        : "yellow"
+                    }`}>{(row.status == "0") ? "Pending" : (row.status == "1") ? "Approved" : "Rejected"}</span>
             },
             wrap: true,
             sortable: true,
@@ -143,23 +151,153 @@ const InvestorRequest = () => {
             grow: 0.5,
         },
         {
-            name: 'UPDATE PAMM',
+            name: 'Action',
             button: true,
             cell: row => {
-                return <div className='actionButtonGroup'>
+                return <div>
                     <Button
-                        className='btn-edit'
-                        onClick={(event) => updatePamm(row)}
+                        id={`actionButton_${row.sr_no}`}
+                        aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => handleContextClick(event, row.sr_no)}
                         {...row}
-                        style={{ color: 'rgb(144 145 139)' }}>
-                        <i className="material-icons">autorenew</i>
+                        style={{ color: 'rgb(144 145 139)' }}
+                    >
+                        <i className="material-icons">more_horiz</i>
                     </Button>
+                    <Menu
+                        id={`basic-menu-${row.sr_no}`}
+                        anchorEl={openTableMenus[row.sr_no]}
+                        open={Boolean(openTableMenus[row.sr_no])}
+                        onClose={(event) => handleContextClose(row.sr_no)}
+                    >
+                        <MenuItem className='approve' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="approve material-icons font-color-approved">thumb_up</i>&nbsp;&nbsp;Approved</MenuItem>
+                        <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row)}><i className="reject material-icons font-color-rejected">thumb_down</i>&nbsp;&nbsp;Rejected</MenuItem>
+
+                    </Menu>
                 </div>
             },
             ignoreRowClick: true,
             allowOverflow: true
         }
     ];
+
+    const handleContextClick = (event, index) => {
+        console.log(event.currentTarget.getAttribute('id'), index);
+        let tableMenus = [...openTableMenus];
+        tableMenus[index] = event.currentTarget;
+        setOpenTableMenus(tableMenus);
+    };
+
+    const handleContextClose = (index) => {
+        let tableMenus = [...openTableMenus];
+        tableMenus[index] = null;
+        setOpenTableMenus(tableMenus);
+    };
+
+    const actionMenuPopup = (e, data) => {
+        handleContextClose(data.sr_no);
+        if (e.target.classList.contains('reject')) {
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to rejected this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-danger'
+                                    onClick={() => {
+                                        changeStatus('rejected', data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Reject it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
+        } else if (e.target.classList.contains('approve')) {
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className='custom-ui'>
+                            <h1>Are you sure?</h1>
+                            <p>Do you want to approved this?</p>
+                            <div className='confirmation-alert-action-button'>
+                                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                                <Button variant="contained" className='btn-gradient btn-success'
+                                    onClick={() => {
+                                        changeStatus('approved', data);
+                                        onClose();
+                                    }}
+                                >
+                                    Yes, Approve it!
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                }
+            });
+        }
+    };
+
+    const changeStatus = (status, data) => {
+        console.log(status, data);
+        if (status == 'approved') {
+            console.log("data", data)
+            setIsLoader(true);
+            const param = new FormData();
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
+            param.append("user_id", data.user_id);
+            param.append("action", 'update_is_pamm');
+            param.append("pamm_request_id", data.pamm_request_id);
+            param.append("status", 1);
+            axios.post(Url + "/ajaxfiles/pamm/user_manage.php", param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                setIsLoader(false);
+                if (res.data.status == "error") {
+                    toast.error(res.data.message);
+                } else {
+                    toast.success(res.data.message);
+                    setRefresh(!refresh);
+                }
+            });
+
+        } else if (status == 'rejected') {
+            console.log("data", data)
+            setIsLoader(true);
+            const param = new FormData();
+            // param.append("is_app", 1);
+            // param.append("AADMIN_LOGIN_ID", 1);
+            param.append("user_id", data.user_id);
+            param.append("action", 'update_is_pamm');
+            param.append("pamm_request_id", data.pamm_request_id);
+            param.append("status", 2);
+            axios.post(Url + "/ajaxfiles/pamm/user_manage.php", param).then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                setIsLoader(false);
+                if (res.data.status == "error") {
+                    toast.error(res.data.message);
+                } else {
+                    toast.success(res.data.message);
+                    setRefresh(!refresh);
+                }
+            });
+
+
+        }
+    }
 
     const updatePamm = (data) => {
         confirmAlert({
@@ -221,7 +359,18 @@ const InvestorRequest = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/pamm/pamm_investor_requests.php`} column={activityColumn} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh} />
+                                                {
+                                                    (isLoader) ? <div className='table-loader'><svg class="spinner" viewBox="0 0 50 50">
+                                                        <circle
+                                                            class="path"
+                                                            cx="25"
+                                                            cy="25"
+                                                            r="20"
+                                                            fill="none"
+                                                            stroke-width="5"
+                                                        ></circle>
+                                                    </svg></div> : <CommonTable url={`${Url}/datatable/pamm/pamm_investor_requests.php`} column={activityColumn} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh} />
+                                                }
                                             </Grid>
                                         </Grid>
                                     </CardContent>
