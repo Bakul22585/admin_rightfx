@@ -286,7 +286,8 @@ const Sidebar = (prop) => {
                     className={`pamm ${open.pamm ? "active" : ""}`}
                     onClick={handleClick}
                   >
-                    <img src='assets/img/pamm.png' className="sidebar-menu-img"/>
+                    <span className="material-icons" style={style}>soap</span>
+                    {/* <img src='assets/img/pamm.png' className="sidebar-menu-img"/> */}
                     Pamm
                     <span className="sidebar-icon-indicator">
 

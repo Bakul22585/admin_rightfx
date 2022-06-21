@@ -273,7 +273,7 @@ const CommonTable = (prop) => {
     ]);
     // console.log("common table",prop);
     return (
-        <div>
+        <div className={`${(prop.className) ? prop.className : ""}`}>
             <div className={`tableSearchField ${(prop.csv) ? "space-between" : ""}`}>
                 {
                     (prop.csv) ? <a href={link} className='btn-export-style' target="_blank">CSV</a> : ""

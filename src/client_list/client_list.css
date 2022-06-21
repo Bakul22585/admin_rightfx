@@ -124,3 +124,6 @@
 .actionButton .lead_completed_status {
     color: #00bf00;
 }
+.client_table .rdt_Table .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol > div > div {
+    white-space: nowrap;
+}

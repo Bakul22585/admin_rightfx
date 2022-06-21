@@ -86,7 +86,7 @@ const App = () => {
               <Routes >
                 <Route exact path="/" element={<Dashboard setLogin={setLogin}/>} />
                 <Route path="*" element={<Navigate to="dashboard" replace setLogin={setLogin}/>} />
-                <Route exact path="/dashboard" element={<Dashboard />} />
+                <Route exact path="/dashboard" element={<Dashboard setLogin={setLogin}/>} />
                 <Route exact path="/employees" element={<Employees />} />
                 <Route exact path="/role_management" element={<RoleManagement />} />
                 <Route exact path="/client_list" element={<ClientList />} />

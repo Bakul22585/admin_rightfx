@@ -331,7 +331,7 @@ const ClientList = () => {
             sortable: true,
             reorder: true,
             wrap: true,
-            grow: 0.1,
+            grow: 0.5,
         },
         {
             name: 'NAME',
@@ -669,7 +669,7 @@ const ClientList = () => {
                                         <Button variant="contained">All</Button>
                                     </div>
                                     <br /> */}
-                                    <CommonTable url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={param}/>
+                                    <CommonTable className="client_table" url={`${Url}/datatable/users_list.php`} column={depositColumn} sort='0' refresh={refresh} filter={filterData} search={searchBy} searchWord={searchKeyword} param={param}/>
                                 </Paper>
 
                                 <BootstrapDialog
