@@ -6,22 +6,22 @@ import InputBase from "@mui/material/InputBase";
 import { styled } from "@mui/material/styles";
 import ButtonBase from "@mui/material/ButtonBase";
 import Avatar from "@mui/material/Avatar";
-import GppGoodIcon from '@mui/icons-material/GppGood';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import GppGoodIcon from "@mui/icons-material/GppGood";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { red } from "@mui/material/colors";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Button, List, ListItem, Menu } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
-import axios from 'axios';
-import { Url } from '../global';
-import EditIcon from '@mui/icons-material/Edit';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import CloseIcon from '@mui/icons-material/Close';
-import DialogActions from '@mui/material/DialogActions';
+import axios from "axios";
+import { Url } from "../global";
+import EditIcon from "@mui/icons-material/Edit";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogActions from "@mui/material/DialogActions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { styled } from "@mui/material/styles";
@@ -34,7 +34,6 @@ const languages = [
     name: "English",
     country_code: "gb",
     dir: "ltr",
-
   },
   {
     code: "ar",
@@ -47,36 +46,31 @@ const languages = [
     name: "日本",
     country_code: "sa",
     dir: "ltr",
-
   },
   {
     code: "ru",
     name: "русский",
     country_code: "gb",
     dir: "ltr",
-
   },
   {
     code: "es",
     name: "española",
     country_code: "gb",
     dir: "ltr",
-
   },
   {
     code: "fa",
     name: "English",
     country_code: "gb",
     dir: "rtl",
-
   },
   {
     code: "cn",
     name: "English",
     country_code: "gb",
     dir: "ltr",
-
-  }
+  },
 ];
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -125,10 +119,10 @@ const CssTextField = styled(TextField)({
 });
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
-  '& .MuiDialogActions-root': {
+  "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
 }));
@@ -228,62 +222,63 @@ const Header = (prop) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (info['search'] && info['search'].trim() != '') {
-      navigate("/master/" + info['search']);
+    if (info["search"] && info["search"].trim() != "") {
+      navigate("/master/" + info["search"]);
     }
   };
 
   const Logout = async () => {
     const param = new FormData();
     // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1)
-    await axios.post(Url + '/ajaxfiles/logout.php', param).then((res) => {
+    // param.append("AADMIN_LOGIN_ID", 1);
+    await axios.post(Url + "/ajaxfiles/logout.php", param).then((res) => {
       localStorage.setItem("login", true);
       prop.setLogin("true");
       navigate("/login");
-    })
-
-  }
+    });
+  };
 
   const MyAccount = () => {
     setAnchorEl(null);
     navigate("/myAccount");
-  }
+  };
 
   const changePasswordSubmit = async () => {
     if (form.current_password == "") {
-      toast.error('Please enter current password');
+      toast.error("Please enter current password");
     } else if (form.new_password == "") {
-      toast.error('Please enter new password');
+      toast.error("Please enter new password");
     } else if (form.confirm_password == "") {
-      toast.error('Please enter confirm password');
+      toast.error("Please enter confirm password");
     } else if (form.new_password != form.confirm_password) {
-      toast.error('Confirm password must be same like to password');
+      toast.error("Confirm password must be same like to password");
     } else {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
       // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1)
+      // param.append("AADMIN_LOGIN_ID", 1);
       param.append("old_password", form.current_password);
       param.append("new_password", form.new_password);
       param.append("confirm_password", form.confirm_password);
-      param.append("action", 'update_password');
+      param.append("action", "update_password");
 
-      await axios.post(Url + '/ajaxfiles/profile_update.php', param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-          CloseDialogbox();
-        }
-      })
+      await axios
+        .post(Url + "/ajaxfiles/profile_update.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            CloseDialogbox();
+          }
+        });
     }
-  }
+  };
 
   const input = (e) => {
     const { name, value } = e.target;
@@ -293,8 +288,8 @@ const Header = (prop) => {
         ...prevalue,
         [name]: value,
       };
-    })
-  }
+    });
+  };
 
   return (
     <div className="app-header app-header--shadow app-header--opacity-bg">
@@ -341,11 +336,9 @@ const Header = (prop) => {
         </form> */}
         <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
-            <Avatar sx={{ bgcolor: '#2a3f73' }}>RA</Avatar>{" "}
+            <Avatar sx={{ bgcolor: "#2a3f73" }}>RA</Avatar>{" "}
           </span>
-          <span className="d-none d-md-inline-block mx-2">
-            RightFx Admin
-          </span>
+          <span className="d-none d-md-inline-block mx-2">RightFx Admin</span>
           <KeyboardArrowDownIcon />
         </ButtonBase>
         <Menu
@@ -364,8 +357,11 @@ const Header = (prop) => {
           }}
         >
           <div className="dropdown-menu-xl overflow-hidden p-0">
-            <div className="d-flex p-4 cursor-pointer" onClick={() => MyAccount()}>
-              <Avatar sx={{ bgcolor: '#2a3f73' }}>RA</Avatar>
+            <div
+              className="d-flex p-4 cursor-pointer"
+              onClick={() => MyAccount()}
+            >
+              <Avatar sx={{ bgcolor: "#2a3f73" }}>RA</Avatar>
               <div className="mx-3">
                 <h6 className="font-weight-bold mb-1 text-black">
                   RightFx Admin
@@ -374,7 +370,10 @@ const Header = (prop) => {
               </div>
             </div>
             <div className="divider"></div>
-            <List className="nav-neutral-danger nav-pills-rounded flex-column" style={{ padding: '0 15px' }}>
+            <List
+              className="nav-neutral-danger nav-pills-rounded flex-column"
+              style={{ padding: "0 15px" }}
+            >
               <ListItem button={true} onClick={() => openDialogbox()}>
                 <div className="mr-2">
                   <i className="material-icons">password</i>
@@ -401,31 +400,62 @@ const Header = (prop) => {
           onClose={CloseDialogbox}
           aria-labelledby="customized-dialog-title"
           open={openModel}
-          className='modalWidth100'
+          className="modalWidth100"
         >
-          <BootstrapDialogTitle id="customized-dialog-title" className='dialogTitle' onClose={CloseDialogbox}>
+          <BootstrapDialogTitle
+            id="customized-dialog-title"
+            className="dialogTitle"
+            onClose={CloseDialogbox}
+          >
             Change Your Password
           </BootstrapDialogTitle>
           <DialogContent dividers>
-            <div className='changePasswordSection'>
-              <div className='element'>
-                <TextField name="current_password" onChange={input} label="Current Password" variant="standard" sx={{ width: '100%' }} focused />
+            <div className="changePasswordSection">
+              <div className="element">
+                <TextField
+                  name="current_password"
+                  onChange={input}
+                  label="Current Password"
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  focused
+                />
               </div>
               <br />
-              <div className='element'>
-                <TextField name="new_password" onChange={input} label="New Password" variant="standard" sx={{ width: '100%' }} focused />
+              <div className="element">
+                <TextField
+                  name="new_password"
+                  onChange={input}
+                  label="New Password"
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  focused
+                />
               </div>
               <br />
-              <div className='element'>
-                <TextField name="confirm_password" onChange={input} label="Confirm Password" variant="standard" sx={{ width: '100%' }} focused />
+              <div className="element">
+                <TextField
+                  name="confirm_password"
+                  onChange={input}
+                  label="Confirm Password"
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  focused
+                />
               </div>
             </div>
           </DialogContent>
           <DialogActions>
-            <div className='dialogMultipleActionButton'>
-              <Button variant="contained" className='cancelButton' onClick={CloseDialogbox}>Cancel</Button>
-              {
-                (form.isLoader) ? <Button
+            <div className="dialogMultipleActionButton">
+              <Button
+                variant="contained"
+                className="cancelButton"
+                onClick={CloseDialogbox}
+              >
+                Cancel
+              </Button>
+              {form.isLoader ? (
+                <Button
                   tabindex="0"
                   size="large"
                   className=" btn-gradient createMt5Formloder"
@@ -441,9 +471,16 @@ const Header = (prop) => {
                       stroke-width="5"
                     ></circle>
                   </svg>
-                </Button> : <Button variant="contained" className='btn-gradient' onClick={changePasswordSubmit}>Change Password</Button>
-              }
-
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  className="btn-gradient"
+                  onClick={changePasswordSubmit}
+                >
+                  Change Password
+                </Button>
+              )}
             </div>
           </DialogActions>
         </BootstrapDialog>

@@ -407,8 +407,8 @@ const Dashboard = (prop) => {
   const [pageLoader, setPageLoader] = useState(true);
   const [leadwise, setLeadWise] = useState({
     options: options,
-    active: true
-  })
+    active: true,
+  });
   useEffect(() => {
     if (localStorage.getItem("login") == "true") {
       prop.setLogin("true");
@@ -441,8 +441,8 @@ const Dashboard = (prop) => {
           item[1] = 0;
         }
       });
-      leadwise.options = { ...options }
-      setLeadWise({ ...leadwise })
+      leadwise.options = { ...options };
+      setLeadWise({ ...leadwise });
     } else {
       data.forEach((item) => {
         var count = fullData.countrywise_users.filter(
@@ -454,17 +454,16 @@ const Dashboard = (prop) => {
           item[1] = 0;
         }
       });
-      leadwise.options = { ...options }
-      setLeadWise({ ...leadwise })
+      leadwise.options = { ...options };
+      setLeadWise({ ...leadwise });
     }
-
-  }
+  };
 
   useEffect(() => {
     if (fullData.countrywise_leads) {
       facthMapData();
     }
-  },[fullData])
+  }, [fullData]);
 
   return (
     <div>
@@ -504,19 +503,33 @@ const Dashboard = (prop) => {
                                 <ButtonGroup
                                   disableElevation
                                   variant="contained"
-
                                 >
-                                  <Button className={`${leadwise.active ? "action-group-button" : "button-group-off"}`} onClick={() => {
-                                    leadwise.active = true
-                                    setLeadWise({ ...leadwise })
-                                    facthMapData()
-                                  }}>Leads</Button>
-                                  <Button className={`${!leadwise.active ? "action-button-group" : "button-group-off"}`}
+                                  <Button
+                                    className={`${
+                                      leadwise.active
+                                        ? "action-group-button"
+                                        : "button-group-off"
+                                    }`}
                                     onClick={() => {
-                                      leadwise.active = false
-                                      setLeadWise({ ...leadwise })
-                                      facthMapData()
-                                    }}>
+                                      leadwise.active = true;
+                                      setLeadWise({ ...leadwise });
+                                      facthMapData();
+                                    }}
+                                  >
+                                    Leads
+                                  </Button>
+                                  <Button
+                                    className={`${
+                                      !leadwise.active
+                                        ? "action-button-group"
+                                        : "button-group-off"
+                                    }`}
+                                    onClick={() => {
+                                      leadwise.active = false;
+                                      setLeadWise({ ...leadwise });
+                                      facthMapData();
+                                    }}
+                                  >
                                     Clients
                                   </Button>
                                 </ButtonGroup>
