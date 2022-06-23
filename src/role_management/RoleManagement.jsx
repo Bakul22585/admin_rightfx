@@ -18,7 +18,6 @@ const RoleManagement = () => {
             selector: row => {
                 return <span>{row.sr_no}</span>
             },
-            sortable: true,
             reorder: true,
             grow: 0.1,
         },
@@ -30,6 +29,7 @@ const RoleManagement = () => {
             sortable: true,
             reorder: true,
             grow: 0.1,
+            wrap: true,
         },
         {
             name: 'DESCRIPTION',
@@ -37,6 +37,7 @@ const RoleManagement = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
         },
         {
             name: 'Action',
@@ -68,6 +69,7 @@ const RoleManagement = () => {
     const [searchKeyword, setSearchKeyword] = useState("");
     const navigate = useNavigate();
     const [openTableMenus, setOpenTableMenus] = useState([]);
+    const [param, setParam] = useState({});
     const [searchBy, setSearchBy] = useState([
         {
           'label': 'ROLE NAME',
@@ -77,7 +79,7 @@ const RoleManagement = () => {
         {
           'label': 'DESCRIPTION',
           'value': false,
-          'name': 'description'
+          'name': 'role_description'
         },
       ]);
 
@@ -135,14 +137,14 @@ const RoleManagement = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Role Management</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword}/>
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam}/>
                                 <br/>
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     <div className='actionGroupButton'>
                                         <Button variant="contained" onClick={gotoRoleCreate}>Add Role</Button>
                                     </div>
                                     <br />
-                                    <CommonTable url={`${Url}/datatable/role_list.php`} column={column} sort='0' search={searchBy} searchWord={searchKeyword}/>
+                                    <CommonTable url={`${Url}/datatable/role_list.php`} column={column} sort='0' search={searchBy} searchWord={searchKeyword} param={param}/>
                                 </Paper>
                             </Grid>
                         </Grid>

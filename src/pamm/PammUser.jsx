@@ -791,8 +791,8 @@ const PammUser = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-                <p className="main-heading">User Management ({title})</p>
-                <Tabs
+                <p className="main-heading">User Management</p>
+                {/* <Tabs
                   value={value}
                   onChange={handleChange}
                   variant="scrollable"
@@ -802,13 +802,13 @@ const PammUser = () => {
                 >
                   <Tab label="CLIENT LIST" />
                   <Tab label="CLIENT PASSWORD LIST" />
-                </Tabs>
-                <SwipeableViews
+                </Tabs> */}
+                {/* <SwipeableViews
                   axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                   index={value}
                   onChangeIndex={handleChangeIndex}
                 >
-                  <TabPanel value={value} index={0} dir={theme.direction}>
+                  <TabPanel value={value} index={0} dir={theme.direction}> */}
                     <CommonFilter
                       search={searchBy}
                       searchWord={setSearchKeyword}
@@ -840,7 +840,7 @@ const PammUser = () => {
                         </Grid>
                       </CardContent>
                     </Paper>
-                  </TabPanel>
+                  {/* </TabPanel>
                   <TabPanel value={value} index={1} dir={theme.direction}>
                     <CommonFilter
                       search={clientPasswordSearchBy}
@@ -853,10 +853,6 @@ const PammUser = () => {
                       style={{ borderRadius: "10px" }}
                       className="pending-all-15px"
                     >
-                      {/* <div className='actionGroupButton'>
-                                                <Button variant="contained" onClick={handleClickOpen}>Add Deposit</Button>
-                                            </div>
-                                            <br /> */}
                       <CardContent className="py-3">
                         <Grid container spacing={2}>
                           <Grid item sm={12} md={12} lg={12}>
@@ -873,7 +869,7 @@ const PammUser = () => {
                       </CardContent>
                     </Paper>
                   </TabPanel>
-                </SwipeableViews>
+                </SwipeableViews> */}
               </Grid>
             </Grid>
             <BootstrapDialog

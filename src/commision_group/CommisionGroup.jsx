@@ -90,14 +90,14 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       name: "group_name",
     },
     {
-      label: "TYPE",
+      label: "MT5 GROUP NAME",
       value: false,
-      name: "type",
+      name: "ib_mt5group_name",
     },
     {
-      label: "TOTAL LEVEL",
+      label: "COMMISSION",
       value: false,
-      name: "total_level",
+      name: "commission",
     },
     {
       label: "COMPANY GET",
@@ -110,9 +110,9 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       name: "company_passon",
     },
     {
-      label: "MAIN USER TRADER",
+      label: "PLAN TITLE",
       value: false,
-      name: "main_user_trader",
+      name: "plan_title",
     },
   ]);
 
@@ -190,7 +190,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       wrap: true,
     },
     {
-      name: "plan title",
+      name: "PLAN TITLE",
       selector: (row) => {
         return <span title={row.plan_title}>{row.plan_title}</span>;
       },
@@ -200,7 +200,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       wrap: true,
     },
     {
-      name: "Is Default",
+      name: "IS DEFAULT",
       selector: (row) => {
         return <span title={row.plan_title}>{(row.is_default == "0")? "No" :"Yes"}</span>;
       },
@@ -210,7 +210,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       wrap: true,
     },
     {
-      name: "Is Private",
+      name: "IS PRIVATE",
       selector: (row) => {
         return <span title={row.plan_title}>{(row.is_private == "0")? "No" :"Yes"}</span>;
       },
@@ -220,7 +220,7 @@ const[mt5GroupName,setmt5GroupName]=useState([])
       wrap: true,
     },
     {
-      name: "Action",
+      name: "ACTION",
       button: true,
       cell: (row) => {
         return (

@@ -3351,13 +3351,25 @@ const Profile = () => {
                 ""
               )}
             </div>
-            <div>
+            {/* <div>
+            </div>
+            <br /> */}
+            <div className="margeField">
               <TextField
                 className="input-font-small"
                 label="Amount"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
+                onChange={transactionInput}
+              />
+              <TextField
+                id="standard-textarea"
+                label="Notes"
+                multiline
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="note"
                 onChange={transactionInput}
               />
             </div>
@@ -6112,6 +6124,7 @@ const Profile = () => {
         param.append("amount", transactionForm.amount);
         param.append("from_account_type", transactionForm.from_account_type);
         param.append("transfer_to", transactionForm.transfer_to);
+        param.append("remarks", transactionForm.note);
 
         await axios
           .post(`${Url}/ajaxfiles/internal_transfer.php`, param)

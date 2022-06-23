@@ -157,6 +157,7 @@ const CommonFilter = (prop) => {
   const filterByChange = (e) => {
     console.log("selected value", e.target.value);
     setFilterBy(e.target.value);
+    prop.setParam({});
   };
 
   const dynamicCheckbox = (e) => {

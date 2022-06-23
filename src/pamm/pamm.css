@@ -16,10 +16,11 @@
 }
 .new-pamm-member-section {
     display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 24% 24% 24% 24%;
     justify-content: center;
     align-items: center;
     padding: 10px;
+    gap: 10px;
 }
 .new-pamm-member-section .new-pamm-member-element {
     display: flex;

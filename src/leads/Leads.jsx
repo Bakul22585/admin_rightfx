@@ -171,6 +171,7 @@ const Leads = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [param, setParam] = useState({});
+  const [callParam, setCallParam] = useState({});
   const [countryData, setCountryData] = useState([])
   const [listManagers, setListManagers] = useState([])
   const [form, setForm] = useState({
@@ -366,6 +367,7 @@ const Leads = () => {
       reference: ''
     });
     setParam({ ...param, 'inquiry_id': e.inquiry_id });
+    setCallParam({'inquiry_id': e.inquiry_id});
     setDialogTitle('View Lead (' + e.customer_name + ')');
     setMaxWidth('lg');
     setOpen(true);
@@ -697,12 +699,12 @@ const Leads = () => {
               <CommonTable url={`${Url}/datatable/fetch_inquiey_master.php`} column={column} sort='0' filter={filterData} refresh={refresh} param={param} />
             </Paper>
           </Grid>
-          {/* <Grid item md={12} lg={12} xl={12} sm={12}>
+          <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Call History</p>
-              <CommonTable url={`${Url}/datatable/users_list.php`} column={callColumn} sort='0' filter={filterData} />
+              <CommonTable url={`${Url}/datatable/fetch_inquiey_call_history.php`} column={callColumn} sort='0' param={callParam}/>
             </Paper>
-          </Grid> */}
+          </Grid>
         </Grid>
       </div>;
     } else if (dialogTitle == 'Are you sure?') {
@@ -1229,6 +1231,7 @@ const Leads = () => {
       },
       reorder: true,
       grow: 0.1,
+      wrap: true,
     },
     {
       name: 'Interest',
@@ -1236,6 +1239,7 @@ const Leads = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+      wrap: true,
     },
     {
       name: 'Followup Date',
@@ -1243,6 +1247,7 @@ const Leads = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+      wrap: true,
     },
     {
       name: 'Remarks',
@@ -1257,6 +1262,7 @@ const Leads = () => {
       selector: row => { return <span title={row.added_by}>{row.added_by}</span> },
       reorder: true,
       grow: 1,
+      wrap: true,
     },
     /* {
       name: 'Recording',
@@ -1276,36 +1282,58 @@ const Leads = () => {
       selector: row => {
         return <span>{row.sr_no}</span>
       },
-      sortable: true,
       reorder: true,
+      wrap: true,
       grow: 0.1,
     },
     {
-      name: 'Mobile No',
-      selector: row => { return <span title={row.user_phone}>{row.user_phone}</span> },
+      name: 'NAME',
+      selector: row => { return <span title={row.called_name_saved}>{row.called_name_saved}</span> },
       sortable: true,
       reorder: true,
+      wrap: true,
     },
     {
-      name: 'Type',
-      selector: row => { return <span title={row.kyc_status}>{row.kyc_status}</span> },
+      name: 'MOBILE NO',
+      selector: row => { return <span title={row.called_mobile}>{row.called_mobile}</span> },
       sortable: true,
       reorder: true,
+      wrap: true,
     },
     {
-      name: 'Call Duration',
-      selector: row => { return <span title={row.user_visible_password}>{row.user_visible_password}</span> },
+      name: 'SIM CARD',
+      selector: row => { return <span title={row.called_sim_name}>{row.called_sim_name}</span> },
       sortable: true,
       reorder: true,
+      wrap: true,
     },
     {
-      name: 'Call Datetime',
-      selector: row => {
-        return <div>
-        </div>
-      },
+      name: 'TYPE',
+      selector: row => { return <span title={row.called_type}>{row.called_type}</span> },
       sortable: true,
       reorder: true,
+      wrap: true,
+    },
+    {
+      name: 'DURATION',
+      selector: row => { return <span title={row.call_duration}>{row.call_duration}</span> },
+      sortable: true,
+      reorder: true,
+      wrap: true,
+    },
+    {
+      name: 'CALL SYNCED ON',
+      selector: row => { return <span title={row.sync_datetime}>{row.sync_datetime}</span> },
+      sortable: true,
+      reorder: true,
+      wrap: true,
+    },
+    {
+      name: 'DATETIME',
+      selector: row => { return <span title={row.called_datetime}>{row.called_datetime}</span> },
+      sortable: true,
+      reorder: true,
+      wrap: true,
     },
   ];
 

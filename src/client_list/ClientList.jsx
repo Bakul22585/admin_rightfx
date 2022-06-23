@@ -441,7 +441,7 @@ const ClientList = () => {
             button: true,
             cell: row => {
                 return <div>
-                    <NavLink to={ClientUrl}><i className="material-icons">login</i></NavLink>
+                    <Button onClick={(e) => {userLogin(row)}}><i className="material-icons">login</i></Button>
                 </div>
             },
             ignoreRowClick: true,
@@ -654,6 +654,50 @@ const ClientList = () => {
                 toast.error(res.data.message);
             } else {
                 setRefresh(!refresh);
+            }
+        });
+    }
+
+    const userLogin = (row) => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className='custom-ui'>
+                        <h1>Are you sure?</h1>
+                        <p>Do you want to sure login this user ?</p>
+                        <div className='confirmation-alert-action-button'>
+                            <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                            <Button variant="contained" className='btn-gradient btn-success'
+                                onClick={() => {
+                                    onClose();
+                                    getUserLoginToken(row);
+                                }}
+                            >
+                                Yes, Login it!
+                            </Button>
+                        </div>
+                    </div>
+                );
+            }
+        });
+    }
+
+    const getUserLoginToken = (data) => {
+        const param = new FormData();
+        // param.append('is_app', 1);
+        // param.append('AADMIN_LOGIN_ID', 1);
+        param.append('action', "login_as_user");
+        param.append('user_id', data.user_id);
+
+        axios.post(Url + "/ajaxfiles/user_manage.php", param).then((res) => {
+            if (res.data.message == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+            }
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                window.open(res.data.redirect_url, "_blank")
             }
         });
     }

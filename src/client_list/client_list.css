@@ -26,6 +26,7 @@
     align-items: end;
     gap: 15px;
     margin-top: 15px;
+    flex-wrap: wrap;
 }
 
 .searchByCheckbox .MuiFormControlLabel-label {

@@ -17817,3 +17817,11 @@ input[type=number] {
   overflow: unset;
   white-space: unset;
 }
+#react-confirm-alert .react-confirm-alert-overlay {
+  z-index: 999;
+}
+@media screen and (max-width: 575px) {
+  .loginbg {
+    padding: 0 15px;
+  }
+}

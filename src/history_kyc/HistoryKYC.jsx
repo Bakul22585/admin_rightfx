@@ -79,10 +79,7 @@ const HistoryKYC = () => {
     const [previewPassbook, setPreviewPassbook] = useState();
     const [searchKeyword, setSearchKeyword] = useState("");
     const [checkStatus, setcheckStatus] = useState("");
-    const [param, setParam] = useState({
-        'kyc_status': (id == "" )?'1' : '',
-        'filter': id
-    });
+    const [param, setParam] = useState({});
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -834,7 +831,7 @@ const HistoryKYC = () => {
 
     useEffect(() => {
         console.log('checkStatus', checkStatus);
-        if (checkStatus != "" ) {
+        if (checkStatus != "" && checkStatus != undefined) {
             param.kyc_status = checkStatus;
             setParam({...param});
         }
@@ -872,6 +869,16 @@ const HistoryKYC = () => {
             setSelectedPassbookFile(e.target.files[0])
         }
     }
+
+    useEffect(() => {
+        if (id != undefined && id != "") {
+            param.filter = id;
+            setParam({...param});
+        } else {
+            param.kyc_status = 1;
+            setParam({...param});
+        }
+    },[])
 
     return (
         <div>

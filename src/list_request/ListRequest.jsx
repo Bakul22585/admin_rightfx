@@ -519,11 +519,6 @@ const ListRequest = () => {
       'name': 'requested_user_name'
     },
     {
-      'label': 'DATE',
-      'value': false,
-      'name': 'date'
-    },
-    {
       'label': 'ACQUIRE CLIENT',
       'value': false,
       'name': 'acquire_client'

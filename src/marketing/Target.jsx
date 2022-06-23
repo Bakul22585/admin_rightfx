@@ -68,6 +68,7 @@ const Target = () => {
     const [dialogTitle, setDialogTitle] = useState("");
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
+    const [checkStatus, setcheckStatus] = useState("");
     const [form, setForm] = useState({
         ac_target: '',
         money_in_target: '',
@@ -426,7 +427,7 @@ const Target = () => {
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
                                 <p className='main-heading'>Salesman</p>
-                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} />
+                                <CommonFilter search={searchBy} searchWord={setSearchKeyword} setParam={setParam} setcheckStatus={setcheckStatus}/>
                                 <br />
                                 <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
                                     {/* <div className='actionGroupButton'>
@@ -436,7 +437,7 @@ const Target = () => {
                                     <CardContent className="py-3">
                                         <Grid container spacing={2}>
                                             <Grid item sm={12} md={12} lg={12}>
-                                                <CommonTable url={`${Url}/datatable/salesmanager_list.php`} column={activityColumn} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh}/>
+                                                <CommonTable url={`${Url}/datatable/salesmanager_list.php`} column={activityColumn} sort='2' search={searchBy} searchWord={searchKeyword} param={param} refresh={refresh} checkStatus={checkStatus}/>
                                             </Grid>
                                         </Grid>
                                     </CardContent>
