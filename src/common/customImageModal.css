@@ -44,6 +44,10 @@
     font-size: 13px !important;
 }
 
+
 .dFsTSm{
     white-space: unset !important;
+    overflow: initial !important;
+    text-transform: uppercase !important;
+    font-size: 12px;
 }
