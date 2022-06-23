@@ -86,7 +86,7 @@ const CommonTable = (prop) => {
 
   const handleClientPageChange = (page) => {
     console.log("page", page);
-    fetchClient(page == 1 ? 0 : page * clientPerPage - 10);
+    fetchClient(page == 1 ? 0 : (page * clientPerPage) - 10);
   };
 
   const handleClientPerRowsChange = async (newPerPage, page) => {

@@ -25,7 +25,7 @@ import Typography from '@mui/material/Typography';
 import CommonFilter from '../common/CommonFilter';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { Url } from '../global';
+import { ClientUrl, Url } from '../global';
 import axios from 'axios';
 
 const CssTextField = styled(TextField)({
@@ -436,6 +436,17 @@ const ClientList = () => {
             ignoreRowClick: true,
             allowOverflow: true
         },
+        {
+            name: 'Client Login',
+            button: true,
+            cell: row => {
+                return <div>
+                    <NavLink to={ClientUrl}><i className="material-icons">login</i></NavLink>
+                </div>
+            },
+            ignoreRowClick: true,
+            allowOverflow: true
+        } 
         /* {
             name: 'Action',
             button: true,

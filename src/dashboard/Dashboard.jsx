@@ -414,8 +414,8 @@ const Dashboard = (prop) => {
       prop.setLogin("true");
     }
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("is_app", 1);
+    param.append("AADMIN_LOGIN_ID", 1);
     axios.post(Url + "/ajaxfiles/dashboard.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
