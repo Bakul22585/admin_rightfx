@@ -127,6 +127,8 @@ const MmManagement = () => {
   const [countryData, setCountryData] = useState({
     data: [],
   });
+
+  const [approvestatus, setApprovestatus] = useState(false);
   const [form, setForm] = useState({
     isLoader: false,
     id: "",
@@ -544,8 +546,8 @@ const MmManagement = () => {
       e.target.classList.contains("edit")
     ) {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      //   param.append("is_app", 1);
+      //   param.append("AADMIN_LOGIN_ID", 1);
       param.append("kyc_id", data.kyc_id);
       param.append("action", "view_kyc");
       axios
@@ -590,8 +592,8 @@ const MmManagement = () => {
     if (status == "approved") {
       console.log("data", data);
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      //   param.append("is_app", 1);
+      //   param.append("AADMIN_LOGIN_ID", 1);
       param.append("kyc_id", data.kyc_id);
       param.append("action", "approve_kyc");
       axios
@@ -603,8 +605,8 @@ const MmManagement = () => {
     } else if (status == "rejected") {
       console.log("data", data);
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      //   param.append("is_app", 1);
+      //   param.append("AADMIN_LOGIN_ID", 1);
       param.append("kyc_id", data.kyc_id);
       param.append("action", "reject_kyc");
       axios
@@ -925,7 +927,7 @@ const MmManagement = () => {
               <Select
                 label
                 className="select-font-small"
-                name="user_country"
+                name="country"
                 onChange={input}
                 value={form.country}
               >
@@ -959,21 +961,25 @@ const MmManagement = () => {
               value={form.city}
             />
           </div>
-          <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
-              <InputLabel>Status</InputLabel>
-              <Select
-                label
-                className="select-font-small"
-                name="status"
-                onChange={input}
-                value={form.status}
-              >
-                <MenuItem value="0">Pending</MenuItem>
-                <MenuItem value="1">Approve</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
+          {approvestatus ? (
+            ""
+          ) : (
+            <div className="input-element">
+              <FormControl variant="standard" sx={{ width: "100%" }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  label
+                  className="select-font-small"
+                  name="status"
+                  onChange={input}
+                  value={form.status}
+                >
+                  <MenuItem value="0">Pending</MenuItem>
+                  <MenuItem value="1">Approve</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          )}
         </div>
       );
     } else if (dialogTitle == "View KYC Details") {
@@ -1367,8 +1373,8 @@ const MmManagement = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      //   param.append("is_app", 1);
+      //   param.append("AADMIN_LOGIN_ID", 1);
       param.append("user_first_name", form.first_name);
       param.append("user_last_name", form.last_name);
       param.append("user_email", form.email);
@@ -1436,8 +1442,8 @@ const MmManagement = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      //   param.append("is_app", 1);
+      //   param.append("AADMIN_LOGIN_ID", 1);
       param.append("action", "update_manager_details");
       param.append("user_id", form.id);
       param.append("user_first_name", form.first_name);
@@ -1526,6 +1532,11 @@ const MmManagement = () => {
           additional_email: "",
           additional_contact_number: "",
         });
+        if (res.data.data.user_status == "1") {
+          setApprovestatus(true);
+        } else {
+          setApprovestatus(false);
+        }
         console.log("form", form);
         setOpen(true);
         setDialogTitle("Edit");
@@ -1561,8 +1572,8 @@ const MmManagement = () => {
       setKycForm({ ...kycForm });
       const param = new FormData();
       param.append("action", "update_kyc");
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      //   param.append("is_app", 1);
+      //   param.append("AADMIN_LOGIN_ID", 1);
       param.append("aadhar_card_number", kycForm.id_number);
       param.append("kyc_status", kycForm.status);
       param.append("feedback_remarks", kycForm.feedback_remarks);
