@@ -82,6 +82,11 @@ const DepositHistory = () => {
           'value': false,
           'name': 'amount'
         },
+        {
+            'label': 'REMARK',
+            'value': false,
+            'name': 'deposit_remarks'
+        },
       ]);
     toast.configure();
 
@@ -144,6 +149,14 @@ const DepositHistory = () => {
             sortable: true,
             reorder: true,
             grow: 0.5,
+            wrap: true,
+        },
+        {
+            name: 'REMARK',
+            selector: row => { return <span title={row.deposit_remarks}>{row.deposit_remarks}</span> },
+            sortable: true,
+            reorder: true,
+            grow: 1,
             wrap: true,
         },
         {

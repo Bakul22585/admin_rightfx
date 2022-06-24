@@ -84,6 +84,14 @@
     padding: 0;
     margin-right: 15px;
 }
+.commission-content-pair-section {
+    margin: 15px 0px;
+    font-size: 17px;
+    font-weight: 500;
+    background-color: #daeeff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
 /* .ib-structure.view-commission-content-section .group-structure-section:last-child {
     border-bottom: 0px solid rgb(0 0 0 / 15%);
 } */

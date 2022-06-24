@@ -573,7 +573,6 @@ const Profile = () => {
       selector: (row) => {
         return <span title={row.sr_no}>{row.sr_no}</span>;
       },
-      sortable: true,
       reorder: true,
       grow: 0.2,
     },
@@ -583,6 +582,7 @@ const Profile = () => {
         return <span title={row.mt5_name}>{row.mt5_name}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -593,6 +593,7 @@ const Profile = () => {
       },
       sortable: true,
       reorder: true,
+      wrap: true,
       grow: 0.3,
     },
     {
@@ -605,6 +606,7 @@ const Profile = () => {
         );
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -614,6 +616,7 @@ const Profile = () => {
         return <span title={row.group_name}>{row.group_name}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -623,6 +626,7 @@ const Profile = () => {
         return <span title={row.leverage}>{row.leverage}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 0.2,
     },
@@ -632,6 +636,7 @@ const Profile = () => {
         return <span title={row.added_datetime}>{row.added_datetime}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -641,6 +646,7 @@ const Profile = () => {
         return <span title={row.main_pwd}>{row.main_pwd}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -649,6 +655,7 @@ const Profile = () => {
       selector: (row) => {
         return <span title={row.investor_pwd}>{row.investor_pwd}</span>;
       },
+      wrap: true,
       sortable: true,
       reorder: true,
       grow: 1,
@@ -659,9 +666,59 @@ const Profile = () => {
         return <span title={(row.status == "1") ? "APPROVED" : (row.status == "2") ? "REJECTED" : "PENDING"} className={`text-color-${(row.status == "1") ? "green" : (row.status == "2") ? "red" : "yellow"}`}>{(row.status == "1") ? "APPROVED" : (row.status == "2") ? "REJECTED" : "PENDING"}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
+    {
+      name: 'Send Mail',
+      button: true,
+      cell: row => {
+        return <div>
+          {
+            (row.isLoader) ? <Button><svg class="spinner" viewBox="0 0 50 50">
+              <circle
+                class="path"
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                stroke-width="5"
+              ></circle>
+            </svg></Button> : <Button onClick={(e) => {
+              confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                      <h1>Are you sure?</h1>
+                      <p>Do you want to send this mt5 account password?</p>
+                      <div className='confirmation-alert-action-button'>
+                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                        <Button variant="contained" className='btn-gradient btn-success'
+                          onClick={() => {
+                            onClose();
+                            row.isLoader = true;
+                            var status = sendMT5PasswordMail(row);
+                            if (status) {
+                              row.isLoader = false;
+                            }
+                          }}
+                        >
+                          Yes, Send it!
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+            }}><i className="material-icons">forward_to_inbox</i></Button>
+          }
+
+        </div>
+      },
+      ignoreRowClick: true,
+      allowOverflow: true
+    }
   ];
 
   const bankColumn = [
@@ -670,7 +727,6 @@ const Profile = () => {
       selector: (row) => {
         return <span title={row.sr_no}>{row.sr_no}</span>;
       },
-      sortable: true,
       reorder: true,
       grow: 0.3,
     },
@@ -680,6 +736,7 @@ const Profile = () => {
         return <span title={row.bank_name}>{row.bank_name}</span>;
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -693,6 +750,7 @@ const Profile = () => {
         );
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     },
@@ -705,6 +763,7 @@ const Profile = () => {
         );
       },
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1.5,
     },
@@ -719,6 +778,7 @@ const Profile = () => {
       },
       sortable: true,
       reorder: true,
+      wrap: true,
       grow: 1,
     },
     {
@@ -749,7 +809,6 @@ const Profile = () => {
           </div>
         );
       },
-      sortable: true,
       reorder: true,
       grow: 3,
     },
@@ -759,7 +818,6 @@ const Profile = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
       grow: 0.4,
     },
@@ -767,6 +825,7 @@ const Profile = () => {
     {
       name: "IP ADDRESS",
       selector: (row) => row.ip_address,
+      wrap: true,
       sortable: true,
       reorder: true,
       grow: 1,
@@ -774,6 +833,7 @@ const Profile = () => {
     {
       name: "DATETIME",
       selector: (row) => row.added_datetime,
+      wrap: true,
       sortable: true,
       reorder: true,
       grow: 1,
@@ -1182,7 +1242,6 @@ const Profile = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
       grow: 0.4,
     },
@@ -1191,6 +1250,7 @@ const Profile = () => {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 3,
     },
@@ -1198,6 +1258,7 @@ const Profile = () => {
       name: "DATETIME",
       selector: (row) => row.date,
       sortable: true,
+      wrap: true,
       reorder: true,
       grow: 1,
     }
@@ -1207,7 +1268,6 @@ const Profile = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
       grow: 0.1,
     },
@@ -1241,6 +1301,7 @@ const Profile = () => {
       sortable: true,
       reorder: true,
       grow: 0.5,
+      wrap: true,
     },
     {
       name: "PAYMENT TYPE",
@@ -1248,6 +1309,7 @@ const Profile = () => {
       sortable: true,
       reorder: true,
       grow: 0.5,
+      wrap: true,
     },
   ];
 
@@ -3365,7 +3427,7 @@ const Profile = () => {
               />
               <TextField
                 id="standard-textarea"
-                label="Notes"
+                label="Remark"
                 multiline
                 variant="standard"
                 sx={{ width: "100%" }}
@@ -3867,12 +3929,12 @@ const Profile = () => {
         <div className="bankDetailsTabSection downline-table">
           {
             (myChildTraderData.parent_id != "") ? <div>
-            <Button onClick={(e) => {
-              getMyChildTrader(myChildTraderData.parent_id)
-            }}><i className="material-icons">arrow_back_ios</i>Back</Button>
-          </div> : ""
+              <Button onClick={(e) => {
+                getMyChildTrader(myChildTraderData.parent_id)
+              }}><i className="material-icons">arrow_back_ios</i>Back</Button>
+            </div> : ""
           }
-          
+
           <table>
             <thead>
               <tr>
@@ -3907,24 +3969,24 @@ const Profile = () => {
                       <td>
                         {
                           (item.is_ib_account == "1" && item.has_downline == true) ? <Button
-                          variant="contained"
-                          className="add_note"
-                          onClick={(e) => {
-                            myTraderData.user_name = item.name;
-                            myTraderData.user_id = item.client_id;
-                            setMyTraderData({...myTraderData});
-                            getMyChildTrader(item.client_id)
-                          }}>
-                          View
-                        </Button> : ""
+                            variant="contained"
+                            className="add_note"
+                            onClick={(e) => {
+                              myTraderData.user_name = item.name;
+                              myTraderData.user_id = item.client_id;
+                              setMyTraderData({ ...myTraderData });
+                              getMyChildTrader(item.client_id)
+                            }}>
+                            View
+                          </Button> : ""
                         }
-                        
+
                       </td>
                     </tr>
                   )
                 }) : <tr>
-                      <td className="text-center" colSpan={10}>Recored not found</td>
-                    </tr>
+                  <td className="text-center" colSpan={10}>Recored not found</td>
+                </tr>
               }
             </tbody>
             <tfoot>
@@ -4169,7 +4231,7 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Add Account" || dialogTitle == "Edit Account") {
       return (
-        <div className="  ">
+        <div className="dialogMultipleActionButton">
           <Button
             variant="contained"
             className="cancelButton"
@@ -5040,7 +5102,7 @@ const Profile = () => {
       toast.error("Please select status");
     } else {
       pammAccess.isLoader = true;
-      setPammAccess({...pammAccess});
+      setPammAccess({ ...pammAccess });
       const param = new FormData();
       // param.append("is_app", 1);
       // param.append("AADMIN_LOGIN_ID", 1);
@@ -5055,7 +5117,7 @@ const Profile = () => {
             navigate("/");
           }
           pammAccess.isLoader = false;
-          setPammAccess({...pammAccess});
+          setPammAccess({ ...pammAccess });
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
@@ -6156,6 +6218,8 @@ const Profile = () => {
       } else if (transactionForm.note == "") {
         toast.error("Please enter note");
       } else {
+        transactionForm.isLoader = true;
+        setTransactionForm({ ...transactionForm });
         const param = new FormData();
         // param.append("is_app", 1);
         // param.append("AADMIN_LOGIN_ID", 1);
@@ -6172,6 +6236,8 @@ const Profile = () => {
               localStorage.setItem("login", true);
               navigate("/");
             }
+            transactionForm.isLoader = false;
+            setTransactionForm({ ...transactionForm });
             if (res.data.status == "error") {
               toast.error(res.data.message);
             } else {
@@ -6396,7 +6462,7 @@ const Profile = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('user_id', id);
+    param.append('user_id', id);
 
     param.append('action', "list_clients");
 
@@ -6568,6 +6634,31 @@ const Profile = () => {
       });
   }
 
+  const sendMT5PasswordMail = async (data) => {
+    const param = new FormData();
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("action", "mail_mt5_password");
+    param.append("user_id", data.user_id);
+    param.append("mt5_acc_no", data.mt5_account_id);
+    param.append("main_pwd", data.main_pwd);
+    param.append("investor_pwd", data.investor_pwd);
+    await axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (resData.data.status == "error") {
+          toast.error(resData.data.message);
+        } else {
+          toast.success(resData.data.message);
+        }
+        return true;
+      });
+  }
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
@@ -6634,13 +6725,13 @@ const Profile = () => {
                         <label>Account Currency</label>
                         <p>USD</p>
                       </div> :
-                      (userData.data['user_level'] == "Master")? <div className="header-highlight">
-                        <label>Partnership</label>
-                        <p>Level: {userData.data['user_level']}</p>
-                      </div>: <div className="header-highlight">
-                        <label>Partnership</label>
-                        <p>Level: {userData.data['user_level']} | Parent: <NavLink className='linkColor' title={userData.data['sponsor_name']} to={`/profile/${userData.data['sponsor_id']}`}>{userData.data['sponsor_name']}</NavLink></p>
-                      </div>
+                        (userData.data['user_level'] == "Master") ? <div className="header-highlight">
+                          <label>Partnership</label>
+                          <p>Level: {userData.data['user_level']}</p>
+                        </div> : <div className="header-highlight">
+                          <label>Partnership</label>
+                          <p>Level: {userData.data['user_level']} | Parent: <NavLink className='linkColor' title={userData.data['sponsor_name']} to={`/profile/${userData.data['sponsor_id']}`}>{userData.data['sponsor_name']}</NavLink></p>
+                        </div>
                     }
 
                     <div className="header-highlight">
@@ -7287,6 +7378,38 @@ const Profile = () => {
                             </div>
                           </Paper>
                         </Grid> */}
+                        <Grid item  md={12} lg={12} xl={12}>
+                        <Paper
+                            elevation={2}
+                            style={{ borderRadius: "10px" }}
+                            className="paper-main-section"
+                          >
+                            <p className="header-title">IB Dedicated Links</p>
+                            <div className="contentSection IB-Dedicated-Links">
+                              <div className="master-structure-section">
+                                <div className="user-links">
+                                  <div className="user-link-header">
+                                    <label>Link Type</label>
+                                    <label>Link</label>
+                                  </div>
+                                  <div className="user-link-body">
+                                    <label>Register</label>
+                                    <div className="link-section">
+                                      <a href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`} target='_blank'>{ClientUrl + `/register/sponsor/${profileForm.wallet_code}`}</a>
+                                      <button className="copy_link" onClick={(e) => {
+                                        navigator.clipboard.writeText(ClientUrl + `/register/sponsor/${profileForm.wallet_code}`).then(function () {
+                                          toast.success('The sponsor link has been successfully copying');
+                                        }, function (err) {
+                                          toast.error('The sponsor link Could not copy, Please try again');
+                                        });
+                                      }}><span className="blinking"><i className="material-icons">content_copy</i></span></button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Paper>
+                        </Grid>
                         <Grid item md={6} lg={6} xl={6}>
                           <Paper
                             elevation={2}
@@ -8196,6 +8319,7 @@ const Profile = () => {
                                   variant="contained"
                                   className="edit_structure"
                                   onClick={openDialogbox}
+                                  disabled={(partnershipMasterStructureData.structure_name != "") ? false : true}
                                 >
                                   Edit Structure
                                 </Button>
@@ -8380,7 +8504,7 @@ const Profile = () => {
                                       </div>
                                     </div>
                                   </div>
-                                  : <label className="text-center" style={{width: '100%'}}>STRUCTURE Has Been Not Assigned</label>
+                                  : <label className="text-center" style={{ width: '100%' }}>STRUCTURE Has Been Not Assigned</label>
                               }
 
                             </div>
@@ -8465,24 +8589,24 @@ const Profile = () => {
                                           <td>
                                             {
                                               (item.is_ib_account == "1" && item.has_downline == true) ? <Button
-                                              variant="contained"
-                                              className="add_note"
-                                              onClick={(e) => {
-                                                myTraderData.user_name = item.name;
-                                                myTraderData.main_user_name = item.name;
-                                                myTraderData.user_id = item.client_id;
-                                                setMyTraderData({...myTraderData});
-                                                getMyChildTrader(item.client_id)
-                                              }}>
-                                              View
-                                            </Button> : ""
+                                                variant="contained"
+                                                className="add_note"
+                                                onClick={(e) => {
+                                                  myTraderData.user_name = item.name;
+                                                  myTraderData.main_user_name = item.name;
+                                                  myTraderData.user_id = item.client_id;
+                                                  setMyTraderData({ ...myTraderData });
+                                                  getMyChildTrader(item.client_id)
+                                                }}>
+                                                View
+                                              </Button> : ""
                                             }
                                           </td>
                                         </tr>
                                       )
                                     }) : <tr>
-                                          <td className="text-center" colSpan={10}>Recored not found</td>
-                                        </tr>
+                                      <td className="text-center" colSpan={10}>Recored not found</td>
+                                    </tr>
                                   }
                                 </tbody>
                                 <tfoot>

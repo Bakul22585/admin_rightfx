@@ -242,6 +242,8 @@ hr.solid {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .headerSection.header-title .groun-button {
@@ -500,6 +502,8 @@ text.highcharts-credits {
     gap: 10px;
     flex-wrap: wrap;
     margin: 15px 0;
+    overflow: auto;
+    padding: 5px;
 }
 .partnership-main-section .master-structure-section {
     width: 49%;
@@ -528,6 +532,7 @@ text.highcharts-credits {
 }
 .referrals-section {
     margin: 15px 0;
+    overflow: auto;
 }
 .referrals-section table {
     width: 100%;
@@ -621,8 +626,8 @@ text.highcharts-credits {
 .downline-table table tbody tr {
     border-bottom: 1px dashed slategray;
 }
-.downline-table table tr td {
-    padding: 10px 0;
+.downline-table table tr td, .downline-table table tr th {
+    padding: 10px;
 }
 .text-center {
     text-align: center;
@@ -632,4 +637,7 @@ text.highcharts-credits {
 }
 .editor-section-border .rdw-editor-wrapper .rdw-editor-main {
     min-height: 200px;
+}
+.IB-Dedicated-Links .master-structure-section .user-links .user-link-body {
+    border-bottom: 0px;
 }

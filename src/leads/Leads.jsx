@@ -367,7 +367,7 @@ const Leads = () => {
       reference: ''
     });
     setParam({ ...param, 'inquiry_id': e.inquiry_id });
-    setCallParam({'inquiry_id': e.inquiry_id});
+    setCallParam({ 'inquiry_id': e.inquiry_id });
     setDialogTitle('View Lead (' + e.customer_name + ')');
     setMaxWidth('lg');
     setOpen(true);
@@ -463,6 +463,47 @@ const Leads = () => {
           }
         });
     }
+  }
+
+  const rejectedLead = (data) => {
+    setCpData((preValue) => {
+      return {
+        ...preValue,
+        isLoader: true,
+      }
+    })
+    const param = new FormData();
+    // param.append("is_app", 1);
+    // param.append("AADMIN_LOGIN_ID", 1);
+    param.append("cp_access", "");
+    param.append("leads_status", "2");
+    param.append("inquiry_id", data.inquiry_id);
+    axios
+      .post(Url + "/ajaxfiles/update_lead_status.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        setCpData((preValue) => {
+          return {
+            ...preValue,
+            isLoader: false,
+          }
+        })
+        if (res.data.status == 'error') {
+          toast.error(res.data.message);
+        } else {
+          setCpData((preValue) => {
+            return {
+              ...preValue,
+              isLoader: false,
+              refresh: !cpData.refresh,
+            }
+          })
+          toast.success(res.data.message)
+        }
+      });
   }
 
   const manageContent = () => {
@@ -702,7 +743,7 @@ const Leads = () => {
           <Grid item md={12} lg={12} xl={12} sm={12}>
             <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
               <p className='view-lead-popup-header-title'>Call History</p>
-              <CommonTable url={`${Url}/datatable/fetch_inquiey_call_history.php`} column={callColumn} sort='0' param={callParam}/>
+              <CommonTable url={`${Url}/datatable/fetch_inquiey_call_history.php`} column={callColumn} sort='0' param={callParam} />
             </Paper>
           </Grid>
         </Grid>
@@ -1059,7 +1100,8 @@ const Leads = () => {
     },
     {
       name: 'STATUS',
-      selector: row => { return <span title={row.leads_status}>{row.leads_status}</span> },
+      selector: row => { return <span title={row.leads_status}>{row.leads_status}</span> }, 
+      // className={(row.leads_status == "Completed") ? "status-text-approved" : (row.leads_status == "Rejected") ? "status-text-rejected" : "status-text-pending"}
       reorder: true,
       wrap: true,
       grow: 1,
@@ -1142,46 +1184,72 @@ const Leads = () => {
       name: 'Action',
       button: true,
       cell: row => {
-        return <> {row.leads_status == "Completed" ? "" :
-          <div>
-            <Button
-              id={`actionButton_${row.sr_no}`}
-              aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={(event) => handleContextClick(event, row.sr_no)}
-              style={{ color: 'black' }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.sr_no}`}
-              anchorEl={openTableMenus[row.sr_no]}
-              open={Boolean(openTableMenus[row.sr_no])}
-              onClose={(event) => handleContextClose(row.sr_no)}
-            >
-              <MenuItem className='completed' {...row} onClick={(e) => {
-                // actionMenuPopup(e, row)
-                handleContextClose(row.sr_no)
-                setCpData({
-                  cp_access: "",
-                  demo_mt5: "",
-                  user_password: "",
-                  inquiry_id: row.inquiry_id,
-                  leads_status: "Completed",
-                  refresh: false,
-                  ibCommissionGroupList: [],
-                  ib_group_id: '0'
-                })
-                setDialogTitle('Are you sure?');
-                setMaxWidth('md');
-                setOpen(true)
-              }
-              }><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
-              {row.leads_status == "Completed" ? <></> : ""}
+        return <> {row.leads_status == "Pending" ? <div>
+          <Button
+            id={`actionButton_${row.sr_no}`}
+            aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={(event) => handleContextClick(event, row.sr_no)}
+            style={{ color: 'black' }}
+          >
+            <i className="material-icons">more_horiz</i>
+          </Button>
+          <Menu
+            id={`basic-menu-${row.sr_no}`}
+            anchorEl={openTableMenus[row.sr_no]}
+            open={Boolean(openTableMenus[row.sr_no])}
+            onClose={(event) => handleContextClose(row.sr_no)}
+          >
+            <MenuItem className='completed' {...row} onClick={(e) => {
+              // actionMenuPopup(e, row)
+              handleContextClose(row.sr_no)
+              setCpData({
+                cp_access: "",
+                demo_mt5: "",
+                user_password: "",
+                inquiry_id: row.inquiry_id,
+                leads_status: "Completed",
+                refresh: false,
+                ibCommissionGroupList: [],
+                ib_group_id: '0'
+              })
+              setDialogTitle('Are you sure?');
+              setMaxWidth('md');
+              setOpen(true)
+            }
+            }><i className="material-icons font-color-approved">task_alt</i>&nbsp;&nbsp;Complete</MenuItem>
+            <MenuItem className='rejected' {...row} onClick={(e) => {
+              // actionMenuPopup(e, row)
+              handleContextClose(row.sr_no)
+              confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div className='custom-ui'>
+                      <h1>Are you sure?</h1>
+                      <p>Do you want to reject this lead?</p>
+                      <div className='confirmation-alert-action-button'>
+                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
+                        <Button variant="contained" className='btn-gradient btn-danger'
+                          onClick={() => {
+                            rejectedLead(row);
+                            onClose();
+                          }}
+                        >
+                          Yes, Reject it!
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+            }
+            }><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem>
+            {row.leads_status == "Completed" ? <></> : ""}
 
-            </Menu>
-          </div>
+          </Menu>
+        </div> :
+          ""
         }</>
 
       },
@@ -1222,7 +1290,7 @@ const Leads = () => {
       ]
     }
   ];
-  
+
   const column = [
     {
       name: 'SR NO',
@@ -1871,7 +1939,7 @@ const Leads = () => {
                       <label htmlFor="contained-button-file" className='fileuploadButton'>
                         <input accept=".csv" id="contained-button-file" type="file" ref={LeadRef} onChange={(e) => {
                           doc.file = e.target.files[0];
-                          setDoc({...doc});
+                          setDoc({ ...doc });
                           confirmAlert({
                             customUI: ({ onClose }) => {
                               return (
