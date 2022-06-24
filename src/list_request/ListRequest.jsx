@@ -1,21 +1,33 @@
-import './list_request.css';
+import "./list_request.css";
 import React, { useState } from "react";
-import { Autocomplete, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, Menu, MenuItem, Paper, Select, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  Grid,
+  Menu,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import CommonFilter from '../common/CommonFilter';
-import CommonTable from '../common/CommonTable';
-import { Url } from '../global';
+import CommonFilter from "../common/CommonFilter";
+import CommonTable from "../common/CommonTable";
+import { IsApprove, Url } from "../global";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BootstrapInput, ColorButton } from '../common/CustomElement';
-import axios from 'axios';
+import { BootstrapInput, ColorButton } from "../common/CustomElement";
+import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
-import { useNavigate } from 'react-router-dom';
-import '../commision_group/commision_group.css';
+import { useNavigate } from "react-router-dom";
+import "../commision_group/commision_group.css";
 
 const ListRequest = () => {
-
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
@@ -29,7 +41,7 @@ const ListRequest = () => {
     structure_data: [],
     isLoader: false,
     refresh: false,
-    admin_approve: ""
+    admin_approve: "",
   });
   const input01 = (event) => {
     const { name, value } = event.target;
@@ -169,18 +181,19 @@ const ListRequest = () => {
         return (
           <span
             title={row.sponsor_approve}
-            className={`text-color-${row.sponsor_approve == "1"
-              ? "green"
-              : row.sponsor_approve == "2"
+            className={`text-color-${
+              row.sponsor_approve == "1"
+                ? "green"
+                : row.sponsor_approve == "2"
                 ? "red"
                 : "yellow"
-              }`}
+            }`}
           >
             {row.sponsor_approve == "1"
               ? "APPROVED"
               : row.sponsor_approve == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -193,21 +206,21 @@ const ListRequest = () => {
       name: "ADMIN APPROVE",
       selector: (row) => {
         return (
-
           <span
             title={row.admin_approve}
-            className={`text-color-${row.admin_approve == "1"
-              ? "green"
-              : row.admin_approve == "2"
+            className={`text-color-${
+              row.admin_approve == "1"
+                ? "green"
+                : row.admin_approve == "2"
                 ? "red"
                 : "yellow"
-              }`}
+            }`}
           >
             {row.admin_approve == "1"
               ? "APPROVED"
               : row.admin_approve == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -222,14 +235,15 @@ const ListRequest = () => {
         return (
           <span
             title={row.status}
-            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-              }`}
+            className={`text-color-${
+              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+            }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -245,7 +259,7 @@ const ListRequest = () => {
           <span title={row.structure_name}>
             {" "}
             {/* {((row.sponsor_approve == "1" && row.admin_approve == "0") || row.sponsor_id=="0") ?  */}
-            {(row.show_update_btn) ?
+            {row.show_update_btn ? (
               <Button
                 sx={{ color: "black" }}
                 onClick={() => {
@@ -256,15 +270,16 @@ const ListRequest = () => {
                       admin_approve: row.admin_approve,
                       remarks: row.remarks,
                       requested_user_id: row.requested_user_id,
-                      ib_application_id: row.ib_application_id
-                    }
-                  })
-
+                      ib_application_id: row.ib_application_id,
+                    };
+                  });
                 }}
               >
                 <i className="material-icons">view_timeline</i>
               </Button>
-              : ""}
+            ) : (
+              ""
+            )}
           </span>
         );
       },
@@ -274,77 +289,85 @@ const ListRequest = () => {
       grow: 0.3,
     },
   ];
-  console.log("updateDate", updateDate)
+  console.log("updateDate", updateDate);
   const viewRequest = async (prop) => {
     // setOpenModel(true);
-    console.log('prop', prop);
+    console.log("prop", prop);
     setIbData(prop);
     if (prop.sponsor_id == "0") {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('action', 'get_default_structure');
-      param.append('user_id', prop.requested_user_id);
-      await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-
-        if (res.data.status == 'error') {
-          toast.error(res.data.message);
-        } else {
-          setIsDefaultStructure(true);
-          updateDate.structure_data = res.data.data;
-          if (res.data.structure_id) {
-            updateDate.structure_id = res.data.structure_id;
-            updateDate.structure_name = res.data.structure_name;
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
+      param.append("action", "get_default_structure");
+      param.append("user_id", prop.requested_user_id);
+      await axios
+        .post(`${Url}/ajaxfiles/structures_manage.php`, param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
           }
-          updateDate.remarks = prop.remarks;
-          updateDate.admin_approve = prop.admin_approve;
-          updateDate.structure_name = prop.structure_name;
 
-          setUpdateDate({ ...updateDate });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            setIsDefaultStructure(true);
+            updateDate.structure_data = res.data.data;
+            if (res.data.structure_id) {
+              updateDate.structure_id = res.data.structure_id;
+              updateDate.structure_name = res.data.structure_name;
+            }
+            updateDate.remarks = prop.remarks;
+            updateDate.admin_approve = prop.admin_approve;
+            updateDate.structure_name = prop.structure_name;
 
-          console.log('form', updateDate);
-          // setMaxWidth('md');
-          // setDialogTitle('Add');
-          setOpenModel(true)
-        }
-      });
+            setUpdateDate({ ...updateDate });
+
+            console.log("form", updateDate);
+            // setMaxWidth('md');
+            // setDialogTitle('Add');
+            setOpenModel(true);
+          }
+        });
     } else if (prop.sponsor_id != "0" && prop.structure_id != "0") {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('action', 'get_my_structure');
-      param.append('user_id', prop.requested_user_id);
-      param.append('structure_id', prop.structure_id);
-      await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-
-        if (res.data.status == 'error') {
-          toast.error(res.data.message);
-        } else {
-          setIsDefaultStructure(false);
-          updateDate.structure_data = res.data.data;
-          if (res.data.structure_id) {
-            updateDate.structure_id = res.data.structure_id;
-            updateDate.structure_name = res.data.structure_name;
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
+      param.append("action", "get_my_structure");
+      param.append("user_id", prop.requested_user_id);
+      param.append("structure_id", prop.structure_id);
+      await axios
+        .post(`${Url}/ajaxfiles/structures_manage.php`, param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
           }
-          updateDate.remarks = prop.remarks;
-          updateDate.admin_approve = prop.admin_approve;
-          updateDate.structure_name = prop.structure_name;
 
-          setUpdateDate({ ...updateDate });
-          console.log('form', updateDate);
-          setOpenModel(true)
-        }
-      });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            setIsDefaultStructure(false);
+            updateDate.structure_data = res.data.data;
+            if (res.data.structure_id) {
+              updateDate.structure_id = res.data.structure_id;
+              updateDate.structure_name = res.data.structure_name;
+            }
+            updateDate.remarks = prop.remarks;
+            updateDate.admin_approve = prop.admin_approve;
+            updateDate.structure_name = prop.structure_name;
+
+            setUpdateDate({ ...updateDate });
+            console.log("form", updateDate);
+            setOpenModel(true);
+          }
+        });
     } else {
-      setOpenModel(true)
+      setOpenModel(true);
     }
     /* const param = new FormData();
     param.append("is_app", 1);
@@ -359,7 +382,7 @@ const ListRequest = () => {
   };
   const handleClose = () => {
     setOpenModel(false);
-  }
+  };
   // const updatePartnership = () => {
   //   if (updateDate.sponsor_approve == "") {
   //     toast.error("Status is required");
@@ -416,7 +439,7 @@ const ListRequest = () => {
         toast.error("Please enter structure name");
         error = true;
       } else {
-        updateDate.structure_data.forEach(element => {
+        updateDate.structure_data.forEach((element) => {
           console.log(element.ib_group_name, element.group_rebate);
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
@@ -431,23 +454,31 @@ const ListRequest = () => {
             error = true;
             return false;
           } else {
-            element.pair_data.forEach(element1 => {
+            element.pair_data.forEach((element1) => {
               if (element1.rebate === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.rebate > element.group_rebate) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                toast.error(
+                  `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.commission === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
+                );
                 error = true;
                 return false;
               } else if (element1.commission > element.group_commission) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                toast.error(
+                  `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
+                );
                 error = true;
                 return false;
               }
@@ -466,92 +497,94 @@ const ListRequest = () => {
     updateDate.isLoader = true;
     setUpdateDate({ ...updateDate });
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('requested_user_id', ibdata.requested_user_id);
-    param.append('ib_application_id', ibdata.ib_application_id);
-    param.append('remarks', updateDate.remarks);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
+    param.append("requested_user_id", ibdata.requested_user_id);
+    param.append("ib_application_id", ibdata.ib_application_id);
+    param.append("remarks", updateDate.remarks);
     // param.append('sponsor_approve', updateDate.sponsor_approve);
-    param.append('admin_approve', updateDate.admin_approve);
-    param.append('structure_name', updateDate.structure_name);
+    param.append("admin_approve", updateDate.admin_approve);
+    param.append("structure_name", updateDate.structure_name);
     if (updateDate.structure_id) {
-      param.append('structure_id', updateDate.structure_id);
-      param.append('action', 'update_master_structure');
+      param.append("structure_id", updateDate.structure_id);
+      param.append("action", "update_master_structure");
     }
     if (updateDate.structure_id == "") {
-      param.append('action', 'insert_master_structure');
+      param.append("action", "insert_master_structure");
     }
-    param.append('pair_data', JSON.stringify(updateDate.structure_data));
+    param.append("pair_data", JSON.stringify(updateDate.structure_data));
 
-    await axios.post(`${Url}/ajaxfiles/structures_manage.php`, param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      updateDate.isLoader = false;
-      setUpdateDate({ ...updateDate });
-      if (res.data.status == 'error') {
-        toast.error(res.data.message);
-      } else {
-        toast.success(res.data.message);
-        setOpenModel(false);
-        setUpdateDate({
-          structure_id: "",
-          sponsor_approve: "",
-          admin_approve: "",
-          remarks: "",
-          structure_name: "",
-          structure_data: [],
-          isLoader: false,
-          refresh: !updateDate.refresh,
-          admin_approve: ""
-        })
-
-
-      }
-    });
+    await axios
+      .post(`${Url}/ajaxfiles/structures_manage.php`, param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        updateDate.isLoader = false;
+        setUpdateDate({ ...updateDate });
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          setOpenModel(false);
+          setUpdateDate({
+            structure_id: "",
+            sponsor_approve: "",
+            admin_approve: "",
+            remarks: "",
+            structure_name: "",
+            structure_data: [],
+            isLoader: false,
+            refresh: !updateDate.refresh,
+            admin_approve: "",
+          });
+        }
+      });
     // }
   };
   const [searchBy, setSearchBy] = useState([
     {
-      'label': 'USER NAME',
-      'value': false,
-      'name': 'requested_user_name'
+      label: "USER NAME",
+      value: false,
+      name: "requested_user_name",
     },
     {
-      'label': 'ACQUIRE CLIENT',
-      'value': false,
-      'name': 'acquire_client'
+      label: "ACQUIRE CLIENT",
+      value: false,
+      name: "acquire_client",
     },
     {
-      'label': 'COUNTRY',
-      'value': false,
-      'name': 'countries'
+      label: "COUNTRY",
+      value: false,
+      name: "countries",
     },
     {
-      'label': 'Sponsor Name',
-      'value': false,
-      'name': 'sponsor_name'
+      label: "Sponsor Name",
+      value: false,
+      name: "sponsor_name",
     },
     {
-      'label': 'EMAIL',
-      'value': false,
-      'name': 'user_email'
+      label: "EMAIL",
+      value: false,
+      name: "user_email",
     },
     {
-      'label': 'STRUCTURE NAME',
-      'value': false,
-      'name': 'structure_name'
+      label: "STRUCTURE NAME",
+      value: false,
+      name: "structure_name",
     },
     {
-      'label': 'REMARK',
-      'value': false,
-      'name': 'remarks'
-    }
+      label: "REMARK",
+      value: false,
+      name: "remarks",
+    },
   ]);
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute('id'), index);
+    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -570,11 +603,28 @@ const ListRequest = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-                <p className='main-heading'>IB Request List</p>
-                <CommonFilter search={searchBy} searchWord={setSearchKeyword} ibList={true} setParam={setParam}/>
+                <p className="main-heading">IB Request List</p>
+                <CommonFilter
+                  search={searchBy}
+                  searchWord={setSearchKeyword}
+                  ibList={true}
+                  setParam={setParam}
+                />
                 <br />
-                <Paper elevation={2} style={{ borderRadius: "10px" }} className='pending-all-15px'>
-                  <CommonTable url={`${Url}/datatable/partnership_requests.php`} column={partnershipcolumn} sort='0' search={searchBy} refresh={updateDate.refresh} searchWord={searchKeyword} param={param}/>
+                <Paper
+                  elevation={2}
+                  style={{ borderRadius: "10px" }}
+                  className="pending-all-15px"
+                >
+                  <CommonTable
+                    url={`${Url}/datatable/partnership_requests.php`}
+                    column={partnershipcolumn}
+                    sort="0"
+                    search={searchBy}
+                    refresh={updateDate.refresh}
+                    searchWord={searchKeyword}
+                    param={param}
+                  />
                 </Paper>
               </Grid>
             </Grid>
@@ -612,10 +662,7 @@ const ListRequest = () => {
                 />
               </DialogTitle>
               <DialogContent className="view-ib-content-section">
-                <Grid
-                  container
-                  spacing={1}
-                >
+                <Grid container spacing={1}>
                   <div>
                     <div className="main-content-display">
                       <div className="display-element">
@@ -661,52 +708,55 @@ const ListRequest = () => {
                       <div className="display-element">
                         <h6>IB APPROVE</h6>
                         <div
-                          className={`col s12 text-color-${ibdata.sponsor_approve == "1"
-                            ? "green"
-                            : ibdata.sponsor_approve == "2"
+                          className={`col s12 text-color-${
+                            ibdata.sponsor_approve == "1"
+                              ? "green"
+                              : ibdata.sponsor_approve == "2"
                               ? "red"
                               : "yellow"
-                            }`}
+                          }`}
                         >
                           {ibdata.sponsor_approve == "1"
                             ? "APPROVED"
                             : ibdata.sponsor_approve == "2"
-                              ? "REJECTED"
-                              : "PENDING"}
+                            ? "REJECTED"
+                            : "PENDING"}
                         </div>
                       </div>
                       <div className="display-element">
                         <h6>ADMIN APPROVE</h6>
                         <div
-                          className={`col s12 text-color-${ibdata.admin_approve == "1"
-                            ? "green"
-                            : ibdata.admin_approve == "2"
+                          className={`col s12 text-color-${
+                            ibdata.admin_approve == "1"
+                              ? "green"
+                              : ibdata.admin_approve == "2"
                               ? "red"
                               : "yellow"
-                            }`}
+                          }`}
                         >
                           {ibdata.admin_approve == "1"
                             ? "APPROVED"
                             : ibdata.admin_approve == "2"
-                              ? "REJECTED"
-                              : "PENDING"}
+                            ? "REJECTED"
+                            : "PENDING"}
                         </div>
                       </div>
                       <div className="display-element">
                         <h6>STATUS</h6>
                         <div
-                          className={`col s12 text-color-${ibdata.status == "1"
-                            ? "green"
-                            : ibdata.status == "2"
+                          className={`col s12 text-color-${
+                            ibdata.status == "1"
+                              ? "green"
+                              : ibdata.status == "2"
                               ? "red"
                               : "yellow"
-                            }`}
+                          }`}
                         >
                           {ibdata.status == "1"
                             ? "APPROVED"
                             : ibdata.status == "2"
-                              ? "REJECTED"
-                              : "PENDING"}
+                            ? "REJECTED"
+                            : "PENDING"}
                         </div>
                       </div>{" "}
                     </div>
@@ -714,112 +764,198 @@ const ListRequest = () => {
                   <div className="divider"></div>
                   <div className="main-content-input">
                     <div className="ib-structure view-commission-content-section">
-                      {
-                        (ibdata.sponsor_id == "0") ? <div style={{ width: '100%' }}>
-                          <TextField label="Structure Name" variant="standard" sx={{ width: '100%' }} name='structure_name' value={updateDate.structure_name} onChange={input01} />
-                        </div> : ""
-                      }
+                      {ibdata.sponsor_id == "0" ? (
+                        <div style={{ width: "100%" }}>
+                          <TextField
+                            label="Structure Name"
+                            variant="standard"
+                            sx={{ width: "100%" }}
+                            name="structure_name"
+                            value={updateDate.structure_name}
+                            onChange={input01}
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
 
-                      {
-                        updateDate.structure_data.map((item, index) => {
-                          return (
-                            <div className="group-structure-section">
-                              <div className="main-section">
-                                <div className='main-section-title'>{item.ib_group_name}</div>
-                                <div className='main-section-input-element'>
-                                  <div>
-                                    {/* <span>Rebate</span> */}
-                                    <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate} disabled={!isDefaultStructure}
-                                      onChange={(e) => {
-                                        updateDate.structure_data[index]['group_rebate'] = e.target.value;
-                                        updateDate.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                          updateDate.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
-                                        });
-                                        setUpdateDate({
-                                          ...updateDate
-                                        });
-                                      }} />
-                                  </div>
-                                  <div>
-                                    {/* <span>Commission</span> */}
-                                    <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission} disabled={!isDefaultStructure}
-                                      onChange={(e) => {
-                                        updateDate.structure_data[index]['group_commission'] = e.target.value;
-                                        updateDate.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                          updateDate.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
-                                        });
-                                        setUpdateDate({
-                                          ...updateDate
-                                        });
-                                      }}
-                                    />
-                                  </div>
-                                  {
-                                    (isDefaultStructure) ?
-                                      <div>
-                                        {
-                                          (item.ibGroup != undefined) ?
-                                            <Autocomplete
-                                              className='autoComplete-input-remove-border'
-                                              disablePortal
-                                              options={item.ibGroup}
-                                              getOptionLabel={(option) => (option ? option.ib_group_name : "")}
-                                              onInputChange={(event, newInputValue) => {
-                                                // fetchAccount(event, newInputValue);
-                                              }}
-                                              onChange={(event, newValue) => {
-                                                updateDate.structure_data[index]['ib_group_level_id'] = newValue.ib_group_level_id;
-                                                setUpdateDate({
-                                                  ...updateDate
-                                                });
-                                              }}
-
-                                              renderInput={(params) => <TextField {...params} label="IB Group" variant="standard" style={{ width: '100%', border: '0px !important' }} />}
-                                            /> : ''
-                                        }
-                                      </div> : ""
-                                  }
-
-                                </div>
-                                <div className='action-section'>
-                                  <span onClick={(e) => { updateDate.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...updateDate }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
-                                </div>
+                      {updateDate.structure_data.map((item, index) => {
+                        return (
+                          <div className="group-structure-section">
+                            <div className="main-section">
+                              <div className="main-section-title">
+                                {item.ib_group_name}
                               </div>
-                              <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                                {
-                                  item.pair_data.map((item1, index1) => {
-                                    return (
-                                      <div className="pair-data">
-                                        <div className='pair-data-title'>{item1.pair_name}</div>
-                                        <div>
-                                          <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled={!isDefaultStructure}
-                                            onChange={(e) => {
-                                              updateDate.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
-                                              setUpdateDate({
-                                                ...updateDate
-                                              });
+                              <div className="main-section-input-element">
+                                <div>
+                                  {/* <span>Rebate</span> */}
+                                  <input
+                                    type="number"
+                                    className="Rebate_amount"
+                                    placeholder="Rebate"
+                                    value={item.group_rebate}
+                                    disabled={!isDefaultStructure}
+                                    onChange={(e) => {
+                                      updateDate.structure_data[index][
+                                        "group_rebate"
+                                      ] = e.target.value;
+                                      updateDate.structure_data[index][
+                                        "pair_data"
+                                      ].forEach((value, valueIndex) => {
+                                        updateDate.structure_data[index][
+                                          "pair_data"
+                                        ][valueIndex]["rebate"] =
+                                          e.target.value;
+                                      });
+                                      setUpdateDate({
+                                        ...updateDate,
+                                      });
+                                    }}
+                                  />
+                                </div>
+                                <div>
+                                  {/* <span>Commission</span> */}
+                                  <input
+                                    type="number"
+                                    className="commission_amount"
+                                    placeholder="Commission"
+                                    value={item.group_commission}
+                                    disabled={!isDefaultStructure}
+                                    onChange={(e) => {
+                                      updateDate.structure_data[index][
+                                        "group_commission"
+                                      ] = e.target.value;
+                                      updateDate.structure_data[index][
+                                        "pair_data"
+                                      ].forEach((value, valueIndex) => {
+                                        updateDate.structure_data[index][
+                                          "pair_data"
+                                        ][valueIndex]["commission"] =
+                                          e.target.value;
+                                      });
+                                      setUpdateDate({
+                                        ...updateDate,
+                                      });
+                                    }}
+                                  />
+                                </div>
+                                {isDefaultStructure ? (
+                                  <div>
+                                    {item.ibGroup != undefined ? (
+                                      <Autocomplete
+                                        className="autoComplete-input-remove-border"
+                                        disablePortal
+                                        options={item.ibGroup}
+                                        getOptionLabel={(option) =>
+                                          option ? option.ib_group_name : ""
+                                        }
+                                        onInputChange={(
+                                          event,
+                                          newInputValue
+                                        ) => {
+                                          // fetchAccount(event, newInputValue);
+                                        }}
+                                        onChange={(event, newValue) => {
+                                          updateDate.structure_data[index][
+                                            "ib_group_level_id"
+                                          ] = newValue.ib_group_level_id;
+                                          setUpdateDate({
+                                            ...updateDate,
+                                          });
+                                        }}
+                                        renderInput={(params) => (
+                                          <TextField
+                                            {...params}
+                                            label="IB Group"
+                                            variant="standard"
+                                            style={{
+                                              width: "100%",
+                                              border: "0px !important",
                                             }}
                                           />
-                                        </div>
-                                        <div>
-                                          <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled={!isDefaultStructure}
-                                            onChange={(e) => {
-                                              updateDate.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
-                                              setUpdateDate({
-                                                ...updateDate
-                                              });
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                    );
-                                  })
-                                }
+                                        )}
+                                      />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="action-section">
+                                <span
+                                  onClick={(e) => {
+                                    updateDate.structure_data[index][
+                                      "is_visible"
+                                    ] = !item.is_visible;
+                                    setUpdateDate({ ...updateDate });
+                                  }}
+                                >
+                                  <i
+                                    class={`fa ${
+                                      item.is_visible
+                                        ? "fa-angle-up"
+                                        : "fa-angle-down"
+                                    }`}
+                                    aria-hidden="true"
+                                  ></i>
+                                </span>
                               </div>
                             </div>
-                          );
-                        })
-                      }
+                            <div
+                              className={`pair-section ${
+                                item.is_visible ? "child-section-visible" : ""
+                              }`}
+                            >
+                              {item.pair_data.map((item1, index1) => {
+                                return (
+                                  <div className="pair-data">
+                                    <div className="pair-data-title">
+                                      {item1.pair_name}
+                                    </div>
+                                    <div>
+                                      <input
+                                        type="number"
+                                        className="rebert_amount"
+                                        placeholder="Rebert"
+                                        value={item1.rebate}
+                                        disabled={!isDefaultStructure}
+                                        onChange={(e) => {
+                                          updateDate.structure_data[index][
+                                            "pair_data"
+                                          ][index1]["rebate"] = e.target.value;
+                                          setUpdateDate({
+                                            ...updateDate,
+                                          });
+                                        }}
+                                      />
+                                    </div>
+                                    <div>
+                                      <input
+                                        type="number"
+                                        className="commission_amount"
+                                        placeholder="Commission"
+                                        value={item1.commission}
+                                        disabled={!isDefaultStructure}
+                                        onChange={(e) => {
+                                          updateDate.structure_data[index][
+                                            "pair_data"
+                                          ][index1]["commission"] =
+                                            e.target.value;
+                                          setUpdateDate({
+                                            ...updateDate,
+                                          });
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                     {/* { */}
                     {/* (ibdata.sponsor_id == "0") ? <div>
@@ -926,7 +1062,7 @@ const ListRequest = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ListRequest
+export default ListRequest;

@@ -6,7 +6,7 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import { BootstrapInput } from "./CustomElement";
 import {
   Checkbox,
@@ -86,7 +86,7 @@ const CommonTable = (prop) => {
 
   const handleClientPageChange = (page) => {
     console.log("page", page);
-    fetchClient(page == 1 ? 0 : (page * clientPerPage) - 10);
+    fetchClient(page == 1 ? 0 : page * clientPerPage - 10);
   };
 
   const handleClientPerRowsChange = async (newPerPage, page) => {
@@ -117,8 +117,10 @@ const CommonTable = (prop) => {
   const fetchClient = async (page) => {
     setClientLoading(true);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("draw", 0);
     param.append("start", page);
     param.append("length", clientPerPage);

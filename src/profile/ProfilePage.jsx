@@ -12,34 +12,34 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ProfilePage = () => {
-    const [profileForm, setProfileForm] = useState({
-        title: "",
-        first_name: "",
-        last_name: "",
-        phone: "",
-        email: "",
-        dob: "",
-        nationality: "",
-        country_of_residence: "",
-        city: "",
-        address: "",
-        address_2: "",
-        gender: "",
-        postal_code: "",
-        language: "",
-        source: "",
-        us_citizen: "",
-        finacial_work: "",
-        tax_number: "",
-        politically_exposed: "",
-        sales_agent: "",
-      });
+  const [profileForm, setProfileForm] = useState({
+    title: "",
+    first_name: "",
+    last_name: "",
+    phone: "",
+    email: "",
+    dob: "",
+    nationality: "",
+    country_of_residence: "",
+    city: "",
+    address: "",
+    address_2: "",
+    gender: "",
+    postal_code: "",
+    language: "",
+    source: "",
+    us_citizen: "",
+    finacial_work: "",
+    tax_number: "",
+    politically_exposed: "",
+    sales_agent: "",
+  });
   const profileInput = (event) => {
     const { name, value } = event.target;
     setProfileForm((prevalue) => {
@@ -93,8 +93,10 @@ const ProfilePage = () => {
       toast.error("Please select sales agent");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("action", "update_basic_information");
       param.append("3r_id", id);
       param.append("manager_id", profileForm.sales_agent);

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Url } from "../../global.js";
+import { IsApprove, Url } from "../../global.js";
 import axios from "axios";
-import "./trandestatistics.css"
+import "./trandestatistics.css";
 const TradeStatistics = () => {
   const [data, setData] = useState({});
   useEffect(() => {
     const param = new FormData();
-    /* param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1); */
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     axios
       .post(`${Url}/ajaxfiles/trading_statistics_manage.php`, param)
       .then((res) => {

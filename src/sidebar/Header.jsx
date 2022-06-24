@@ -15,7 +15,7 @@ import TextField from "@mui/material/TextField";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
 import axios from "axios";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -229,8 +229,11 @@ const Header = (prop) => {
 
   const Logout = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
+
     await axios.post(Url + "/ajaxfiles/logout.php", param).then((res) => {
       localStorage.setItem("login", true);
       prop.setLogin("true");
@@ -256,8 +259,10 @@ const Header = (prop) => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("old_password", form.current_password);
       param.append("new_password", form.new_password);
       param.append("confirm_password", form.confirm_password);

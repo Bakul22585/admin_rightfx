@@ -20,7 +20,7 @@ import { Button } from "@mui/material";
 import mapDataWorld from "@highcharts/map-collection/custom/world.geo.json";
 import Chart from "react-apexcharts";
 import CommonFilter from "../common/CommonFilter";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 const WorldMap = require("react-world-map");
@@ -414,8 +414,10 @@ const Dashboard = (prop) => {
       prop.setLogin("true");
     }
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     axios.post(Url + "/ajaxfiles/dashboard.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);

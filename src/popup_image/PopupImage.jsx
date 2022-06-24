@@ -13,12 +13,11 @@ import {
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const PopupImage = () => {
-
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
@@ -46,14 +45,16 @@ const PopupImage = () => {
   toast.configure();
   const fatchimage = async () => {
     const param = new FormData();
-    /* param.append("is_app", 1);
-    param.append("AADMIN_LOGIN_ID", 1); */
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "popup_image");
     await axios.post(`${Url}/ajaxfiles/common_api.php`, param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
         navigate("/");
-    }
+      }
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
@@ -72,8 +73,10 @@ const PopupImage = () => {
     } else {
       setLoader(true);
       const param = new FormData();
-      /* param.append("is_app", 1);
-      param.append("AADMIN_LOGIN_ID", 1); */
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("popup_image", selectedFile);
       await axios
         .post(`${Url}/ajaxfiles/update_image.php`, param)
@@ -81,7 +84,7 @@ const PopupImage = () => {
           if (res.data.message == "Session has been expired") {
             localStorage.setItem("login", true);
             navigate("/");
-        }
+          }
           if (res.data.status == "error") {
             toast.error(res.data.message);
             setLoader(false);
@@ -141,7 +144,7 @@ const PopupImage = () => {
                         <br />
                         <div className="popsavebuttton">
                           {loader == true ? (
-                            <Button  disabled className="popdisableimage" >
+                            <Button disabled className="popdisableimage">
                               <svg class="spinner" viewBox="0 0 50 50">
                                 <circle
                                   class="path"

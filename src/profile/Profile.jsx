@@ -49,10 +49,10 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import Chart from "react-apexcharts";
-import { Url, ClientUrl } from "../global";
+import { Url, ClientUrl, IsApprove } from "../global";
 import KycDocument from "./KycDocument";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -183,14 +183,14 @@ const Profile = () => {
   const [dialogTitle, setDialogTitle] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [param, setParam] = useState({
-    'action': 'my_referrals',
-    'user_id': id,
-    'structure_id': 0
+    action: "my_referrals",
+    user_id: id,
+    structure_id: 0,
   });
   const [userData, setuserData] = useState({ isLoader: true, data: {} });
   const [filterData, setFilterData] = useState(null);
   const [mt5AccountList, setMt5AccountList] = useState([]);
-  const [salesList, setSalesList] = useState([])
+  const [salesList, setSalesList] = useState([]);
   const [countryData, setCountryData] = useState({
     data: [],
   });
@@ -295,13 +295,13 @@ const Profile = () => {
   const [linkClientForm, setLinkClientForm] = useState({
     client: "",
     structure: "",
-    list: []
+    list: [],
   });
   const [linkIBForm, setLinkIBForm] = useState({
     master_account: "",
     customer_name: "",
     structure: "",
-    list: []
+    list: [],
   });
   const [sendMailForm, setsendMailForm] = useState({
     from: "",
@@ -382,13 +382,17 @@ const Profile = () => {
     structure_id: "",
     isLoader: false,
   });
-  const [partnershipMasterStructureData, setPartnershipMasterStructureData] = useState({
-    structure_name: "",
-    structure_data: [],
-    structure_id: "",
-    isLoader: false,
-  });
-  const [newPartnershipMasterStructureData, setNewPartnershipMasterStructureData] = useState({
+  const [partnershipMasterStructureData, setPartnershipMasterStructureData] =
+    useState({
+      structure_name: "",
+      structure_data: [],
+      structure_id: "",
+      isLoader: false,
+    });
+  const [
+    newPartnershipMasterStructureData,
+    setNewPartnershipMasterStructureData,
+  ] = useState({
     structure_name: "",
     structure_data: [],
     structure_id: "",
@@ -416,7 +420,7 @@ const Profile = () => {
     parent_id: "",
   });
   const [fullWidth, setFullWidth] = useState(true);
-  const [maxWidth, setMaxWidth] = useState('sm');
+  const [maxWidth, setMaxWidth] = useState("sm");
   const [myStructureData, setMyStructureData] = useState({
     structure_name: "",
     structure_data: [],
@@ -663,7 +667,26 @@ const Profile = () => {
     {
       name: "Status",
       selector: (row) => {
-        return <span title={(row.status == "1") ? "APPROVED" : (row.status == "2") ? "REJECTED" : "PENDING"} className={`text-color-${(row.status == "1") ? "green" : (row.status == "2") ? "red" : "yellow"}`}>{(row.status == "1") ? "APPROVED" : (row.status == "2") ? "REJECTED" : "PENDING"}</span>;
+        return (
+          <span
+            title={
+              row.status == "1"
+                ? "APPROVED"
+                : row.status == "2"
+                ? "REJECTED"
+                : "PENDING"
+            }
+            className={`text-color-${
+              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+            }`}
+          >
+            {row.status == "1"
+              ? "APPROVED"
+              : row.status == "2"
+              ? "REJECTED"
+              : "PENDING"}
+          </span>
+        );
       },
       sortable: true,
       wrap: true,
@@ -671,54 +694,71 @@ const Profile = () => {
       grow: 1,
     },
     {
-      name: 'Send Mail',
+      name: "Send Mail",
       button: true,
-      cell: row => {
-        return <div>
-          {
-            (row.isLoader) ? <Button><svg class="spinner" viewBox="0 0 50 50">
-              <circle
-                class="path"
-                cx="25"
-                cy="25"
-                r="20"
-                fill="none"
-                stroke-width="5"
-              ></circle>
-            </svg></Button> : <Button onClick={(e) => {
-              confirmAlert({
-                customUI: ({ onClose }) => {
-                  return (
-                    <div className='custom-ui'>
-                      <h1>Are you sure?</h1>
-                      <p>Do you want to send this mt5 account password?</p>
-                      <div className='confirmation-alert-action-button'>
-                        <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                        <Button variant="contained" className='btn-gradient btn-success'
-                          onClick={() => {
-                            onClose();
-                            row.isLoader = true;
-                            var status = sendMT5PasswordMail(row);
-                            if (status) {
-                              row.isLoader = false;
-                            }
-                          }}
-                        >
-                          Yes, Send it!
-                        </Button>
-                      </div>
-                    </div>
-                  );
-                }
-              });
-            }}><i className="material-icons">forward_to_inbox</i></Button>
-          }
-
-        </div>
+      cell: (row) => {
+        return (
+          <div>
+            {row.isLoader ? (
+              <Button>
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle
+                    class="path"
+                    cx="25"
+                    cy="25"
+                    r="20"
+                    fill="none"
+                    stroke-width="5"
+                  ></circle>
+                </svg>
+              </Button>
+            ) : (
+              <Button
+                onClick={(e) => {
+                  confirmAlert({
+                    customUI: ({ onClose }) => {
+                      return (
+                        <div className="custom-ui">
+                          <h1>Are you sure?</h1>
+                          <p>Do you want to send this mt5 account password?</p>
+                          <div className="confirmation-alert-action-button">
+                            <Button
+                              variant="contained"
+                              className="cancelButton"
+                              onClick={onClose}
+                            >
+                              No
+                            </Button>
+                            <Button
+                              variant="contained"
+                              className="btn-gradient btn-success"
+                              onClick={() => {
+                                onClose();
+                                row.isLoader = true;
+                                var status = sendMT5PasswordMail(row);
+                                if (status) {
+                                  row.isLoader = false;
+                                }
+                              }}
+                            >
+                              Yes, Send it!
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    },
+                  });
+                }}
+              >
+                <i className="material-icons">forward_to_inbox</i>
+              </Button>
+            )}
+          </div>
+        );
       },
       ignoreRowClick: true,
-      allowOverflow: true
-    }
+      allowOverflow: true,
+    },
   ];
 
   const bankColumn = [
@@ -788,7 +828,7 @@ const Profile = () => {
           <div>
             <Button
               className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
-            // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
+              // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
             >
               <DeleteIcon sx={{ color: "red" }} />
             </Button>
@@ -1013,18 +1053,19 @@ const Profile = () => {
         return (
           <span
             title={row.sponsor_approve}
-            className={`text-color-${row.sponsor_approve == "1"
-              ? "green"
-              : row.sponsor_approve == "2"
+            className={`text-color-${
+              row.sponsor_approve == "1"
+                ? "green"
+                : row.sponsor_approve == "2"
                 ? "red"
                 : "yellow"
-              }`}
+            }`}
           >
             {row.sponsor_approve == "1"
               ? "APPROVED"
               : row.sponsor_approve == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -1039,18 +1080,19 @@ const Profile = () => {
         return (
           <span
             title={row.admin_approve}
-            className={`text-color-${row.admin_approve == "1"
-              ? "green"
-              : row.admin_approve == "2"
+            className={`text-color-${
+              row.admin_approve == "1"
+                ? "green"
+                : row.admin_approve == "2"
                 ? "red"
                 : "yellow"
-              }`}
+            }`}
           >
             {row.admin_approve == "1"
               ? "APPROVED"
               : row.admin_approve == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -1065,14 +1107,15 @@ const Profile = () => {
         return (
           <span
             title={row.status}
-            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-              }`}
+            className={`text-color-${
+              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+            }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -1114,16 +1157,16 @@ const Profile = () => {
   const [refresh, setRefresh] = useState(false);
   const [getStructuresList, setGetStructuresList] = useState([]);
   const [viewCpPassword, setViewCpPassword] = useState({
-    'cp_password': ''
+    cp_password: "",
   });
   const [changePassword, setChangePassword] = useState({
-    'password': '',
-    'new_password': '',
-    isLoader: false
+    password: "",
+    new_password: "",
+    isLoader: false,
   });
   const [pammAccess, setPammAccess] = useState({
-    status: '',
-    isLoader: false
+    status: "",
+    isLoader: false,
   });
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
@@ -1150,8 +1193,10 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1198,8 +1243,10 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "get_my_structure");
     axios
@@ -1235,7 +1282,7 @@ const Profile = () => {
       sortable: true,
       reorder: true,
       grow: 1,
-    }
+    },
   ];
 
   const logColumn = [
@@ -1261,7 +1308,7 @@ const Profile = () => {
       wrap: true,
       reorder: true,
       grow: 1,
-    }
+    },
   ];
 
   const walletHistoryColumn = [
@@ -1316,8 +1363,10 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "get_mt5_account_list");
 
     axios
@@ -1334,8 +1383,10 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "list_my_structures");
 
     axios
@@ -1356,8 +1407,10 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
-    // param1.append("is_app", 1);
-    // param1.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param1.append("user_id", id);
 
     if (res !== null) {
@@ -1381,7 +1434,6 @@ const Profile = () => {
   };
 
   const forinloop = () => {
-
     var html = [];
     for (let x in masterStructureData.pair_data) {
       html.push(
@@ -1447,14 +1499,16 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     if (res) {
       param.append("structure_id", res);
       param.append("action", "get_my_structure");
     } else {
-      param.append('action', 'get_default_structure');
+      param.append("action", "get_default_structure");
       // param.append("action", "add_new_structure_data");
     }
     axios
@@ -1466,7 +1520,7 @@ const Profile = () => {
         }
         newMasterStructureData.structure_data = res.data.data;
         setNewMasterStructureData({ ...newMasterStructureData });
-        // setMasterStructureData(res.data.data); 
+        // setMasterStructureData(res.data.data);
         // setStructureList((preValue) => {
         //   return {
         //     ...preValue,
@@ -1478,14 +1532,16 @@ const Profile = () => {
 
   const getPartnershipMasterStructure = (res) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     if (res) {
       param.append("structure_id", res);
       param.append("action", "get_my_structure");
     } else {
-      param.append('action', 'get_default_structure');
+      param.append("action", "get_default_structure");
       // param.append("action", "add_new_structure_data");
     }
     axios
@@ -1497,18 +1553,24 @@ const Profile = () => {
         }
         if (res) {
           partnershipMasterStructureData.structure_data = resData.data.data;
-          setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
+          setPartnershipMasterStructureData({
+            ...partnershipMasterStructureData,
+          });
         } else {
           newPartnershipMasterStructureData.structure_data = resData.data.data;
-          setNewPartnershipMasterStructureData({ ...newPartnershipMasterStructureData });
+          setNewPartnershipMasterStructureData({
+            ...newPartnershipMasterStructureData,
+          });
         }
       });
   };
 
   const getBankList = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "view_bank_details");
     axios
@@ -1525,8 +1587,10 @@ const Profile = () => {
   const getwalletBalance = () => {
     if (transactionForm.account == "Wallet") {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("action", "view_balance");
       axios
@@ -1543,8 +1607,10 @@ const Profile = () => {
 
   const getMtBalance = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("from_mt5_account_id", transactionForm.from_mt5_account_id);
     param.append("action", "view_mt5_balance");
@@ -1559,8 +1625,10 @@ const Profile = () => {
 
   const getMt5LivePackages = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     axios
       .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
@@ -1677,7 +1745,7 @@ const Profile = () => {
       newMasterStructureData.isLoader = false;
       setNewMasterStructureData({ ...newMasterStructureData });
       getMasterStructureList();
-      setMasterStructureData([])
+      setMasterStructureData([]);
       setmasterStructureForm({
         name: "",
         forex_rebate: "",
@@ -1710,7 +1778,7 @@ const Profile = () => {
       setLinkClientForm({
         client: "",
         structure: "",
-        list: []
+        list: [],
       });
       getLinkClientList();
     } else if (e.target.classList.contains("link_ib")) {
@@ -1719,7 +1787,7 @@ const Profile = () => {
         master_account: "",
         customer_name: "",
         structure: "",
-        list: []
+        list: [],
       });
       getIBUserList();
     } else if (e.target.classList.contains("unlink_ib")) {
@@ -1727,12 +1795,20 @@ const Profile = () => {
       confirmAlert({
         customUI: ({ onClose }) => {
           return (
-            <div className='custom-ui'>
+            <div className="custom-ui">
               <h1>Are you sure?</h1>
               <p>Do you want to unlink IB?</p>
-              <div className='confirmation-alert-action-button'>
-                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                <Button variant="contained" className='btn-gradient btn-danger'
+              <div className="confirmation-alert-action-button">
+                <Button
+                  variant="contained"
+                  className="cancelButton"
+                  onClick={onClose}
+                >
+                  No
+                </Button>
+                <Button
+                  variant="contained"
+                  className="btn-gradient btn-danger"
                   onClick={() => {
                     unlinkIB();
                     onClose();
@@ -1743,7 +1819,7 @@ const Profile = () => {
               </div>
             </div>
           );
-        }
+        },
       });
     } else if (e.target.classList.contains("send_email")) {
       setDialogTitle("Send Email");
@@ -1853,15 +1929,15 @@ const Profile = () => {
     } else if (e.target.classList.contains("change_password")) {
       setDialogTitle("Change Password");
       setChangePassword({
-        'password': '',
-        'new_password': '',
-        isLoader: false
+        password: "",
+        new_password: "",
+        isLoader: false,
       });
     } else if (e.target.classList.contains("pamm_access")) {
       setDialogTitle("Pamm Access");
       setPammAccess({
-        status: userData.data['is_pamm'],
-        isLoader: false
+        status: userData.data["is_pamm"],
+        isLoader: false,
       });
     }
     if (!e.target.classList.contains("unlink_ib")) {
@@ -2175,41 +2251,63 @@ const Profile = () => {
           </div>
           <div className="main-content-input">
             <div className="ib-structure view-commission-content-section">
-              {
-                newMasterStructureData.structure_data.map((item, index) => {
-                  return (
-                    <div className="group-structure-section">
-                      <div className="main-section">
-                        <div className='main-section-title'>{item.ib_group_name}</div>
-                        <div className='main-section-input-element'>
-                          <div>
-                            {/* <span>Rebate</span> */}
-                            <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
-                              onChange={(e) => {
-                                newMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
-                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData
-                                });
-                              }} />
-                          </div>
-                          <div>
-                            {/* <span>Commission</span> */}
-                            <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
-                              onChange={(e) => {
-                                newMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
-                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData
-                                });
-                              }}
-                            />
-                          </div>
-                          {/* <div>
+              {newMasterStructureData.structure_data.map((item, index) => {
+                return (
+                  <div className="group-structure-section">
+                    <div className="main-section">
+                      <div className="main-section-title">
+                        {item.ib_group_name}
+                      </div>
+                      <div className="main-section-input-element">
+                        <div>
+                          {/* <span>Rebate</span> */}
+                          <input
+                            type="number"
+                            className="Rebate_amount"
+                            placeholder="Rebate"
+                            value={item.group_rebate}
+                            onChange={(e) => {
+                              newMasterStructureData.structure_data[index][
+                                "group_rebate"
+                              ] = e.target.value;
+                              newMasterStructureData.structure_data[index][
+                                "pair_data"
+                              ].forEach((value, valueIndex) => {
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ][valueIndex]["rebate"] = e.target.value;
+                              });
+                              setNewMasterStructureData({
+                                ...newMasterStructureData,
+                              });
+                            }}
+                          />
+                        </div>
+                        <div>
+                          {/* <span>Commission</span> */}
+                          <input
+                            type="number"
+                            className="commission_amount"
+                            placeholder="Commission"
+                            value={item.group_commission}
+                            onChange={(e) => {
+                              newMasterStructureData.structure_data[index][
+                                "group_commission"
+                              ] = e.target.value;
+                              newMasterStructureData.structure_data[index][
+                                "pair_data"
+                              ].forEach((value, valueIndex) => {
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ][valueIndex]["commission"] = e.target.value;
+                              });
+                              setNewMasterStructureData({
+                                ...newMasterStructureData,
+                              });
+                            }}
+                          />
+                        </div>
+                        {/* <div>
                             {
                               (item.ibGroup != undefined) ?
                                 <FormControl variant="standard">
@@ -2238,50 +2336,78 @@ const Profile = () => {
                                 </FormControl> : ''
                             }
                           </div> */}
-                        </div>
-                        <div className='action-section'>
-                          <span onClick={(e) => { newMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
-                        </div>
                       </div>
-                      <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                        {
-                          item.pair_data.map((item1, index1) => {
-                            return (
-                              <div className="pair-data">
-                                <div className='pair-data-title'>{item1.pair_name}</div>
-                                <div>
-                                  <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
-                                    onChange={(e) => {
-                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
-                                      setNewMasterStructureData({
-                                        ...newMasterStructureData
-                                      });
-                                    }}
-                                  />
-                                </div>
-                                <div>
-                                  <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
-                                    onChange={(e) => {
-                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
-                                      setNewMasterStructureData({
-                                        ...newMasterStructureData
-                                      });
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            );
-                          })
-                        }
+                      <div className="action-section">
+                        <span
+                          onClick={(e) => {
+                            newMasterStructureData.structure_data[index][
+                              "is_visible"
+                            ] = !item.is_visible;
+                            setUpdateDate({ ...newMasterStructureData });
+                          }}
+                        >
+                          <i
+                            class={`fa ${
+                              item.is_visible ? "fa-angle-up" : "fa-angle-down"
+                            }`}
+                            aria-hidden="true"
+                          ></i>
+                        </span>
                       </div>
                     </div>
-                  );
-                })
-              }
+                    <div
+                      className={`pair-section ${
+                        item.is_visible ? "child-section-visible" : ""
+                      }`}
+                    >
+                      {item.pair_data.map((item1, index1) => {
+                        return (
+                          <div className="pair-data">
+                            <div className="pair-data-title">
+                              {item1.pair_name}
+                            </div>
+                            <div>
+                              <input
+                                type="number"
+                                className="rebert_amount"
+                                placeholder="Rebert"
+                                value={item1.rebate}
+                                onChange={(e) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][index1]["rebate"] = e.target.value;
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <input
+                                type="number"
+                                className="commission_amount"
+                                placeholder="Commission"
+                                value={item1.commission}
+                                onChange={(e) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][index1]["commission"] = e.target.value;
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
           {/* {forinloop()} */}
-
         </div>
       );
     } else if (dialogTitle == "Edit Master Structure") {
@@ -2311,7 +2437,10 @@ const Profile = () => {
                 onChange={(e) => {
                   getMasterStructure(e.target.value);
                   newMasterStructureData.structure_id = e.target.value;
-                  newMasterStructureData.structure_name = structureList.data.filter((x) => x.structure_id == e.target.value)[0].structure_name;
+                  newMasterStructureData.structure_name =
+                    structureList.data.filter(
+                      (x) => x.structure_id == e.target.value
+                    )[0].structure_name;
                   setStructureList((prevalue) => {
                     return {
                       ...prevalue,
@@ -2335,41 +2464,63 @@ const Profile = () => {
           </div>
           <div className="main-content-input">
             <div className="ib-structure view-commission-content-section">
-              {
-                newMasterStructureData.structure_data.map((item, index) => {
-                  return (
-                    <div className="group-structure-section">
-                      <div className="main-section">
-                        <div className='main-section-title'>{item.ib_group_name}</div>
-                        <div className='main-section-input-element'>
-                          <div>
-                            {/* <span>Rebate</span> */}
-                            <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
-                              onChange={(e) => {
-                                newMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
-                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData
-                                });
-                              }} />
-                          </div>
-                          <div>
-                            {/* <span>Commission</span> */}
-                            <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
-                              onChange={(e) => {
-                                newMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
-                                newMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                  newMasterStructureData.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData
-                                });
-                              }}
-                            />
-                          </div>
-                          {/* <div>
+              {newMasterStructureData.structure_data.map((item, index) => {
+                return (
+                  <div className="group-structure-section">
+                    <div className="main-section">
+                      <div className="main-section-title">
+                        {item.ib_group_name}
+                      </div>
+                      <div className="main-section-input-element">
+                        <div>
+                          {/* <span>Rebate</span> */}
+                          <input
+                            type="number"
+                            className="Rebate_amount"
+                            placeholder="Rebate"
+                            value={item.group_rebate}
+                            onChange={(e) => {
+                              newMasterStructureData.structure_data[index][
+                                "group_rebate"
+                              ] = e.target.value;
+                              newMasterStructureData.structure_data[index][
+                                "pair_data"
+                              ].forEach((value, valueIndex) => {
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ][valueIndex]["rebate"] = e.target.value;
+                              });
+                              setNewMasterStructureData({
+                                ...newMasterStructureData,
+                              });
+                            }}
+                          />
+                        </div>
+                        <div>
+                          {/* <span>Commission</span> */}
+                          <input
+                            type="number"
+                            className="commission_amount"
+                            placeholder="Commission"
+                            value={item.group_commission}
+                            onChange={(e) => {
+                              newMasterStructureData.structure_data[index][
+                                "group_commission"
+                              ] = e.target.value;
+                              newMasterStructureData.structure_data[index][
+                                "pair_data"
+                              ].forEach((value, valueIndex) => {
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ][valueIndex]["commission"] = e.target.value;
+                              });
+                              setNewMasterStructureData({
+                                ...newMasterStructureData,
+                              });
+                            }}
+                          />
+                        </div>
+                        {/* <div>
                             {
                               (item.ibGroup != undefined) ?
                                 <FormControl variant="standard">
@@ -2398,46 +2549,75 @@ const Profile = () => {
                                 </FormControl> : ''
                             }
                           </div> */}
-                        </div>
-                        <div className='action-section'>
-                          <span onClick={(e) => { newMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
-                        </div>
                       </div>
-                      <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                        {
-                          item.pair_data.map((item1, index1) => {
-                            return (
-                              <div className="pair-data">
-                                <div className='pair-data-title'>{item1.pair_name}</div>
-                                <div>
-                                  <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
-                                    onChange={(e) => {
-                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
-                                      setNewMasterStructureData({
-                                        ...newMasterStructureData
-                                      });
-                                    }}
-                                  />
-                                </div>
-                                <div>
-                                  <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
-                                    onChange={(e) => {
-                                      newMasterStructureData.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
-                                      setNewMasterStructureData({
-                                        ...newMasterStructureData
-                                      });
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            );
-                          })
-                        }
+                      <div className="action-section">
+                        <span
+                          onClick={(e) => {
+                            newMasterStructureData.structure_data[index][
+                              "is_visible"
+                            ] = !item.is_visible;
+                            setUpdateDate({ ...newMasterStructureData });
+                          }}
+                        >
+                          <i
+                            class={`fa ${
+                              item.is_visible ? "fa-angle-up" : "fa-angle-down"
+                            }`}
+                            aria-hidden="true"
+                          ></i>
+                        </span>
                       </div>
                     </div>
-                  );
-                })
-              }
+                    <div
+                      className={`pair-section ${
+                        item.is_visible ? "child-section-visible" : ""
+                      }`}
+                    >
+                      {item.pair_data.map((item1, index1) => {
+                        return (
+                          <div className="pair-data">
+                            <div className="pair-data-title">
+                              {item1.pair_name}
+                            </div>
+                            <div>
+                              <input
+                                type="number"
+                                className="rebert_amount"
+                                placeholder="Rebert"
+                                value={item1.rebate}
+                                onChange={(e) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][index1]["rebate"] = e.target.value;
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <input
+                                type="number"
+                                className="commission_amount"
+                                placeholder="Commission"
+                                value={item1.commission}
+                                onChange={(e) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][index1]["commission"] = e.target.value;
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
           {/* {masterStructureData.map((item, index) => {
@@ -2615,13 +2795,13 @@ const Profile = () => {
                 name="client"
                 onChange={linkClientInput}
               >
-                {
-                  linkClientForm.list?.map((item) => {
-                    return (
-                      <MenuItem value={item.client_id}>{item.client_name}</MenuItem>
-                    )
-                  })
-                }
+                {linkClientForm.list?.map((item) => {
+                  return (
+                    <MenuItem value={item.client_id}>
+                      {item.client_name}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </div>
@@ -2673,13 +2853,13 @@ const Profile = () => {
                 onChange={linkIBInput}
               >
                 {/* <MenuItem value="test">Test</MenuItem> */}
-                {
-                  linkIBForm.list?.map((item) => {
-                    return (
-                      <MenuItem value={item.sponser_id}>{item.sponser_name}</MenuItem>
-                    )
-                  })
-                }
+                {linkIBForm.list?.map((item) => {
+                  return (
+                    <MenuItem value={item.sponser_id}>
+                      {item.sponser_name}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </div>
@@ -2786,12 +2966,14 @@ const Profile = () => {
         </div>
       );
     } else if (dialogTitle == "View Control Panel Access Password") {
-      return <div>
-        <div className="element-section">
-          <label>CP Password :</label>
-          <span>{viewCpPassword.cp_password}</span>
+      return (
+        <div>
+          <div className="element-section">
+            <label>CP Password :</label>
+            <span>{viewCpPassword.cp_password}</span>
+          </div>
         </div>
-      </div>;
+      );
     } else if (dialogTitle == "Download Client PDF") {
     } else if (dialogTitle == "Add New Note") {
       return (
@@ -3367,7 +3549,7 @@ const Profile = () => {
                 </FormControl>
               ) : transactionForm.account_to != "" ? (
                 transactionForm.account == "MT5" &&
-                  transactionForm.account_to == "Wallet" ? (
+                transactionForm.account_to == "Wallet" ? (
                   <TextField
                     className="disabled-input-wallet-code"
                     label="Wallet Code"
@@ -3394,7 +3576,7 @@ const Profile = () => {
                 ""
               )}
               {transactionForm.from_mt5_account_id &&
-                transactionForm.account == "MT5" ? (
+              transactionForm.account == "MT5" ? (
                 <>
                   {" "}
                   <TextField
@@ -3559,7 +3741,9 @@ const Profile = () => {
               value={partnershipMasterStructureData.structure_name}
               onChange={(e) => {
                 partnershipMasterStructureData.structure_name = e.target.value;
-                setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
+                setPartnershipMasterStructureData({
+                  ...partnershipMasterStructureData,
+                });
                 // setStructureList((preValue) => {
                 //   return {
                 //     ...preValue,
@@ -3571,36 +3755,61 @@ const Profile = () => {
           </div>
           <div className="main-content-input">
             <div className="ib-structure view-commission-content-section">
-              {
-                partnershipMasterStructureData.structure_data.map((item, index) => {
+              {partnershipMasterStructureData.structure_data.map(
+                (item, index) => {
                   return (
                     <div className="group-structure-section">
                       <div className="main-section">
-                        <div className='main-section-title'>{item.ib_group_name}</div>
-                        <div className='main-section-input-element'>
+                        <div className="main-section-title">
+                          {item.ib_group_name}
+                        </div>
+                        <div className="main-section-input-element">
                           <div>
                             {/* <span>Rebate</span> */}
-                            <input type='number' className="Rebate_amount" placeholder="Rebate" value={item.group_rebate}
+                            <input
+                              type="number"
+                              className="Rebate_amount"
+                              placeholder="Rebate"
+                              value={item.group_rebate}
                               onChange={(e) => {
-                                partnershipMasterStructureData.structure_data[index]['group_rebate'] = e.target.value;
-                                partnershipMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                  partnershipMasterStructureData.structure_data[index]['pair_data'][valueIndex]['rebate'] = e.target.value;
+                                partnershipMasterStructureData.structure_data[
+                                  index
+                                ]["group_rebate"] = e.target.value;
+                                partnershipMasterStructureData.structure_data[
+                                  index
+                                ]["pair_data"].forEach((value, valueIndex) => {
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["pair_data"][valueIndex]["rebate"] =
+                                    e.target.value;
                                 });
                                 setPartnershipMasterStructureData({
-                                  ...partnershipMasterStructureData
+                                  ...partnershipMasterStructureData,
                                 });
-                              }} />
+                              }}
+                            />
                           </div>
                           <div>
                             {/* <span>Commission</span> */}
-                            <input type='number' className="commission_amount" placeholder="Commission" value={item.group_commission}
+                            <input
+                              type="number"
+                              className="commission_amount"
+                              placeholder="Commission"
+                              value={item.group_commission}
                               onChange={(e) => {
-                                partnershipMasterStructureData.structure_data[index]['group_commission'] = e.target.value;
-                                partnershipMasterStructureData.structure_data[index]['pair_data'].forEach((value, valueIndex) => {
-                                  partnershipMasterStructureData.structure_data[index]['pair_data'][valueIndex]['commission'] = e.target.value;
+                                partnershipMasterStructureData.structure_data[
+                                  index
+                                ]["group_commission"] = e.target.value;
+                                partnershipMasterStructureData.structure_data[
+                                  index
+                                ]["pair_data"].forEach((value, valueIndex) => {
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["pair_data"][valueIndex]["commission"] =
+                                    e.target.value;
                                 });
                                 setPartnershipMasterStructureData({
-                                  ...partnershipMasterStructureData
+                                  ...partnershipMasterStructureData,
                                 });
                               }}
                             />
@@ -3635,45 +3844,81 @@ const Profile = () => {
                             }
                           </div> */}
                         </div>
-                        <div className='action-section'>
-                          <span onClick={(e) => { partnershipMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setPartnershipMasterStructureData({ ...partnershipMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                        <div className="action-section">
+                          <span
+                            onClick={(e) => {
+                              partnershipMasterStructureData.structure_data[
+                                index
+                              ]["is_visible"] = !item.is_visible;
+                              setPartnershipMasterStructureData({
+                                ...partnershipMasterStructureData,
+                              });
+                            }}
+                          >
+                            <i
+                              class={`fa ${
+                                item.is_visible
+                                  ? "fa-angle-up"
+                                  : "fa-angle-down"
+                              }`}
+                              aria-hidden="true"
+                            ></i>
+                          </span>
                         </div>
                       </div>
-                      <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                        {
-                          item.pair_data.map((item1, index1) => {
-                            return (
-                              <div className="pair-data">
-                                <div className='pair-data-title'>{item1.pair_name}</div>
-                                <div>
-                                  <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate}
-                                    onChange={(e) => {
-                                      partnershipMasterStructureData.structure_data[index]['pair_data'][index1]['rebate'] = e.target.value;
-                                      setPartnershipMasterStructureData({
-                                        ...partnershipMasterStructureData
-                                      });
-                                    }}
-                                  />
-                                </div>
-                                <div>
-                                  <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission}
-                                    onChange={(e) => {
-                                      partnershipMasterStructureData.structure_data[index]['pair_data'][index1]['commission'] = e.target.value;
-                                      setPartnershipMasterStructureData({
-                                        ...partnershipMasterStructureData
-                                      });
-                                    }}
-                                  />
-                                </div>
+                      <div
+                        className={`pair-section ${
+                          item.is_visible ? "child-section-visible" : ""
+                        }`}
+                      >
+                        {item.pair_data.map((item1, index1) => {
+                          return (
+                            <div className="pair-data">
+                              <div className="pair-data-title">
+                                {item1.pair_name}
                               </div>
-                            );
-                          })
-                        }
+                              <div>
+                                <input
+                                  type="number"
+                                  className="rebert_amount"
+                                  placeholder="Rebert"
+                                  value={item1.rebate}
+                                  onChange={(e) => {
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"][index1]["rebate"] =
+                                      e.target.value;
+                                    setPartnershipMasterStructureData({
+                                      ...partnershipMasterStructureData,
+                                    });
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="number"
+                                  className="commission_amount"
+                                  placeholder="Commission"
+                                  value={item1.commission}
+                                  onChange={(e) => {
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"][index1]["commission"] =
+                                      e.target.value;
+                                    setPartnershipMasterStructureData({
+                                      ...partnershipMasterStructureData,
+                                    });
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   );
-                })
-              }
+                }
+              )}
             </div>
           </div>
           {/* {masterStructureData.map((item, index) => {
@@ -3835,7 +4080,6 @@ const Profile = () => {
           </div>
         </div> */}
         </div>
-
       );
     } else if (dialogTitle == "Change MT5 Password") {
       return (
@@ -3924,16 +4168,25 @@ const Profile = () => {
           </div>
         </div>
       );
-    } else if (dialogTitle == myTraderData.user_name || dialogTitle == myTraderData.main_user_name) {
+    } else if (
+      dialogTitle == myTraderData.user_name ||
+      dialogTitle == myTraderData.main_user_name
+    ) {
       return (
         <div className="bankDetailsTabSection downline-table">
-          {
-            (myChildTraderData.parent_id != "") ? <div>
-              <Button onClick={(e) => {
-                getMyChildTrader(myChildTraderData.parent_id)
-              }}><i className="material-icons">arrow_back_ios</i>Back</Button>
-            </div> : ""
-          }
+          {myChildTraderData.parent_id != "" ? (
+            <div>
+              <Button
+                onClick={(e) => {
+                  getMyChildTrader(myChildTraderData.parent_id);
+                }}
+              >
+                <i className="material-icons">arrow_back_ios</i>Back
+              </Button>
+            </div>
+          ) : (
+            ""
+          )}
 
           <table>
             <thead>
@@ -3952,14 +4205,14 @@ const Profile = () => {
               </tr>
             </thead>
             <tbody>
-              {
-                (myChildTraderData.data.data != undefined) ? myChildTraderData.data.data.map((item) => {
+              {myChildTraderData.data.data != undefined ? (
+                myChildTraderData.data.data.map((item) => {
                   return (
                     <tr>
                       <td>{item.sr_no}</td>
                       <td>{item.name}</td>
                       <td>{item.user_email}</td>
-                      <td>{(item.is_ib_account == "1") ? "Yes" : "No"}</td>
+                      <td>{item.is_ib_account == "1" ? "Yes" : "No"}</td>
                       <td>{item.mt5_acc_ids}</td>
                       <td>{item.deposit_amount}</td>
                       <td>{item.withdrawal_amount}</td>
@@ -3967,36 +4220,89 @@ const Profile = () => {
                       <td>{item.total_withdraw}</td>
                       <td>{item.wallet_balance}</td>
                       <td>
-                        {
-                          (item.is_ib_account == "1" && item.has_downline == true) ? <Button
+                        {item.is_ib_account == "1" &&
+                        item.has_downline == true ? (
+                          <Button
                             variant="contained"
                             className="add_note"
                             onClick={(e) => {
                               myTraderData.user_name = item.name;
                               myTraderData.user_id = item.client_id;
                               setMyTraderData({ ...myTraderData });
-                              getMyChildTrader(item.client_id)
-                            }}>
+                              getMyChildTrader(item.client_id);
+                            }}
+                          >
                             View
-                          </Button> : ""
-                        }
-
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
-                  )
-                }) : <tr>
-                  <td className="text-center" colSpan={10}>Recored not found</td>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td className="text-center" colSpan={10}>
+                    Recored not found
+                  </td>
                 </tr>
-              }
+              )}
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="4"><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total'] : ""}</b></td>
-                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_user_deposit'] : ""}</b></td>
-                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_user_withdraw'] : ""}</b></td>
-                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_total_user_deposit'] : ""}</b></td>
-                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_total_user_withdraw'] : ""}</b></td>
-                <td><b>{(myChildTraderData.data.footer_count != undefined) ? myChildTraderData.data['footer_count']['total_user_wallet'] : ""}</b></td>
+                <td colSpan="4">
+                  <b>
+                    {myChildTraderData.data.footer_count != undefined
+                      ? myChildTraderData.data["footer_count"]["total"]
+                      : ""}
+                  </b>
+                </td>
+                <td>
+                  <b>
+                    {myChildTraderData.data.footer_count != undefined
+                      ? myChildTraderData.data["footer_count"][
+                          "total_user_deposit"
+                        ]
+                      : ""}
+                  </b>
+                </td>
+                <td>
+                  <b>
+                    {myChildTraderData.data.footer_count != undefined
+                      ? myChildTraderData.data["footer_count"][
+                          "total_user_withdraw"
+                        ]
+                      : ""}
+                  </b>
+                </td>
+                <td>
+                  <b>
+                    {myChildTraderData.data.footer_count != undefined
+                      ? myChildTraderData.data["footer_count"][
+                          "total_total_user_deposit"
+                        ]
+                      : ""}
+                  </b>
+                </td>
+                <td>
+                  <b>
+                    {myChildTraderData.data.footer_count != undefined
+                      ? myChildTraderData.data["footer_count"][
+                          "total_total_user_withdraw"
+                        ]
+                      : ""}
+                  </b>
+                </td>
+                <td>
+                  <b>
+                    {myChildTraderData.data.footer_count != undefined
+                      ? myChildTraderData.data["footer_count"][
+                          "total_user_wallet"
+                        ]
+                      : ""}
+                  </b>
+                </td>
               </tr>
             </tfoot>
           </table>
@@ -4583,7 +4889,10 @@ const Profile = () => {
           )}
         </div>
       );
-    } else if (dialogTitle == myTraderData.user_name || dialogTitle == myTraderData.main_user_name) {
+    } else if (
+      dialogTitle == myTraderData.user_name ||
+      dialogTitle == myTraderData.main_user_name
+    ) {
       return (
         <div className="dialogMultipleActionButton">
           <Button
@@ -4594,7 +4903,7 @@ const Profile = () => {
             Cancel
           </Button>
         </div>
-      )
+      );
     } else if (dialogTitle == "Pamm Access") {
       return (
         <div className="dialogMultipleActionButton">
@@ -4660,8 +4969,10 @@ const Profile = () => {
 
   const createMt5AccountSubmit = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
 
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
@@ -4674,8 +4985,14 @@ const Profile = () => {
       toast.error("Please select account option");
     } else if (createMt5Form.password == "") {
       toast.error("Please enter password");
-    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(createMt5Form.password)) {
-      toast.error("Please enter valid password. Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character");
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+        createMt5Form.password
+      )
+    ) {
+      toast.error(
+        "Please enter valid password. Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+      );
     } else if (createMt5Form.confirm_password == "") {
       toast.error("Please enter confirm password");
     } else if (createMt5Form.confirm_password != createMt5Form.password) {
@@ -4730,8 +5047,10 @@ const Profile = () => {
 
   const getMt5AccountStatus = (mt5ID) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("mt5_id", mt5ID);
     param.append("action", "check_mt5_status");
@@ -4748,12 +5067,12 @@ const Profile = () => {
           setMt5AccessForm((prevalue) => {
             return {
               ...prevalue,
-              ['status']: res.data.mt5_status,
+              ["status"]: res.data.mt5_status,
             };
           });
         }
       });
-  }
+  };
 
   const Mt5AccountAccessSubmit = () => {
     if (Mt5AccessForm.account_type == "") {
@@ -4768,8 +5087,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -4829,8 +5150,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -4892,8 +5215,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -4946,8 +5271,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -5019,8 +5346,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -5068,8 +5397,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("password", changePassword.password);
       param.append("confirm_password", changePassword.new_password);
@@ -5104,8 +5435,10 @@ const Profile = () => {
       pammAccess.isLoader = true;
       setPammAccess({ ...pammAccess });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("is_pamm", pammAccess.status);
       param.append("action", "update_is_pamm");
@@ -5146,7 +5479,7 @@ const Profile = () => {
         toast.error("Please enter structure name");
         error = true;
       } else {
-        newMasterStructureData.structure_data.forEach(element => {
+        newMasterStructureData.structure_data.forEach((element) => {
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5160,23 +5493,31 @@ const Profile = () => {
             error = true;
             return false;
           } else {
-            element.pair_data.forEach(element1 => {
+            element.pair_data.forEach((element1) => {
               if (element1.rebate === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.rebate > element.group_rebate) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                toast.error(
+                  `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.commission === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
+                );
                 error = true;
                 return false;
               } else if (element1.commission > element.group_commission) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                toast.error(
+                  `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
+                );
                 error = true;
                 return false;
               }
@@ -5193,10 +5534,15 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
-    param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
+    param.append(
+      "pair_data",
+      JSON.stringify(newMasterStructureData.structure_data)
+    );
     param.append("structure_name", newMasterStructureData.structure_name);
     param.append("structure_id", newMasterStructureData.structure_id);
     param.append("action", "update_strcuture_master");
@@ -5223,7 +5569,7 @@ const Profile = () => {
         toast.error("Please enter structure name");
         error = true;
       } else {
-        partnershipMasterStructureData.structure_data.forEach(element => {
+        partnershipMasterStructureData.structure_data.forEach((element) => {
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5237,23 +5583,31 @@ const Profile = () => {
             error = true;
             return false;
           } else {
-            element.pair_data.forEach(element1 => {
+            element.pair_data.forEach((element1) => {
               if (element1.rebate === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.rebate > element.group_rebate) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                toast.error(
+                  `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.commission === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
+                );
                 error = true;
                 return false;
               } else if (element1.commission > element.group_commission) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                toast.error(
+                  `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
+                );
                 error = true;
                 return false;
               }
@@ -5270,11 +5624,19 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
-    param.append("pair_data", JSON.stringify(partnershipMasterStructureData.structure_data));
-    param.append("structure_name", partnershipMasterStructureData.structure_name);
+    param.append(
+      "pair_data",
+      JSON.stringify(partnershipMasterStructureData.structure_data)
+    );
+    param.append(
+      "structure_name",
+      partnershipMasterStructureData.structure_name
+    );
     param.append("structure_id", partnershipMasterStructureData.structure_id);
     param.append("action", "update_strcuture_master");
     axios
@@ -5288,7 +5650,9 @@ const Profile = () => {
           toast.error(res.data.message);
         } else {
           toast.success(res.data.message);
-          getPartnershipMasterStructure(partnershipMasterStructureData.structure_id);
+          getPartnershipMasterStructure(
+            partnershipMasterStructureData.structure_id
+          );
           handleClose();
         }
       });
@@ -5301,7 +5665,7 @@ const Profile = () => {
         toast.error("Please enter structure name");
         error = true;
       } else {
-        newMasterStructureData.structure_data.forEach(element => {
+        newMasterStructureData.structure_data.forEach((element) => {
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5315,23 +5679,31 @@ const Profile = () => {
             error = true;
             return false;
           } else {
-            element.pair_data.forEach(element1 => {
+            element.pair_data.forEach((element1) => {
               if (element1.rebate === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.rebate > element.group_rebate) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-                toast.error(`Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`);
+                toast.error(
+                  `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
+                );
                 error = true;
                 return false;
               } else if (element1.commission === "") {
-                toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission`);
+                toast.error(
+                  `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
+                );
                 error = true;
                 return false;
               } else if (element1.commission > element.group_commission) {
                 // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-                toast.error(`Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`);
+                toast.error(
+                  `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
+                );
                 error = true;
                 return false;
               }
@@ -5348,10 +5720,15 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
-    param.append("pair_data", JSON.stringify(newMasterStructureData.structure_data));
+    param.append(
+      "pair_data",
+      JSON.stringify(newMasterStructureData.structure_data)
+    );
     param.append("structure_name", newMasterStructureData.structure_name);
     param.append("action", "insert_strcuture_master");
 
@@ -5383,8 +5760,10 @@ const Profile = () => {
 
   useEffect(() => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -5442,8 +5821,10 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -5503,22 +5884,24 @@ const Profile = () => {
       const param = new FormData();
       // param.append('is_app', 1);
       // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('user_id', id);
-      param.append('employment_status', employmentDetailsForm.status);
-      param.append('inudstry', employmentDetailsForm.industry);
-      param.append('action', 'update_employement_status');
+      param.append("user_id", id);
+      param.append("employment_status", employmentDetailsForm.status);
+      param.append("inudstry", employmentDetailsForm.industry);
+      param.append("action", "update_employement_status");
 
-      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-        }
-      });
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+          }
+        });
     }
   };
 
@@ -5635,22 +6018,24 @@ const Profile = () => {
       const param = new FormData();
       // param.append('is_app', 1);
       // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('user_id', id);
-      param.append('client_id', linkClientForm.client);
-      param.append('action', 'link_client');
+      param.append("user_id", id);
+      param.append("client_id", linkClientForm.client);
+      param.append("action", "link_client");
 
-      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-          setOpen(false);
-        }
-      });
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
     }
   };
 
@@ -5671,22 +6056,24 @@ const Profile = () => {
       const param = new FormData();
       // param.append('is_app', 1);
       // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('user_id', id);
-      param.append('sponsor_id', linkIBForm.customer_name);
-      param.append('action', 'link_ib');
+      param.append("user_id", id);
+      param.append("sponsor_id", linkIBForm.customer_name);
+      param.append("action", "link_ib");
 
-      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-          setOpen(false);
-        }
-      });
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
     }
   };
 
@@ -5722,8 +6109,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       // param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -5777,23 +6166,25 @@ const Profile = () => {
       const param = new FormData();
       // param.append('is_app', 1);
       // param.append('AADMIN_LOGIN_ID', 1);
-      param.append('user_id', id);
-      param.append('action', "update_cp_access");
-      param.append('user_status', cpAccessForm.status);
+      param.append("user_id", id);
+      param.append("action", "update_cp_access");
+      param.append("user_status", cpAccessForm.status);
 
-      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          getUserDetails();
-          toast.success(res.data.message);
-          setOpen(false);
-        }
-      });
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            getUserDetails();
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
     }
   };
 
@@ -5827,8 +6218,10 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -5880,8 +6273,10 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        if (IsApprove !== "") {
+          param.append("is_app", IsApprove.is_app);
+          param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
@@ -5939,8 +6334,10 @@ const Profile = () => {
         toast.error("Please enter account number");
       } else {
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        if (IsApprove !== "") {
+          param.append("is_app", IsApprove.is_app);
+          param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
         param.append("action", "add_user_bank");
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
@@ -6038,8 +6435,10 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         param.append("action", "add_deposit");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        if (IsApprove !== "") {
+          param.append("is_app", IsApprove.is_app);
+          param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
         param.append("payment_method", transactionForm.payment);
@@ -6100,8 +6499,10 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_withdraw");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        if (IsApprove !== "") {
+          param.append("is_app", IsApprove.is_app);
+          param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
         if (transactionForm.crypto_name) {
@@ -6166,8 +6567,10 @@ const Profile = () => {
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
         param.append("action", "add_transfer");
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        if (IsApprove !== "") {
+          param.append("is_app", IsApprove.is_app);
+          param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
         param.append("user_id", userData.data["user_id"]);
         param.append("from_transfer", transactionForm.account);
         param.append("to_transfer", transactionForm.account_to);
@@ -6221,8 +6624,10 @@ const Profile = () => {
         transactionForm.isLoader = true;
         setTransactionForm({ ...transactionForm });
         const param = new FormData();
-        // param.append("is_app", 1);
-        // param.append("AADMIN_LOGIN_ID", 1);
+        if (IsApprove !== "") {
+          param.append("is_app", IsApprove.is_app);
+          param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
         param.append("user_id", id);
         param.append("action", "add_mt5_bonus");
         param.append("credit_type", transactionForm.credit_type);
@@ -6288,22 +6693,41 @@ const Profile = () => {
       confirmAlert({
         customUI: ({ onClose }) => {
           return (
-            <div className='custom-ui'>
+            <div className="custom-ui">
               <h1>Are you sure?</h1>
               <p>Do you want to delete this?</p>
-              <div className='confirmation-alert-action-button'>
-                <Button variant="contained" className='cancelButton' onClick={onClose}>No</Button>
-                <Button variant="contained" className='btn-gradient btn-danger'
+              <div className="confirmation-alert-action-button">
+                <Button
+                  variant="contained"
+                  className="cancelButton"
+                  onClick={onClose}
+                >
+                  No
+                </Button>
+                <Button
+                  variant="contained"
+                  className="btn-gradient btn-danger"
                   onClick={async () => {
                     onClose();
                     const param = new FormData();
-                    // param.append("is_app", 1);
-                    // param.append("AADMIN_LOGIN_ID", 1);
+                    if (IsApprove !== "") {
+                      param.append("is_app", IsApprove.is_app);
+                      param.append(
+                        "AADMIN_LOGIN_ID",
+                        IsApprove.AADMIN_LOGIN_ID
+                      );
+                    }
                     param.append("user_id", id);
-                    param.append("action", 'delete_master_structure');
-                    param.append("structure_id", partnershipMasterStructureData.structure_id);
+                    param.append("action", "delete_master_structure");
+                    param.append(
+                      "structure_id",
+                      partnershipMasterStructureData.structure_id
+                    );
                     await axios
-                      .post(`${Url}/ajaxfiles/master_structure_manage.php`, param)
+                      .post(
+                        `${Url}/ajaxfiles/master_structure_manage.php`,
+                        param
+                      )
                       .then((res) => {
                         if (res.data.message == "Session has been expired") {
                           localStorage.setItem("login", true);
@@ -6319,7 +6743,7 @@ const Profile = () => {
                             structure_data: [],
                             structure_id: "",
                             isLoader: false,
-                          })
+                          });
                         }
                       });
                   }}
@@ -6329,7 +6753,7 @@ const Profile = () => {
               </div>
             </div>
           );
-        }
+        },
       });
       /* toast.success("Structure has been successfully deleted");
       setDeleteStructureForm({
@@ -6340,8 +6764,10 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     userData.isLoader = true;
     setuserData({ ...userData });
@@ -6360,8 +6786,8 @@ const Profile = () => {
           userData.data = res.data.data;
           setuserData({ ...userData });
           setEmploymentDetailsForm({
-            status: userData.data['employment_status'],
-            industry: userData.data['inudstry'],
+            status: userData.data["employment_status"],
+            industry: userData.data["inudstry"],
           });
         }
       });
@@ -6369,8 +6795,10 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "get_general_information");
     await axios
@@ -6416,8 +6844,10 @@ const Profile = () => {
 
   const getReferralData = async (structure_id) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("structure_id", structure_id);
     param.append("action", "my_referrals");
@@ -6443,130 +6873,142 @@ const Profile = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('action', "list_salesman");
+    param.append("action", "list_salesman");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        // toast.error(res.data.message);
-      } else {
-        setSalesList(res.data.managers)
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          // toast.error(res.data.message);
+        } else {
+          setSalesList(res.data.managers);
+        }
+      });
+  };
 
   const getLinkClientList = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', id);
+    param.append("user_id", id);
 
-    param.append('action', "list_clients");
+    param.append("action", "list_clients");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        linkClientForm.list = res.data.data;
-        setLinkClientForm({ ...linkClientForm });
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          linkClientForm.list = res.data.data;
+          setLinkClientForm({ ...linkClientForm });
+        }
+      });
+  };
 
   const getIBUserList = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('action', "list_ib_users");
+    param.append("action", "list_ib_users");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        linkIBForm.list = res.data.data;
-        setLinkIBForm({ ...linkIBForm });
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          linkIBForm.list = res.data.data;
+          setLinkIBForm({ ...linkIBForm });
+        }
+      });
+  };
 
   const unlinkIB = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', id);
-    param.append('action', "unlink_ib");
+    param.append("user_id", id);
+    param.append("action", "unlink_ib");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        toast.success(res.data.message);
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+        }
+      });
+  };
 
   const viewCPPassword = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', id);
-    param.append('action', "view_cp_password");
+    param.append("user_id", id);
+    param.append("action", "view_cp_password");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        viewCpPassword.cp_password = res.data.view_password;
-        setViewCpPassword({ ...viewCpPassword });
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          viewCpPassword.cp_password = res.data.view_password;
+          setViewCpPassword({ ...viewCpPassword });
+        }
+      });
+  };
 
   const getCpAccessSetting = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', id);
-    param.append('action', "view_cp_access");
+    param.append("user_id", id);
+    param.append("action", "view_cp_access");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        cpAccessForm.status = res.data.login_block;
-        setCpAccessForm({ ...cpAccessForm });
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          cpAccessForm.status = res.data.login_block;
+          setCpAccessForm({ ...cpAccessForm });
+        }
+      });
+  };
 
   const getMyTraders = () => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', id);
+    param.append("user_id", id);
 
     axios.post(Url + "/ajaxfiles/my_traders.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
@@ -6580,41 +7022,45 @@ const Profile = () => {
         setMyTraderData({ ...myTraderData });
       }
     });
-  }
+  };
 
   const getMyChildTrader = (childId) => {
     const param = new FormData();
     // param.append('is_app', 1);
     // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', id);
-    param.append('client_id', childId);
+    param.append("user_id", id);
+    param.append("client_id", childId);
 
-    axios.post(Url + "/ajaxfiles/sponser_mt_data_ajax.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        myChildTraderData.data = res.data;
-        myChildTraderData.parent_id = res.data.back_links;
-        setMyChildTraderData({ ...myChildTraderData });
-        if (res.data.back_links == "") {
-          setDialogTitle(myTraderData.main_user_name);
-        } else {
-          setDialogTitle(myTraderData.user_name);
+    axios
+      .post(Url + "/ajaxfiles/sponser_mt_data_ajax.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
         }
-        setMaxWidth('lg');
-        setOpen(true);
-      }
-    });
-  }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          myChildTraderData.data = res.data;
+          myChildTraderData.parent_id = res.data.back_links;
+          setMyChildTraderData({ ...myChildTraderData });
+          if (res.data.back_links == "") {
+            setDialogTitle(myTraderData.main_user_name);
+          } else {
+            setDialogTitle(myTraderData.user_name);
+          }
+          setMaxWidth("lg");
+          setOpen(true);
+        }
+      });
+  };
 
   const getMyAssignedStructure = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "get_my_assigned_structure");
     axios
@@ -6632,12 +7078,14 @@ const Profile = () => {
           setMyStructureData({ ...myStructureData });
         }
       });
-  }
+  };
 
   const sendMT5PasswordMail = async (data) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "mail_mt5_password");
     param.append("user_id", data.user_id);
     param.append("mt5_acc_no", data.mt5_account_id);
@@ -6657,18 +7105,20 @@ const Profile = () => {
         }
         return true;
       });
-  }
+  };
 
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
     getMt5LivePackages();
     getAccountList();
-    getSalesList()
+    getSalesList();
 
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "get_leverages");
     axios
@@ -6681,7 +7131,6 @@ const Profile = () => {
         setLeverageForm(res.data.leverages);
       });
   }, [id]);
-
 
   return (
     <div>
@@ -6697,11 +7146,15 @@ const Profile = () => {
             <div style={{ opacity: 1 }}>
               <Grid container>
                 <Grid item md={12} lg={12} xl={12}>
-                  {
-                    (userData.data["user_status"] == "0") ? <div className="user-status-section">
-                      <span className={`text-color-red`}>{userData.data["user_status_msg"]}</span>
-                    </div> : ""
-                  }
+                  {userData.data["user_status"] == "0" ? (
+                    <div className="user-status-section">
+                      <span className={`text-color-red`}>
+                        {userData.data["user_status_msg"]}
+                      </span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <div className="client-detail-header">
                     <div className="client-name">
                       <label>
@@ -6720,19 +7173,31 @@ const Profile = () => {
                       <label>Total Accounts</label>
                       <p>{userData.data["total_mt5_accounts"]}</p>
                     </div>
-                    {
-                      (userData.data['user_level'] == "USD") ? <div className="header-highlight">
+                    {userData.data["user_level"] == "USD" ? (
+                      <div className="header-highlight">
                         <label>Account Currency</label>
                         <p>USD</p>
-                      </div> :
-                        (userData.data['user_level'] == "Master") ? <div className="header-highlight">
-                          <label>Partnership</label>
-                          <p>Level: {userData.data['user_level']}</p>
-                        </div> : <div className="header-highlight">
-                          <label>Partnership</label>
-                          <p>Level: {userData.data['user_level']} | Parent: <NavLink className='linkColor' title={userData.data['sponsor_name']} to={`/profile/${userData.data['sponsor_id']}`}>{userData.data['sponsor_name']}</NavLink></p>
-                        </div>
-                    }
+                      </div>
+                    ) : userData.data["user_level"] == "Master" ? (
+                      <div className="header-highlight">
+                        <label>Partnership</label>
+                        <p>Level: {userData.data["user_level"]}</p>
+                      </div>
+                    ) : (
+                      <div className="header-highlight">
+                        <label>Partnership</label>
+                        <p>
+                          Level: {userData.data["user_level"]} | Parent:{" "}
+                          <NavLink
+                            className="linkColor"
+                            title={userData.data["sponsor_name"]}
+                            to={`/profile/${userData.data["sponsor_id"]}`}
+                          >
+                            {userData.data["sponsor_name"]}
+                          </NavLink>
+                        </p>
+                      </div>
+                    )}
 
                     <div className="header-highlight">
                       <label>Balance</label>
@@ -6740,7 +7205,11 @@ const Profile = () => {
                     </div>
                     <div className="header-highlight">
                       <label>Sales Agent</label>
-                      <p>{(userData.data["manager_name"] == "") ? "Not Assigned" : userData.data["manager_name"]}</p>
+                      <p>
+                        {userData.data["manager_name"] == ""
+                          ? "Not Assigned"
+                          : userData.data["manager_name"]}
+                      </p>
                     </div>
                   </div>
                   <br />
@@ -6753,30 +7222,34 @@ const Profile = () => {
                     aria-label="scrollable auto tabs example"
                     className="tabsBar"
                   >
-                    <Tab
-                      label="PROFILE PAGE"
-                    />
-                    <Tab
-                      label="BANK DETAILS"
-                    />
+                    <Tab label="PROFILE PAGE" />
+                    <Tab label="BANK DETAILS" />
                     <Tab label="DOCUMENTS" />
                     <Tab label="ACCOUNTS" />
                     <Tab label="ACTIVITIES" />
                     <Tab label="LOGS" />
                     <Tab label="TRANSACTIONS" />
-                    {
-                      userData.data.is_ib_account == "0" ? "" : <Tab label="REFERRALS" />
-                    }
-                    {
-                      userData.data.is_ib_account == "0" ? "" : <Tab label="PARTNERSHIP" />
-                    }
-                    {
-                      userData.data.is_ib_account == "0" ? "" : <Tab label="MY STRUCTURE" />
-                    }
+                    {userData.data.is_ib_account == "0" ? (
+                      ""
+                    ) : (
+                      <Tab label="REFERRALS" />
+                    )}
+                    {userData.data.is_ib_account == "0" ? (
+                      ""
+                    ) : (
+                      <Tab label="PARTNERSHIP" />
+                    )}
+                    {userData.data.is_ib_account == "0" ? (
+                      ""
+                    ) : (
+                      <Tab label="MY STRUCTURE" />
+                    )}
                     <Tab label="NOTES" />
-                    {
-                      userData.data.is_ib_account == "0" ? "" : <Tab label="DOWNLINE" />
-                    }
+                    {userData.data.is_ib_account == "0" ? (
+                      ""
+                    ) : (
+                      <Tab label="DOWNLINE" />
+                    )}
                   </Tabs>
                   <SwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -6861,7 +7334,7 @@ const Profile = () => {
                                   focused
                                   name="email"
                                   disabled
-                                // onChange={profileInput}
+                                  // onChange={profileInput}
                                 />
                               </div>
                               <div className="element">
@@ -7108,11 +7581,13 @@ const Profile = () => {
                                     onChange={profileInput}
                                     name="sales_agent"
                                   >
-                                    {
-                                      salesList.map((item) => {
-                                        return <MenuItem value={item.manager_id}>{item.manager_name}</MenuItem>
-                                      })
-                                    }
+                                    {salesList.map((item) => {
+                                      return (
+                                        <MenuItem value={item.manager_id}>
+                                          {item.manager_name}
+                                        </MenuItem>
+                                      );
+                                    })}
                                   </Select>
                                 </FormControl>
                               </div>
@@ -7217,49 +7692,57 @@ const Profile = () => {
                                 >
                                   Change MT5 Password
                                 </Button>
-
                               </div>
                               <br />
                               <p className="group-header">IB</p>
                               <div className="mt5btngroup">
-                                {
-                                  userData.data.is_ib_account == "1" ? <>
+                                {userData.data.is_ib_account == "1" ? (
+                                  <>
                                     <Button
                                       variant="contained"
                                       className="add_master_structure btn-hover-css"
-                                      onClick={openDialogbox}>
+                                      onClick={openDialogbox}
+                                    >
                                       Add Master Structure
                                     </Button>
                                     <Button
                                       variant="contained"
                                       className="edit_master_structure btn-hover-css"
-                                      onClick={openDialogbox}>
+                                      onClick={openDialogbox}
+                                    >
                                       Edit Master Structure
                                     </Button>
                                     <Button
                                       variant="contained"
                                       className="link_client btn-hover-css"
-                                      onClick={openDialogbox}>
+                                      onClick={openDialogbox}
+                                    >
                                       Link Client
                                     </Button>
                                     <Button
                                       variant="contained"
                                       className="unlink_ib btn-hover-css"
-                                      onClick={openDialogbox}>
+                                      onClick={openDialogbox}
+                                    >
                                       Unlink IB
                                     </Button>
-                                  </> : ""
-                                }
-                                {
-                                  userData.data.is_ib_account == "0" ? <>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+                                {userData.data.is_ib_account == "0" ? (
+                                  <>
                                     <Button
                                       variant="contained"
                                       className="link_ib btn-hover-css"
-                                      onClick={openDialogbox}>
+                                      onClick={openDialogbox}
+                                    >
                                       Link To IB
                                     </Button>
-                                  </> : ""
-                                }
+                                  </>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                               {/* {
                                 userData.data.is_ib_account == "0" ? "" :
@@ -7378,8 +7861,8 @@ const Profile = () => {
                             </div>
                           </Paper>
                         </Grid> */}
-                        <Grid item  md={12} lg={12} xl={12}>
-                        <Paper
+                        <Grid item md={12} lg={12} xl={12}>
+                          <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
                             className="paper-main-section"
@@ -7395,14 +7878,41 @@ const Profile = () => {
                                   <div className="user-link-body">
                                     <label>Register</label>
                                     <div className="link-section">
-                                      <a href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`} target='_blank'>{ClientUrl + `/register/sponsor/${profileForm.wallet_code}`}</a>
-                                      <button className="copy_link" onClick={(e) => {
-                                        navigator.clipboard.writeText(ClientUrl + `/register/sponsor/${profileForm.wallet_code}`).then(function () {
-                                          toast.success('The sponsor link has been successfully copying');
-                                        }, function (err) {
-                                          toast.error('The sponsor link Could not copy, Please try again');
-                                        });
-                                      }}><span className="blinking"><i className="material-icons">content_copy</i></span></button>
+                                      <a
+                                        href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
+                                        target="_blank"
+                                      >
+                                        {ClientUrl +
+                                          `/register/sponsor/${profileForm.wallet_code}`}
+                                      </a>
+                                      <button
+                                        className="copy_link"
+                                        onClick={(e) => {
+                                          navigator.clipboard
+                                            .writeText(
+                                              ClientUrl +
+                                                `/register/sponsor/${profileForm.wallet_code}`
+                                            )
+                                            .then(
+                                              function () {
+                                                toast.success(
+                                                  "The sponsor link has been successfully copying"
+                                                );
+                                              },
+                                              function (err) {
+                                                toast.error(
+                                                  "The sponsor link Could not copy, Please try again"
+                                                );
+                                              }
+                                            );
+                                        }}
+                                      >
+                                        <span className="blinking">
+                                          <i className="material-icons">
+                                            content_copy
+                                          </i>
+                                        </span>
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
@@ -8204,54 +8714,84 @@ const Profile = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {
-                                      referralData.data.map((item, index) => {
-                                        return (
-                                          <>
-                                            <tr>
-                                              <td>
-                                                <div className="collaps-content">
-                                                  <i class={`fa fa-angle-${(item.is_collapse) ? 'up' : 'down'}`} onClick={(e) => {
-                                                    referralData.data[index].is_collapse = !item.is_collapse;
-                                                    setReferralData({ ...referralData });
-                                                  }}></i>{item.ib_group_name}
-                                                </div>
-                                              </td>
-                                              <td>{item.client_type}</td>
-                                              <td>{item.mt5_acc_no}</td>
-                                              <td>
-                                                <div className="referral-commission_rebate-content" style={{ backgroundColor: `${item.group_color}` }}>{item.group_commission}</div>
-                                              </td>
-                                              <td>
-                                                <div className="referral-commission_rebate-content" style={{ backgroundColor: `${item.group_color}` }}>{item.group_rebate}</div>
-                                              </td>
-                                              <td>{item.sponsor_name}</td>
-                                            </tr>
-                                            {
-                                              (item.is_collapse) ?
-                                                item.structure_users.map((item1) => {
+                                    {referralData.data.map((item, index) => {
+                                      return (
+                                        <>
+                                          <tr>
+                                            <td>
+                                              <div className="collaps-content">
+                                                <i
+                                                  class={`fa fa-angle-${
+                                                    item.is_collapse
+                                                      ? "up"
+                                                      : "down"
+                                                  }`}
+                                                  onClick={(e) => {
+                                                    referralData.data[
+                                                      index
+                                                    ].is_collapse =
+                                                      !item.is_collapse;
+                                                    setReferralData({
+                                                      ...referralData,
+                                                    });
+                                                  }}
+                                                ></i>
+                                                {item.ib_group_name}
+                                              </div>
+                                            </td>
+                                            <td>{item.client_type}</td>
+                                            <td>{item.mt5_acc_no}</td>
+                                            <td>
+                                              <div
+                                                className="referral-commission_rebate-content"
+                                                style={{
+                                                  backgroundColor: `${item.group_color}`,
+                                                }}
+                                              >
+                                                {item.group_commission}
+                                              </div>
+                                            </td>
+                                            <td>
+                                              <div
+                                                className="referral-commission_rebate-content"
+                                                style={{
+                                                  backgroundColor: `${item.group_color}`,
+                                                }}
+                                              >
+                                                {item.group_rebate}
+                                              </div>
+                                            </td>
+                                            <td>{item.sponsor_name}</td>
+                                          </tr>
+                                          {item.is_collapse
+                                            ? item.structure_users.map(
+                                                (item1) => {
                                                   return (
                                                     <tr className="referral-child-structure-users">
-                                                      <td>{item1.client_name}</td>
+                                                      <td>
+                                                        {item1.client_name}
+                                                      </td>
                                                       <td>{item1.client}</td>
-                                                      <td>{item1.mt5_acc_no}</td>
+                                                      <td>
+                                                        {item1.mt5_acc_no}
+                                                      </td>
                                                       <td></td>
                                                       <td></td>
-                                                      <td>{item1.sponsor_name}</td>
+                                                      <td>
+                                                        {item1.sponsor_name}
+                                                      </td>
                                                     </tr>
-                                                  )
-                                                }) : ""
-                                            }
-                                          </>
-                                        )
-                                      })
-                                    }
+                                                  );
+                                                }
+                                              )
+                                            : ""}
+                                        </>
+                                      );
+                                    })}
                                     <tr></tr>
                                   </tbody>
                                 </table>
                               </div>
-
-
                             </div>
                           </Paper>
                         </Grid>
@@ -8263,7 +8803,8 @@ const Profile = () => {
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
-                            className="paper-main-section partnership-main-section">
+                            className="paper-main-section partnership-main-section"
+                          >
                             <div className="headerSection header-title">
                               <div className="header-search-section">
                                 <FormControl
@@ -8276,15 +8817,24 @@ const Profile = () => {
                                     className="select-font-small"
                                     name="structure"
                                     onChange={(e) => {
-                                      getPartnershipMasterStructure(e.target.value);
-                                      partnershipMasterStructureData.structure_id = e.target.value;
-                                      partnershipMasterStructureData.structure_name = structureList.data.filter((x) => x.structure_id == e.target.value)[0].structure_name;
+                                      getPartnershipMasterStructure(
+                                        e.target.value
+                                      );
+                                      partnershipMasterStructureData.structure_id =
+                                        e.target.value;
+                                      partnershipMasterStructureData.structure_name =
+                                        structureList.data.filter(
+                                          (x) =>
+                                            x.structure_id == e.target.value
+                                        )[0].structure_name;
                                       setStructureList((prevalue) => {
                                         return {
                                           ...prevalue,
-                                          structure_name: structureList.data.filter(
-                                            (x) => x.structure_id == e.target.value
-                                          )[0].structure_name,
+                                          structure_name:
+                                            structureList.data.filter(
+                                              (x) =>
+                                                x.structure_id == e.target.value
+                                            )[0].structure_name,
                                           structure_id: e.target.value,
                                         };
                                       });
@@ -8319,39 +8869,66 @@ const Profile = () => {
                                   variant="contained"
                                   className="edit_structure"
                                   onClick={openDialogbox}
-                                  disabled={(partnershipMasterStructureData.structure_name != "") ? false : true}
+                                  disabled={
+                                    partnershipMasterStructureData.structure_name !=
+                                    ""
+                                      ? false
+                                      : true
+                                  }
                                 >
                                   Edit Structure
                                 </Button>
                               </div>
                             </div>
                             <div className="bankDetailsTabSection">
-                              {
-                                (partnershipMasterStructureData.structure_data.length > 0) ?
-                                  <div className="partnership-section">
-                                    <div className="master-structure-section">
-                                      <div className="structureNameSection view-ib-content-section">
-                                        <label>STRUCTURE NAME</label>
-                                        <span>{partnershipMasterStructureData.structure_name}</span>
-                                      </div>
-                                      <div className="main-content-input">
-                                        <div className="ib-structure view-commission-content-section">
-                                          {
-                                            partnershipMasterStructureData.structure_data.map((item, index) => {
-                                              return (
-                                                <div className="group-structure-section">
-                                                  <div className="main-section">
-                                                    <div className='main-section-title'>{item.ib_group_name}</div>
-                                                    <div className='main-section-input-element'>
-                                                      <div>
-                                                        {/* <span>Rebate</span> */}
-                                                        <input type='number' className="Rebate_amount" placeholder="Rebate" disabled value={item.group_rebate} />
-                                                      </div>
-                                                      <div>
-                                                        {/* <span>Commission</span> */}
-                                                        <input type='number' className="commission_amount" placeholder="Commission" disabled value={item.group_commission} />
-                                                      </div>
-                                                      {/* <div>
+                              {partnershipMasterStructureData.structure_data
+                                .length > 0 ? (
+                                <div className="partnership-section">
+                                  <div className="master-structure-section">
+                                    <div className="structureNameSection view-ib-content-section">
+                                      <label>STRUCTURE NAME</label>
+                                      <span>
+                                        {
+                                          partnershipMasterStructureData.structure_name
+                                        }
+                                      </span>
+                                    </div>
+                                    <div className="main-content-input">
+                                      <div className="ib-structure view-commission-content-section">
+                                        {partnershipMasterStructureData.structure_data.map(
+                                          (item, index) => {
+                                            return (
+                                              <div className="group-structure-section">
+                                                <div className="main-section">
+                                                  <div className="main-section-title">
+                                                    {item.ib_group_name}
+                                                  </div>
+                                                  <div className="main-section-input-element">
+                                                    <div>
+                                                      {/* <span>Rebate</span> */}
+                                                      <input
+                                                        type="number"
+                                                        className="Rebate_amount"
+                                                        placeholder="Rebate"
+                                                        disabled
+                                                        value={
+                                                          item.group_rebate
+                                                        }
+                                                      />
+                                                    </div>
+                                                    <div>
+                                                      {/* <span>Commission</span> */}
+                                                      <input
+                                                        type="number"
+                                                        className="commission_amount"
+                                                        placeholder="Commission"
+                                                        disabled
+                                                        value={
+                                                          item.group_commission
+                                                        }
+                                                      />
+                                                    </div>
+                                                    {/* <div>
                                                       {
                                                         (item.ibGroup != undefined) ?
                                                           <FormControl variant="standard">
@@ -8374,65 +8951,137 @@ const Profile = () => {
                                                           </FormControl> : ''
                                                       }
                                                     </div> */}
-                                                    </div>
-                                                    <div className='action-section'>
-                                                      <span onClick={(e) => { partnershipMasterStructureData.structure_data[index]['is_visible'] = !item.is_visible; setUpdateDate({ ...newMasterStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
-                                                    </div>
                                                   </div>
-                                                  <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                                                    {
-                                                      item.pair_data.map((item1, index1) => {
-                                                        return (
-                                                          <div className="pair-data">
-                                                            <div className='pair-data-title'>{item1.pair_name}</div>
-                                                            <div>
-                                                              <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled />
-                                                            </div>
-                                                            <div>
-                                                              <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled />
-                                                            </div>
-                                                          </div>
-                                                        );
-                                                      })
-                                                    }
+                                                  <div className="action-section">
+                                                    <span
+                                                      onClick={(e) => {
+                                                        partnershipMasterStructureData.structure_data[
+                                                          index
+                                                        ]["is_visible"] =
+                                                          !item.is_visible;
+                                                        setUpdateDate({
+                                                          ...newMasterStructureData,
+                                                        });
+                                                      }}
+                                                    >
+                                                      <i
+                                                        class={`fa ${
+                                                          item.is_visible
+                                                            ? "fa-angle-up"
+                                                            : "fa-angle-down"
+                                                        }`}
+                                                        aria-hidden="true"
+                                                      ></i>
+                                                    </span>
                                                   </div>
                                                 </div>
-                                              );
-                                            })
+                                                <div
+                                                  className={`pair-section ${
+                                                    item.is_visible
+                                                      ? "child-section-visible"
+                                                      : ""
+                                                  }`}
+                                                >
+                                                  {item.pair_data.map(
+                                                    (item1, index1) => {
+                                                      return (
+                                                        <div className="pair-data">
+                                                          <div className="pair-data-title">
+                                                            {item1.pair_name}
+                                                          </div>
+                                                          <div>
+                                                            <input
+                                                              type="number"
+                                                              className="rebert_amount"
+                                                              placeholder="Rebert"
+                                                              value={
+                                                                item1.rebate
+                                                              }
+                                                              disabled
+                                                            />
+                                                          </div>
+                                                          <div>
+                                                            <input
+                                                              type="number"
+                                                              className="commission_amount"
+                                                              placeholder="Commission"
+                                                              value={
+                                                                item1.commission
+                                                              }
+                                                              disabled
+                                                            />
+                                                          </div>
+                                                        </div>
+                                                      );
+                                                    }
+                                                  )}
+                                                </div>
+                                              </div>
+                                            );
                                           }
-                                        </div>
+                                        )}
                                       </div>
                                     </div>
-                                    <div className="master-structure-section">
-                                      <div className="structureNameSection view-ib-content-section">
-                                        <h4 style={{ fontWeight: 600 }}>IB Dedicated Links</h4>
-                                        {/* <label>STRUCTURE NAME</label>
+                                  </div>
+                                  <div className="master-structure-section">
+                                    <div className="structureNameSection view-ib-content-section">
+                                      <h4 style={{ fontWeight: 600 }}>
+                                        IB Dedicated Links
+                                      </h4>
+                                      {/* <label>STRUCTURE NAME</label>
                                         <span>{partnershipMasterStructureData.structure_name}</span> */}
+                                    </div>
+                                    <div className="user-links">
+                                      <div className="user-link-header">
+                                        <label>Link Type</label>
+                                        <label>Link</label>
                                       </div>
-                                      <div className="user-links">
-                                        <div className="user-link-header">
-                                          <label>Link Type</label>
-                                          <label>Link</label>
-                                        </div>
-                                        <div className="user-link-body">
-                                          <label>Register</label>
-                                          <div className="link-section">
-                                            <a href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`} target='_blank'>{ClientUrl + `/register/sponsor/${profileForm.wallet_code}`}</a>
-                                            <button className="copy_link" onClick={(e) => {
-                                              navigator.clipboard.writeText(ClientUrl + `/register/sponsor/${profileForm.wallet_code}`).then(function () {
-                                                toast.success('The sponsor link has been successfully copying');
-                                              }, function (err) {
-                                                toast.error('The sponsor link Could not copy, Please try again');
-                                              });
-                                            }}><span className="blinking"><i className="material-icons">content_copy</i></span></button>
-                                          </div>
+                                      <div className="user-link-body">
+                                        <label>Register</label>
+                                        <div className="link-section">
+                                          <a
+                                            href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
+                                            target="_blank"
+                                          >
+                                            {ClientUrl +
+                                              `/register/sponsor/${profileForm.wallet_code}`}
+                                          </a>
+                                          <button
+                                            className="copy_link"
+                                            onClick={(e) => {
+                                              navigator.clipboard
+                                                .writeText(
+                                                  ClientUrl +
+                                                    `/register/sponsor/${profileForm.wallet_code}`
+                                                )
+                                                .then(
+                                                  function () {
+                                                    toast.success(
+                                                      "The sponsor link has been successfully copying"
+                                                    );
+                                                  },
+                                                  function (err) {
+                                                    toast.error(
+                                                      "The sponsor link Could not copy, Please try again"
+                                                    );
+                                                  }
+                                                );
+                                            }}
+                                          >
+                                            <span className="blinking">
+                                              <i className="material-icons">
+                                                content_copy
+                                              </i>
+                                            </span>
+                                          </button>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                  : ''
-                              }
-
+                                </div>
+                              ) : (
+                                ""
+                              )}
                             </div>
                           </Paper>
                         </Grid>
@@ -8444,69 +9093,137 @@ const Profile = () => {
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
-                            className="paper-main-section partnership-main-section">
+                            className="paper-main-section partnership-main-section"
+                          >
                             <div className="headerSection header-title">
                               <div className="header-search-section">
                                 <p class="margin-0">My Structure</p>
                               </div>
                             </div>
                             <div className="bankDetailsTabSection getMyStructure">
-                              {
-                                (myStructureData.structure_data.length > 0) ?
-                                  <div className="partnership-section">
-                                    <div className="master-structure-section">
-                                      <div className="structureNameSection view-ib-content-section">
-                                        <label>{myStructureData.structure_name}</label>
-                                        {/* <span>{myStructureData.structure_name}</span> */}
-                                      </div>
-                                      <div className="main-content-input">
-                                        <div className="ib-structure view-commission-content-section">
-                                          {
-                                            myStructureData.structure_data.map((item, index) => {
-                                              return (
-                                                <div className="group-structure-section">
-                                                  <div className="main-section">
-                                                    <div className='main-section-title'>{item.ib_group_name}</div>
-                                                    <div className='main-section-input-element'>
-                                                      <div>
-                                                        <input type='number' className="Rebate_amount" placeholder="Rebate" disabled value={item.group_rebate} />
-                                                      </div>
-                                                      <div>
-                                                        <input type='number' className="commission_amount" placeholder="Commission" disabled value={item.group_commission} />
-                                                      </div>
+                              {myStructureData.structure_data.length > 0 ? (
+                                <div className="partnership-section">
+                                  <div className="master-structure-section">
+                                    <div className="structureNameSection view-ib-content-section">
+                                      <label>
+                                        {myStructureData.structure_name}
+                                      </label>
+                                      {/* <span>{myStructureData.structure_name}</span> */}
+                                    </div>
+                                    <div className="main-content-input">
+                                      <div className="ib-structure view-commission-content-section">
+                                        {myStructureData.structure_data.map(
+                                          (item, index) => {
+                                            return (
+                                              <div className="group-structure-section">
+                                                <div className="main-section">
+                                                  <div className="main-section-title">
+                                                    {item.ib_group_name}
+                                                  </div>
+                                                  <div className="main-section-input-element">
+                                                    <div>
+                                                      <input
+                                                        type="number"
+                                                        className="Rebate_amount"
+                                                        placeholder="Rebate"
+                                                        disabled
+                                                        value={
+                                                          item.group_rebate
+                                                        }
+                                                      />
                                                     </div>
-                                                    <div className='action-section'>
-                                                      <span onClick={(e) => { myStructureData.structure_data[index]['is_visible'] = !item.is_visible; setMyStructureData({ ...myStructureData }) }}><i class={`fa ${item.is_visible ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true"></i></span>
+                                                    <div>
+                                                      <input
+                                                        type="number"
+                                                        className="commission_amount"
+                                                        placeholder="Commission"
+                                                        disabled
+                                                        value={
+                                                          item.group_commission
+                                                        }
+                                                      />
                                                     </div>
                                                   </div>
-                                                  <div className={`pair-section ${(item.is_visible) ? 'child-section-visible' : ''}`}>
-                                                    {
-                                                      item.pair_data.map((item1, index1) => {
-                                                        return (
-                                                          <div className="pair-data">
-                                                            <div className='pair-data-title'>{item1.pair_name}</div>
-                                                            <div>
-                                                              <input type='number' className="rebert_amount" placeholder="Rebert" value={item1.rebate} disabled />
-                                                            </div>
-                                                            <div>
-                                                              <input type='number' className="commission_amount" placeholder="Commission" value={item1.commission} disabled />
-                                                            </div>
-                                                          </div>
-                                                        );
-                                                      })
-                                                    }
+                                                  <div className="action-section">
+                                                    <span
+                                                      onClick={(e) => {
+                                                        myStructureData.structure_data[
+                                                          index
+                                                        ]["is_visible"] =
+                                                          !item.is_visible;
+                                                        setMyStructureData({
+                                                          ...myStructureData,
+                                                        });
+                                                      }}
+                                                    >
+                                                      <i
+                                                        class={`fa ${
+                                                          item.is_visible
+                                                            ? "fa-angle-up"
+                                                            : "fa-angle-down"
+                                                        }`}
+                                                        aria-hidden="true"
+                                                      ></i>
+                                                    </span>
                                                   </div>
                                                 </div>
-                                              );
-                                            })
+                                                <div
+                                                  className={`pair-section ${
+                                                    item.is_visible
+                                                      ? "child-section-visible"
+                                                      : ""
+                                                  }`}
+                                                >
+                                                  {item.pair_data.map(
+                                                    (item1, index1) => {
+                                                      return (
+                                                        <div className="pair-data">
+                                                          <div className="pair-data-title">
+                                                            {item1.pair_name}
+                                                          </div>
+                                                          <div>
+                                                            <input
+                                                              type="number"
+                                                              className="rebert_amount"
+                                                              placeholder="Rebert"
+                                                              value={
+                                                                item1.rebate
+                                                              }
+                                                              disabled
+                                                            />
+                                                          </div>
+                                                          <div>
+                                                            <input
+                                                              type="number"
+                                                              className="commission_amount"
+                                                              placeholder="Commission"
+                                                              value={
+                                                                item1.commission
+                                                              }
+                                                              disabled
+                                                            />
+                                                          </div>
+                                                        </div>
+                                                      );
+                                                    }
+                                                  )}
+                                                </div>
+                                              </div>
+                                            );
                                           }
-                                        </div>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
-                                  : <label className="text-center" style={{ width: '100%' }}>STRUCTURE Has Been Not Assigned</label>
-                              }
-
+                                </div>
+                              ) : (
+                                <label
+                                  className="text-center"
+                                  style={{ width: "100%" }}
+                                >
+                                  STRUCTURE Has Been Not Assigned
+                                </label>
+                              )}
                             </div>
                           </Paper>
                         </Grid>
@@ -8572,14 +9289,18 @@ const Profile = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {
-                                    (myTraderData.data.data != undefined) ? myTraderData.data.data.map((item) => {
+                                  {myTraderData.data.data != undefined ? (
+                                    myTraderData.data.data.map((item) => {
                                       return (
                                         <tr>
                                           <td>{item.sr_no}</td>
                                           <td>{item.name}</td>
                                           <td>{item.user_email}</td>
-                                          <td>{(item.is_ib_account == "1") ? "Yes" : "No"}</td>
+                                          <td>
+                                            {item.is_ib_account == "1"
+                                              ? "Yes"
+                                              : "No"}
+                                          </td>
                                           <td>{item.mt5_acc_ids}</td>
                                           <td>{item.deposit_amount}</td>
                                           <td>{item.withdrawal_amount}</td>
@@ -8587,36 +9308,105 @@ const Profile = () => {
                                           <td>{item.total_withdraw}</td>
                                           <td>{item.wallet_balance}</td>
                                           <td>
-                                            {
-                                              (item.is_ib_account == "1" && item.has_downline == true) ? <Button
+                                            {item.is_ib_account == "1" &&
+                                            item.has_downline == true ? (
+                                              <Button
                                                 variant="contained"
                                                 className="add_note"
                                                 onClick={(e) => {
-                                                  myTraderData.user_name = item.name;
-                                                  myTraderData.main_user_name = item.name;
-                                                  myTraderData.user_id = item.client_id;
-                                                  setMyTraderData({ ...myTraderData });
-                                                  getMyChildTrader(item.client_id)
-                                                }}>
+                                                  myTraderData.user_name =
+                                                    item.name;
+                                                  myTraderData.main_user_name =
+                                                    item.name;
+                                                  myTraderData.user_id =
+                                                    item.client_id;
+                                                  setMyTraderData({
+                                                    ...myTraderData,
+                                                  });
+                                                  getMyChildTrader(
+                                                    item.client_id
+                                                  );
+                                                }}
+                                              >
                                                 View
-                                              </Button> : ""
-                                            }
+                                              </Button>
+                                            ) : (
+                                              ""
+                                            )}
                                           </td>
                                         </tr>
-                                      )
-                                    }) : <tr>
-                                      <td className="text-center" colSpan={10}>Recored not found</td>
+                                      );
+                                    })
+                                  ) : (
+                                    <tr>
+                                      <td className="text-center" colSpan={10}>
+                                        Recored not found
+                                      </td>
                                     </tr>
-                                  }
+                                  )}
                                 </tbody>
                                 <tfoot>
                                   <tr>
-                                    <td colSpan="5"><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total'] : ""}</b></td>
-                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_deposit'] : ""}</b></td>
-                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_withdraw'] : ""}</b></td>
-                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_total_user_deposit'] : ""}</b></td>
-                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_total_user_withdraw'] : ""}</b></td>
-                                    <td><b>{(myTraderData.data.footer_count != undefined) ? myTraderData.data['footer_count']['total_user_wallet'] : ""}</b></td>
+                                    <td colSpan="5">
+                                      <b>
+                                        {myTraderData.data.footer_count !=
+                                        undefined
+                                          ? myTraderData.data["footer_count"][
+                                              "total"
+                                            ]
+                                          : ""}
+                                      </b>
+                                    </td>
+                                    <td>
+                                      <b>
+                                        {myTraderData.data.footer_count !=
+                                        undefined
+                                          ? myTraderData.data["footer_count"][
+                                              "total_user_deposit"
+                                            ]
+                                          : ""}
+                                      </b>
+                                    </td>
+                                    <td>
+                                      <b>
+                                        {myTraderData.data.footer_count !=
+                                        undefined
+                                          ? myTraderData.data["footer_count"][
+                                              "total_user_withdraw"
+                                            ]
+                                          : ""}
+                                      </b>
+                                    </td>
+                                    <td>
+                                      <b>
+                                        {myTraderData.data.footer_count !=
+                                        undefined
+                                          ? myTraderData.data["footer_count"][
+                                              "total_total_user_deposit"
+                                            ]
+                                          : ""}
+                                      </b>
+                                    </td>
+                                    <td>
+                                      <b>
+                                        {myTraderData.data.footer_count !=
+                                        undefined
+                                          ? myTraderData.data["footer_count"][
+                                              "total_total_user_withdraw"
+                                            ]
+                                          : ""}
+                                      </b>
+                                    </td>
+                                    <td>
+                                      <b>
+                                        {myTraderData.data.footer_count !=
+                                        undefined
+                                          ? myTraderData.data["footer_count"][
+                                              "total_user_wallet"
+                                            ]
+                                          : ""}
+                                      </b>
+                                    </td>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -8688,7 +9478,7 @@ const Profile = () => {
             <Grid
               container
               spacing={1}
-            // className="MuiGrid-justify-xs-space-between mt-2"
+              // className="MuiGrid-justify-xs-space-between mt-2"
             >
               <div>
                 <div className="main-content-display">
@@ -8735,52 +9525,55 @@ const Profile = () => {
                   <div className="display-element">
                     <h6>IB APPROVE</h6>
                     <div
-                      className={`col s12 text-color-${ibdata.sponsor_approve == "1"
-                        ? "green"
-                        : ibdata.sponsor_approve == "2"
+                      className={`col s12 text-color-${
+                        ibdata.sponsor_approve == "1"
+                          ? "green"
+                          : ibdata.sponsor_approve == "2"
                           ? "red"
                           : "yellow"
-                        }`}
+                      }`}
                     >
                       {ibdata.sponsor_approve == "1"
                         ? "APPROVED"
                         : ibdata.sponsor_approve == "2"
-                          ? "REJECTED"
-                          : "PENDING"}
+                        ? "REJECTED"
+                        : "PENDING"}
                     </div>
                   </div>
                   <div className="display-element">
                     <h6>ADMIN APPROVE</h6>
                     <div
-                      className={`col s12 text-color-${ibdata.admin_approve == "1"
-                        ? "green"
-                        : ibdata.admin_approve == "2"
+                      className={`col s12 text-color-${
+                        ibdata.admin_approve == "1"
+                          ? "green"
+                          : ibdata.admin_approve == "2"
                           ? "red"
                           : "yellow"
-                        }`}
+                      }`}
                     >
                       {ibdata.admin_approve == "1"
                         ? "APPROVED"
                         : ibdata.admin_approve == "2"
-                          ? "REJECTED"
-                          : "PENDING"}
+                        ? "REJECTED"
+                        : "PENDING"}
                     </div>
                   </div>
                   <div className="display-element">
                     <h6>STATUS</h6>
                     <div
-                      className={`col s12 text-color-${ibdata.status == "1"
-                        ? "green"
-                        : ibdata.status == "2"
+                      className={`col s12 text-color-${
+                        ibdata.status == "1"
+                          ? "green"
+                          : ibdata.status == "2"
                           ? "red"
                           : "yellow"
-                        }`}
+                      }`}
                     >
                       {ibdata.status == "1"
                         ? "APPROVED"
                         : ibdata.status == "2"
-                          ? "REJECTED"
-                          : "PENDING"}
+                        ? "REJECTED"
+                        : "PENDING"}
                     </div>
                   </div>{" "}
                 </div>

@@ -19,7 +19,7 @@ import {
 import React, { useEffect, useState } from "react";
 import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -546,8 +546,10 @@ const MmManagement = () => {
       e.target.classList.contains("edit")
     ) {
       const param = new FormData();
-      //   param.append("is_app", 1);
-      //   param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("kyc_id", data.kyc_id);
       param.append("action", "view_kyc");
       axios
@@ -592,8 +594,10 @@ const MmManagement = () => {
     if (status == "approved") {
       console.log("data", data);
       const param = new FormData();
-      //   param.append("is_app", 1);
-      //   param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("kyc_id", data.kyc_id);
       param.append("action", "approve_kyc");
       axios
@@ -605,8 +609,10 @@ const MmManagement = () => {
     } else if (status == "rejected") {
       console.log("data", data);
       const param = new FormData();
-      //   param.append("is_app", 1);
-      //   param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("kyc_id", data.kyc_id);
       param.append("action", "reject_kyc");
       axios
@@ -1373,8 +1379,10 @@ const MmManagement = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      //   param.append("is_app", 1);
-      //   param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_first_name", form.first_name);
       param.append("user_last_name", form.last_name);
       param.append("user_email", form.email);
@@ -1442,8 +1450,10 @@ const MmManagement = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      //   param.append("is_app", 1);
-      //   param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("action", "update_manager_details");
       param.append("user_id", form.id);
       param.append("user_first_name", form.first_name);
@@ -1483,8 +1493,10 @@ const MmManagement = () => {
 
   const getCountry = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -1501,8 +1513,10 @@ const MmManagement = () => {
 
   const edit = (data) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "view_manager_details");
     param.append("user_id", data.user_id);
     axios.post(Url + "/ajaxfiles/pamm/mm_manage.php", param).then((res) => {
@@ -1572,8 +1586,10 @@ const MmManagement = () => {
       setKycForm({ ...kycForm });
       const param = new FormData();
       param.append("action", "update_kyc");
-      //   param.append("is_app", 1);
-      //   param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("aadhar_card_number", kycForm.id_number);
       param.append("kyc_status", kycForm.status);
       param.append("feedback_remarks", kycForm.feedback_remarks);

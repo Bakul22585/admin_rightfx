@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -666,8 +666,10 @@ const PammUser = () => {
 
   const edit = (data) => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "view_user_details");
     param.append("user_id", data.user_id);
     axios.post(Url + "/ajaxfiles/pamm/user_manage.php", param).then((res) => {
@@ -731,8 +733,10 @@ const PammUser = () => {
       toast.error("Please select login block");
     } else {
       const param = new FormData();
-      // param.append("is_app", 1);
-      // param.append("AADMIN_LOGIN_ID", 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("action", "update_user_details");
       param.append("user_id", form.user_id);
       param.append("user_first_name", form.user_first_name);
@@ -764,8 +768,10 @@ const PammUser = () => {
 
   const getCountry = () => {
     const param = new FormData();
-    // param.append("is_app", 1);
-    // param.append("AADMIN_LOGIN_ID", 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
         localStorage.setItem("login", true);
@@ -809,38 +815,38 @@ const PammUser = () => {
                   onChangeIndex={handleChangeIndex}
                 >
                   <TabPanel value={value} index={0} dir={theme.direction}> */}
-                    <CommonFilter
-                      search={searchBy}
-                      searchWord={setSearchKeyword}
-                      setParam={setParam}
-                    />
-                    <br />
-                    <Paper
-                      elevation={2}
-                      style={{ borderRadius: "10px" }}
-                      className="pending-all-15px"
-                    >
-                      {/* <div className='actionGroupButton'>
+                <CommonFilter
+                  search={searchBy}
+                  searchWord={setSearchKeyword}
+                  setParam={setParam}
+                />
+                <br />
+                <Paper
+                  elevation={2}
+                  style={{ borderRadius: "10px" }}
+                  className="pending-all-15px"
+                >
+                  {/* <div className='actionGroupButton'>
                                                 <Button variant="contained" onClick={handleClickOpen}>Add Deposit</Button>
                                             </div>
                                             <br /> */}
-                      <CardContent className="py-3">
-                        <Grid container spacing={2}>
-                          <Grid item sm={12} md={12} lg={12}>
-                            <CommonTable
-                              url={`${Url}/datatable/pamm/pamm_client_list.php`}
-                              column={column}
-                              sort="2"
-                              search={searchBy}
-                              searchWord={searchKeyword}
-                              param={param}
-                              refresh={refresh}
-                            />
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </Paper>
-                  {/* </TabPanel>
+                  <CardContent className="py-3">
+                    <Grid container spacing={2}>
+                      <Grid item sm={12} md={12} lg={12}>
+                        <CommonTable
+                          url={`${Url}/datatable/pamm/pamm_client_list.php`}
+                          column={column}
+                          sort="2"
+                          search={searchBy}
+                          searchWord={searchKeyword}
+                          param={param}
+                          refresh={refresh}
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Paper>
+                {/* </TabPanel>
                   <TabPanel value={value} index={1} dir={theme.direction}>
                     <CommonFilter
                       search={clientPasswordSearchBy}
