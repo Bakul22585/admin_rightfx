@@ -318,6 +318,7 @@ const SalesReport = () => {
                           search={searchBy}
                           param={param}
                           searchWord={searchKeyword}
+                          csv="datatable/sales_report_export.php"
                         />
                       </Grid>
                     </Grid>

@@ -217,6 +217,7 @@ const IBCommisionReport = () => {
                           setResData={setResData}
                           param={param}
                           searchWord={searchKeyword}
+                          csv="datatable/user_ib_commission_list_export.php"
                         />
                       </Grid>
                     </Grid>

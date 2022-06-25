@@ -55,7 +55,6 @@ const SalesIncentive = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
       wrap: true,
       reorder: true,
       grow: 0.1,
@@ -151,6 +150,7 @@ const SalesIncentive = () => {
                           param={param}
                           searchWord={searchKeyword}
                           salesReport={true}
+                          csv="datatable/salesman_incentive_list_export.php"
                         />
                       </Grid>
                     </Grid>

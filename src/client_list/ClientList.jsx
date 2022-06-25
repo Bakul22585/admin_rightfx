@@ -380,7 +380,7 @@ const ClientList = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 0.5,
+      grow: 0.7,
     },
     {
       name: "PASSWORD",

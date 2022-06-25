@@ -16,11 +16,11 @@ import { Url } from "../global";
 
 const CopyOpenTrades = () => {
   const [refresh, setRefresh] = useState(false);
-  const [resData, setResData] = useState({})
+  const [resData, setResData] = useState({});
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState({
-    start_date: '',
-    end_date: ''
+    start_date: "",
+    end_date: "",
   });
   const [searchBy, setSearchBy] = useState([
     {
@@ -180,7 +180,9 @@ const CopyOpenTrades = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-                <p className="main-heading">Copy Trading Open Position Report</p>
+                <p className="main-heading">
+                  Copy Trading Open Position Report
+                </p>
 
                 <div className="setBoxs">
                   {" "}
@@ -218,14 +220,20 @@ const CopyOpenTrades = () => {
                     <div className="card padding-9 animate fadeLeft boxsize">
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{resData.total_volume_value} </h5>
+                          <h5 className="mb-0">
+                            {resData.total_volume_value}{" "}
+                          </h5>
                           <p className="no-margin">MT Volume</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword}/>
+                <CommonFilter
+                  search={searchBy}
+                  setParam={setParam}
+                  searchWord={setSearchKeyword}
+                />
                 <br />
                 <Paper
                   elevation={2}
@@ -244,6 +252,7 @@ const CopyOpenTrades = () => {
                           search={searchBy}
                           setResData={setResData}
                           searchWord={searchKeyword}
+                          csv="datatable/copy_open_trading_list_export.php"
                         />
                       </Grid>
                     </Grid>

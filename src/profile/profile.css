@@ -462,11 +462,11 @@ text.highcharts-credits {
 .display-element h6:after {
     content: " :";
 }
-.divider {
+/* .divider {
     border-bottom: 1px solid black;
     width: 100%;
     margin: 10px 0;
-}
+} */
 .main-content-input {
     display: flex;
     flex-direction: column;

@@ -124,7 +124,6 @@ const FAQEditor = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
       wrap: true,
       reorder: true,
       grow: 0.1,
