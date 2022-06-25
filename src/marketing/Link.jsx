@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
-import { IsApprove, Url } from "../global";
+import { ClientUrl, IsApprove, Url } from "../global";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import { confirmAlert } from "react-confirm-alert";
@@ -187,16 +187,16 @@ const Link = () => {
           <div className="full-url-section">
             <a
               className="linkColor"
-              title={row.campaign_url}
-              href={row.campaign_url}
+              title={`${ClientUrl}/register/campaign/${row.campaign_url}`}
+              href={`${ClientUrl}/register/campaign/${row.campaign_url}`}
               target="_blank"
             >
-              {row.campaign_url}
+              {`${ClientUrl}/register/campaign/${row.campaign_url}`}
             </a>
             <button
               className="copy_link"
               onClick={(e) => {
-                navigator.clipboard.writeText(row.campaign_url).then(
+                navigator.clipboard.writeText(`${ClientUrl}/register/campaign/${row.campaign_url}`).then(
                   function () {
                     toast.success("URL has been successfully copied");
                   },

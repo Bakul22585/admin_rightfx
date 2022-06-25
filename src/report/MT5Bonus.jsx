@@ -47,7 +47,6 @@ const PartnershipWithdraw = () => {
             selector: row => {
                 return <span>{row.sr_no}</span>
             },
-            sortable: true,
             wrap: true,
             reorder: true,
             grow: 0.1,
@@ -90,10 +89,17 @@ const PartnershipWithdraw = () => {
             sortable: true,
             reorder: true,
             grow: 0.3,
-        }, {
+        }, 
+        {
             name: 'BONUS AMOUNT',
             selector: row => { return <span title={row.amount}>{row.amount}</span> },
             sortable: true,
+            reorder: true,
+            grow: 0.3,
+        },
+        {
+            name: 'TYPE',
+            selector: row => { return <span title={row.bonus_type}>{row.bonus_type}</span> },
             reorder: true,
             grow: 0.3,
         },
