@@ -236,9 +236,10 @@ const Leads = () => {
   const [doc, setDoc] = useState({
     file: "",
   });
+  const [soure, setSoure] = useState([]);
   const [searchBy, setSearchBy] = useState([
     {
-      label: "CUSTOMER",
+      label: "Customer",
       value: false,
       name: "customer_name",
     },
@@ -246,16 +247,6 @@ const Leads = () => {
       label: "Interest",
       value: false,
       name: "interest",
-    },
-    {
-      label: "Assign To",
-      value: false,
-      name: "assign_to",
-    },
-    {
-      label: "Source",
-      value: false,
-      name: "source",
     },
     {
       label: "Remark",
@@ -299,6 +290,7 @@ const Leads = () => {
       } else {
         console.log("res.data.managers", res.data.managers);
         setListManagers(res.data.managers);
+        setSoure(res.data.inquiry_source_master);
       }
     });
   };
@@ -617,15 +609,11 @@ const Leads = () => {
                 Source
               </InputLabel>
               <Select onChange={input} label="Source" name="source_id">
-                <MenuItem value="1">Newspaper Ads</MenuItem>
-                <MenuItem value="2">Banner Ads</MenuItem>
-                <MenuItem value="3">Billboards</MenuItem>
-                <MenuItem value="4">Paper</MenuItem>
-                <MenuItem value="5">Broker</MenuItem>
-                <MenuItem value="6">Facebook Ads</MenuItem>
-                <MenuItem value="7">Instagram Ads</MenuItem>
-                <MenuItem value="8">Whatsapp ads</MenuItem>
-                <MenuItem value="9">Website</MenuItem>
+                {soure.map((item) => {
+                  return (
+                    <MenuItem value={item.source_id}>{item.name}</MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <TextField
@@ -713,6 +701,7 @@ const Leads = () => {
                 })}
               </Select>
             </FormControl>
+            <br />
             <br />
             <TextField
               label="Remarks"
@@ -2269,7 +2258,8 @@ const Leads = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setFilterDate}
-                  setcheckStatus={setcheckStatus}
+                  salesAgent={true}
+                  setsaleStatus={setcheckStatus}
                 />
                 <br />
                 <Paper

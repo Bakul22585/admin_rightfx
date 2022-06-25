@@ -127,7 +127,7 @@ const CommisionGroup = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
+      sortable: false,
       reorder: true,
       wrap: true,
       grow: 0.1,
@@ -139,7 +139,7 @@ const CommisionGroup = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.7,
+      grow: 0.1,
       wrap: true,
     },
     {
@@ -149,7 +149,7 @@ const CommisionGroup = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.7,
+      grow: 1,
       wrap: true,
     },
     {
@@ -179,7 +179,7 @@ const CommisionGroup = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.5,
+      grow: 0.3,
       wrap: true,
     },
     {
@@ -191,7 +191,7 @@ const CommisionGroup = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.5,
+      grow: 0.3,
       wrap: true,
     },
     {
@@ -215,7 +215,7 @@ const CommisionGroup = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.2,
+      grow: 0.1,
       wrap: true,
     },
     {
@@ -229,7 +229,7 @@ const CommisionGroup = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.2,
+      grow: 0.1,
       wrap: true,
     },
     {
@@ -329,6 +329,7 @@ const CommisionGroup = () => {
       },
       ignoreRowClick: true,
       allowOverflow: true,
+      grow: 0.1,
     },
   ];
 

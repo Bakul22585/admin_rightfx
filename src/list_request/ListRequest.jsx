@@ -74,7 +74,7 @@ const ListRequest = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 0.5,
+      grow: 0.4,
     },
     {
       name: "DATE",
@@ -84,7 +84,7 @@ const ListRequest = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 0.6,
+      grow: 0.3,
     },
     {
       name: "ACQUIRE CLIENT",
@@ -94,7 +94,7 @@ const ListRequest = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 0.3,
+      grow: 0.6,
     },
     {
       name: "COUNTRY",
@@ -200,7 +200,7 @@ const ListRequest = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.3,
     },
     {
       name: "ADMIN APPROVE",
@@ -227,7 +227,7 @@ const ListRequest = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.3,
     },
     {
       name: "STATUS",
@@ -247,10 +247,9 @@ const ListRequest = () => {
           </span>
         );
       },
-      sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.3,
     },
     {
       name: "ACTION",
@@ -286,7 +285,7 @@ const ListRequest = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 0.3,
+      grow: 0.1,
     },
   ];
   console.log("updateDate", updateDate);

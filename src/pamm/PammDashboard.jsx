@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import { Button, CardContent, Grid, Paper } from "@mui/material";
 import "./pamm.css";
 

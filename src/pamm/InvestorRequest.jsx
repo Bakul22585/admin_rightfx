@@ -58,7 +58,6 @@ const InvestorRequest = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
       grow: 0.1,
     },
@@ -80,7 +79,7 @@ const InvestorRequest = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 0.5,
+      grow: 0.3,
     },
     {
       name: "EMAIL",

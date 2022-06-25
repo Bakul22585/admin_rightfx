@@ -12,7 +12,7 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -116,6 +116,7 @@ const PositionReport = () => {
   const [param, setParam] = useState({
     start_date: "",
     end_date: "",
+    mt5_acc_no: "",
   });
   toast.configure();
   const column = [
@@ -231,7 +232,9 @@ const PositionReport = () => {
       grow: 0.3,
     },
   ];
-
+  useEffect(() => {
+    getMt5AccountList();
+  }, []);
   const getMt5AccountList = async () => {
     const param = new FormData();
     if (IsApprove !== "") {
@@ -255,9 +258,6 @@ const PositionReport = () => {
       });
   };
 
-  useEffect(() => {
-    getMt5AccountList();
-  }, []);
   return (
     <div>
       <div className="app-content--inner">
@@ -328,13 +328,7 @@ const PositionReport = () => {
                   <CardContent className="py-3">
                     <Grid container spacing={2}>
                       <Grid item sm={12} md={12} lg={12}>
-                        <FormControl
-                          sx={{ m: 1, width: "100%" }}
-                          className="multipleSelect"
-                        >
-                          <InputLabel id="demo-multiple-chip-label">
-                            MT5 Account
-                          </InputLabel>
+                        <FormControl sx={{ width: "100%" }}>
                           <Select
                             input={<BootstrapInput />}
                             sx={{ width: "100%" }}

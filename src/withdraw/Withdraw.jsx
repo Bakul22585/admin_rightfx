@@ -194,7 +194,6 @@ const Withdraw = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
       reorder: true,
       wrap: true,
       grow: 0.1,
@@ -207,7 +206,7 @@ const Withdraw = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.5,
     },
     {
       name: "NAME",
@@ -217,7 +216,7 @@ const Withdraw = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.5,
     },
     {
       name: "ACCOUNT NO",
@@ -237,7 +236,7 @@ const Withdraw = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 0.5,
+      grow: 0.3,
     },
     {
       name: "AMOUNT",

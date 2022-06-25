@@ -88,17 +88,18 @@ const names = [
   "Kelly Snyder",
 ];
 
-const source = [
-  "Website - IB Form",
-  "Website - Demo Form",
-  "CRM",
-  "Live",
-  "CRM - Multi Structure",
-  "Website - Live Form",
-  "Dedicated Link - IB",
-];
+// const source = [
+//   "Website - IB Form",
+//   "Website - Demo Form",
+//   "CRM",
+//   "Live",
+//   "CRM - Multi Structure",
+//   "Website - Live Form",
+//   "Dedicated Link - IB",
+// ];
 
 const CommonFilter = (prop) => {
+  const [soure, setSoure] = useState([]);
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -141,6 +142,7 @@ const CommonFilter = (prop) => {
       } else {
         console.log("res.data.managers", res.data.managers);
         setListManagers(res.data.managers);
+        setSoure(res.data.inquiry_source_master);
       }
     });
   };
@@ -160,7 +162,21 @@ const CommonFilter = (prop) => {
     setFilterBy(e.target.value);
     prop.setParam({});
   };
-
+  const handleChange1 = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value },
+    } = event;
+    setSourceName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    prop.setParam((prevalue) => {
+      return {
+        ...prevalue,
+        source_id: typeof value === "string" ? value.split(",") : value,
+      };
+    });
+  };
   const dynamicCheckbox = (e) => {
     let checkbox = [];
     propSearchElement.forEach((element) => {
@@ -277,7 +293,12 @@ const CommonFilter = (prop) => {
                             ) : (
                               ""
                             )}
-                            {prop.setcheckStatus ? (
+                            {prop.salesAgent ? (
+                              <MenuItem value="Source">Source</MenuItem>
+                            ) : (
+                              ""
+                            )}
+                            {prop.setcheckStatus || prop.setsaleStatus ? (
                               <MenuItem value="Status">Status</MenuItem>
                             ) : (
                               ""
@@ -359,10 +380,16 @@ const CommonFilter = (prop) => {
                               labe
                               id="demo-multiple-chip"
                               value={personName}
+                              input={<BootstrapInput />}
                               onChange={(e) => {
-                                prop.salesAgent(e.target.value);
                                 setPersonName(e.target.value);
-                                console.log("e.tarhet", e.target.value);
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    ...prevalue,
+                                    lead_assign_user_id: e.target.value,
+                                  };
+                                });
+                                console.log("e.tarhet", personName);
                               }}
                             >
                               {listManagers.map((item) => {
@@ -487,18 +514,13 @@ const CommonFilter = (prop) => {
                             sx={{ m: 1, width: 300 }}
                             className="multipleSelect"
                           >
-                            <InputLabel>Select Source</InputLabel>
                             <Select
                               labe
                               id="demo-multiple-chip"
                               multiple
                               value={sourceName}
-                              input={
-                                <OutlinedInput
-                                  id="select-multiple-chip"
-                                  label="Select Source"
-                                />
-                              }
+                              input={<BootstrapInput />}
+                              onChange={handleChange1}
                               renderValue={(selected) => (
                                 <Box
                                   sx={{
@@ -514,15 +536,13 @@ const CommonFilter = (prop) => {
                               )}
                               MenuProps={MenuProps}
                             >
-                              {source.map((name) => (
-                                <MenuItem
-                                  key={name}
-                                  value={name}
-                                  // style={getStyles(name, personName, theme)}
-                                >
-                                  {name}
-                                </MenuItem>
-                              ))}
+                              {soure.map((item) => {
+                                return (
+                                  <MenuItem value={item.name}>
+                                    {item.name}
+                                  </MenuItem>
+                                );
+                              })}
                             </Select>
                           </FormControl>
                         ) : (
@@ -539,14 +559,24 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 console.log("e.target.value", e.target.value);
                                 setcheckStatus(e.target.value);
-                                prop.setcheckStatus(e.target.value);
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    ...prevalue,
+                                    status: e.target.value,
+                                  };
+                                });
                               }}
                               input={<BootstrapInput />}
                               sx={{ width: "200px" }}
                             >
                               <MenuItem>Select Option</MenuItem>
                               <MenuItem value="0">Pending</MenuItem>
-                              <MenuItem value="1">Completed</MenuItem>
+                              {prop.setsaleStatus ? (
+                                <MenuItem value="1">Completed</MenuItem>
+                              ) : (
+                                <MenuItem value="1">Approve</MenuItem>
+                              )}
+
                               <MenuItem value="2">Rejected</MenuItem>
                             </Select>
                           </FormControl>

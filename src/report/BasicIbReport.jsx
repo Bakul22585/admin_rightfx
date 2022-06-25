@@ -17,8 +17,8 @@ import axios from "axios";
 const BasicIbReport = () => {
   const [refresh, setRefresh] = useState(false);
   const [param, setParam] = useState({
-    start_date: '',
-    end_date: ''
+    start_date: "",
+    end_date: "",
   });
   const [searchBy, setSearchBy] = useState([
     {
@@ -45,27 +45,33 @@ const BasicIbReport = () => {
       label: "Withdraw",
       value: false,
       name: "withdraw",
-    }, {
+    },
+    {
       label: "Total Lot Work",
       value: false,
       name: "total_lot_work",
-    }, {
+    },
+    {
       label: "Total Commission",
       value: false,
       name: "total_commission",
-    }, {
+    },
+    {
       label: "Personal Deposit",
       value: false,
       name: "personal_deposit",
-    }, {
+    },
+    {
       label: "Personal Withdraw",
       value: false,
       name: "personal_withdraw",
-    }, {
+    },
+    {
       label: "Lot Size",
       value: false,
       name: ".personal_lot_size",
-    }, {
+    },
+    {
       label: "Total Dead Account",
       value: false,
       name: "total_dead_account",
@@ -74,13 +80,11 @@ const BasicIbReport = () => {
       label: "Total Group Wise List Count",
       value: false,
       name: "total_group_wise_list_count",
-    }
-
+    },
   ]);
   const [searchKeyword, setSearchKeyword] = useState("");
 
-  const [resData, setResData] = useState({})
-
+  const [resData, setResData] = useState({});
 
   const column = [
     {
@@ -88,7 +92,6 @@ const BasicIbReport = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
       wrap: true,
       reorder: true,
       grow: 0.1,
@@ -147,7 +150,9 @@ const BasicIbReport = () => {
     {
       name: "Total Commission",
       selector: (row) => {
-        return <span title={row.total_commission}>${row.total_commission}</span>;
+        return (
+          <span title={row.total_commission}>${row.total_commission}</span>
+        );
       },
       reorder: true,
       grow: 0.3,
@@ -163,7 +168,9 @@ const BasicIbReport = () => {
     {
       name: "Personal Withdraw",
       selector: (row) => {
-        return <span title={row.personal_withdraw}>${row.personal_withdraw}</span>;
+        return (
+          <span title={row.personal_withdraw}>${row.personal_withdraw}</span>
+        );
       },
       reorder: true,
       grow: 0.3,
@@ -171,7 +178,9 @@ const BasicIbReport = () => {
     {
       name: "Lot Size",
       selector: (row) => {
-        return <span title={row.personal_lot_size}>{row.personal_lot_size}</span>;
+        return (
+          <span title={row.personal_lot_size}>{row.personal_lot_size}</span>
+        );
       },
       reorder: true,
       grow: 0.3,
@@ -179,7 +188,9 @@ const BasicIbReport = () => {
     {
       name: "Total Dead Account",
       selector: (row) => {
-        return <span title={row.total_dead_account}>{row.total_dead_account}</span>;
+        return (
+          <span title={row.total_dead_account}>{row.total_dead_account}</span>
+        );
       },
       reorder: true,
       grow: 0.3,
@@ -187,12 +198,15 @@ const BasicIbReport = () => {
     {
       name: "Total Group Wise List Count",
       selector: (row) => {
-        return <span title={row.total_group_wise_list_count}>{row.total_group_wise_list_count}</span>;
+        return (
+          <span title={row.total_group_wise_list_count}>
+            {row.total_group_wise_list_count}
+          </span>
+        );
       },
       reorder: true,
       grow: 0.3,
     },
-
   ];
   return (
     <div>
@@ -203,7 +217,13 @@ const BasicIbReport = () => {
               <Grid item md={12} lg={12} xl={12}>
                 <p className="main-heading">All In One IB Report</p>
 
-                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} date={true} isShowFilterBy={true}/>
+                <CommonFilter
+                  search={searchBy}
+                  setParam={setParam}
+                  searchWord={setSearchKeyword}
+                  date={true}
+                  isShowFilterBy={true}
+                />
                 <br />
                 <Paper
                   elevation={2}

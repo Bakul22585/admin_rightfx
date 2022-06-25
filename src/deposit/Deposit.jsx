@@ -212,7 +212,6 @@ const Deposit = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
       reorder: true,
       wrap: true,
       grow: 0.1,
@@ -300,7 +299,6 @@ const Deposit = () => {
           ""
         );
       },
-      sortable: true,
       reorder: true,
       grow: 0.5,
       wrap: true,

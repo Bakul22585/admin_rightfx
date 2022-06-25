@@ -31,7 +31,7 @@
 
 .searchByCheckbox .MuiFormControlLabel-label {
     font-size: 12px;
-}
+    text-transform: uppercase !important;}
 
 .multipleSelect .MuiInputLabel-shrink {
     opacity: 0;

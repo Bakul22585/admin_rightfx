@@ -193,9 +193,8 @@ const PammUser = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
-      grow: 0.4,
+      grow: 0.1,
     },
     {
       name: "USER NAME",

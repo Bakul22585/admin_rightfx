@@ -216,32 +216,32 @@ const ClientList = () => {
   const [clientType, setClientType] = useState("");
   const [searchBy, setSearchBy] = useState([
     {
-      label: "MT5 ID",
+      label: "MT5 Id",
       value: false,
       name: "mt5_acc_no",
     },
     {
-      label: "WALLET ID",
+      label: "Wallet Id",
       value: false,
       name: "wallet_code",
     },
     {
-      label: "NAME",
+      label: "Name",
       value: false,
       name: "name",
     },
     {
-      label: "EMAIL",
+      label: "Email",
       value: false,
       name: "user_email",
     },
     {
-      label: "PHONE",
+      label: "Phone",
       value: false,
       name: "user_phone",
     },
     {
-      label: "PASSWORD",
+      label: "Password",
       value: false,
       name: "user_password",
     },
@@ -360,7 +360,7 @@ const ClientList = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.7,
     },
     {
       name: "EMAIL",
@@ -370,7 +370,7 @@ const ClientList = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1.5,
+      grow: 1,
     },
     {
       name: "PHONE",
@@ -380,7 +380,7 @@ const ClientList = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.5,
     },
     {
       name: "PASSWORD",
@@ -394,7 +394,7 @@ const ClientList = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.5,
     },
     {
       name: "SALES",
@@ -425,7 +425,7 @@ const ClientList = () => {
       },
       reorder: true,
       wrap: true,
-      grow: 2,
+      grow: 0.7,
     },
     {
       name: "IB Name",
@@ -444,7 +444,7 @@ const ClientList = () => {
       },
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.7,
     },
     {
       name: "KYC",
@@ -484,7 +484,7 @@ const ClientList = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1.2,
+      grow: 0.5,
     },
     {
       name: "Lead Close",

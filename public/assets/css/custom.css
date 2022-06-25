@@ -17816,6 +17816,7 @@ input[type=number] {
 .rdt_Table .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol > div > div {
   overflow: unset;
   white-space: unset;
+  text-align: center;
 }
 #react-confirm-alert .react-confirm-alert-overlay {
   z-index: 999;

@@ -205,9 +205,8 @@ const MmManagement = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
-      grow: 0.4,
+      grow: 0.1,
     },
     {
       name: "USER NAME",
@@ -314,9 +313,8 @@ const MmManagement = () => {
     {
       name: "SR NO",
       selector: (row) => row.sr_no,
-      sortable: true,
       reorder: true,
-      grow: 0.4,
+      grow: 0.1,
     },
     {
       name: "USER NAME",
@@ -348,7 +346,7 @@ const MmManagement = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 1,
+      grow: 0.5,
     },
     {
       name: "STATUS",
@@ -387,7 +385,7 @@ const MmManagement = () => {
       wrap: true,
       sortable: true,
       reorder: true,
-      grow: 0.5,
+      grow: 0.7,
     },
     {
       name: "Action",

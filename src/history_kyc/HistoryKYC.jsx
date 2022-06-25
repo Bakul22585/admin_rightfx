@@ -140,10 +140,9 @@ const HistoryKYC = () => {
       selector: (row) => {
         return <span>{row.sr_no}</span>;
       },
-      sortable: true,
       wrap: true,
       reorder: true,
-      grow: 0.1,
+      grow: 0.01,
     },
     {
       name: "DATE",
@@ -153,7 +152,7 @@ const HistoryKYC = () => {
       sortable: true,
       wrap: true,
       reorder: true,
-      grow: 0.3,
+      grow: 0.4,
     },
     {
       name: "NAME",
@@ -163,7 +162,7 @@ const HistoryKYC = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 0.5,
+      grow: 0.3,
     },
     {
       name: "EMAIL",
@@ -204,7 +203,7 @@ const HistoryKYC = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 0.3,
+      grow: 0.1,
     },
     {
       name: "Action",
@@ -251,6 +250,7 @@ const HistoryKYC = () => {
       },
       ignoreRowClick: true,
       allowOverflow: true,
+      grow: 0.1,
     },
   ];
 

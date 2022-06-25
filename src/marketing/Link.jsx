@@ -213,7 +213,6 @@ const Link = () => {
           </div>
         );
       },
-      sortable: true,
       reorder: true,
       grow: 1,
       wrap: true,
