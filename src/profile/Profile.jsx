@@ -5882,8 +5882,10 @@ const Profile = () => {
       toast.error("Please select employment industry");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("employment_status", employmentDetailsForm.status);
       param.append("inudstry", employmentDetailsForm.industry);
@@ -6016,8 +6018,10 @@ const Profile = () => {
       toast.error("Please select client");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("client_id", linkClientForm.client);
       param.append("action", "link_client");
@@ -6054,8 +6058,10 @@ const Profile = () => {
       toast.error("Please enter master account id");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("sponsor_id", linkIBForm.customer_name);
       param.append("action", "link_ib");
@@ -6164,8 +6170,10 @@ const Profile = () => {
       toast.error("Please select control panel access");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("user_id", id);
       param.append("action", "update_cp_access");
       param.append("user_status", cpAccessForm.status);
@@ -6871,8 +6879,10 @@ const Profile = () => {
 
   const getSalesList = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "list_salesman");
 
     axios
@@ -6892,8 +6902,10 @@ const Profile = () => {
 
   const getLinkClientList = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
 
     param.append("action", "list_clients");
@@ -6916,8 +6928,10 @@ const Profile = () => {
 
   const getIBUserList = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "list_ib_users");
 
     axios
@@ -6938,8 +6952,10 @@ const Profile = () => {
 
   const unlinkIB = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "unlink_ib");
 
@@ -6960,8 +6976,10 @@ const Profile = () => {
 
   const viewCPPassword = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "view_cp_password");
 
@@ -6983,8 +7001,10 @@ const Profile = () => {
 
   const getCpAccessSetting = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("action", "view_cp_access");
 
@@ -7006,8 +7026,10 @@ const Profile = () => {
 
   const getMyTraders = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
 
     axios.post(Url + "/ajaxfiles/my_traders.php", param).then((res) => {
@@ -7026,8 +7048,10 @@ const Profile = () => {
 
   const getMyChildTrader = (childId) => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", id);
     param.append("client_id", childId);
 

@@ -5,9 +5,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import InnerImageZoom from "react-inner-image-zoom";
-import { Button, Grid, Input, InputBase, MenuItem, Paper, Select } from "@mui/material";
-import './ticket.css';
-import { Url } from "../global";
+import {
+  Button,
+  Grid,
+  Input,
+  InputBase,
+  MenuItem,
+  Paper,
+  Select,
+} from "@mui/material";
+import "./ticket.css";
+import { IsApprove, Url } from "../global";
 import { styled } from "@mui/material/styles";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -43,72 +51,70 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const ViewTicket = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
-  const [selectedFile, setSelectedFile] = useState()
+  const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [form, setForm] = useState({
     message: "",
     file: "",
     status: "Open",
-    isLoader: false
+    isLoader: false,
   });
   const [viewTicketData, setViewTicketData] = useState({
-    data: {}
+    data: {},
   });
   toast.configure();
 
   useEffect(() => {
     if (!selectedFile) {
-      setPreview(undefined)
-      return
+      setPreview(undefined);
+      return;
     }
 
-    const objectUrl = URL.createObjectURL(selectedFile)
-    setPreview(objectUrl)
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
 
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [selectedFile])
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
 
   useEffect(() => {
     fetchViewTicketDetails();
-  }, [])
+  }, []);
 
-  const onSelectFile = e => {
+  const onSelectFile = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined)
-      return
+      setSelectedFile(undefined);
+      return;
     }
     setForm({ ...form, file: e.target.files[0] });
-    setSelectedFile(e.target.files[0])
-  }
+    setSelectedFile(e.target.files[0]);
+  };
 
   const fetchViewTicketDetails = async () => {
     const param = new FormData();
-    /* param.append('is_app', 1);
-    param.append('AADMIN_LOGIN_ID', 1); */
-    // param.append("action", 'view_support_ticket');
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("ticket_id", id);
-    await axios
-      .post(`${Url}/ajaxfiles/view_ticket.php`, param)
-      .then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
+    await axios.post(`${Url}/ajaxfiles/view_ticket.php`, param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
       }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          console.log(res.data);
-          if (res.data.data.length > 0) {
-            viewTicketData.data = res.data.data[0];
-            setViewTicketData({ ...viewTicketData });
-            console.log('view ticket', viewTicketData.data);
-          }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        console.log(res.data);
+        if (res.data.data.length > 0) {
+          viewTicketData.data = res.data.data[0];
+          setViewTicketData({ ...viewTicketData });
+          console.log("view ticket", viewTicketData.data);
         }
-      });
-  }
+      }
+    });
+  };
 
   const sendMessage = async () => {
     if (form.message == "") {
@@ -117,8 +123,10 @@ const ViewTicket = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      /* param.append('is_app', 1);
-      param.append('AADMIN_LOGIN_ID', 1); */
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("ticketChatID", id);
       param.append("ticketTitle", viewTicketData.data.tickettitle);
       param.append("subject", viewTicketData.data.subject);
@@ -133,7 +141,7 @@ const ViewTicket = () => {
           if (res.data.message == "Session has been expired") {
             localStorage.setItem("login", true);
             navigate("/");
-        }
+          }
           form.isLoader = false;
           setForm({ ...form });
           if (res.data.status == "error") {
@@ -145,13 +153,13 @@ const ViewTicket = () => {
               message: "",
               file: "",
               status: "Open",
-              isLoader: false
+              isLoader: false,
             });
             fetchViewTicketDetails();
           }
         });
     }
-  }
+  };
 
   return (
     <div>
@@ -168,17 +176,24 @@ const ViewTicket = () => {
                     <Paper
                       elevation={1}
                       style={{ borderRadius: "10px" }}
-                      className="w-100 mb-5">
+                      className="w-100 mb-5"
+                    >
                       <div className="view-ticket card-header">
                         <div>
                           <div>
                             <label className="font-weight-bold mb-0 text-dark font-size-18">
-                              View Ticket - {(viewTicketData.data.tickettitle) ? viewTicketData.data.tickettitle : ""}
+                              View Ticket -{" "}
+                              {viewTicketData.data.tickettitle
+                                ? viewTicketData.data.tickettitle
+                                : ""}
                             </label>
                           </div>
                           <div>
                             <label className="mb-0 text-dark">
-                              Subject : {(viewTicketData.data.subject) ? viewTicketData.data.subject : ""}
+                              Subject :{" "}
+                              {viewTicketData.data.subject
+                                ? viewTicketData.data.subject
+                                : ""}
                             </label>
                           </div>
                         </div>
@@ -200,40 +215,54 @@ const ViewTicket = () => {
                               className="w-100"
                             >
                               <div className="content-area">
-                                {(viewTicketData.data.conversation) ?
-                                  viewTicketData.data.conversation.map((item) => {
-                                    if (item.position == "right") {
-                                      return (
-                                        <div className="chat right-side">
-                                          <div className="chat-body">
-                                            <div className="chat-text">
-                                              <p>{item.ticketconversation}</p>
+                                {viewTicketData.data.conversation
+                                  ? viewTicketData.data.conversation.map(
+                                      (item) => {
+                                        if (item.position == "right") {
+                                          return (
+                                            <div className="chat right-side">
+                                              <div className="chat-body">
+                                                <div className="chat-text">
+                                                  <p>
+                                                    {item.ticketconversation}
+                                                  </p>
+                                                </div>
+                                              </div>
+                                              <div className="chat-avatar">
+                                                <a className="avatar">
+                                                  <img
+                                                    src={item.avtar}
+                                                    class="circle"
+                                                    alt="avatar"
+                                                  />
+                                                </a>
+                                              </div>
                                             </div>
-                                          </div>
-                                          <div className="chat-avatar">
-                                            <a className="avatar">
-                                              <img src={item.avtar} class="circle" alt="avatar" />
-                                            </a>
-                                          </div>
-                                        </div>
-                                      );
-                                    } else {
-                                      return (
-                                        <div className="chat left-side">
-                                          <div className="chat-avatar">
-                                            <a className="avatar">
-                                              <img src={item.avtar} class="circle" alt="avatar" />
-                                            </a>
-                                          </div>
-                                          <div className="chat-body">
-                                            <div className="chat-text">
-                                              <p>{item.ticketconversation}</p>
+                                          );
+                                        } else {
+                                          return (
+                                            <div className="chat left-side">
+                                              <div className="chat-avatar">
+                                                <a className="avatar">
+                                                  <img
+                                                    src={item.avtar}
+                                                    class="circle"
+                                                    alt="avatar"
+                                                  />
+                                                </a>
+                                              </div>
+                                              <div className="chat-body">
+                                                <div className="chat-text">
+                                                  <p>
+                                                    {item.ticketconversation}
+                                                  </p>
+                                                </div>
+                                              </div>
                                             </div>
-                                          </div>
-                                        </div>
-                                      );
-                                    }
-                                  })
+                                          );
+                                        }
+                                      }
+                                    )
                                   : ""}
 
                                 {/* <div className="chat left-side">
@@ -360,7 +389,7 @@ const ViewTicket = () => {
                               setForm({
                                 ...form,
                                 message: e.target.value,
-                              })
+                              });
                             }}
                             placeholder="Send Message"
                             displayEmpty
@@ -368,30 +397,91 @@ const ViewTicket = () => {
                               "aria-label": "Without label",
                             }}
                           />
-                          {(form.isLoader) ? <Button className="send-message-disabled-button" disabled><svg class="spinner" viewBox="0 0 50 50">
-                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                          </svg></Button> : <Button variant="contained" className="send-message" onClick={sendMessage}><i className="material-icons">send</i> &nbsp;Send</Button>}
-                          {(form.isLoader) ? <Button className="send-message-disabled-button" disabled><svg class="spinner" viewBox="0 0 50 50">
-                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                          </svg></Button> : <label htmlFor="contained-button-file" className='ticket-file-upload'>
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={onSelectFile} />
-                            {selectedFile ? <img src={preview} className='deposit-upload-image-preview' /> : <Button className="site-button-color" variant="contained" component="span">
-                              <i className="material-icons">backup</i>&nbsp;Upload
-                            </Button>}
-                          </label>}
+                          {form.isLoader ? (
+                            <Button
+                              className="send-message-disabled-button"
+                              disabled
+                            >
+                              <svg class="spinner" viewBox="0 0 50 50">
+                                <circle
+                                  class="path"
+                                  cx="25"
+                                  cy="25"
+                                  r="20"
+                                  fill="none"
+                                  stroke-width="5"
+                                ></circle>
+                              </svg>
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              className="send-message"
+                              onClick={sendMessage}
+                            >
+                              <i className="material-icons">send</i> &nbsp;Send
+                            </Button>
+                          )}
+                          {form.isLoader ? (
+                            <Button
+                              className="send-message-disabled-button"
+                              disabled
+                            >
+                              <svg class="spinner" viewBox="0 0 50 50">
+                                <circle
+                                  class="path"
+                                  cx="25"
+                                  cy="25"
+                                  r="20"
+                                  fill="none"
+                                  stroke-width="5"
+                                ></circle>
+                              </svg>
+                            </Button>
+                          ) : (
+                            <label
+                              htmlFor="contained-button-file"
+                              className="ticket-file-upload"
+                            >
+                              <Input
+                                accept="image/*"
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                                onChange={onSelectFile}
+                              />
+                              {selectedFile ? (
+                                <img
+                                  src={preview}
+                                  className="deposit-upload-image-preview"
+                                />
+                              ) : (
+                                <Button
+                                  className="site-button-color"
+                                  variant="contained"
+                                  component="span"
+                                >
+                                  <i className="material-icons">backup</i>
+                                  &nbsp;Upload
+                                </Button>
+                              )}
+                            </label>
+                          )}
                           <Select
                             value={form.status}
                             displayEmpty
                             inputProps={{
                               "aria-label": "Without label",
                             }}
-                            className='table-dropdown'
+                            className="table-dropdown"
                             input={<BootstrapInput />}
-                            name='interest'
-                            onChange={(e) => setForm({
+                            name="interest"
+                            onChange={(e) =>
+                              setForm({
                                 ...form,
                                 status: e.target.value,
-                              })}
+                              })
+                            }
                           >
                             <MenuItem value="Open">Open</MenuItem>
                             <MenuItem value="Close">Close</MenuItem>

@@ -446,8 +446,10 @@ const PendingKYC = () => {
     } else if (status == "Edit KYC Details") {
       param.append("action", "view_kyc");
     }
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("user_id", data.user_id);
     param.append("kyc_id", data.kyc_id);
     await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -905,8 +907,10 @@ const PendingKYC = () => {
       setForm({ ...form });
       const param = new FormData();
       param.append("action", "update_kyc");
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("aadhar_card_number", form.aadhar_card_number);
       /* param.append('bank_account_number', form.account_number);
             param.append('bank_name', form.bank_name);

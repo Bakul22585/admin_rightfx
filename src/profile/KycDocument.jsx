@@ -9,13 +9,10 @@ import MenuItem from "@mui/material/MenuItem";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 // import CustomImageModal from "../../customComponet/CustomImageModal";
-import {
-  BootstrapInput,
-  ColorButton,
-} from "../common/CustomElement";
+import { BootstrapInput, ColorButton } from "../common/CustomElement";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { Url } from "../global.js";
+import { IsApprove, Url } from "../global.js";
 import axios from "axios";
 import InfoIcon from "@mui/icons-material/Info";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -58,23 +55,27 @@ const KycDocument = (prop) => {
       toast.error("Back Side of image is required");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("aadhar_card_front_image", doc.fontimg);
       param.append("aadhar_card_back_image", doc.backimg);
       param.append("user_id", prop.id);
       param.append("action", "update_kyc");
-      axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-        if (res.data.message == "Session has been expired") {
-          navigate("/");
-        }
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-          getUserKyc();
-        }
-      });
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            getUserKyc();
+          }
+        });
     }
   };
 
@@ -122,26 +123,30 @@ const KycDocument = (prop) => {
 
   const getUserKyc = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
-    param.append('user_id', prop.id);
-    param.append('action', 'get_kyc_status');
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
+    param.append("user_id", prop.id);
+    param.append("action", "get_kyc_status");
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        kycData = res.data.kyc_data;
-        setKycData(kycData);
-        setFontimg(kycData.aadhar_card_front_image);
-        setBackimg(kycData.aadhar_card_back_image);
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          kycData = res.data.kyc_data;
+          setKycData(kycData);
+          setFontimg(kycData.aadhar_card_front_image);
+          setBackimg(kycData.aadhar_card_back_image);
+        }
+      });
+  };
 
   useEffect(() => {
     getUserKyc();
@@ -156,7 +161,7 @@ const KycDocument = (prop) => {
 
       const objectUrl = URL.createObjectURL(doc.fontimg);
       setFontimg(objectUrl);
-      console.log("objectUrl", objectUrl)
+      console.log("objectUrl", objectUrl);
 
       return () => URL.revokeObjectURL(objectUrl);
     }
@@ -171,7 +176,7 @@ const KycDocument = (prop) => {
 
       const objectUrl = URL.createObjectURL(doc.backimg);
       setBackimg(objectUrl);
-      console.log("objectUrl", objectUrl)
+      console.log("objectUrl", objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [doc]);
@@ -228,8 +233,6 @@ const KycDocument = (prop) => {
                         >
                           Proof of ID
                         </MenuItem>
-
-
                       </Select>
                     </FormControl>
                   </Grid>
@@ -250,12 +253,11 @@ const KycDocument = (prop) => {
                         </Select>
                       </FormControl>
                     )}
-
                   </Grid>
                 </Grid>
                 {doc.proof == "Proof of ID" ? (
                   sendKycRequest.proof1 == false &&
-                    kycStatus.master_status == "0" ? (
+                  kycStatus.master_status == "0" ? (
                     <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
                       <h5 className="text-center font-weight-bold text-dark ">
                         <div>
@@ -279,7 +281,7 @@ const KycDocument = (prop) => {
 
                 {doc.proof == "Proof of ID" ? (
                   sendKycRequest.proof1 == false &&
-                    kycStatus.master_status == "1" ? (
+                  kycStatus.master_status == "1" ? (
                     <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
                       <h5 className="text-center font-weight-bold text-dark">
                         <div>
@@ -303,7 +305,7 @@ const KycDocument = (prop) => {
 
                 {doc.proof == "Proof of ID" ? (
                   sendKycRequest.proof1 == false &&
-                    kycStatus.master_status == "2" ? (
+                  kycStatus.master_status == "2" ? (
                     <div className="text-dark w-100 h-100 kyc-status-section padingtop5">
                       <h5 className="text-center font-weight-bold text-dark ">
                         <div>
@@ -324,8 +326,6 @@ const KycDocument = (prop) => {
                 ) : (
                   ""
                 )}
-
-
 
                 {option && (
                   <Grid
@@ -375,28 +375,32 @@ const KycDocument = (prop) => {
                             ) : (
                             )} */}
                             <div className="preview-image-section">
-                            {
-                              (kycData?.master_status == "1") ? "" : <button
-                                className="bg-transparent p-0 border-0 image-delete-btn"
-                                onClick={() =>
-                                  setDoc((prevalue) => {
-                                    return {
-                                      ...prevalue,
-                                      fontimg: "",
-                                    };
-                                  })
-                                }
-                              >
-                                <CloseOutlinedIcon className="fontimgclose" />
-                              </button>
-                            }
-                            <CustomImageModal image={fontimg} className='deposit-upload-image-preview1'/> 
-                            {/* <img
+                              {kycData?.master_status == "1" ? (
+                                ""
+                              ) : (
+                                <button
+                                  className="bg-transparent p-0 border-0 image-delete-btn"
+                                  onClick={() =>
+                                    setDoc((prevalue) => {
+                                      return {
+                                        ...prevalue,
+                                        fontimg: "",
+                                      };
+                                    })
+                                  }
+                                >
+                                  <CloseOutlinedIcon className="fontimgclose" />
+                                </button>
+                              )}
+                              <CustomImageModal
+                                image={fontimg}
+                                className="deposit-upload-image-preview1"
+                              />
+                              {/* <img
                               src={fontimg}
                               className="deposit-upload-image-preview1"
                             /> */}
                             </div>
-
                           </>
                         )}
                       </div>
@@ -442,34 +446,36 @@ const KycDocument = (prop) => {
                             ) : (
                             )} */}
                             <div className="preview-image-section">
-                              {
-                                (kycData?.master_status == "1") ? "" : <button
-                                className="bg-transparent p-0 border-0 image-delete-btn"
-                                onClick={() =>
-                                  setDoc((prevalue) => {
-                                    return {
-                                      ...prevalue,
-                                      backimg: "",
-                                    };
-                                  })
-                                }
-                              >
-                                <CloseOutlinedIcon className="fontimgclose" />
-                              </button>
-                              }
-                              <CustomImageModal image={backimg} className='deposit-upload-image-preview1'/> 
-                            {/* <img
+                              {kycData?.master_status == "1" ? (
+                                ""
+                              ) : (
+                                <button
+                                  className="bg-transparent p-0 border-0 image-delete-btn"
+                                  onClick={() =>
+                                    setDoc((prevalue) => {
+                                      return {
+                                        ...prevalue,
+                                        backimg: "",
+                                      };
+                                    })
+                                  }
+                                >
+                                  <CloseOutlinedIcon className="fontimgclose" />
+                                </button>
+                              )}
+                              <CustomImageModal
+                                image={backimg}
+                                className="deposit-upload-image-preview1"
+                              />
+                              {/* <img
                               src={backimg}
                               className="deposit-upload-image-preview1"
                             /> */}
                             </div>
-
-
                           </>
                         )}
                       </div>
                     </Grid>
-
                   </Grid>
                 )}
 
@@ -478,30 +484,30 @@ const KycDocument = (prop) => {
                   style={{ marginTop: "100px" }}
                 >
                   <i>
-                    (Maximum size of document 5MB) Allow File Formats
-                    *jpg, *png, *pdf
+                    (Maximum size of document 5MB) Allow File Formats *jpg,
+                    *png, *pdf
                   </i>
-                  {
-                    (kycData?.master_status == "1") ? <ColorButton
-                    onClick={onSubmit}
-                    variant="contained"
-                    disabled
-                    size="medium"
-                    className="p-3 pr-4 pl-4 text-center text-capitalize"
-                  >
-                    Save
-                  </ColorButton> :<ColorButton
-                    onClick={onSubmit}
-                    variant="contained"
-                    disabled={!sendKycRequest}
-                    size="medium"
-                    className="p-3 pr-4 pl-4 text-center text-capitalize"
-                  >
-                    Save
-                  </ColorButton>
-                  }
-                  
-
+                  {kycData?.master_status == "1" ? (
+                    <ColorButton
+                      onClick={onSubmit}
+                      variant="contained"
+                      disabled
+                      size="medium"
+                      className="p-3 pr-4 pl-4 text-center text-capitalize"
+                    >
+                      Save
+                    </ColorButton>
+                  ) : (
+                    <ColorButton
+                      onClick={onSubmit}
+                      variant="contained"
+                      disabled={!sendKycRequest}
+                      size="medium"
+                      className="p-3 pr-4 pl-4 text-center text-capitalize"
+                    >
+                      Save
+                    </ColorButton>
+                  )}
                 </div>
               </div>
             </Paper>

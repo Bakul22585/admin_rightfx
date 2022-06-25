@@ -272,8 +272,10 @@ const Leads = () => {
 
   const getcontry = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.status == "error") {
         // toast.error(res.data.message);
@@ -285,8 +287,10 @@ const Leads = () => {
 
   const getListManagers = () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("action", "list_managers");
 
     axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
@@ -1704,8 +1708,10 @@ const Leads = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("customer_name", form.customer_name);
       param.append("customer_mobile", form.customer_mobile);
       param.append("customer_email", form.customer_email);
@@ -2014,8 +2020,10 @@ const Leads = () => {
     } else {
       newFollowupForm.isLoader = true;
       setNewFollowupForm({ ...newFollowupForm });
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("status_id", newFollowupForm.interest);
       param.append("lead_assign_user_id", newFollowupForm.lead_assign_user_id);
       param.append("remarks", newFollowupForm.remark);
@@ -2195,8 +2203,10 @@ const Leads = () => {
     } else if (status == "rejected") {
       param.append("leads_status", 3);
     }
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     await axios
       .post(`${Url}/ajaxfiles/update_lead_status.php`, param)
       .then((res) => {
@@ -2221,8 +2231,10 @@ const Leads = () => {
   const handleAction = async () => {
     console.log("doc", doc);
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("import_lead_file", doc.file);
     await axios.post(`${Url}/ajaxfiles/import_leads.php`, param).then((res) => {
       if (res.data.message == "Session has been expired") {

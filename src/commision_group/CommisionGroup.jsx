@@ -1278,8 +1278,10 @@ const CommisionGroup = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("action", "add_ib_commission_group");
       // param.append('ib_group_level_id', form.ib_group_level_id);
       param.append("ib_group_name", form.group_name);
@@ -1408,8 +1410,10 @@ const CommisionGroup = () => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("action", "update_ib_commission_group");
       param.append("ib_group_level_id", form.ib_group_level_id);
       param.append("ib_group_main_id", form.ib_group_main_id);
@@ -1522,8 +1526,10 @@ const CommisionGroup = () => {
     if (flag == "delete") {
       param.append("action", "delete_ib_commission_group");
     }
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
     param.append("ib_group_level_id", id.ib_group_level_id);
     await axios
       .post(`${Url}/ajaxfiles/ib_commission_group_manage.php`, param)

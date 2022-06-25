@@ -14,7 +14,7 @@ import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
 import { Url } from "../global";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -51,7 +51,6 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const PositionReport = () => {
-
   const navigate = useNavigate();
   const [refresh, setRefresh] = useState(false);
   const [searchBy, setSearchBy] = useState([
@@ -112,11 +111,11 @@ const PositionReport = () => {
     },
   ]);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [resData, setResData] = useState({})
+  const [resData, setResData] = useState({});
   const [mt5AccountList, setMt5AccountList] = useState([]);
   const [param, setParam] = useState({
-    start_date: '',
-    end_date: ''
+    start_date: "",
+    end_date: "",
   });
   toast.configure();
   const column = [
@@ -233,28 +232,32 @@ const PositionReport = () => {
     },
   ];
 
-  const getMt5AccountList = async() => {
+  const getMt5AccountList = async () => {
     const param = new FormData();
-    // param.append('is_app', 1);
-    // param.append('AADMIN_LOGIN_ID', 1);
-    await axios.post(`${Url}/ajaxfiles/position_mt5_list.php`, param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == 'error') {
-        toast.error(res.data.message);
-      } else {
-        if (res.data.status != "error") {
-          setMt5AccountList([...res.data.mt5_acc_no_list]);
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
+    await axios
+      .post(`${Url}/ajaxfiles/position_mt5_list.php`, param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
         }
-      }
-    });
-  }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          if (res.data.status != "error") {
+            setMt5AccountList([...res.data.mt5_acc_no_list]);
+          }
+        }
+      });
+  };
 
   useEffect(() => {
     getMt5AccountList();
-  }, [])
+  }, []);
   return (
     <div>
       <div className="app-content--inner">
@@ -309,17 +312,12 @@ const PositionReport = () => {
                     <div className="card padding-9 animate fadeLeft boxsize">
                       <div className="row">
                         <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">
-                            {resData.total_earnings}{" "}
-                          </h5>
-                          <p className="no-margin">
-                            Total Earning
-                          </p>
+                          <h5 className="mb-0">{resData.total_earnings} </h5>
+                          <p className="no-margin">Total Earning</p>
                         </div>
                       </div>
                     </div>
                   </div>{" "}
-
                 </div>
                 {/* <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} /> */}
                 <Paper
@@ -342,17 +340,18 @@ const PositionReport = () => {
                             sx={{ width: "100%" }}
                             value={param.mt5_acc_no}
                             onChange={(e) => {
-                                console.log(e.target.value);
-                                param.mt5_acc_no = e.target.value;
-                                setParam({...param})
-                              }}>
-                            {
-                                mt5AccountList.map((item) => {
-                                  return (
-                                    <MenuItem value={item.mt5_account_id}>{item.mt5_name}</MenuItem>
-                                  );
-                                })
-                              }
+                              console.log(e.target.value);
+                              param.mt5_acc_no = e.target.value;
+                              setParam({ ...param });
+                            }}
+                          >
+                            {mt5AccountList.map((item) => {
+                              return (
+                                <MenuItem value={item.mt5_account_id}>
+                                  {item.mt5_name}
+                                </MenuItem>
+                              );
+                            })}
                           </Select>
                         </FormControl>
                       </Grid>

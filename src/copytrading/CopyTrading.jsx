@@ -21,7 +21,7 @@ import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import { fromJS } from "draft-js/lib/CharacterMetadata";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -435,7 +435,7 @@ const CopyTrading = () => {
       toast.error("Please enter Phone");
     } else if (form.address == "") {
       toast.error("Please enter Address");
-    } else if (form.email=="") {
+    } else if (form.email == "") {
       toast.error("Please enter email");
     } else if (
       !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email)
@@ -443,14 +443,16 @@ const CopyTrading = () => {
       toast.error("Email format is invaild ");
     } else {
       const param = new FormData();
-      // param.append('is_app', 1);
-      // param.append('AADMIN_LOGIN_ID', 1);  
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
       param.append("copy_master_name", form.name);
       param.append("copy_master_email", form.email);
       param.append("copy_master_phone", form.phone);
       param.append("copy_master_address", form.address);
       param.append("copy_master_profile_pic", form.img);
-        param.append("copy_position", 1);
+      param.append("copy_position", 1);
       param.append("copy_risk_score", form.risk_score);
       param.append("copy_gain", form.gain);
       param.append("copy_profit", form.loss);
@@ -459,15 +461,17 @@ const CopyTrading = () => {
       param.append("all_time_copier", form.copiers_right);
       param.append("commission_percentage", form.commission);
       param.append("copier_country", "india");
-      
-      axios.post(`${Url}/ajaxfiles/create_copy_trading_account.php`, param).then((res) => {
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          handleClose();
-          toast.success("Copy trading account has been added successfully.");
-        }
-      });
+
+      axios
+        .post(`${Url}/ajaxfiles/create_copy_trading_account.php`, param)
+        .then((res) => {
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            handleClose();
+            toast.success("Copy trading account has been added successfully.");
+          }
+        });
     }
   };
 
