@@ -117,11 +117,6 @@ const HistoryKYC = () => {
   });
   const [searchBy, setSearchBy] = useState([
     {
-      label: "DATE",
-      value: false,
-      name: "date",
-    },
-    {
       label: "NAME",
       value: false,
       name: "name",

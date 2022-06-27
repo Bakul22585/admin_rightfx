@@ -432,116 +432,119 @@ const ListRequest = () => {
   // };
   toast.configure();
   const updatePartnership = async () => {
-    var error = false;
-    if (updateDate.structure_data.length > 0) {
-      if (updateDate.structure_name == "") {
-        toast.error("Please enter structure name");
-        error = true;
-      } else {
-        updateDate.structure_data.forEach((element) => {
-          console.log(element.ib_group_name, element.group_rebate);
-          if (element.group_rebate === "") {
-            toast.error(`Please enter ${element.ib_group_name} rebate`);
-            error = true;
-            return false;
-          } else if (element.group_commission === "") {
-            toast.error(`Please enter ${element.ib_group_name} commission`);
-            error = true;
-            return false;
-          } else if (element.ib_group_level_id === 0) {
-            toast.error(`Please enter ${element.ib_group_name} ib group`);
-            error = true;
-            return false;
+    // if (updateDate.structure_data.length > 0) {
+    //   if (updateDate.structure_name == "") {
+    //     toast.error("Please enter structure name");
+    //     error = true;
+    //   } else {
+    //     updateDate.structure_data.forEach((element) => {
+    //       console.log(element.ib_group_name, element.group_rebate);
+    //       if (element.group_rebate === "") {
+    //         toast.error(`Please enter ${element.ib_group_name} rebate`);
+    //         error = true;
+    //         return false;
+    //       } else if (element.group_commission === "") {
+    //         toast.error(`Please enter ${element.ib_group_name} commission`);
+    //         error = true;
+    //         return false;
+    //       } else if (element.ib_group_level_id === 0) {
+    //         toast.error(`Please enter ${element.ib_group_name} ib group`);
+    //         error = true;
+    //         return false;
+    //       } else {
+    //         element.pair_data.forEach((element1) => {
+    //           if (element1.rebate === "") {
+    //             toast.error(
+    //               `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
+    //             );
+    //             error = true;
+    //             return false;
+    //           } else if (element1.rebate > element.group_rebate) {
+    //             // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+    //             toast.error(
+    //               `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
+    //             );
+    //             error = true;
+    //             return false;
+    //           } else if (element1.commission === "") {
+    //             toast.error(
+    //               `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
+    //             );
+    //             error = true;
+    //             return false;
+    //           } else if (element1.commission > element.group_commission) {
+    //             // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+    //             toast.error(
+    //               `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
+    //             );
+    //             error = true;
+    //             return false;
+    //           }
+    //         });
+    //       }
+    //       if (error) {
+    //         return false;
+    //       }
+    //     });
+    //   }
+    //   if (error) {
+    //     return false;
+    //   }
+    // }
+
+    if (updateDate.structure_name == "") {
+      toast.error("Please enter structure name");
+    } else {
+      updateDate.isLoader = true;
+      setUpdateDate({ ...updateDate });
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
+      param.append("requested_user_id", ibdata.requested_user_id);
+      param.append("ib_application_id", ibdata.ib_application_id);
+      param.append("remarks", updateDate.remarks);
+      // param.append('sponsor_approve', updateDate.sponsor_approve);
+      param.append("admin_approve", updateDate.admin_approve);
+      param.append("structure_name", updateDate.structure_name);
+      if (updateDate.structure_id) {
+        param.append("structure_id", updateDate.structure_id);
+        param.append("action", "update_master_structure");
+      }
+      if (updateDate.structure_id == "") {
+        param.append("action", "insert_master_structure");
+      }
+      param.append("pair_data", JSON.stringify(updateDate.structure_data));
+
+      await axios
+        .post(`${Url}/ajaxfiles/structures_manage.php`, param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          updateDate.isLoader = false;
+          setUpdateDate({ ...updateDate });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
           } else {
-            element.pair_data.forEach((element1) => {
-              if (element1.rebate === "") {
-                toast.error(
-                  `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
-                );
-                error = true;
-                return false;
-              } else if (element1.rebate > element.group_rebate) {
-                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-                toast.error(
-                  `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
-                );
-                error = true;
-                return false;
-              } else if (element1.commission === "") {
-                toast.error(
-                  `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
-                );
-                error = true;
-                return false;
-              } else if (element1.commission > element.group_commission) {
-                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-                toast.error(
-                  `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
-                );
-                error = true;
-                return false;
-              }
+            toast.success(res.data.message);
+            setOpenModel(false);
+            setUpdateDate({
+              structure_id: "",
+              sponsor_approve: "",
+              admin_approve: "",
+              remarks: "",
+              structure_name: "",
+              structure_data: [],
+              isLoader: false,
+              refresh: !updateDate.refresh,
+              admin_approve: "",
             });
           }
-          if (error) {
-            return false;
-          }
         });
-      }
-      if (error) {
-        return false;
-      }
     }
-
-    updateDate.isLoader = true;
-    setUpdateDate({ ...updateDate });
-    const param = new FormData();
-    if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-    }
-    param.append("requested_user_id", ibdata.requested_user_id);
-    param.append("ib_application_id", ibdata.ib_application_id);
-    param.append("remarks", updateDate.remarks);
-    // param.append('sponsor_approve', updateDate.sponsor_approve);
-    param.append("admin_approve", updateDate.admin_approve);
-    param.append("structure_name", updateDate.structure_name);
-    if (updateDate.structure_id) {
-      param.append("structure_id", updateDate.structure_id);
-      param.append("action", "update_master_structure");
-    }
-    if (updateDate.structure_id == "") {
-      param.append("action", "insert_master_structure");
-    }
-    param.append("pair_data", JSON.stringify(updateDate.structure_data));
-
-    await axios
-      .post(`${Url}/ajaxfiles/structures_manage.php`, param)
-      .then((res) => {
-        if (res.data.message == "Session has been expired") {
-          localStorage.setItem("login", true);
-          navigate("/");
-        }
-        updateDate.isLoader = false;
-        setUpdateDate({ ...updateDate });
-        if (res.data.status == "error") {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-          setOpenModel(false);
-          setUpdateDate({
-            structure_id: "",
-            sponsor_approve: "",
-            admin_approve: "",
-            remarks: "",
-            structure_name: "",
-            structure_data: [],
-            isLoader: false,
-            refresh: !updateDate.refresh,
-            admin_approve: "",
-          });
-        }
-      });
     // }
   };
   const [searchBy, setSearchBy] = useState([
