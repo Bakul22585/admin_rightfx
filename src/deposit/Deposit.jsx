@@ -200,6 +200,18 @@ const Deposit = () => {
     deposit_id: "",
     isLoader: false,
   });
+  const [storeDepositData, setStoreDepositData] = useState({
+    date: "",
+    name: "",
+    email: "",
+    phone: "",
+    deposit_method: "",
+    amount: "",
+    remark: "",
+    status: "",
+    deposit_id: "",
+    isLoader: false,
+  });
   const [param, setParam] = useState({
     start_date: "",
     end_date: "",
@@ -488,7 +500,7 @@ const Deposit = () => {
           >
             Cancel
           </Button>
-          {viewDepositForm.status == "0" ? (
+          {storeDepositData.status == "0" ? (
             viewDepositForm.isLoader == true ? (
               <Button
                 variant="contained"
@@ -875,7 +887,7 @@ const Deposit = () => {
               value={viewDepositForm.remark}
               onChange={input1}
               focused
-              disabled={viewDepositForm.status == "0" ? false : true}
+              disabled={storeDepositData.status == "0" ? false : true}
             />
             {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
             <FormControl variant="standard" sx={{ width: "100%" }} focused>
@@ -884,7 +896,7 @@ const Deposit = () => {
                 value={viewDepositForm.status}
                 name="status"
                 onChange={input1}
-                disabled={viewDepositForm.status == "0" ? false : true}
+                disabled={storeDepositData.status == "0" ? false : true}
               >
                 <MenuItem value="0">Pending</MenuItem>
                 <MenuItem value="1">Approve</MenuItem>
@@ -1039,6 +1051,18 @@ const Deposit = () => {
           toast.error(res.data.message);
         } else {
           setviewDepositForm({
+            date: res.data.deposit_data.deposit_datetime,
+            name: res.data.deposit_data.name,
+            email: res.data.deposit_data.user_email,
+            phone: res.data.deposit_data.user_phone,
+            deposit_method: res.data.deposit_data.deposit_method,
+            amount: res.data.deposit_data.deposit_amount,
+            remark: res.data.deposit_data.deposit_remarks,
+            status: res.data.deposit_data.deposit_status,
+            deposit_id: id,
+            isLoader: false,
+          });
+          setStoreDepositData({
             date: res.data.deposit_data.deposit_datetime,
             name: res.data.deposit_data.name,
             email: res.data.deposit_data.user_email,

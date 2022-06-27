@@ -5479,7 +5479,7 @@ const Profile = () => {
         toast.error("Please enter structure name");
         error = true;
       } else {
-        newMasterStructureData.structure_data.forEach((element) => {
+        /* newMasterStructureData.structure_data.forEach((element) => {
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5526,7 +5526,7 @@ const Profile = () => {
           if (error) {
             return false;
           }
-        });
+        }); */
       }
       if (error) {
         return false;
@@ -5665,7 +5665,7 @@ const Profile = () => {
         toast.error("Please enter structure name");
         error = true;
       } else {
-        newMasterStructureData.structure_data.forEach((element) => {
+        /* newMasterStructureData.structure_data.forEach((element) => {
           if (element.group_rebate === "") {
             toast.error(`Please enter ${element.ib_group_name} rebate`);
             error = true;
@@ -5712,7 +5712,7 @@ const Profile = () => {
           if (error) {
             return false;
           }
-        });
+        }); */
       }
       if (error) {
         return false;
@@ -7885,7 +7885,10 @@ const Profile = () => {
                             </div>
                           </Paper>
                         </Grid> */}
-                        <Grid item md={12} lg={12} xl={12}>
+                        {userData.data.is_ib_account == "0" ? (
+                          ""
+                        ) : (
+                          <Grid item md={12} lg={12} xl={12}>
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
@@ -7944,6 +7947,8 @@ const Profile = () => {
                             </div>
                           </Paper>
                         </Grid>
+                        )}
+                        
                         <Grid item md={6} lg={6} xl={6}>
                           <Paper
                             elevation={2}

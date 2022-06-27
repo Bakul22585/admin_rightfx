@@ -855,7 +855,7 @@ const IBStructure = () => {
       toast.error("Please enter structure name");
       error = true;
     } else {
-      form.structure_data.forEach((element) => {
+      /* form.structure_data.forEach((element) => {
         console.log(element.ib_group_name, element.group_rebate);
         if (element.group_rebate === "") {
           toast.error(`Please enter ${element.ib_group_name} rebate`);
@@ -889,7 +889,7 @@ const IBStructure = () => {
         if (error) {
           return false;
         }
-      });
+      }); */
     }
     if (error) {
       return false;

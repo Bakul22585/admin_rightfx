@@ -639,6 +639,39 @@ const Sidebar = (prop) => {
                 </li>
                 <li>
                   <a
+                    className={`menu_setting ${open.menu_setting ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <span className="material-icons" style={style}>
+                    room_preferences
+                    </span>
+                    Menu Setting
+                    <span className="sidebar-icon-indicator">
+                      {open.menu_setting ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.menu_setting} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/leads_list" onClick={CloseSidebar}>
+                        Menu Items
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/reminder" onClick={CloseSidebar}>
+                        Permissions
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/change_menu_order" onClick={CloseSidebar}>
+                        Change Menu Order
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
+                <li>
+                  <a
                     className={`logout ${open.logout ? "active" : null}`}
                     onClick={handleClick}
                   >

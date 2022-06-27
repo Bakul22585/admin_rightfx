@@ -1199,6 +1199,7 @@ const HistoryKYC = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setcheckStatus={setcheckStatus}
+                  setParam={setParam}
                 />
                 <br />
                 <Paper

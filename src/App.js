@@ -215,7 +215,7 @@ const App = () => {
                 <Route exact path="/ib_structure" element={<IBStructure />} />
                 <Route exact path="/link" element={<Link />} />
                 <Route exact path="/Salesman" element={<Target />} />
-                <Route exact path="/menu_setting" element={<MenuSetting />} />
+                <Route exact path="/change_menu_order" element={<MenuSetting />} />
                 <Route
                   exact
                   path="/pamm_dashboard"

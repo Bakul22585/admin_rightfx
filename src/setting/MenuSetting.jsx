@@ -105,7 +105,7 @@ const MenuSetting = () => {
                     <div style={{ opacity: 1 }}>
                         <Grid container>
                             <Grid item md={12} lg={12} xl={12}>
-                                <p className="main-heading">Menu Setting</p>
+                                <p className="main-heading">Change Menu Order</p>
 
                                 <Paper
                                     elevation={2}

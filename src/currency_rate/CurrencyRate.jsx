@@ -23,7 +23,7 @@ const CurrencyRate = () => {
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState({
     deposit_rate: "",
-    usd_rate: "",
+    incentive_usd_rate: "",
     withdrawal_rate: "",
   });
   useEffect(() => {
@@ -57,6 +57,7 @@ const CurrencyRate = () => {
         setData({
           deposit_rate: res.data.deposit_rate,
           withdrawal_rate: res.data.withdrawal_rate,
+          incentive_usd_rate: res.data.incentive_usd_rate,
         });
       }
     });
@@ -64,7 +65,7 @@ const CurrencyRate = () => {
   //   useState
 
   const onSubmit = async () => {
-    if (!data.usd_rate) {
+    if (!data.incentive_usd_rate) {
       toast.error("Insantive USD rate is requied");
     } else if (!data.deposit_rate) {
       toast.error("Deposit rate is requied");
@@ -80,7 +81,7 @@ const CurrencyRate = () => {
       param.append("action", "update_rate");
       param.append("deposit_rate", data.deposit_rate);
       param.append("withdrawal_rate", data.withdrawal_rate);
-      param.append("insantive_usd_rate", data.usd_rate);
+      param.append("incentive_usd_rate", data.incentive_usd_rate);
       await axios
         .post(`${Url}/ajaxfiles/currency_manage.php`, param)
         .then((res) => {
@@ -118,10 +119,10 @@ const CurrencyRate = () => {
                         <div className="input-section">
                           <TextField
                             label="Insantive USD Rate"
-                            value={data.usd_rate}
+                            value={data.incentive_usd_rate}
                             variant="standard"
                             sx={{ width: "100%" }}
-                            name="usd_rate"
+                            name="incentive_usd_rate"
                             type="number"
                             onChange={onChange}
                           />
