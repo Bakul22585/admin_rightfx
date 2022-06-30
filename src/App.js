@@ -8,7 +8,7 @@ import Deposit from "./deposit/Deposit.jsx";
 import Withdraw from "./withdraw/Withdraw.jsx";
 import DepositHistory from "./deposit_history/DepositHistory";
 import WithdrawHistory from "./withdraw_history/WithdrawHistory";
-import Employees from "./employees/Employees";
+// import Employees from "./employees/Employees";
 import RoleManagement from "./role_management/RoleManagement";
 import ClientList from "./client_list/ClientList";
 import ListRequest from "./list_request/ListRequest";
@@ -58,6 +58,7 @@ import MmManagement from "./pamm/MmManagement";
 import InvestorRequest from "./pamm/InvestorRequest";
 import PammUser from "./pamm/PammUser";
 import SalesReport from "./report/SalesReport";
+import Employees from "./Staff/Employees";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -119,6 +120,7 @@ const App = () => {
                   path="/role_management"
                   element={<RoleManagement />}
                 />
+                <Route exact path="/client_list" element={<ClientList />} />
                 <Route exact path="/client_list" element={<ClientList />} />
                 <Route exact path="/client_list/:id" element={<ClientList />} />
                 <Route exact path="/list_request" element={<ListRequest />} />

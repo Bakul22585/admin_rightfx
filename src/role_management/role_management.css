@@ -154,3 +154,37 @@
     min-width: 640px;
     padding: 5px;
 }
+.main-menu-section {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    padding: 5px;
+    border-radius: 10px;
+    list-style: none;
+}
+.main-menu-section div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.main-menu-section a {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 5px;
+}
+.role-management-section {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.sub-menu-section {
+    list-style: none;
+    width: 100%;
+    padding: 0 65px;
+}
+.sub-menu-section li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}

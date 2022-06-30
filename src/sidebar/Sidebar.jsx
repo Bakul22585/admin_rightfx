@@ -21,6 +21,7 @@ const Sidebar = (prop) => {
     trading: false,
     platforms: false,
     contests: false,
+    staff: false,
   });
   const CloseSidebar = () => {
     prop.setSidebar(false);
@@ -122,6 +123,34 @@ const Sidebar = (prop) => {
                     Employees
                   </NavLink>
                 </li> */}
+                <li>
+                  <a
+                    className={`staff ${open.staff ? "active" : ""}`}
+                    onClick={handleClick}
+                  >
+                    <span className="material-icons" style={style}>
+                      list_alt
+                    </span>
+                    Staff
+                    <span className="sidebar-icon-indicator">
+                      {open.staff ? <ExpandMore /> : <ExpandLess />}
+                    </span>
+                  </a>
+                  <Collapse in={open.staff} timeout="auto" unmountOnExit>
+                    <ul>
+                      <li>
+                        <NavLink to="/employees" onClick={CloseSidebar}>
+                          Employees
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/role_management" onClick={CloseSidebar}>
+                          Role Management
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </Collapse>
+                </li>
                 <li>
                   <NavLink
                     className="nav-link-simple "
