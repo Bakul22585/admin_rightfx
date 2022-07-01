@@ -21,35 +21,115 @@ const CreateRole = () => {
   });
   const [form, setForm] = useState({
     role: id,
+    name: "",
+    description: "",
+    accessId: "",
+    isLoader: false
   });
-  var [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   toast.configure();
+
   const updateRole = () => {
-    toast.success(`${id} role has been updated successfully.`);
-    navigate("/role_management");
+    if (form.name == "") {
+      toast.error("Please enter role name");
+    } else if (form.description == "") {
+      toast.error("Please enter role description");
+    } else {
+      var activeMenuIds = [];
+      data.forEach((element) => {
+        if (element.active == true) {
+          activeMenuIds.push(element.menu_id);
+          var subMenuactiveIds = element.sub_menu_list.filter((x) => x.active == true).map((sub) => {
+            return sub.menu_id;
+          });
+          activeMenuIds.push(...subMenuactiveIds);
+        }
+      })
+
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
+      param.append("action", "edit_role");
+      param.append("role_id", id);
+      param.append("role_name", form.name);
+      param.append("role_description", form.description);
+      param.append("menu_access_menu_ids", activeMenuIds.join(','));
+      axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          navigate("/role_management");
+        }
+      });
+    }
   };
+
   const createRole = () => {
-    toast.success(`${form.role} role has been created successfully.`);
-    navigate("/role_management");
+    if (form.name == "") {
+      toast.error("Please enter role name");
+    } else if (form.description == "") {
+      toast.error("Please enter role description");
+    } else {
+      var activeMenuIds = [];
+      data.forEach((element) => {
+        if (element.active == true) {
+          activeMenuIds.push(element.menu_id);
+          var subMenuactiveIds = element.sub_menu_list.filter((x) => x.active == true).map((sub) => {
+            return sub.menu_id;
+          });
+          activeMenuIds.push(...subMenuactiveIds);
+        }
+      })
+
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      }
+      param.append("action", "add_role");
+      param.append("role_name", form.name);
+      param.append("role_description", form.description);
+      param.append("menu_access_menu_ids", activeMenuIds.join(','));
+      axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          navigate("/role_management");
+        }
+      });
+    }
   };
-  useEffect(() => {
-    getRolemanList();
-  }, []);
+
   const getRolemanList = () => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
-    param.append("action", "list_permissions");
+    if (id) {
+      param.append("role_id", id);
+      param.append("action", "view_role_details");
+    } else {
+      param.append("action", "list_permissions");
+    }
     axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
       if (res.data.status == "error") {
       } else {
         setData(res.data.data);
-        console.log("role data", data);
+        if (id) {
+          setForm({
+            name: res.data.role_name,
+            description: res.data.role_description,
+          });
+        }
       }
     });
   };
+
   const input = (event) => {
     const { name, value } = event.target;
     setForm((prevalue) => {
@@ -62,16 +142,20 @@ const CreateRole = () => {
 
   const handleClick = (e) => {
     const name = e.target.classList[0];
-    console.log(name);
-    setOpen((preValue) => {
-      return {
-        // ...preValue,
-        [name]: !open[name],
-      };
-    });
+    if (name.startsWith("menu-")) {
+      setOpen((preValue) => {
+        return {
+          ...preValue,
+          [name]: !open[name],
+        };
+      });
+    }
   };
 
-  console.log("id", id);
+  useEffect(() => {
+    getRolemanList();
+  }, []);
+
   return (
     <div>
       <div className="app-content--inner">
@@ -94,10 +178,34 @@ const CreateRole = () => {
                         type="text"
                         className="create-role-input"
                         placeholder="Role Name"
-                        name="role"
-                        value={form.role}
+                        name="name"
+                        value={form.name}
                         onChange={input}
                       />
+                    </div>
+                    <div className="input-section">
+                      <input
+                        type="text"
+                        className="create-role-input"
+                        placeholder="Role Description"
+                        name="description"
+                        value={form.description}
+                        onChange={input}
+                      />
+                    </div>
+                    <div className="input-section">
+                      <label>All <small>(select/unselect)</small></label>
+                      <Switch
+                      onChange={(e) => {
+                        data.forEach((element) => {
+                          element.active = e.target.checked;
+                          element.sub_menu_list.forEach((subMenu) => {
+                            subMenu.active = e.target.checked;
+                          });
+                        });
+                        setData([...data]);
+                      }}
+                    />
                     </div>
                     {/* <br/> */}
                     <ul className="role-management-section">
@@ -105,28 +213,32 @@ const CreateRole = () => {
                         return (
                           <li className="main-menu-section">
                             <a
-                              className={`menu-${index} ${
-                                open[`menu-${index}`] ? "active" : ""
-                              }`}
+                              className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""
+                                }`}
                               onClick={handleClick}
                             >
                               <div>
-                                <i className="material-icons">
+                                <i className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""} material-icons`}  onClick={handleClick}>
                                   {item.icon_class}
                                 </i>
-                                <span>{item.menu_name}</span>
+                                <span className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""
+                                }`} onClick={handleClick}>{item.menu_name} <small>({item.menu_label})</small> {(item.description == "" || item.description == null) ? "" : "- "+item.description} </span>
                               </div>
 
                               <div>
                                 <Switch
-                                  //   checked={checked}
+                                  checked={item.active ? item.active : false}
                                   onChange={(e) => {
-                                    console.log("target", e.target.checked);
+                                    item.active = e.target.checked;
+                                    item.sub_menu_list.forEach((element) => {
+                                      element.active = e.target.checked;
+                                    });
+                                    setData([...data]);
                                   }}
                                 />
                                 {item.sub_menu_list.length > 0 ? (
                                   <span
-                                    className="sidebar-icon-indicator"
+                                    className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""} sidebar-icon-indicator`}
                                     onClick={handleClick}
                                   >
                                     {open[`menu-${index}`] ? (
@@ -150,9 +262,19 @@ const CreateRole = () => {
                                 <ul className="sub-menu-section">
                                   {item.sub_menu_list.map((subMenu) => {
                                     return (
-                                      <li className="sub-menu">
-                                        <span>{subMenu.menu_name}</span>
-                                        <Switch />
+                                      <li className={`sub-menu ${(subMenu.menu_label == "Permission") ? "permission" : ""}`}>
+                                        <span className="sub-menu-title">{subMenu.menu_name} <small>({subMenu.menu_label})</small>  {(subMenu.description == "" || subMenu.description == null) ? "" : "- "+subMenu.description}</span>
+                                        <Switch checked={subMenu.active ? subMenu.active : false} onChange={(e) => {
+                                          subMenu.active = e.target.checked;
+                                          // setData([...data]);
+                                          var activeMenu = item.sub_menu_list.filter((x) => x.active == true);
+                                          if (activeMenu.length > 0) {
+                                            item.active = true;
+                                          } else {
+                                            item.active = false;
+                                          }
+                                          setData([...data]);
+                                        }} />
                                       </li>
                                     );
                                   })}

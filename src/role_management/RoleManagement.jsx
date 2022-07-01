@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import CommonFilter from "../common/CommonFilter";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
+import axios from "axios";
 
 const RoleManagement = () => {
   const column = [
@@ -48,7 +49,7 @@ const RoleManagement = () => {
           <div className="actionButtonGroup">
             <Button
               className="btn-edit"
-              onClick={(event) => gotoCreateRole(event, row.role_name)}
+              onClick={(event) => gotoCreateRole(event, row)}
               {...row}
               style={{ color: "rgb(144 145 139)" }}
             >
@@ -56,7 +57,7 @@ const RoleManagement = () => {
             </Button>
             <Button
               className="btn-close"
-              onClick={(event) => actionMenuPopup(event, row.sr_no)}
+              onClick={(event) => actionMenuPopup(event, row)}
               {...row}
               style={{ color: "rgb(144 145 139)" }}
             >
@@ -71,6 +72,7 @@ const RoleManagement = () => {
   ];
 
   const [open, setOpen] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
   const [openTableMenus, setOpenTableMenus] = useState([]);
@@ -106,18 +108,17 @@ const RoleManagement = () => {
     navigate("/createRole");
   };
 
-  const gotoCreateRole = (e, id) => {
-    console.log("goto profile page", e.target, id);
-    navigate("/createRole/" + id);
+  const gotoCreateRole = (e, data) => {
+    navigate("/createRole/" + data.role_id);
   };
 
-  const actionMenuPopup = (e, index) => {
+  const actionMenuPopup = (e, data) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
           <div className="custom-ui">
             <h1>Are you sure?</h1>
-            <p>Do you want to delete this?</p>
+            <p>Do you want to delete this role?</p>
             <div className="confirmation-alert-action-button">
               <Button
                 variant="contained"
@@ -130,6 +131,7 @@ const RoleManagement = () => {
                 variant="contained"
                 className="btn-gradient btn-danger"
                 onClick={() => {
+                  deleterole(data);
                   onClose();
                 }}
               >
@@ -141,6 +143,24 @@ const RoleManagement = () => {
       },
     });
   };
+
+  const deleterole = (data) => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+    }
+    param.append("role_id", data.role_id);
+    param.append("action", "delete_role");
+    axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
+        setRefresh(!refresh);
+      }
+    });
+  }
   console.log(searchKeyword);
   return (
     <div>
@@ -174,6 +194,7 @@ const RoleManagement = () => {
                     search={searchBy}
                     searchWord={searchKeyword}
                     param={param}
+                    refresh={refresh}
                   />
                 </Paper>
               </Grid>
