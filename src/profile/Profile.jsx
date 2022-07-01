@@ -6518,15 +6518,15 @@ const Profile = () => {
         }
         if (transactionForm.upi_crypto_ac_number) {
           param.append(
-            "upi_crypto_ac_number ",
+            "upi_crypto_ac_number",
             transactionForm.upi_crypto_ac_number
           );
         }
         if (transactionForm.user_bank_id) {
-          param.append("user_bank_id ", transactionForm.user_bank_id);
+          param.append("user_bank_id", transactionForm.user_bank_id);
         }
         if (transactionForm.upi_name) {
-          param.append("upi_name ", transactionForm.upi_name);
+          param.append("upi_name", transactionForm.upi_name);
         }
         param.append("amount", transactionForm.amount);
         param.append("action", "add_withdraw");
