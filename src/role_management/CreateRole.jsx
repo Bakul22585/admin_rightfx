@@ -111,7 +111,7 @@ const CreateRole = () => {
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
     if (id) {
-      param.append("role_id", id);
+      param.append("view_role_id", id);
       param.append("action", "view_role_details");
     } else {
       param.append("action", "list_permissions");

@@ -1,12 +1,20 @@
 import { Button, CardContent, Grid, Input, Paper } from '@mui/material';
 import React from 'react'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from "axios";
 import './setting.css';
+import { IsApprove, Url } from '../global';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MenuSetting = () => {
-    let list = ['Dashboard', 'Role Management', 'Client List', 'Lead', 'KYC', 'IB Management', 'Deposit', 'Withdrawal', 'IB Withdraw', 'Marketing', 'Reports', 'Admin Accounts', 'FAQ Editor', 'Activity Log', 'Notification', 'Ticket', 'Currency Rate', 'Popup Image', 'Settings', 'logout'];
+
+    const navigate = useNavigate();
+    let list = [];
     let sourceElement = null;
     const [sortedList, setSortedList] = useState(list);
+    toast.configure();
 
     const handleDragStart = (event) => {
         event.target.style.opacity = 0.5
@@ -23,7 +31,7 @@ const MenuSetting = () => {
         event.target.classList.add('over')
         document.querySelector(".over").closest(".dnd-list").classList.add('over');
     }
-    
+
     const handleDragLeave = (event) => {
         document.querySelector(".over").closest(".dnd-list").classList.remove('over');
         event.target.classList.remove('over')
@@ -91,13 +99,41 @@ const MenuSetting = () => {
                     onDragEnd={handleDragEnd}
                     onChange={handleChange}
                     placeholder='Enter text here'
-                    value={sortedList[i]}
+                    value={item.menu_name}
                 />
             </div>
         )
         )
     }
-    
+
+    const getParentMenus = () => {
+        const param = new FormData();
+        if (IsApprove !== "") {
+            param.append("is_app", IsApprove.is_app);
+            param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
+        param.append("action", "view_parent_menus");
+        axios.post(Url + "/ajaxfiles/menu_manage.php", param).then((res) => {
+            if (res.data["status"] == "error" && res.data["message"] == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+              }
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                setSortedList([...res.data.data]);
+            }
+        });
+    }
+
+    const save = () => {
+        console.log('sorted list', sortedList);
+    }
+
+    useEffect(() => {
+        getParentMenus();
+    }, [])
+
     return (
         <div>
             <div className="app-content--inner">
@@ -132,12 +168,13 @@ const MenuSetting = () => {
                                                         </Button>
                                                     ) : (
                                                     )} */}
-                                                        <Button
-                                                            variant="contained"
-                                                            className="btn-success"
-                                                        >
-                                                            Save
-                                                        </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        className="btn-success"
+                                                        onClick={save}
+                                                    >
+                                                        Save
+                                                    </Button>
                                                 </div>
                                             </Grid>
                                         </Grid>

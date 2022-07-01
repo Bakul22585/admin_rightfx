@@ -682,7 +682,7 @@ const Sidebar = (prop) => {
                   <Collapse in={open.menu_setting} timeout="auto" unmountOnExit>
                     <ul>
                       <li>
-                        <NavLink to="/leads_list" onClick={CloseSidebar}>
+                        <NavLink to="/menu_item" onClick={CloseSidebar}>
                         Menu Items
                         </NavLink>
                       </li>
