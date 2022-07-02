@@ -83,7 +83,6 @@ const MenuSetting = () => {
     }
 
     const listItems = () => {
-
         return sortedList.map((item, i) => (
             <div key={i} className='dnd-list'>
                 <input
@@ -100,6 +99,7 @@ const MenuSetting = () => {
                     onChange={handleChange}
                     placeholder='Enter text here'
                     value={item.menu_name}
+                    readOnly
                 />
             </div>
         )
@@ -127,7 +127,25 @@ const MenuSetting = () => {
     }
 
     const save = () => {
-        console.log('sorted list', sortedList);
+        const param = new FormData();
+        if (IsApprove !== "") {
+            param.append("is_app", IsApprove.is_app);
+            param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        }
+        param.append("action", "order_main_menu");
+        param.append("main_menu_ids", JSON.stringify(sortedList));
+        axios.post(Url + "/ajaxfiles/menu_manage.php", param).then((res) => {
+            if (res.data["status"] == "error" && res.data["message"] == "Session has been expired") {
+                localStorage.setItem("login", true);
+                navigate("/");
+              }
+            if (res.data.status == "error") {
+                toast.error(res.data.message);
+            } else {
+                toast.success(res.data.message);
+                getParentMenus();
+            }
+        });
     }
 
     useEffect(() => {

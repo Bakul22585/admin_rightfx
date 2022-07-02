@@ -268,6 +268,10 @@ const Leads = () => {
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         // toast.error(res.data.message);
       } else {
@@ -285,6 +289,10 @@ const Leads = () => {
     param.append("action", "list_managers");
 
     axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         // toast.error(res.data.message);
       } else {
@@ -1857,6 +1865,10 @@ const Leads = () => {
     param.append("inquiry_id", data.inquiry_id);
     param.append("interest", e.target.value);
     axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       toast.success(res.data.message);
       setCpData((preValue) => {
         return {

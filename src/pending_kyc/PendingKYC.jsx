@@ -499,8 +499,12 @@ const PendingKYC = () => {
       param.append("kyc_id", data.kyc_id);
       param.append("action", "approve_kyc");
       axios.post(Url + "/ajaxfiles/kyc_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setRefresh(!refresh);
-        toast.success("KYC has been successfully completed.");
+        toast.success(res.data.message);
       });
     } else if (status == "rejected") {
       console.log("data", data);
@@ -512,8 +516,12 @@ const PendingKYC = () => {
       param.append("kyc_id", data.kyc_id);
       param.append("action", "reject_kyc");
       axios.post(Url + "/ajaxfiles/kyc_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setRefresh(!refresh);
-        toast.success("KYC has been successfully rejected.");
+        toast.success(res.data.message);
       });
     }
   };

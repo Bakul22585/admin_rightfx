@@ -57,6 +57,10 @@ const CreateRole = () => {
       param.append("role_description", form.description);
       param.append("menu_access_menu_ids", activeMenuIds.join(','));
       axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -94,6 +98,10 @@ const CreateRole = () => {
       param.append("role_description", form.description);
       param.append("menu_access_menu_ids", activeMenuIds.join(','));
       axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -117,7 +125,12 @@ const CreateRole = () => {
       param.append("action", "list_permissions");
     }
     axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
+        toast.error(res.data.message);
       } else {
         setData(res.data.data);
         if (id) {

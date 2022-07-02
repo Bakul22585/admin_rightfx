@@ -137,6 +137,10 @@ const CommonFilter = (prop) => {
     param.append("action", "list_managers");
 
     axios.post(Url + "/ajaxfiles/change_lead_data.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         // toast.error(res.data.message);
       } else {

@@ -59,7 +59,7 @@ import InvestorRequest from "./pamm/InvestorRequest";
 import PammUser from "./pamm/PammUser";
 import SalesReport from "./report/SalesReport";
 import Employees from "./Staff/Employees";
-import MenuItem from "./setting/MeniItem";
+import MenuItems from "./setting/MenuItems";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -219,7 +219,7 @@ const App = () => {
                 <Route exact path="/link" element={<Link />} />
                 <Route exact path="/Salesman" element={<Target />} />
                 <Route exact path="/change_menu_order" element={<MenuSetting />} />
-                <Route exact path="/menu_item" element={<MenuItem />} />
+                <Route exact path="/menu_item" element={<MenuItems />} />
                 <Route
                   exact
                   path="/pamm_dashboard"

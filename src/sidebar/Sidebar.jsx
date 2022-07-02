@@ -151,7 +151,7 @@ const Sidebar = (prop) => {
                     </ul>
                   </Collapse>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink
                     className="nav-link-simple "
                     to="/role_management"
@@ -162,7 +162,7 @@ const Sidebar = (prop) => {
                     </span>
                     Role Management
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink
                     className="nav-link-simple "
@@ -686,11 +686,11 @@ const Sidebar = (prop) => {
                         Menu Items
                         </NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/reminder" onClick={CloseSidebar}>
                         Permissions
                         </NavLink>
-                      </li>
+                      </li> */}
                       <li>
                         <NavLink to="/change_menu_order" onClick={CloseSidebar}>
                         Change Menu Order

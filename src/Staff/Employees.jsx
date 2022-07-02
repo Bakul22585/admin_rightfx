@@ -193,6 +193,10 @@ const Employees = () => {
     }
     param.append("action", "get_roles");
     axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       list.roleList = res.data.data;
       setList({ ...list });
     });
@@ -206,6 +210,10 @@ const Employees = () => {
     }
     param.append("action", "get_manager_master");
     axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       list.mangerList = res.data.data;
       setList({ ...list });
     });
@@ -252,6 +260,10 @@ const Employees = () => {
       form.isLoader = true;
       setForm({ ...form });
       axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
           form.isLoader = false;
@@ -278,6 +290,10 @@ const Employees = () => {
     form.isLoader = true;
     setForm({ ...form });
     axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         toast.error(res.data.message);
         form.isLoader = false;
@@ -331,6 +347,10 @@ const Employees = () => {
       form.isLoader = true;
       setForm({ ...form });
       axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
           form.isLoader = false;

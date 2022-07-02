@@ -153,6 +153,10 @@ const RoleManagement = () => {
     param.append("role_id", data.role_id);
     param.append("action", "delete_role");
     axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
