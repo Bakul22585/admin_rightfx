@@ -1193,10 +1193,11 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1243,9 +1244,10 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "get_my_structure");
@@ -1363,9 +1365,10 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "get_mt5_account_list_live");
 
@@ -1383,9 +1386,10 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "list_my_structures");
 
@@ -1407,9 +1411,10 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param1.append("user_id", id);
 
@@ -1499,9 +1504,10 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     if (res) {
@@ -1532,9 +1538,10 @@ const Profile = () => {
 
   const getPartnershipMasterStructure = (res) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     if (res) {
@@ -1567,9 +1574,10 @@ const Profile = () => {
 
   const getBankList = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "view_bank_details");
@@ -1587,10 +1595,11 @@ const Profile = () => {
   const getwalletBalance = () => {
     if (transactionForm.account == "Wallet") {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("action", "view_balance");
       axios
@@ -1607,9 +1616,10 @@ const Profile = () => {
 
   const getMtBalance = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("from_mt5_account_id", transactionForm.from_mt5_account_id);
@@ -1625,9 +1635,10 @@ const Profile = () => {
 
   const getMt5LivePackages = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     axios
@@ -4969,9 +4980,10 @@ const Profile = () => {
 
   const createMt5AccountSubmit = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
 
     if (createMt5Form.account_type == "") {
@@ -5047,9 +5059,10 @@ const Profile = () => {
 
   const getMt5AccountStatus = (mt5ID) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("mt5_id", mt5ID);
@@ -5087,10 +5100,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -5150,10 +5164,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -5215,10 +5230,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -5271,10 +5287,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -5346,10 +5363,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -5397,10 +5415,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("password", changePassword.password);
       param.append("confirm_password", changePassword.new_password);
@@ -5435,10 +5454,11 @@ const Profile = () => {
       pammAccess.isLoader = true;
       setPammAccess({ ...pammAccess });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("is_pamm", pammAccess.status);
       param.append("action", "update_is_pamm");
@@ -5534,9 +5554,10 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append(
@@ -5624,9 +5645,10 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append(
@@ -5720,9 +5742,10 @@ const Profile = () => {
     }
 
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append(
@@ -5760,9 +5783,10 @@ const Profile = () => {
 
   useEffect(() => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
@@ -5821,10 +5845,11 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -5882,10 +5907,11 @@ const Profile = () => {
       toast.error("Please select employment industry");
     } else {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("employment_status", employmentDetailsForm.status);
       param.append("inudstry", employmentDetailsForm.industry);
@@ -6018,10 +6044,11 @@ const Profile = () => {
       toast.error("Please select client");
     } else {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("client_id", linkClientForm.client);
       param.append("action", "link_client");
@@ -6058,10 +6085,11 @@ const Profile = () => {
       toast.error("Please enter master account id");
     } else {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("sponsor_id", linkIBForm.customer_name);
       param.append("action", "link_ib");
@@ -6115,10 +6143,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       // param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -6170,10 +6199,11 @@ const Profile = () => {
       toast.error("Please select control panel access");
     } else {
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("action", "update_cp_access");
       param.append("user_status", cpAccessForm.status);
@@ -6226,10 +6256,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
-      if (IsApprove !== "") {
-        param.append("is_app", IsApprove.is_app);
-        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      }
+ if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -6772,9 +6803,10 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     userData.isLoader = true;
@@ -6803,9 +6835,10 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "get_general_information");
@@ -6852,9 +6885,10 @@ const Profile = () => {
 
   const getReferralData = async (structure_id) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("structure_id", structure_id);
@@ -6879,9 +6913,10 @@ const Profile = () => {
 
   const getSalesList = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "list_salesman");
 
@@ -6902,9 +6937,10 @@ const Profile = () => {
 
   const getLinkClientList = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
 
@@ -6928,9 +6964,10 @@ const Profile = () => {
 
   const getIBUserList = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "list_ib_users");
 
@@ -6952,9 +6989,10 @@ const Profile = () => {
 
   const unlinkIB = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "unlink_ib");
@@ -6976,9 +7014,10 @@ const Profile = () => {
 
   const viewCPPassword = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "view_cp_password");
@@ -7001,9 +7040,10 @@ const Profile = () => {
 
   const getCpAccessSetting = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "view_cp_access");
@@ -7026,9 +7066,10 @@ const Profile = () => {
 
   const getMyTraders = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
 
@@ -7048,9 +7089,10 @@ const Profile = () => {
 
   const getMyChildTrader = (childId) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("client_id", childId);
@@ -7081,9 +7123,10 @@ const Profile = () => {
 
   const getMyAssignedStructure = () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "get_my_assigned_structure");
@@ -7106,9 +7149,10 @@ const Profile = () => {
 
   const sendMT5PasswordMail = async (data) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "mail_mt5_password");
     param.append("user_id", data.user_id);
@@ -7139,9 +7183,10 @@ const Profile = () => {
     getSalesList();
 
     const param = new FormData();
-    if (IsApprove !== "") {
+ if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
     param.append("action", "get_leverages");

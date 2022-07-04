@@ -9,6 +9,7 @@ const ClientUrl = "https://rightfx.alphapixclients.com";
 const IsApprove = {
   is_app: "1",
   AADMIN_LOGIN_ID: "1",
+  AADMIN_LOGIN_ROLE_ID:"1"
 };
 
 const UserInfo = {};

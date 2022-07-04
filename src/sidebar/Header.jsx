@@ -139,41 +139,20 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {/* {onClose ? (
-              <IconButton
-                  aria-label="close"
-                  onClick={onClose}
-                  sx={{
-                      position: 'absolute',
-                      right: 8,
-                      top: 8,
-                      color: (theme) => theme.palette.grey[500],
-                  }}
-              >
-                  <CloseIcon />
-              </IconButton>
-          ) : null} */}
+
     </DialogTitle>
   );
 };
 
 const Header = (prop) => {
-  // const { t } = useTranslation();
 
-  // const currentLanguageCode = cookies.get("i18next") || "en";
-  // const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
-  /*  useEffect(() => {
-     console.log(currentLanguage.dir);
-     document.body.dir = currentLanguage.dir || 'ltr'
-     // document.title = t('app_title')
-     prop.setClang(currentLanguage.dir)
-   }, [currentLanguage]); */
   const navigate = useNavigate();
+  const [prefrence, setPrefrence] = useState({});
+
   const [age, setAge] = React.useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
     console.log(event.target.value);
-    // i18next.changeLanguage(event.target.value);
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -210,6 +189,9 @@ const Header = (prop) => {
     setOpenModel(false);
   };
 
+  useEffect(()=>{
+    fetchUserPref()
+  },[])
   const input1 = (event) => {
     const { name, value } = event.target;
     setinfo((prevalue) => {
@@ -226,20 +208,48 @@ const Header = (prop) => {
       navigate("/master/" + info["search"]);
     }
   };
-
+  const fetchUserPref = async () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    await axios
+      .post(`${Url}/ajaxfiles/get_user_prefrence.php`, param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          // localStorage.setItem("login", true);
+          //   prop.setLogin("true");
+          //   navigate("/dashboard");
+          // navigate("/login");
+        }
+        setPrefrence(res.data);
+      });
+  };
+  const str = () => {
+    if (prefrence.user_name) {
+      const str = prefrence.user_name.split(" ");
+      const firstname = str[0].charAt(0);
+      const lastname = str[1].charAt(0);
+      console.log("lastname", firstname + lastname);
+      return (firstname + lastname).toUpperCase();
+    }
+  };
   const Logout = async () => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
-
     await axios.post(Url + "/ajaxfiles/logout.php", param).then((res) => {
       localStorage.setItem("login", true);
       prop.setLogin("true");
       navigate("/login");
     });
   };
+
 
   const MyAccount = () => {
     setAnchorEl(null);
@@ -262,6 +272,7 @@ const Header = (prop) => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("old_password", form.current_password);
       param.append("new_password", form.new_password);
@@ -341,9 +352,9 @@ const Header = (prop) => {
         </form> */}
         <ButtonBase onClick={handleClick}>
           <span className="MuiButton-label">
-            <Avatar sx={{ bgcolor: "#2a3f73" }}>RA</Avatar>{" "}
+            <Avatar sx={{ bgcolor: "#2a3f73" }}> <span>{str()}</span></Avatar>{" "}
           </span>
-          <span className="d-none d-md-inline-block mx-2">RightFx Admin</span>
+          <span className="d-none d-md-inline-block mx-2">{prefrence.user_name}</span>
           <KeyboardArrowDownIcon />
         </ButtonBase>
         <Menu
@@ -369,9 +380,9 @@ const Header = (prop) => {
               <Avatar sx={{ bgcolor: "#2a3f73" }}>RA</Avatar>
               <div className="mx-3">
                 <h6 className="font-weight-bold mb-1 text-black">
-                  RightFx Admin
+                {prefrence.user_name}
                 </h6>
-                <p className="text-black-50 mb-0">rightfx@gmail.com</p>
+                <p className="text-black-50 mb-0">{prefrence.user_email}</p>
               </div>
             </div>
             <div className="divider"></div>

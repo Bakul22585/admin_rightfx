@@ -190,6 +190,7 @@ const Employees = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "get_roles");
     axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
@@ -207,6 +208,7 @@ const Employees = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "get_manager_master");
     axios.post(Url + "/ajaxfiles/employee_manage.php", param).then((res) => {
@@ -226,10 +228,10 @@ const Employees = () => {
     } else if (form.user_email == "") {
       toast.error("Email is required");
     } else if (form.user_phone == "") {
-      toast.error("Email is required");
+      toast.error("Phone number is required");
     } else if (form.role_id == "" || form.role_id == "0") {
       toast.error("Role is required");
-    } else if (form.manger_master_id == "") {
+    } else if (form.manger_master_id == "" && form.role_id == "3") {
       toast.error("Manger is required");
     } else if (form.ac_target == "" && form.role_id == "3") {
       toast.error("Account target is required");
@@ -243,16 +245,20 @@ const Employees = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      if(form.role_id == "3"){
+        param.append("manger_master_id", form.manger_master_id);
+        param.append("ac_target", form.ac_target);
+        param.append("money_in_target", form.money_in_target);
       }
       param.append("action", "edit_employee");
       param.append("user_first_name", form.user_first_name);
       param.append("user_last_name", form.user_last_name);
       param.append("user_email", form.user_email);
       param.append("user_password", form.user_password);
-      param.append("role_id", form.role_id);
-      param.append("manger_master_id", form.manger_master_id);
-      param.append("ac_target", form.ac_target);
-      param.append("money_in_target", form.money_in_target);
+      param.append("employee_role_id", form.role_id);
+     
       param.append("user_status", form.user_status);
       param.append("user_phone", form.user_phone);
 
@@ -284,6 +290,7 @@ const Employees = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "delete_employee");
     param.append("user_id", form.user_id);
@@ -318,7 +325,7 @@ const Employees = () => {
       toast.error("Email is required");
     } else if (form.role_id == "" || form.role_id == "0") {
       toast.error("Role is required");
-    } else if (form.manger_master_id == "") {
+    } else if (form.manger_master_id == "" && form.role_id == "3") {
       toast.error("Manger is required");
     } else if (form.ac_target == "" && form.role_id == "3") {
       toast.error("Account target is required");
@@ -332,16 +339,21 @@ const Employees = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      if(form.role_id == "3")
+      {
+        param.append("manger_master_id", form.manger_master_id);
+        param.append("ac_target", form.ac_target);
+        param.append("money_in_target", form.money_in_target);
       }
       param.append("action", "add_employee");
       param.append("user_first_name", form.user_first_name);
       param.append("user_last_name", form.user_last_name);
       param.append("user_email", form.user_email);
       param.append("user_password", form.user_password);
-      param.append("role_id", form.role_id);
-      param.append("manger_master_id", form.manger_master_id);
-      param.append("ac_target", form.ac_target);
-      param.append("money_in_target", form.money_in_target);
+      param.append("employee_role_id", form.role_id);
+     
       param.append("user_status", form.user_status);
       param.append("user_phone", form.user_phone);
       form.isLoader = true;
@@ -518,8 +530,6 @@ const Employees = () => {
                   <MenuItem value="0">Pending</MenuItem>
 
                   <MenuItem value="1">Approve</MenuItem>
-
-                  <MenuItem value="2">Rejected</MenuItem>
                 </Select>
               </FormControl>
             </div>{" "}

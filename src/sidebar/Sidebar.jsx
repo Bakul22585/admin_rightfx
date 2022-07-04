@@ -58,10 +58,10 @@ const Sidebar = (prop) => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", UserInfo.AADMIN_LOGIN_ID);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append('action', 'sidebar_menus');
-    param.append("role_id", UserInfo.AADMIN_LOGIN_ROLE_ID);
     axios.post(`${Url}/ajaxfiles/menu_manage.php`, param).then((res) => {
       if (res.data.status == 'error') {
         toast.error(res.data.message);
