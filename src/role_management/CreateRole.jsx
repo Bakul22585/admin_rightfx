@@ -186,7 +186,8 @@ const CreateRole = () => {
                   className="pending-all-15px"
                 >
                   <div className="create-role-content-section">
-                    <div className="input-section">
+                    <div className="input-section" style={{flexDirection:'column', gap: '0px'}}>
+                      <b>Role Name</b>
                       <input
                         type="text"
                         className="create-role-input"
@@ -196,7 +197,8 @@ const CreateRole = () => {
                         onChange={input}
                       />
                     </div>
-                    <div className="input-section">
+                    <div className="input-section" style={{flexDirection:'column', gap: '0px'}}>
+                    <b>Role Description</b>
                       <input
                         type="text"
                         className="create-role-input"

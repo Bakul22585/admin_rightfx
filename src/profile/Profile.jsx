@@ -1367,7 +1367,7 @@ const Profile = () => {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
-    param.append("action", "get_mt5_account_list");
+    param.append("action", "get_mt5_account_list_live");
 
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
@@ -3192,7 +3192,7 @@ const Profile = () => {
                     {mt5AccountList.map((item) => {
                       return (
                         <MenuItem value={item.mt5_acc_no}>
-                          {item.mt5_acc_no}
+                          {item.mt5_acc_no} ({item.mt5_name})
                         </MenuItem>
                       );
                     })}

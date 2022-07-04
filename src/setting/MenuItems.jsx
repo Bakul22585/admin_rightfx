@@ -964,7 +964,7 @@ const MenuItems = () => {
                                                                 <i className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""} material-icons`} onClick={handleClick}>
                                                                     {item.icon_class}
                                                                 </i>
-                                                                <span className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""}`} onClick={handleClick}>{item.menu_name} {(item.description == "" || item.description == null) ? "" : "- " + item.description} </span>
+                                                                <span className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""}`} onClick={handleClick}>{item.menu_name}  <small>({item.menu_label})</small> {(item.description == "" || item.description == null) ? "" : "- " + item.description} </span>
                                                             </div>
 
                                                             <div>
@@ -975,7 +975,7 @@ const MenuItems = () => {
                                                                     handleClickOpen(e, item)
                                                                 }}><i className={`material-icons add-child-menu`}>control_point</i></Button>
                                                                 {
-                                                                    item.sub_menu_list.length > 0 ? <Button title="Sorting" className="sorting-sub-menu" onClick={(e) => {sorting(item)}}><i className={`material-icons`}>grading</i></Button> : ""
+                                                                    item.sub_menu_list.length > 0 ? <Button title="Sorting" className="sorting-sub-menu" onClick={(e) => {sorting(item)}}><i className={`material-icons`}>format_list_bulleted</i></Button> : ""
                                                                 }
                                                                 
                                                                 <Button title="Delete" className="menu-edit-button" onClick={(e) => { deleteConfirmation(item) }}><i className={`material-icons`}>delete</i></Button>
@@ -1006,9 +1006,9 @@ const MenuItems = () => {
                                                                     {item.sub_menu_list.map((subMenu) => {
                                                                         return (
                                                                             <li className={`sub-menu ${(subMenu.menu_label == "Permission") ? "permission" : ""}`}>
-                                                                                <span className="sub-menu-title">{subMenu.menu_name} {(subMenu.description == "" || subMenu.description == null) ? "" : "- " + subMenu.description}</span>
+                                                                                <span className="sub-menu-title">{subMenu.menu_name} <small>({subMenu.menu_label})</small> {(subMenu.description == "" || subMenu.description == null) ? "" : "- " + subMenu.description}</span>
                                                                                 <div>
-                                                                                    <Button className="edit-child-menu" title="Edit Child Menu" onClick={(e) => {
+                                                                                    <Button className="edit-child-menu" title={`${(subMenu.menu_label == "Permission") ? "Edit Permission" : "Edit Child Menu"} `} onClick={(e) => {
                                                                                         handleClickOpen(e, subMenu)
                                                                                     }}><i className={`material-icons edit-child-menu`}>edit_note</i></Button>
                                                                                     <Button title="Delete" className="menu-edit-button" onClick={(e) => { deleteConfirmation(subMenu) }}><i className={`material-icons`}>delete</i></Button>

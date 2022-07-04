@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import logo1 from "../sidebar/logo1.png";
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
-import { Url } from '../global';
+import { Url, UserInfo } from '../global';
 import { Link, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -103,6 +103,9 @@ export default function Login1(prop) {
                 } else {
                     notify1("Login successful");
                     localStorage.setItem('login', false);
+                    UserInfo.AADMIN_LOGIN_ID = res.data.user_data.AADMIN_LOGIN_ID;
+                    UserInfo.AADMIN_LOGIN_NAME = res.data.user_data.AADMIN_LOGIN_NAME;
+                    UserInfo.AADMIN_LOGIN_ROLE_ID = res.data.user_data.AADMIN_LOGIN_ROLE_ID;
                     prop.setLogin("false")
                     navigate("/dashboard");
                 }

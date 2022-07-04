@@ -10,5 +10,7 @@ const IsApprove = {
   is_app: "1",
   AADMIN_LOGIN_ID: "1",
 };
+
+const UserInfo = {};
 // const IsApprove = "";
-export { Url, ClientUrl, IsApprove };
+export { Url, ClientUrl, IsApprove, UserInfo };

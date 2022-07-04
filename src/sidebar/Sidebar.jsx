@@ -7,6 +7,11 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { IsApprove, Url, UserInfo } from "../global";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 // import { useTranslation } from "react-i18next";
 // import Dashboard from "./Dashboard.svg"
 const style = {
@@ -16,6 +21,7 @@ const Sidebar = (prop) => {
   // const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [menuData, setMenuData] = useState([]);
   const [open, setOpen] = React.useState({
     operation: false,
     trading: false,
@@ -47,13 +53,32 @@ const Sidebar = (prop) => {
   const handleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  console.log(prop);
+
+  const getSidebarMenu = () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", UserInfo.AADMIN_LOGIN_ID);
+    }
+    param.append('action', 'sidebar_menus');
+    param.append("role_id", UserInfo.AADMIN_LOGIN_ROLE_ID);
+    axios.post(`${Url}/ajaxfiles/menu_manage.php`, param).then((res) => {
+      if (res.data.status == 'error') {
+        toast.error(res.data.message);
+      } else {
+        setMenuData([...res.data.data]);
+      }
+    });
+  }
+
+  useEffect(() => {
+    getSidebarMenu();
+  }, [])
 
   return (
     <div
-      className={`main-sidebar-content  ${
-        isSidebarOpen ? "sidebar-with-4rem" : ""
-      }`}
+      className={`main-sidebar-content  ${isSidebarOpen ? "sidebar-with-4rem" : ""
+        }`}
     >
       <div className={`app-sidebar app-sidebar--light app-sidebar--shadow`}>
         <div className="app-sidebar--header">
@@ -103,7 +128,50 @@ const Sidebar = (prop) => {
           <div>
             <div className="sidebar-navigation">
               <ul className="pt-2">
-                <li>
+                {
+                  menuData.map((item, index) => {
+                    return (
+                      (item.sub_menu_list.length > 0) ? <li>
+                        <a
+                          className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""}`}
+                          onClick={handleClick}
+                        >
+                          <span className="material-icons" style={style}>{item.icon_class}</span>
+                          {item.menu_name}
+                          <span className="sidebar-icon-indicator">
+                            {open[`menu-${index}`] ? <ExpandMore /> : <ExpandLess />}
+                          </span>
+                        </a>
+                        <Collapse in={open[`menu-${index}`]} timeout="auto" unmountOnExit>
+                          <ul>
+                            {
+                              item.sub_menu_list.map((subMenu) => {
+                                return (
+                                  <li>
+                                    <NavLink to={`/${subMenu.menu_url}`} onClick={CloseSidebar}>
+                                      {subMenu.menu_name}
+                                    </NavLink>
+                                  </li>
+                                )
+                              })
+                            }
+                          </ul>
+                        </Collapse>
+                      </li> :
+                        <li>
+                          <NavLink
+                            className="nav-link-simple"
+                            to={`/${item.menu_url}`}
+                            onClick={CloseSidebar}
+                          >
+                            <span className="material-icons" style={style}>{item.icon_class}</span>
+                            {item.menu_name}
+                          </NavLink>
+                        </li>
+                    );
+                  })
+                }
+                {/* <li>
                   <NavLink
                     className="nav-link-simple "
                     to="/dashboard"
@@ -115,14 +183,6 @@ const Sidebar = (prop) => {
                     Dashboard
                   </NavLink>
                 </li>
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/employees" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    person
-                    </span>
-                    Employees
-                  </NavLink>
-                </li> */}
                 <li>
                   <a
                     className={`staff ${open.staff ? "active" : ""}`}
@@ -151,18 +211,6 @@ const Sidebar = (prop) => {
                     </ul>
                   </Collapse>
                 </li>
-                {/* <li>
-                  <NavLink
-                    className="nav-link-simple "
-                    to="/role_management"
-                    onClick={CloseSidebar}
-                  >
-                    <span className="material-icons" style={style}>
-                      manage_accounts
-                    </span>
-                    Role Management
-                  </NavLink>
-                </li> */}
                 <li>
                   <NavLink
                     className="nav-link-simple "
@@ -203,30 +251,6 @@ const Sidebar = (prop) => {
                     </ul>
                   </Collapse>
                 </li>
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/leads_list" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    view_list
-                    </span>
-                    Leads List
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="nav-link-simple " to="/reminder" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    calendar_month
-                    </span>
-                    Reminder
-                    </NavLink>
-                </li> */}
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/list_request" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    fact_check
-                    </span>
-                    IB Requests List
-                  </NavLink>
-                </li> */}
                 <li>
                   <a
                     className={`kyc ${open.kyc ? "active" : ""}`}
@@ -255,27 +279,10 @@ const Sidebar = (prop) => {
                     </ul>
                   </Collapse>
                 </li>
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/pending_kyc" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    pending_actions
-                    </span>
-                    Pending KYC
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="nav-link-simple " to="/history_kyc" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    history
-                    </span>
-                    History KYC
-                  </NavLink>
-                </li> */}
                 <li>
                   <a
-                    className={`ibManagement ${
-                      open.ibManagement ? "active" : ""
-                    }`}
+                    className={`ibManagement ${open.ibManagement ? "active" : ""
+                      }`}
                     onClick={handleClick}
                   >
                     <span className="material-icons" style={style}>
@@ -298,31 +305,9 @@ const Sidebar = (prop) => {
                           IB Requests List
                         </NavLink>
                       </li>
-                      {/* <li>
-                        <NavLink to="/ib_structure" onClick={CloseSidebar}>IB Structure</NavLink>
-                      </li> */}
-                      {/* <li>
-                        <NavLink to="/generate_income" onClick={CloseSidebar}>Generate Income</NavLink>
-                      </li> */}
                     </ul>
                   </Collapse>
                 </li>
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/mt5_group" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    groups
-                    </span>
-                    MT5 Groups
-                  </NavLink>
-                </li> */}
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/copy_trading" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    add_chart
-                    </span>
-                    Copy Trading
-                  </NavLink>
-                </li> */}
                 <li>
                   <NavLink
                     className="nav-link-simple "
@@ -359,14 +344,6 @@ const Sidebar = (prop) => {
                     IB Withdraw
                   </NavLink>
                 </li>
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/ib_withdraw" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    file_upload
-                    </span>
-                    ib Withdraw
-                  </NavLink>
-                </li> */}
                 <li>
                   <a
                     className={`pamm ${open.pamm ? "active" : ""}`}
@@ -375,7 +352,6 @@ const Sidebar = (prop) => {
                     <span className="material-icons" style={style}>
                       soap
                     </span>
-                    {/* <img src='assets/img/pamm.png' className="sidebar-menu-img"/> */}
                     Pamm
                     <span className="sidebar-icon-indicator">
                       {open.pamm ? <ExpandMore /> : <ExpandLess />}
@@ -404,12 +380,6 @@ const Sidebar = (prop) => {
                           MM Management
                         </NavLink>
                       </li>
-                      {/* <li>
-                        <NavLink to="/target" onClick={CloseSidebar}>Transaction</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/target" onClick={CloseSidebar}>Content Management</NavLink>
-                      </li> */}
                       <li>
                         <NavLink
                           to="/pamm_investor_request"
@@ -504,12 +474,6 @@ const Sidebar = (prop) => {
                           Trade History
                         </NavLink>
                       </li>
-                      {/* <li>
-                        <NavLink to="/trade_history_total" onClick={CloseSidebar}>Trade History Total</NavLink>
-                      </li> */}
-                      {/* <li>
-                        <NavLink to="/copy_open_trades" onClick={CloseSidebar}>Copy Open Trades</NavLink>
-                      </li> */}
                       <li>
                         <NavLink
                           to="/ib_commision_report"
@@ -559,18 +523,6 @@ const Sidebar = (prop) => {
                           IB Commisions
                         </NavLink>
                       </li>
-                      {/* <li>
-                        <NavLink to="/Platforms/android" onClick={CloseSidebar}>Partnership Commisions</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Copy Trading Commisions</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/trade_statistics" onClick={CloseSidebar}>Trade Statistics</NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/Platforms/iphone" onClick={CloseSidebar}>Accounts</NavLink>
-                      </li> */}
                     </ul>
                   </Collapse>
                 </li>
@@ -622,14 +574,6 @@ const Sidebar = (prop) => {
                     Ticket
                   </NavLink>
                 </li>
-                {/* <li>
-                  <NavLink className="nav-link-simple " to="/plans" onClick={CloseSidebar}>
-                    <span className="material-icons" style={style}>
-                    fact_check
-                    </span>
-                    Plans
-                    </NavLink>
-                </li> */}
                 <li>
                   <NavLink
                     className="nav-link-simple "
@@ -672,7 +616,7 @@ const Sidebar = (prop) => {
                     onClick={handleClick}
                   >
                     <span className="material-icons" style={style}>
-                    room_preferences
+                      room_preferences
                     </span>
                     Menu Setting
                     <span className="sidebar-icon-indicator">
@@ -683,17 +627,12 @@ const Sidebar = (prop) => {
                     <ul>
                       <li>
                         <NavLink to="/menu_item" onClick={CloseSidebar}>
-                        Menu Items
+                          Menu Items
                         </NavLink>
                       </li>
-                      {/* <li>
-                        <NavLink to="/reminder" onClick={CloseSidebar}>
-                        Permissions
-                        </NavLink>
-                      </li> */}
                       <li>
                         <NavLink to="/change_menu_order" onClick={CloseSidebar}>
-                        Change Menu Order
+                          Change Menu Order
                         </NavLink>
                       </li>
                     </ul>
@@ -709,7 +648,7 @@ const Sidebar = (prop) => {
                     </span>
                     Logout
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div
