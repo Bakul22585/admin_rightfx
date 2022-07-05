@@ -166,6 +166,18 @@ const ListRequest = () => {
       grow: 0.3,
     },
     {
+      name: "WEBSITE URL",
+      selector: (row) => {
+        return (
+          <span title={row.website_url}>{row.website_url}</span>
+        );
+      },
+      wrap: true,
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
       name: "REMARK",
       selector: (row) => {
         return <span title={row.remarks}>{row.remarks}</span>;
@@ -298,6 +310,7 @@ const ListRequest = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "get_default_structure");
       param.append("user_id", prop.requested_user_id);
@@ -335,6 +348,7 @@ const ListRequest = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "get_my_structure");
       param.append("user_id", prop.requested_user_id);
@@ -501,6 +515,7 @@ const ListRequest = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("requested_user_id", ibdata.requested_user_id);
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -702,6 +717,10 @@ const ListRequest = () => {
                       <div className="display-element">
                         <h6>WEBSITE</h6>
                         <div>{ibdata.is_website}</div>
+                      </div>
+                      <div className="display-element">
+                        <h6>WEBSITE URL</h6>
+                        <div>{ibdata.website_url}</div>
                       </div>
                       <div className="display-element">
                         <h6>REMARK</h6>

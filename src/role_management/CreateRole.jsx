@@ -286,7 +286,7 @@ const CreateRole = () => {
                                           if (activeMenu.length > 0) {
                                             item.active = true;
                                           } else {
-                                            item.active = false;
+                                            // item.active = false;
                                           }
                                           setData([...data]);
                                         }} />
