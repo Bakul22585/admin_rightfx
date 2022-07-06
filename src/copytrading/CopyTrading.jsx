@@ -279,33 +279,57 @@ const CopyTrading = () => {
                 <div className="gain-element">
                   <p>GAIN</p>
                   <input
-                    type="number"
+                    type="text"
                     name="gain"
                     placeholder="15"
                     className="formControl-input"
                     value={form.gain}
-                    onChange={input}
+                    onChange={(e) => {
+                      if (Number(e.target.value) > 0) {
+                        form.gain = Number(e.target.value);
+                        setForm({...form});
+                      } else if (e.target.value == "" || e.target.value == 0) {
+                        form.gain = 0;
+                        setForm({...form});
+                      }
+                    }}
                   />
                 </div>
                 <div className="copiers-element">
                   <p>COPIERS</p>
                   <div className="input-section">
                     <input
-                      type="number"
+                      type="text"
                       name="copiers_left"
                       placeholder="5872"
                       className="formControl-input"
                       value={form.copiers_left}
-                      onChange={input}
+                      onChange={(e) => {
+                        if (Number(e.target.value) > 0) {
+                          form.copiers_left = Number(e.target.value);
+                          setForm({...form});
+                        } else if (e.target.value == "" || e.target.value == 0) {
+                          form.copiers_left = 0;
+                          setForm({...form});
+                        }
+                      }}
                     />
                     <i className="material-icons">arrow_upward</i>
                     <input
-                      type="number"
+                      type="text"
                       name="copiers_right"
                       placeholder="5200"
                       className="formControl-input"
                       value={form.copiers_right}
-                      onChange={input}
+                      onChange={(e) => {
+                        if (Number(e.target.value) > 0) {
+                          form.copiers_right = Number(e.target.value);
+                          setForm({...form});
+                        } else if (e.target.value == "" || e.target.value == 0) {
+                          form.copiers_right = 0;
+                          setForm({...form});
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -314,43 +338,75 @@ const CopyTrading = () => {
                 <p>PROFIT AND LOSS</p>
                 <div className="input-element">
                   <input
-                    type="number"
+                    type="text"
                     name="profit"
                     placeholder="15"
                     className="formControl-input"
                     value={form.profit}
-                    onChange={input}
+                    onChange={(e) => {
+                      if (Number(e.target.value) > 0) {
+                        form.profit = Number(e.target.value);
+                        setForm({...form});
+                      } else if (e.target.value == "" || e.target.value == 0) {
+                        form.profit = 0;
+                        setForm({...form});
+                      }
+                    }}
                   />
                   <input
-                    type="number"
+                    type="text"
                     name="loss"
                     placeholder="15"
                     className="formControl-input"
                     value={form.loss}
-                    onChange={input}
+                    onChange={(e) => {
+                      if (Number(e.target.value) > 0) {
+                        form.loss = Number(e.target.value);
+                        setForm({...form});
+                      } else if (e.target.value == "" || e.target.value == 0) {
+                        form.loss = 0;
+                        setForm({...form});
+                      }
+                    }}
                   />
                 </div>
               </div>
               <div className="commission-section">
                 <p>COMMISSION</p>
                 <input
-                  type="number"
+                  type="text"
                   name="commission"
                   placeholder="15"
                   className="formControl-input"
                   value={form.commission}
-                  onChange={input}
+                  onChange={(e) => {
+                    if (Number(e.target.value) > 0) {
+                      form.commission = Number(e.target.value);
+                      setForm({...form});
+                    } else if (e.target.value == "" || e.target.value == 0) {
+                      form.commission = 0;
+                      setForm({...form});
+                    }
+                  }}
                 />
               </div>
               <div className="extra-field-element">
                 <p>PHONE</p>
                 <input
-                  type="number"
+                  type="text"
                   name="phone"
                   placeholder="+91 99099 99099"
                   className="formControl-input"
                   value={form.phone}
-                  onChange={input}
+                  onChange={(e) => {
+                    if (Number(e.target.value) > 0) {
+                      form.phone = Number(e.target.value);
+                      setForm({...form});
+                    } else if (e.target.value == "" || e.target.value == 0) {
+                      form.phone = 0;
+                      setForm({...form});
+                    }
+                  }}
                 />
               </div>
               <div className="extra-field-element">

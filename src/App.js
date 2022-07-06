@@ -60,6 +60,7 @@ import PammUser from "./pamm/PammUser";
 import SalesReport from "./report/SalesReport";
 import Employees from "./Staff/Employees";
 import MenuItems from "./setting/MenuItems";
+import UsersGroups from "./users_group/userGroup";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -249,6 +250,11 @@ const App = () => {
                   exact
                   path="/sales_incentive"
                   element={<SalesIncentive />}
+                />
+                <Route
+                  exact
+                  path="/user_groups"
+                  element={<UsersGroups />}
                 />
               </Routes>
               {/* <Footer /> */}

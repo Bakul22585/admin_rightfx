@@ -328,6 +328,11 @@ const CommonFilter = (prop) => {
                             ) : (
                               ""
                             )}
+                            {prop.userGroup ? (
+                              <MenuItem value="userGroup">User Group</MenuItem>
+                            ) : (
+                              ""
+                            )}
                             {/* {
                               prop.ibList ? <>
                                 <MenuItem value="sponsor">Sponsor</MenuItem>
@@ -442,7 +447,7 @@ const CommonFilter = (prop) => {
                                 <MenuItem
                                   key={name}
                                   value={name}
-                                  // style={getStyles(name, personName, theme)}
+                                // style={getStyles(name, personName, theme)}
                                 >
                                   {name}
                                 </MenuItem>
@@ -507,7 +512,7 @@ const CommonFilter = (prop) => {
                                 <MenuItem
                                   key={name}
                                   value={name}
-                                  // style={getStyles(name, personName, theme)}
+                                // style={getStyles(name, personName, theme)}
                                 >
                                   {name}
                                 </MenuItem>
@@ -696,6 +701,37 @@ const CommonFilter = (prop) => {
                               <MenuItem value="0">Pending</MenuItem>
                               <MenuItem value="1">Completed</MenuItem>
                               <MenuItem value="2">Rejected</MenuItem>
+                            </Select>
+                          </FormControl>
+                        ) : (
+                          ""
+                        )}
+
+                        {filterBy == "userGroup" ? (
+                          <FormControl
+                            sx={{ m: 1, width: 300 }}
+                            className="multipleSelect"
+                          >
+                            <InputLabel>User Group</InputLabel>
+                            <Select
+                              onChange={(e) => {
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    ...prevalue,
+                                    user_group_id: e.target.value,
+                                  };
+                                });
+                              }}
+                              input={<BootstrapInput />}
+                              sx={{ width: "200px" }}
+                            >
+                              {prop.userGroup.map((item) => {
+                                return (
+                                  <MenuItem value={item.user_group_id}>
+                                    {item.user_group_name}
+                                  </MenuItem>
+                                );
+                              })}
                             </Select>
                           </FormControl>
                         ) : (

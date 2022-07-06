@@ -726,31 +726,45 @@ const IBStructure = () => {
                   <div>{item.ib_group_name}</div>
                   <div>
                     <input
-                      type="number"
+                      type="text"
                       className="rebert_amount"
                       placeholder="Rebert"
                       value={item.group_rebate}
                       onChange={(e) => {
-                        form.structure_data[index]["group_rebate"] =
-                          e.target.value;
-                        setForm({
-                          ...form,
-                        });
+                        if (Number(e.target.value) > 0) {
+                          form.structure_data[index]["group_rebate"] =
+                            Number(e.target.value);
+                          setForm({
+                            ...form,
+                          });
+                        } else if (e.target.value == "" || e.target.value == 0) {
+                          form.structure_data[index]["group_rebate"] = 0;
+                          setForm({
+                            ...form,
+                          });
+                        }
                       }}
                     />
                   </div>
                   <div>
                     <input
-                      type="number"
+                      type="text"
                       className="commission_amount"
                       placeholder="Commission"
                       value={item.group_commission}
                       onChange={(e) => {
-                        form.structure_data[index]["group_commission"] =
-                          e.target.value;
-                        setForm({
-                          ...form,
-                        });
+                        if (Number(e.target.value) > 0) {
+                          form.structure_data[index]["group_commission"] =
+                            Number(e.target.value);
+                          setForm({
+                            ...form,
+                          });
+                        } else if (e.target.value == "" || e.target.value == 0) {
+                          form.structure_data[index]["group_commission"] = 0;
+                          setForm({
+                            ...form,
+                          });
+                        }
                       }}
                     />
                   </div>
@@ -792,33 +806,52 @@ const IBStructure = () => {
                         <div>{item1.pair_name}</div>
                         <div>
                           <input
-                            type="number"
+                            type="text"
                             className="rebert_amount"
                             placeholder="Rebert"
                             value={item1.rebate}
                             onChange={(e) => {
-                              form.structure_data[index]["pair_data"][index1][
-                                "rebate"
-                              ] = e.target.value;
-                              setForm({
-                                ...form,
-                              });
+                              if (Number(e.target.value) > 0) {
+                                form.structure_data[index]["pair_data"][index1][
+                                  "rebate"
+                                ] = Number(e.target.value);
+                                setForm({
+                                  ...form,
+                                });
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                form.structure_data[index]["pair_data"][index1][
+                                  "rebate"
+                                ] = 0;
+                                setForm({
+                                  ...form,
+                                });
+                              }
+                              
                             }}
                           />
                         </div>
                         <div>
                           <input
-                            type="number"
+                            type="text"
                             className="commission_amount"
                             placeholder="Commission"
                             value={item1.commission}
                             onChange={(e) => {
-                              form.structure_data[index]["pair_data"][index1][
-                                "commission"
-                              ] = e.target.value;
-                              setForm({
-                                ...form,
-                              });
+                              if (Number(e.target.value) > 0) {
+                                form.structure_data[index]["pair_data"][index1][
+                                  "commission"
+                                ] = Number(e.target.value);
+                                setForm({
+                                  ...form,
+                                });
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                form.structure_data[index]["pair_data"][index1][
+                                  "commission"
+                                ] = 0;
+                                setForm({
+                                  ...form,
+                                });
+                              }
                             }}
                           />
                         </div>

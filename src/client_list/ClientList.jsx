@@ -14,6 +14,7 @@ import {
   OutlinedInput,
   Paper,
   Select,
+  Switch,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -148,53 +149,16 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
-const source = [
-  "Website - IB Form",
-  "Website - Demo Form",
-  "CRM",
-  "Live",
-  "CRM - Multi Structure",
-  "Website - Live Form",
-  "Dedicated Link - IB",
-];
 
 const ClientList = () => {
   const { id } = useParams();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState("sm");
+  const [dialogTitle, setDialogTitle] = useState("");
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState([]);
+  const [anchorEl, setAnchorEl] = useState([]);
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [filterData, setFilterData] = useState({});
   const [filterSection, setFilterSection] = useState(false);
@@ -202,7 +166,8 @@ const ClientList = () => {
   const [filterBy, setFilterBy] = useState("");
   const [clientSearch, setClientSearch] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [state, setState] = React.useState({
+  const [transactionAccessUserId, setTransactionAccessUserId] = useState("");
+  const [state, setState] = useState({
     first_name: false,
     last_name: false,
     email: false,
@@ -250,6 +215,8 @@ const ClientList = () => {
   const [param, setParam] = useState({
     filter: id,
   });
+  const [transactionAccessData, setTransactionAccessData] = useState({});
+  const [transactionAccessLoader, setTransactionAccessLoader] = useState(false);
   toast.configure();
   const handleClickOpen = () => {
     setOpen(true);
@@ -529,6 +496,26 @@ const ClientList = () => {
               }}
             >
               <i className="material-icons">login</i>
+            </Button>
+          </div>
+        );
+      },
+      ignoreRowClick: true,
+      allowOverflow: true,
+      grow: 0.1,
+    },
+    {
+      name: "Action",
+      button: true,
+      cell: (row) => {
+        return (
+          <div>
+            <Button
+              onClick={(e) => {
+                transactionStatus(row);
+              }}
+            >
+              <i className="material-icons">manage_accounts</i>
             </Button>
           </div>
         );
@@ -845,6 +832,157 @@ const ClientList = () => {
       }
     });
   };
+  
+  const transactionStatus = (data) => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "transaction_access_status");
+    param.append("user_id", data.user_id);
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        setTransactionAccessUserId(data.user_id);
+        setTransactionAccessData({...res.data});
+        setDialogTitle('Transaction Access');
+        setOpen(true);
+      }
+    });
+  }
+
+  const manageContent = () => {
+    if (dialogTitle == "Transaction Access"){
+      return(
+        <div className="transaction-access-section">
+          <div className="input-access-element">
+            <label>Copy Invest Access</label>
+            <Switch checked={(transactionAccessData.is_copy_invest_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_copy_invest_active = (transactionAccessData.is_copy_invest_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>Copy Withdraw Access</label>
+            <Switch checked={(transactionAccessData.is_copy_withdraw_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_copy_withdraw_active = (transactionAccessData.is_copy_withdraw_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>Deposit Access</label>
+            <Switch checked={(transactionAccessData.is_deposit_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_deposit_active = (transactionAccessData.is_deposit_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>IB Withdraw Access</label>
+            <Switch checked={(transactionAccessData.is_ib_withdraw_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_ib_withdraw_active = (transactionAccessData.is_ib_withdraw_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>Pamm Invest Access</label>
+            <Switch checked={(transactionAccessData.is_pamm_invest_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_pamm_invest_active = (transactionAccessData.is_pamm_invest_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>Pamm Withdraw Access</label>
+            <Switch checked={(transactionAccessData.is_pamm_withdraw_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_pamm_withdraw_active = (transactionAccessData.is_pamm_withdraw_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>Transfer Access</label>
+            <Switch checked={(transactionAccessData.is_transfer_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_transfer_active = (transactionAccessData.is_transfer_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+          <div className="input-access-element">
+          <label>Withdrawal Access</label>
+            <Switch checked={(transactionAccessData.is_withdrawal_active == "1") ? true: false} onChange={(e) => {
+              transactionAccessData.is_withdrawal_active = (transactionAccessData.is_withdrawal_active == "1")? "0" : "1";
+              setTransactionAccessData({...transactionAccessData});
+            }} />
+          </div>
+        </div>
+      )
+    }
+  }
+
+  const manageDialogActionButton = () => {
+    if (dialogTitle == "Transaction Access") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          {transactionAccessLoader == true ? (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              disabled>
+              <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={accessSubmit}>
+              Submit
+            </Button>
+          )}
+        </div>
+      )
+    }
+  }
+
+  const accessSubmit = () => {
+    setTransactionAccessLoader(true);
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "update_transaction_access");
+    param.append("user_id", transactionAccessUserId);
+    param.append("transaction_status", JSON.stringify(transactionAccessData));
+
+    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
+      setTransactionAccessLoader(false);
+      if (res.data.status == "error") {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
+        setTransactionAccessUserId('');
+        setTransactionAccessData({});
+        setOpen(false);
+      }
+    });
+  }
 
   useEffect(() => {
     getSalesList();
@@ -894,444 +1032,17 @@ const ClientList = () => {
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"
                   open={open}
-                  className="modalWidth100"
+                  fullWidth={fullWidth}
+                  maxWidth={maxWidth}
                 >
                   <BootstrapDialogTitle
                     id="customized-dialog-title"
                     onClose={handleClose}
                   >
-                    Create new client
+                    {dialogTitle}
                   </BootstrapDialogTitle>
-                  <DialogContent dividers>
-                    <Stepper activeStep={activeStep} orientation="vertical">
-                      {/* {steps.map((step, index) => (
-                                                <Step key={step.label}>
-                                                    <StepLabel
-                                                        optional={
-                                                            index === 2 ? (
-                                                                <Typography variant="caption">Last step</Typography>
-                                                            ) : null
-                                                        }
-                                                    >
-                                                        {step.label}
-                                                    </StepLabel>
-                                                    <StepContent>
-                                                        <Typography>{step.description}</Typography>
-                                                        <Box sx={{ mb: 2 }}>
-                                                            <div>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    onClick={handleNext}
-                                                                    sx={{ mt: 1, mr: 1 }}
-                                                                >
-                                                                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                                                                </Button>
-                                                                <Button
-                                                                    disabled={index === 0}
-                                                                    onClick={handleBack}
-                                                                    sx={{ mt: 1, mr: 1 }}
-                                                                >
-                                                                    Back
-                                                                </Button>
-                                                            </div>
-                                                        </Box>
-                                                    </StepContent>
-                                                </Step>
-                                            ))} */}
-                      <Step key="PERSONAL INFORMATION">
-                        <StepLabel>PERSONAL INFORMATION</StepLabel>
-                        <StepContent>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-100">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Client type
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Individual">
-                                  Individual
-                                </MenuItem>
-                                <MenuItem value="Corporate">Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-30">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Title
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Mr.">Mr.</MenuItem>
-                                <MenuItem value="Mrs">Mrs</MenuItem>
-                                <MenuItem value="Miss">Miss</MenuItem>
-                                <MenuItem value="Ms">Ms</MenuItem>
-                                <MenuItem value="Dr">Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="First Name"
-                              variant="standard"
-                            />
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="Last Name"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Email"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Phone"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              type="date"
-                              id="standard-basic"
-                              className="w-100"
-                              label="Date of birth"
-                              variant="standard"
-                              focused
-                            />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className="btnStepperAction">
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                      <Step key="CLIENT DETAILS">
-                        <StepLabel>CLIENT DETAILS</StepLabel>
-                        <StepContent>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-100">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Client type
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Individual">
-                                  Individual
-                                </MenuItem>
-                                <MenuItem value="Corporate">Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-30">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Title
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Mr.">Mr.</MenuItem>
-                                <MenuItem value="Mrs">Mrs</MenuItem>
-                                <MenuItem value="Miss">Miss</MenuItem>
-                                <MenuItem value="Ms">Ms</MenuItem>
-                                <MenuItem value="Dr">Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="First Name"
-                              variant="standard"
-                            />
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="Last Name"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Email"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Phone"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              type="date"
-                              id="standard-basic"
-                              className="w-100"
-                              label="Date of birth"
-                              variant="standard"
-                            />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className="btnStepperAction">
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                      <Step key="KYC DOCUMENTS (optional)">
-                        <StepLabel>KYC DOCUMENTS (optional)</StepLabel>
-                        <StepContent>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-100">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Client type
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Individual">
-                                  Individual
-                                </MenuItem>
-                                <MenuItem value="Corporate">Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-30">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Title
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Mr.">Mr.</MenuItem>
-                                <MenuItem value="Mrs">Mrs</MenuItem>
-                                <MenuItem value="Miss">Miss</MenuItem>
-                                <MenuItem value="Ms">Ms</MenuItem>
-                                <MenuItem value="Dr">Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="First Name"
-                              variant="standard"
-                            />
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="Last Name"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Email"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Phone"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              type="date"
-                              id="standard-basic"
-                              className="w-100"
-                              label="Date of birth"
-                              variant="standard"
-                            />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className="btnStepperAction">
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                      <Step key="ACCOUNT INFO">
-                        <StepLabel>ACCOUNT INFO</StepLabel>
-                        <StepContent>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-100">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Client type
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Client type"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Individual">
-                                  Individual
-                                </MenuItem>
-                                <MenuItem value="Corporate">Corporate</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <FormControl variant="standard" className="w-30">
-                              <InputLabel id="demo-simple-select-standard-label">
-                                Title
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={clientType}
-                                onChange={addNewClientType}
-                                label="Title"
-                                style={{ width: "100%" }}
-                              >
-                                <MenuItem value="Mr.">Mr.</MenuItem>
-                                <MenuItem value="Mrs">Mrs</MenuItem>
-                                <MenuItem value="Miss">Miss</MenuItem>
-                                <MenuItem value="Ms">Ms</MenuItem>
-                                <MenuItem value="Dr">Dr</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="First Name"
-                              variant="standard"
-                            />
-                            <TextField
-                              id="standard-basic"
-                              className="w-45"
-                              label="Last Name"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Email"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              id="standard-basic"
-                              className="w-100"
-                              label="Phone"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="elementSection">
-                            <TextField
-                              type="date"
-                              id="standard-basic"
-                              className="w-100"
-                              label="Date of birth"
-                              variant="standard"
-                            />
-                          </div>
-
-                          <Box sx={{ mb: 2 }}>
-                            <div className="btnStepperAction">
-                              <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 1, mr: 1 }}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </Box>
-                        </StepContent>
-                      </Step>
-                    </Stepper>
-                  </DialogContent>
-                  {/* <DialogActions>
-                                        <Button autoFocus onClick={handleClose}>
-                                            Save changes
-                                        </Button>
-                                    </DialogActions> */}
+                  <DialogContent dividers>{manageContent()}</DialogContent>
+                  <DialogActions>{manageDialogActionButton()}</DialogActions>
                 </BootstrapDialog>
               </Grid>
             </Grid>

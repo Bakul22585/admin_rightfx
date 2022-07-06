@@ -11,10 +11,15 @@ import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import CommonFilter from "../common/CommonFilter";
 import CommonTable from "../common/CommonTable";
-import { Url } from "../global";
+import { IsApprove, Url } from "../global";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const BasicReport = () => {
+
+  const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [param, setParam] = useState({
@@ -22,6 +27,7 @@ const BasicReport = () => {
     end_date: ''
   });
   const [salesAgent, setSalesAgent] = useState("")
+  const [groupList, setGroupList] = useState([])
 
   const [searchBy, setSearchBy] = useState([
     {
@@ -103,6 +109,7 @@ const BasicReport = () => {
     },
   ]);
   const [resData, setResData] = useState({})
+  toast.configure();
 
   const column = [
     {
@@ -231,7 +238,17 @@ const BasicReport = () => {
       wrap: true,
       reorder: true,
       grow: 0.3,
-    }, {
+    }, 
+    {
+      name: "User Group",
+      selector: (row) => {
+        return <span title={row.user_group_name}>{row.user_group_name}</span>;
+      },
+      wrap: true,
+      reorder: true,
+      grow: 0.3,
+    }, 
+    {
       name: "Group Name",
       selector: (row) => {
         return <span title={row.mt5_group_name}>{row.mt5_group_name}</span>;
@@ -239,7 +256,8 @@ const BasicReport = () => {
       wrap: true,
       reorder: true,
       grow: 0.3,
-    }, {
+    }, 
+    {
       name: "Sales Person Name",
       selector: (row) => {
         return <span title={row.sales_person_name}>{row.sales_person_name}</span>;
@@ -272,6 +290,35 @@ const BasicReport = () => {
       grow: 0.3,
     },
   ];
+
+  const getUserGroup = async() => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "list_user_groups");
+    await axios
+      .post(Url + "/ajaxfiles/user_group_manage.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (resData.data.status == "error") {
+          toast.error(resData.data.message);
+        } else {
+          setGroupList([...resData.data.group_data]);
+          console.log("group l;ist", groupList);
+        }
+        return true;
+      });
+  }
+
+  useEffect(() => {
+    getUserGroup();
+  }, [])
   return (
     <div>
       <div className="app-content--inner">
@@ -280,7 +327,7 @@ const BasicReport = () => {
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
                 <p className="main-heading">All In One Report</p>
-                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} salesAgent={setSalesAgent}/>
+                <CommonFilter search={searchBy} setParam={setParam} searchWord={setSearchKeyword} salesAgent={setSalesAgent} userGroup={groupList}/>
                 <br />
                 <Paper
                   elevation={2}

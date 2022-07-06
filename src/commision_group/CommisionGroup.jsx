@@ -826,57 +826,117 @@ const CommisionGroup = () => {
           <div className="view-commission-content-section">
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Forex"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_forex"
                 value={form.ib_company_forex}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_forex = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_forex = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Bullion"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_bullion"
                 value={form.ib_company_bullion}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_bullion = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_bullion = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Indices"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_indices"
                 value={form.ib_company_indices}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_indices = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_indices = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Energy"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_energy"
                 value={form.ib_company_energy}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_energy = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_energy = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Crypto"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_crypto"
                 value={form.ib_company_crypto}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_crypto = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_crypto = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
           </div>
@@ -1092,57 +1152,117 @@ const CommisionGroup = () => {
           <div className="view-commission-content-section">
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Forex"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_forex"
                 value={form.ib_company_forex}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_forex = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_forex = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Bullion"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_bullion"
                 value={form.ib_company_bullion}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_bullion = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_bullion = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Indices"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_indices"
                 value={form.ib_company_indices}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_indices = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_indices = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Energy"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_energy"
                 value={form.ib_company_energy}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_energy = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_energy = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
               <TextField
-                type="number"
+                type="text"
                 label="Crypto"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_crypto"
                 value={form.ib_company_crypto}
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.ib_company_crypto = Number(e.target.value);
+                    setForm({
+                      ...form,
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.ib_company_crypto = 0;
+                    setForm({
+                      ...form,
+                    });
+                  }
+                }}
               />
             </div>
           </div>

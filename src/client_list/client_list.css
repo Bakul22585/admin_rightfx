@@ -128,3 +128,12 @@
 .client_table .rdt_Table .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol > div > div {
     white-space: nowrap;
 }
+.transaction-access-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+.transaction-access-section .input-access-element {
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+}

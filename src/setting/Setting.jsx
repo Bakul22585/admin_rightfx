@@ -31,6 +31,11 @@ const Setting = () => {
     is_deposit_active: 0,
     is_withdrawal_active: 0,
     is_transfer_active: 0,
+    is_copy_invest_active: 0,
+    is_copy_withdraw_active: 0,
+    is_ib_withdraw_active: 0,
+    is_pamm_invest_active: 0,
+    is_pamm_withdraw_active: 0,
     transfer_wallet_to_wallet_charges: "0",
     bank_ac_name: "0",
     bank_ac_number: "0",
@@ -83,6 +88,16 @@ const Setting = () => {
             res.data.settings_list.is_withdrawal_active == "0" ? false : true,
           is_transfer_active:
             res.data.settings_list.is_transfer_active == "0" ? false : true,
+          is_copy_invest_active:
+            res.data.settings_list.is_copy_invest_active == "0" ? false : true,
+          is_copy_withdraw_active:
+            res.data.settings_list.is_copy_withdraw_active == "0" ? false : true,
+          is_ib_withdraw_active:
+            res.data.settings_list.is_ib_withdraw_active == "0" ? false : true,
+          is_pamm_invest_active:
+            res.data.settings_list.is_pamm_invest_active == "0" ? false : true,
+          is_pamm_withdraw_active:
+            res.data.settings_list.is_pamm_withdraw_active == "0" ? false : true,
           transfer_wallet_to_wallet_charges:
             res.data.settings_list.transfer_wallet_to_wallet_charges,
           /* bank_ac_name: res.data.settings_list.bank_ac_name,
@@ -106,6 +121,7 @@ const Setting = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "update_settings");
     param.append(
@@ -119,6 +135,26 @@ const Setting = () => {
     param.append(
       "is_transfer_active",
       form.is_transfer_active == true ? "1" : "0"
+    );
+    param.append(
+      "is_copy_invest_active",
+      form.is_copy_invest_active == true ? "1" : "0"
+    );
+    param.append(
+      "is_copy_withdraw_active",
+      form.is_copy_withdraw_active == true ? "1" : "0"
+    );
+    param.append(
+      "is_ib_withdraw_active",
+      form.is_ib_withdraw_active == true ? "1" : "0"
+    );
+    param.append(
+      "is_pamm_invest_active",
+      form.is_pamm_invest_active == true ? "1" : "0"
+    );
+    param.append(
+      "is_pamm_withdraw_active",
+      form.is_pamm_withdraw_active == true ? "1" : "0"
     );
     param.append(
       "transfer_wallet_to_wallet_charges",
@@ -225,6 +261,26 @@ const Setting = () => {
                           <FormControlLabel
                             control={
                               <Checkbox
+                                checked={form.is_copy_invest_active}
+                                name="is_copy_invest_active"
+                                onChange={input}
+                              />
+                            }
+                            label="Copy Invest Status"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={form.is_copy_withdraw_active}
+                                name="is_copy_withdraw_active"
+                                onChange={input}
+                              />
+                            }
+                            label="Copy Withdraw Status"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
                                 checked={form.is_deposit_active}
                                 name="is_deposit_active"
                                 onChange={input}
@@ -235,12 +291,32 @@ const Setting = () => {
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={form.is_withdrawal_active}
-                                name="is_withdrawal_active"
+                                checked={form.is_ib_withdraw_active}
+                                name="is_ib_withdraw_active"
                                 onChange={input}
                               />
                             }
-                            label="Withdrawal Status"
+                            label="IB Withdraw Status"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={form.is_pamm_invest_active}
+                                name="is_pamm_invest_active"
+                                onChange={input}
+                              />
+                            }
+                            label="Pamm Invest Status"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={form.is_pamm_withdraw_active}
+                                name="is_pamm_withdraw_active"
+                                onChange={input}
+                              />
+                            }
+                            label="Pamm Withdraw Status"
                           />
                           <FormControlLabel
                             control={
@@ -251,6 +327,16 @@ const Setting = () => {
                               />
                             }
                             label="Transafer Status"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={form.is_withdrawal_active}
+                                name="is_withdrawal_active"
+                                onChange={input}
+                              />
+                            }
+                            label="Withdrawal Status"
                           />
                         </div>
                         <br />
@@ -295,7 +381,7 @@ const Setting = () => {
                           {form.isloader ? (
                             <Button
                               variant="contained"
-                              className="btn-success"
+                              className="btn-gradient btn-success"
                               disabled
                             >
                               <svg class="spinner" viewBox="0 0 50 50">
@@ -312,7 +398,7 @@ const Setting = () => {
                           ) : (
                             <Button
                               variant="contained"
-                              className="btn-success"
+                              className="btn-gradient btn-success"
                               onClick={saveSetting}
                             >
                               Update

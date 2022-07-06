@@ -123,8 +123,16 @@ const CurrencyRate = () => {
                             variant="standard"
                             sx={{ width: "100%" }}
                             name="incentive_usd_rate"
-                            type="number"
-                            onChange={onChange}
+                            type="text"
+                            onChange={(e) => {
+                              if (Number(e.target.value) > 0) {
+                                data.incentive_usd_rate = Number(e.target.value);
+                                setData({...data});
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                data.incentive_usd_rate = 0;
+                                setData({...data});
+                              }
+                            }}
                           />
                         </div>
                         <br />
@@ -135,8 +143,16 @@ const CurrencyRate = () => {
                             variant="standard"
                             sx={{ width: "100%" }}
                             name="deposit_rate"
-                            type="number"
-                            onChange={onChange}
+                            type="text"
+                            onChange={(e) => {
+                              if (Number(e.target.value) > 0) {
+                                data.deposit_rate = Number(e.target.value);
+                                setData({...data});
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                data.deposit_rate = 0;
+                                setData({...data});
+                              }
+                            }}
                           />
                         </div>
                         <br />
@@ -147,8 +163,16 @@ const CurrencyRate = () => {
                             variant="standard"
                             sx={{ width: "100%" }}
                             name="withdrawal_rate"
-                            type="number"
-                            onChange={onChange}
+                            type="text"
+                            onChange={(e) => {
+                              if (Number(e.target.value) > 0) {
+                                data.withdrawal_rate = Number(e.target.value);
+                                setData({...data});
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                data.withdrawal_rate = 0;
+                                setData({...data});
+                              }
+                            }}
                           />
                         </div>
                         <br />

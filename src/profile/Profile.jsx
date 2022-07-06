@@ -427,6 +427,11 @@ const Profile = () => {
     structure_id: "",
     isLoader: false,
   });
+  const [groupForm, setGroupForm] = useState({
+    group_id: "",
+    isLoader: false,
+    list: []
+  });
 
   const depositColumn = [
     {
@@ -673,18 +678,17 @@ const Profile = () => {
               row.status == "1"
                 ? "APPROVED"
                 : row.status == "2"
-                ? "REJECTED"
-                : "PENDING"
+                  ? "REJECTED"
+                  : "PENDING"
             }
-            className={`text-color-${
-              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-            }`}
+            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+              }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -828,7 +832,7 @@ const Profile = () => {
           <div>
             <Button
               className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
-              // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
+            // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
             >
               <DeleteIcon sx={{ color: "red" }} />
             </Button>
@@ -1053,19 +1057,18 @@ const Profile = () => {
         return (
           <span
             title={row.sponsor_approve}
-            className={`text-color-${
-              row.sponsor_approve == "1"
-                ? "green"
-                : row.sponsor_approve == "2"
+            className={`text-color-${row.sponsor_approve == "1"
+              ? "green"
+              : row.sponsor_approve == "2"
                 ? "red"
                 : "yellow"
-            }`}
+              }`}
           >
             {row.sponsor_approve == "1"
               ? "APPROVED"
               : row.sponsor_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -1080,19 +1083,18 @@ const Profile = () => {
         return (
           <span
             title={row.admin_approve}
-            className={`text-color-${
-              row.admin_approve == "1"
-                ? "green"
-                : row.admin_approve == "2"
+            className={`text-color-${row.admin_approve == "1"
+              ? "green"
+              : row.admin_approve == "2"
                 ? "red"
                 : "yellow"
-            }`}
+              }`}
           >
             {row.admin_approve == "1"
               ? "APPROVED"
               : row.admin_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -1107,15 +1109,14 @@ const Profile = () => {
         return (
           <span
             title={row.status}
-            className={`text-color-${
-              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-            }`}
+            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+              }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -1193,11 +1194,11 @@ const Profile = () => {
       toast.error("Remark is required");
     } else {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("action", "update_partnership_request");
       param.append("ib_application_id", ibdata.ib_application_id);
@@ -1244,7 +1245,7 @@ const Profile = () => {
     setOpenModel(true);
     setIbData(prop);
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1365,7 +1366,7 @@ const Profile = () => {
   const getAccountList = () => {
     const param = new FormData();
     param.append("user_id", id);
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1386,7 +1387,7 @@ const Profile = () => {
   const getMasterStructureList = () => {
     const param = new FormData();
     param.append("user_id", id);
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1411,7 +1412,7 @@ const Profile = () => {
 
   const getMasterStructure2 = (res) => {
     const param1 = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1504,7 +1505,7 @@ const Profile = () => {
 
   const getMasterStructure = (res) => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1538,7 +1539,7 @@ const Profile = () => {
 
   const getPartnershipMasterStructure = (res) => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1574,7 +1575,7 @@ const Profile = () => {
 
   const getBankList = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1595,11 +1596,11 @@ const Profile = () => {
   const getwalletBalance = () => {
     if (transactionForm.account == "Wallet") {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("action", "view_balance");
       axios
@@ -1616,7 +1617,7 @@ const Profile = () => {
 
   const getMtBalance = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1635,7 +1636,7 @@ const Profile = () => {
 
   const getMt5LivePackages = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -1950,6 +1951,9 @@ const Profile = () => {
         status: userData.data["is_pamm"],
         isLoader: false,
       });
+    } else if (e.target.classList.contains("user-group")) {
+      getUserGroupList();
+      setDialogTitle("Groups");
     }
     if (!e.target.classList.contains("unlink_ib")) {
       setOpen(true);
@@ -2273,48 +2277,80 @@ const Profile = () => {
                         <div>
                           {/* <span>Rebate</span> */}
                           <input
-                            type="number"
+                            type="text"
                             className="Rebate_amount"
                             placeholder="Rebate"
                             value={item.group_rebate}
                             onChange={(e) => {
-                              newMasterStructureData.structure_data[index][
-                                "group_rebate"
-                              ] = e.target.value;
-                              newMasterStructureData.structure_data[index][
-                                "pair_data"
-                              ].forEach((value, valueIndex) => {
+                              if (Number(e.target.value) > 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_rebate"
+                                ] = Number(e.target.value);
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
-                                ][valueIndex]["rebate"] = e.target.value;
-                              });
-                              setNewMasterStructureData({
-                                ...newMasterStructureData,
-                              });
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["rebate"] = Number(e.target.value);
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_rebate"
+                                ] = 0;
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["rebate"] = 0;
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              }
                             }}
                           />
                         </div>
                         <div>
                           {/* <span>Commission</span> */}
                           <input
-                            type="number"
+                            type="text"
                             className="commission_amount"
                             placeholder="Commission"
                             value={item.group_commission}
                             onChange={(e) => {
-                              newMasterStructureData.structure_data[index][
-                                "group_commission"
-                              ] = e.target.value;
-                              newMasterStructureData.structure_data[index][
-                                "pair_data"
-                              ].forEach((value, valueIndex) => {
+                              if (Number(e.target.value) > 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_commission"
+                                ] = Number(e.target.value);
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
-                                ][valueIndex]["commission"] = e.target.value;
-                              });
-                              setNewMasterStructureData({
-                                ...newMasterStructureData,
-                              });
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["commission"] = Number(e.target.value);
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_commission"
+                                ] = 0;
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["commission"] = 0;
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              }
                             }}
                           />
                         </div>
@@ -2358,18 +2394,16 @@ const Profile = () => {
                           }}
                         >
                           <i
-                            class={`fa ${
-                              item.is_visible ? "fa-angle-up" : "fa-angle-down"
-                            }`}
+                            class={`fa ${item.is_visible ? "fa-angle-up" : "fa-angle-down"
+                              }`}
                             aria-hidden="true"
                           ></i>
                         </span>
                       </div>
                     </div>
                     <div
-                      className={`pair-section ${
-                        item.is_visible ? "child-section-visible" : ""
-                      }`}
+                      className={`pair-section ${item.is_visible ? "child-section-visible" : ""
+                        }`}
                     >
                       {item.pair_data.map((item1, index1) => {
                         return (
@@ -2379,33 +2413,51 @@ const Profile = () => {
                             </div>
                             <div>
                               <input
-                                type="number"
+                                type="text"
                                 className="rebert_amount"
                                 placeholder="Rebert"
                                 value={item1.rebate}
                                 onChange={(e) => {
-                                  newMasterStructureData.structure_data[index][
-                                    "pair_data"
-                                  ][index1]["rebate"] = e.target.value;
-                                  setNewMasterStructureData({
-                                    ...newMasterStructureData,
-                                  });
+                                  if (Number(e.target.value) > 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["rebate"] = e.target.value;
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  } else if (e.target.value == "" || e.target.value == 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["rebate"] = 0;
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  } 
                                 }}
                               />
                             </div>
                             <div>
                               <input
-                                type="number"
+                                type="text"
                                 className="commission_amount"
                                 placeholder="Commission"
                                 value={item1.commission}
                                 onChange={(e) => {
-                                  newMasterStructureData.structure_data[index][
-                                    "pair_data"
-                                  ][index1]["commission"] = e.target.value;
-                                  setNewMasterStructureData({
-                                    ...newMasterStructureData,
-                                  });
+                                  if (Number(e.target.value) > 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["commission"] = Number(e.target.value);
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  } else if (e.target.value == "" || e.target.value == 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["commission"] = 0;
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  }
                                 }}
                               />
                             </div>
@@ -2486,48 +2538,66 @@ const Profile = () => {
                         <div>
                           {/* <span>Rebate</span> */}
                           <input
-                            type="number"
+                            type="text"
                             className="Rebate_amount"
                             placeholder="Rebate"
                             value={item.group_rebate}
                             onChange={(e) => {
-                              newMasterStructureData.structure_data[index][
-                                "group_rebate"
-                              ] = e.target.value;
-                              newMasterStructureData.structure_data[index][
-                                "pair_data"
-                              ].forEach((value, valueIndex) => {
+                              if (Number(e.target.value) > 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_rebate"
+                                ] = Number(e.target.value);
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
-                                ][valueIndex]["rebate"] = e.target.value;
-                              });
-                              setNewMasterStructureData({
-                                ...newMasterStructureData,
-                              });
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["rebate"] = Number(e.target.value);
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              } else if (e.target.value == "" || e.target.value == 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_rebate"
+                                ] = 0;
+                                newMasterStructureData.structure_data[index][
+                                  "pair_data"
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["rebate"] = 0;
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              }
                             }}
                           />
                         </div>
                         <div>
                           {/* <span>Commission</span> */}
                           <input
-                            type="number"
+                            type="text"
                             className="commission_amount"
                             placeholder="Commission"
                             value={item.group_commission}
                             onChange={(e) => {
-                              newMasterStructureData.structure_data[index][
-                                "group_commission"
-                              ] = e.target.value;
-                              newMasterStructureData.structure_data[index][
-                                "pair_data"
-                              ].forEach((value, valueIndex) => {
+                              if (Number(e.target.value) > 0) {
+                                newMasterStructureData.structure_data[index][
+                                  "group_commission"
+                                ] = Number(e.target.value);
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
-                                ][valueIndex]["commission"] = e.target.value;
-                              });
-                              setNewMasterStructureData({
-                                ...newMasterStructureData,
-                              });
+                                ].forEach((value, valueIndex) => {
+                                  newMasterStructureData.structure_data[index][
+                                    "pair_data"
+                                  ][valueIndex]["commission"] = Number(e.target.value);
+                                });
+                                setNewMasterStructureData({
+                                  ...newMasterStructureData,
+                                });
+                              }
                             }}
                           />
                         </div>
@@ -2571,18 +2641,16 @@ const Profile = () => {
                           }}
                         >
                           <i
-                            class={`fa ${
-                              item.is_visible ? "fa-angle-up" : "fa-angle-down"
-                            }`}
+                            class={`fa ${item.is_visible ? "fa-angle-up" : "fa-angle-down"
+                              }`}
                             aria-hidden="true"
                           ></i>
                         </span>
                       </div>
                     </div>
                     <div
-                      className={`pair-section ${
-                        item.is_visible ? "child-section-visible" : ""
-                      }`}
+                      className={`pair-section ${item.is_visible ? "child-section-visible" : ""
+                        }`}
                     >
                       {item.pair_data.map((item1, index1) => {
                         return (
@@ -2592,33 +2660,51 @@ const Profile = () => {
                             </div>
                             <div>
                               <input
-                                type="number"
+                                type="text"
                                 className="rebert_amount"
                                 placeholder="Rebert"
                                 value={item1.rebate}
                                 onChange={(e) => {
-                                  newMasterStructureData.structure_data[index][
-                                    "pair_data"
-                                  ][index1]["rebate"] = e.target.value;
-                                  setNewMasterStructureData({
-                                    ...newMasterStructureData,
-                                  });
+                                  if (Number(e.target.value) > 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["rebate"] = Number(e.target.value);
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  } else if (e.target.value == "" || e.target.value == 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["rebate"] = 0;
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  }
                                 }}
                               />
                             </div>
                             <div>
                               <input
-                                type="number"
+                                type="text"
                                 className="commission_amount"
                                 placeholder="Commission"
                                 value={item1.commission}
                                 onChange={(e) => {
-                                  newMasterStructureData.structure_data[index][
-                                    "pair_data"
-                                  ][index1]["commission"] = e.target.value;
-                                  setNewMasterStructureData({
-                                    ...newMasterStructureData,
-                                  });
+                                  if (Number(e.target.value) > 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["commission"] = Number(e.target.value);
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  } else if (e.target.value == "" || e.target.value == 0) {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][index1]["commission"] = 0;
+                                    setNewMasterStructureData({
+                                      ...newMasterStructureData,
+                                    });
+                                  }
                                 }}
                               />
                             </div>
@@ -3560,7 +3646,7 @@ const Profile = () => {
                 </FormControl>
               ) : transactionForm.account_to != "" ? (
                 transactionForm.account == "MT5" &&
-                transactionForm.account_to == "Wallet" ? (
+                  transactionForm.account_to == "Wallet" ? (
                   <TextField
                     className="disabled-input-wallet-code"
                     label="Wallet Code"
@@ -3587,7 +3673,7 @@ const Profile = () => {
                 ""
               )}
               {transactionForm.from_mt5_account_id &&
-              transactionForm.account == "MT5" ? (
+                transactionForm.account == "MT5" ? (
                 <>
                   {" "}
                   <TextField
@@ -3778,50 +3864,83 @@ const Profile = () => {
                           <div>
                             {/* <span>Rebate</span> */}
                             <input
-                              type="number"
+                              type="text"
                               className="Rebate_amount"
                               placeholder="Rebate"
                               value={item.group_rebate}
                               onChange={(e) => {
-                                partnershipMasterStructureData.structure_data[
-                                  index
-                                ]["group_rebate"] = e.target.value;
-                                partnershipMasterStructureData.structure_data[
-                                  index
-                                ]["pair_data"].forEach((value, valueIndex) => {
+                                if (Number(e.target.value) > 0) {
                                   partnershipMasterStructureData.structure_data[
                                     index
-                                  ]["pair_data"][valueIndex]["rebate"] =
-                                    e.target.value;
-                                });
-                                setPartnershipMasterStructureData({
-                                  ...partnershipMasterStructureData,
-                                });
+                                  ]["group_rebate"] = Number(e.target.value);
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["pair_data"].forEach((value, valueIndex) => {
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"][valueIndex]["rebate"] =
+                                    Number(e.target.value);
+                                  });
+                                  setPartnershipMasterStructureData({
+                                    ...partnershipMasterStructureData,
+                                  });
+                                } else if (e.target.value == "" || e.target.value == 0) {
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["group_rebate"] = 0;
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["pair_data"].forEach((value, valueIndex) => {
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"][valueIndex]["rebate"] =
+                                    0;
+                                  });
+                                  setPartnershipMasterStructureData({
+                                    ...partnershipMasterStructureData,
+                                  });
+                                }
                               }}
                             />
                           </div>
                           <div>
                             {/* <span>Commission</span> */}
                             <input
-                              type="number"
+                              type="text"
                               className="commission_amount"
                               placeholder="Commission"
                               value={item.group_commission}
                               onChange={(e) => {
-                                partnershipMasterStructureData.structure_data[
-                                  index
-                                ]["group_commission"] = e.target.value;
-                                partnershipMasterStructureData.structure_data[
-                                  index
-                                ]["pair_data"].forEach((value, valueIndex) => {
+                                if (Number(e.target.value) > 0) {
                                   partnershipMasterStructureData.structure_data[
                                     index
-                                  ]["pair_data"][valueIndex]["commission"] =
-                                    e.target.value;
-                                });
-                                setPartnershipMasterStructureData({
-                                  ...partnershipMasterStructureData,
-                                });
+                                  ]["group_commission"] = Number(e.target.value);
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["pair_data"].forEach((value, valueIndex) => {
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"][valueIndex]["commission"] =
+                                    Number(e.target.value);
+                                  });
+                                  setPartnershipMasterStructureData({
+                                    ...partnershipMasterStructureData,
+                                  });
+                                } else if (e.target.value == "" || e.target.value == 0) {
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["group_commission"] = 0;
+                                  partnershipMasterStructureData.structure_data[
+                                    index
+                                  ]["pair_data"].forEach((value, valueIndex) => {
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"][valueIndex]["commission"] = 0;
+                                  });
+                                  setPartnershipMasterStructureData({
+                                    ...partnershipMasterStructureData,
+                                  });
+                                }
                               }}
                             />
                           </div>
@@ -3867,20 +3986,18 @@ const Profile = () => {
                             }}
                           >
                             <i
-                              class={`fa ${
-                                item.is_visible
-                                  ? "fa-angle-up"
-                                  : "fa-angle-down"
-                              }`}
+                              class={`fa ${item.is_visible
+                                ? "fa-angle-up"
+                                : "fa-angle-down"
+                                }`}
                               aria-hidden="true"
                             ></i>
                           </span>
                         </div>
                       </div>
                       <div
-                        className={`pair-section ${
-                          item.is_visible ? "child-section-visible" : ""
-                        }`}
+                        className={`pair-section ${item.is_visible ? "child-section-visible" : ""
+                          }`}
                       >
                         {item.pair_data.map((item1, index1) => {
                           return (
@@ -3890,35 +4007,51 @@ const Profile = () => {
                               </div>
                               <div>
                                 <input
-                                  type="number"
+                                  type="text"
                                   className="rebert_amount"
                                   placeholder="Rebert"
                                   value={item1.rebate}
                                   onChange={(e) => {
-                                    partnershipMasterStructureData.structure_data[
-                                      index
-                                    ]["pair_data"][index1]["rebate"] =
-                                      e.target.value;
-                                    setPartnershipMasterStructureData({
-                                      ...partnershipMasterStructureData,
-                                    });
+                                    if (Number(e.target.value) > 0) {
+                                      partnershipMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][index1]["rebate"] = Number(e.target.value);
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData,
+                                      });
+                                    } else if (e.target.value == "" || e.target.value == 0) {
+                                      partnershipMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][index1]["rebate"] = 0;
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData,
+                                      });
+                                    }
                                   }}
                                 />
                               </div>
                               <div>
                                 <input
-                                  type="number"
+                                  type="text"
                                   className="commission_amount"
                                   placeholder="Commission"
                                   value={item1.commission}
                                   onChange={(e) => {
-                                    partnershipMasterStructureData.structure_data[
-                                      index
-                                    ]["pair_data"][index1]["commission"] =
-                                      e.target.value;
-                                    setPartnershipMasterStructureData({
-                                      ...partnershipMasterStructureData,
-                                    });
+                                    if (Number(e.target.value) > 0) {
+                                      partnershipMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][index1]["commission"] = Number(e.target.value);
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData,
+                                      });
+                                    } else if (e.target.value == "" || e.target.value == 0) {
+                                      partnershipMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][index1]["commission"] = 0;
+                                      setPartnershipMasterStructureData({
+                                        ...partnershipMasterStructureData,
+                                      });
+                                    }
                                   }}
                                 />
                               </div>
@@ -4232,7 +4365,7 @@ const Profile = () => {
                       <td>{item.wallet_balance}</td>
                       <td>
                         {item.is_ib_account == "1" &&
-                        item.has_downline == true ? (
+                          item.has_downline == true ? (
                           <Button
                             variant="contained"
                             className="add_note"
@@ -4273,8 +4406,8 @@ const Profile = () => {
                   <b>
                     {myChildTraderData.data.footer_count != undefined
                       ? myChildTraderData.data["footer_count"][
-                          "total_user_deposit"
-                        ]
+                      "total_user_deposit"
+                      ]
                       : ""}
                   </b>
                 </td>
@@ -4282,8 +4415,8 @@ const Profile = () => {
                   <b>
                     {myChildTraderData.data.footer_count != undefined
                       ? myChildTraderData.data["footer_count"][
-                          "total_user_withdraw"
-                        ]
+                      "total_user_withdraw"
+                      ]
                       : ""}
                   </b>
                 </td>
@@ -4291,8 +4424,8 @@ const Profile = () => {
                   <b>
                     {myChildTraderData.data.footer_count != undefined
                       ? myChildTraderData.data["footer_count"][
-                          "total_total_user_deposit"
-                        ]
+                      "total_total_user_deposit"
+                      ]
                       : ""}
                   </b>
                 </td>
@@ -4300,8 +4433,8 @@ const Profile = () => {
                   <b>
                     {myChildTraderData.data.footer_count != undefined
                       ? myChildTraderData.data["footer_count"][
-                          "total_total_user_withdraw"
-                        ]
+                      "total_total_user_withdraw"
+                      ]
                       : ""}
                   </b>
                 </td>
@@ -4309,8 +4442,8 @@ const Profile = () => {
                   <b>
                     {myChildTraderData.data.footer_count != undefined
                       ? myChildTraderData.data["footer_count"][
-                          "total_user_wallet"
-                        ]
+                      "total_user_wallet"
+                      ]
                       : ""}
                   </b>
                 </td>
@@ -4339,6 +4472,32 @@ const Profile = () => {
           </div>
         </div>
       );
+    } else if (dialogTitle == "Groups") {
+      return (
+        <div>
+          <FormControl variant="standard" sx={{ width: "100%" }}>
+            <InputLabel>Gorup</InputLabel>
+            <Select
+              label
+              className="select-font-small"
+              name="language"
+              value={groupForm.group_id}
+              onChange={(e) => {
+                groupForm.group_id = e.target.value;
+                setGroupForm({ ...groupForm });
+              }}
+            >
+              {
+                groupForm.list.map((item) => {
+                  return (
+                    <MenuItem value={item.user_group_id}>{item.user_group_name}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </div>
+      )
     }
   };
 
@@ -4955,6 +5114,46 @@ const Profile = () => {
           )}
         </div>
       );
+    } else if (dialogTitle == "Groups") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {groupForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={userGroupSubmit}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
+      );
     }
   };
 
@@ -4980,7 +5179,7 @@ const Profile = () => {
 
   const createMt5AccountSubmit = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -5059,7 +5258,7 @@ const Profile = () => {
 
   const getMt5AccountStatus = (mt5ID) => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -5100,11 +5299,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", Mt5AccessForm.account_type);
       param.append("mt5_access_type", Mt5AccessForm.status);
@@ -5164,11 +5363,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", linkAccountForm.account_number);
       param.append("account_type", linkAccountForm.account_type);
@@ -5230,11 +5429,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", resetMt5PasswordForm.mt5_id);
 
@@ -5287,11 +5486,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("action", "change_mt5_leverage");
       param.append("mt5_id", changeLeverageForm.account);
@@ -5363,11 +5562,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("mt5_id", changeAccountPasswordForm.mt5_id);
       param.append("password_type", changeAccountPasswordForm.password_type);
@@ -5415,11 +5614,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("password", changePassword.password);
       param.append("confirm_password", changePassword.new_password);
@@ -5454,11 +5653,11 @@ const Profile = () => {
       pammAccess.isLoader = true;
       setPammAccess({ ...pammAccess });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("is_pamm", pammAccess.status);
       param.append("action", "update_is_pamm");
@@ -5554,7 +5753,7 @@ const Profile = () => {
     }
 
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -5645,7 +5844,7 @@ const Profile = () => {
     }
 
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -5742,7 +5941,7 @@ const Profile = () => {
     }
 
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -5783,7 +5982,7 @@ const Profile = () => {
 
   useEffect(() => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -5845,11 +6044,11 @@ const Profile = () => {
       toast.error("Please select user_status");
     } else {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("action", "update_basic_information");
       param.append("user_id", id);
       param.append("manager_id", profileForm.sales_agent);
@@ -5907,11 +6106,11 @@ const Profile = () => {
       toast.error("Please select employment industry");
     } else {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("employment_status", employmentDetailsForm.status);
       param.append("inudstry", employmentDetailsForm.industry);
@@ -6044,11 +6243,11 @@ const Profile = () => {
       toast.error("Please select client");
     } else {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("client_id", linkClientForm.client);
       param.append("action", "link_client");
@@ -6085,11 +6284,11 @@ const Profile = () => {
       toast.error("Please enter master account id");
     } else {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("sponsor_id", linkIBForm.customer_name);
       param.append("action", "link_ib");
@@ -6143,11 +6342,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       // param.append("mail_from", sendMailForm.from);
       param.append("mail_to", sendMailForm.to);
@@ -6199,11 +6398,11 @@ const Profile = () => {
       toast.error("Please select control panel access");
     } else {
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("action", "update_cp_access");
       param.append("user_status", cpAccessForm.status);
@@ -6256,11 +6455,11 @@ const Profile = () => {
         };
       });
       const param = new FormData();
- if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-    }
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
       param.append("user_id", id);
       param.append("action", "add_new_notes");
       param.append("notes", noteForm.notes);
@@ -6803,7 +7002,7 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -6825,6 +7024,8 @@ const Profile = () => {
         } else {
           userData.data = res.data.data;
           setuserData({ ...userData });
+          groupForm.group_id = res.data.data.user_group_id;
+          setGroupForm({ ...groupForm });
           setEmploymentDetailsForm({
             status: userData.data["employment_status"],
             industry: userData.data["inudstry"],
@@ -6835,7 +7036,7 @@ const Profile = () => {
 
   const getProfilePageData = async () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -6885,7 +7086,7 @@ const Profile = () => {
 
   const getReferralData = async (structure_id) => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -6913,7 +7114,7 @@ const Profile = () => {
 
   const getSalesList = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -6937,7 +7138,7 @@ const Profile = () => {
 
   const getLinkClientList = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -6964,7 +7165,7 @@ const Profile = () => {
 
   const getIBUserList = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -6989,7 +7190,7 @@ const Profile = () => {
 
   const unlinkIB = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7014,7 +7215,7 @@ const Profile = () => {
 
   const viewCPPassword = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7040,7 +7241,7 @@ const Profile = () => {
 
   const getCpAccessSetting = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7066,7 +7267,7 @@ const Profile = () => {
 
   const getMyTraders = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7089,7 +7290,7 @@ const Profile = () => {
 
   const getMyChildTrader = (childId) => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7123,7 +7324,7 @@ const Profile = () => {
 
   const getMyAssignedStructure = () => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7149,7 +7350,7 @@ const Profile = () => {
 
   const sendMT5PasswordMail = async (data) => {
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7175,6 +7376,60 @@ const Profile = () => {
       });
   };
 
+  const getUserGroupList = async () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "list_user_groups");
+    await axios
+      .post(Url + "/ajaxfiles/user_group_manage.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (resData.data.status == "error") {
+          toast.error(resData.data.message);
+        } else {
+          groupForm.list = resData.data.group_data;
+          setGroupForm({ ...groupForm });
+          console.log("group l;ist", groupForm);
+        }
+        return true;
+      });
+  };
+
+  const userGroupSubmit = async () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "change_user_group");
+    param.append("user_id", id);
+    param.append("user_group_id", groupForm.group_id);
+    await axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (resData.data.status == "error") {
+          toast.error(resData.data.message);
+        } else {
+          toast.success(resData.data.message);
+          setOpen(false);
+          getUserDetails();
+        }
+        return true;
+      });
+  };
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
@@ -7183,7 +7438,7 @@ const Profile = () => {
     getSalesList();
 
     const param = new FormData();
- if (IsApprove !== "") {
+    if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
@@ -7403,7 +7658,7 @@ const Profile = () => {
                                   focused
                                   name="email"
                                   disabled
-                                  // onChange={profileInput}
+                                // onChange={profileInput}
                                 />
                               </div>
                               <div className="element">
@@ -7899,6 +8154,17 @@ const Profile = () => {
                                   Add Transaction
                                 </Button>
                               </div>
+                              <br />
+                              <p className="group-header">Groups</p>
+                              <div className="mt5btngroup">
+                                <Button
+                                  variant="contained"
+                                  className="user-group btn-hover-css"
+                                  onClick={openDialogbox}
+                                >
+                                  Group
+                                </Button>
+                              </div>
                             </div>
                           </Paper>
                         </Grid>
@@ -7934,66 +8200,66 @@ const Profile = () => {
                           ""
                         ) : (
                           <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <p className="header-title">IB Dedicated Links</p>
-                            <div className="contentSection IB-Dedicated-Links">
-                              <div className="master-structure-section">
-                                <div className="user-links">
-                                  <div className="user-link-header">
-                                    <label>Link Type</label>
-                                    <label>Link</label>
-                                  </div>
-                                  <div className="user-link-body">
-                                    <label>Register</label>
-                                    <div className="link-section">
-                                      <a
-                                        href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
-                                        target="_blank"
-                                      >
-                                        {ClientUrl +
-                                          `/register/sponsor/${profileForm.wallet_code}`}
-                                      </a>
-                                      <button
-                                        className="copy_link"
-                                        onClick={(e) => {
-                                          navigator.clipboard
-                                            .writeText(
-                                              ClientUrl +
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <p className="header-title">IB Dedicated Links</p>
+                              <div className="contentSection IB-Dedicated-Links">
+                                <div className="master-structure-section">
+                                  <div className="user-links">
+                                    <div className="user-link-header">
+                                      <label>Link Type</label>
+                                      <label>Link</label>
+                                    </div>
+                                    <div className="user-link-body">
+                                      <label>Register</label>
+                                      <div className="link-section">
+                                        <a
+                                          href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
+                                          target="_blank"
+                                        >
+                                          {ClientUrl +
+                                            `/register/sponsor/${profileForm.wallet_code}`}
+                                        </a>
+                                        <button
+                                          className="copy_link"
+                                          onClick={(e) => {
+                                            navigator.clipboard
+                                              .writeText(
+                                                ClientUrl +
                                                 `/register/sponsor/${profileForm.wallet_code}`
-                                            )
-                                            .then(
-                                              function () {
-                                                toast.success(
-                                                  "The sponsor link has been successfully copying"
-                                                );
-                                              },
-                                              function (err) {
-                                                toast.error(
-                                                  "The sponsor link Could not copy, Please try again"
-                                                );
-                                              }
-                                            );
-                                        }}
-                                      >
-                                        <span className="blinking">
-                                          <i className="material-icons">
-                                            content_copy
-                                          </i>
-                                        </span>
-                                      </button>
+                                              )
+                                              .then(
+                                                function () {
+                                                  toast.success(
+                                                    "The sponsor link has been successfully copying"
+                                                  );
+                                                },
+                                                function (err) {
+                                                  toast.error(
+                                                    "The sponsor link Could not copy, Please try again"
+                                                  );
+                                                }
+                                              );
+                                          }}
+                                        >
+                                          <span className="blinking">
+                                            <i className="material-icons">
+                                              content_copy
+                                            </i>
+                                          </span>
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </Paper>
-                        </Grid>
+                            </Paper>
+                          </Grid>
                         )}
-                        
+
                         <Grid item md={6} lg={6} xl={6}>
                           <Paper
                             elevation={2}
@@ -8795,11 +9061,10 @@ const Profile = () => {
                                             <td>
                                               <div className="collaps-content">
                                                 <i
-                                                  class={`fa fa-angle-${
-                                                    item.is_collapse
-                                                      ? "up"
-                                                      : "down"
-                                                  }`}
+                                                  class={`fa fa-angle-${item.is_collapse
+                                                    ? "up"
+                                                    : "down"
+                                                    }`}
                                                   onClick={(e) => {
                                                     referralData.data[
                                                       index
@@ -8839,25 +9104,25 @@ const Profile = () => {
                                           </tr>
                                           {item.is_collapse
                                             ? item.structure_users.map(
-                                                (item1) => {
-                                                  return (
-                                                    <tr className="referral-child-structure-users">
-                                                      <td>
-                                                        {item1.client_name}
-                                                      </td>
-                                                      <td>{item1.client}</td>
-                                                      <td>
-                                                        {item1.mt5_acc_no}
-                                                      </td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td>
-                                                        {item1.sponsor_name}
-                                                      </td>
-                                                    </tr>
-                                                  );
-                                                }
-                                              )
+                                              (item1) => {
+                                                return (
+                                                  <tr className="referral-child-structure-users">
+                                                    <td>
+                                                      {item1.client_name}
+                                                    </td>
+                                                    <td>{item1.client}</td>
+                                                    <td>
+                                                      {item1.mt5_acc_no}
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                      {item1.sponsor_name}
+                                                    </td>
+                                                  </tr>
+                                                );
+                                              }
+                                            )
                                             : ""}
                                         </>
                                       );
@@ -8945,7 +9210,7 @@ const Profile = () => {
                                   onClick={openDialogbox}
                                   disabled={
                                     partnershipMasterStructureData.structure_name !=
-                                    ""
+                                      ""
                                       ? false
                                       : true
                                   }
@@ -9039,22 +9304,20 @@ const Profile = () => {
                                                       }}
                                                     >
                                                       <i
-                                                        class={`fa ${
-                                                          item.is_visible
-                                                            ? "fa-angle-up"
-                                                            : "fa-angle-down"
-                                                        }`}
+                                                        class={`fa ${item.is_visible
+                                                          ? "fa-angle-up"
+                                                          : "fa-angle-down"
+                                                          }`}
                                                         aria-hidden="true"
                                                       ></i>
                                                     </span>
                                                   </div>
                                                 </div>
                                                 <div
-                                                  className={`pair-section ${
-                                                    item.is_visible
-                                                      ? "child-section-visible"
-                                                      : ""
-                                                  }`}
+                                                  className={`pair-section ${item.is_visible
+                                                    ? "child-section-visible"
+                                                    : ""
+                                                    }`}
                                                 >
                                                   {item.pair_data.map(
                                                     (item1, index1) => {
@@ -9126,7 +9389,7 @@ const Profile = () => {
                                               navigator.clipboard
                                                 .writeText(
                                                   ClientUrl +
-                                                    `/register/sponsor/${profileForm.wallet_code}`
+                                                  `/register/sponsor/${profileForm.wallet_code}`
                                                 )
                                                 .then(
                                                   function () {
@@ -9231,22 +9494,20 @@ const Profile = () => {
                                                       }}
                                                     >
                                                       <i
-                                                        class={`fa ${
-                                                          item.is_visible
-                                                            ? "fa-angle-up"
-                                                            : "fa-angle-down"
-                                                        }`}
+                                                        class={`fa ${item.is_visible
+                                                          ? "fa-angle-up"
+                                                          : "fa-angle-down"
+                                                          }`}
                                                         aria-hidden="true"
                                                       ></i>
                                                     </span>
                                                   </div>
                                                 </div>
                                                 <div
-                                                  className={`pair-section ${
-                                                    item.is_visible
-                                                      ? "child-section-visible"
-                                                      : ""
-                                                  }`}
+                                                  className={`pair-section ${item.is_visible
+                                                    ? "child-section-visible"
+                                                    : ""
+                                                    }`}
                                                 >
                                                   {item.pair_data.map(
                                                     (item1, index1) => {
@@ -9383,7 +9644,7 @@ const Profile = () => {
                                           <td>{item.wallet_balance}</td>
                                           <td>
                                             {item.is_ib_account == "1" &&
-                                            item.has_downline == true ? (
+                                              item.has_downline == true ? (
                                               <Button
                                                 variant="contained"
                                                 className="add_note"
@@ -9424,60 +9685,60 @@ const Profile = () => {
                                     <td colSpan="5">
                                       <b>
                                         {myTraderData.data.footer_count !=
-                                        undefined
+                                          undefined
                                           ? myTraderData.data["footer_count"][
-                                              "total"
-                                            ]
+                                          "total"
+                                          ]
                                           : ""}
                                       </b>
                                     </td>
                                     <td>
                                       <b>
                                         {myTraderData.data.footer_count !=
-                                        undefined
+                                          undefined
                                           ? myTraderData.data["footer_count"][
-                                              "total_user_deposit"
-                                            ]
+                                          "total_user_deposit"
+                                          ]
                                           : ""}
                                       </b>
                                     </td>
                                     <td>
                                       <b>
                                         {myTraderData.data.footer_count !=
-                                        undefined
+                                          undefined
                                           ? myTraderData.data["footer_count"][
-                                              "total_user_withdraw"
-                                            ]
+                                          "total_user_withdraw"
+                                          ]
                                           : ""}
                                       </b>
                                     </td>
                                     <td>
                                       <b>
                                         {myTraderData.data.footer_count !=
-                                        undefined
+                                          undefined
                                           ? myTraderData.data["footer_count"][
-                                              "total_total_user_deposit"
-                                            ]
+                                          "total_total_user_deposit"
+                                          ]
                                           : ""}
                                       </b>
                                     </td>
                                     <td>
                                       <b>
                                         {myTraderData.data.footer_count !=
-                                        undefined
+                                          undefined
                                           ? myTraderData.data["footer_count"][
-                                              "total_total_user_withdraw"
-                                            ]
+                                          "total_total_user_withdraw"
+                                          ]
                                           : ""}
                                       </b>
                                     </td>
                                     <td>
                                       <b>
                                         {myTraderData.data.footer_count !=
-                                        undefined
+                                          undefined
                                           ? myTraderData.data["footer_count"][
-                                              "total_user_wallet"
-                                            ]
+                                          "total_user_wallet"
+                                          ]
                                           : ""}
                                       </b>
                                     </td>
@@ -9552,7 +9813,7 @@ const Profile = () => {
             <Grid
               container
               spacing={1}
-              // className="MuiGrid-justify-xs-space-between mt-2"
+            // className="MuiGrid-justify-xs-space-between mt-2"
             >
               <div>
                 <div className="main-content-display">
@@ -9599,55 +9860,52 @@ const Profile = () => {
                   <div className="display-element">
                     <h6>IB APPROVE</h6>
                     <div
-                      className={`col s12 text-color-${
-                        ibdata.sponsor_approve == "1"
-                          ? "green"
-                          : ibdata.sponsor_approve == "2"
+                      className={`col s12 text-color-${ibdata.sponsor_approve == "1"
+                        ? "green"
+                        : ibdata.sponsor_approve == "2"
                           ? "red"
                           : "yellow"
-                      }`}
+                        }`}
                     >
                       {ibdata.sponsor_approve == "1"
                         ? "APPROVED"
                         : ibdata.sponsor_approve == "2"
-                        ? "REJECTED"
-                        : "PENDING"}
+                          ? "REJECTED"
+                          : "PENDING"}
                     </div>
                   </div>
                   <div className="display-element">
                     <h6>ADMIN APPROVE</h6>
                     <div
-                      className={`col s12 text-color-${
-                        ibdata.admin_approve == "1"
-                          ? "green"
-                          : ibdata.admin_approve == "2"
+                      className={`col s12 text-color-${ibdata.admin_approve == "1"
+                        ? "green"
+                        : ibdata.admin_approve == "2"
                           ? "red"
                           : "yellow"
-                      }`}
+                        }`}
                     >
                       {ibdata.admin_approve == "1"
                         ? "APPROVED"
                         : ibdata.admin_approve == "2"
-                        ? "REJECTED"
-                        : "PENDING"}
+                          ? "REJECTED"
+                          : "PENDING"}
                     </div>
                   </div>
                   <div className="display-element">
                     <h6>STATUS</h6>
                     <div
-                      className={`col s12 text-color-${
-                        ibdata.status == "1"
-                          ? "green"
-                          : ibdata.status == "2"
+                      className={`col s12 text-color-${ibdata.status == "1"
+                        ? "green"
+                        : ibdata.status == "2"
                           ? "red"
                           : "yellow"
-                      }`}
+                        }`}
                     >
                       {ibdata.status == "1"
                         ? "APPROVED"
                         : ibdata.status == "2"
-                        ? "REJECTED"
-                        : "PENDING"}
+                          ? "REJECTED"
+                          : "PENDING"}
                     </div>
                   </div>{" "}
                 </div>

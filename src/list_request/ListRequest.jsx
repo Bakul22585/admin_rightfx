@@ -193,19 +193,18 @@ const ListRequest = () => {
         return (
           <span
             title={row.sponsor_approve}
-            className={`text-color-${
-              row.sponsor_approve == "1"
+            className={`text-color-${row.sponsor_approve == "1"
                 ? "green"
                 : row.sponsor_approve == "2"
-                ? "red"
-                : "yellow"
-            }`}
+                  ? "red"
+                  : "yellow"
+              }`}
           >
             {row.sponsor_approve == "1"
               ? "APPROVED"
               : row.sponsor_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -220,19 +219,18 @@ const ListRequest = () => {
         return (
           <span
             title={row.admin_approve}
-            className={`text-color-${
-              row.admin_approve == "1"
+            className={`text-color-${row.admin_approve == "1"
                 ? "green"
                 : row.admin_approve == "2"
-                ? "red"
-                : "yellow"
-            }`}
+                  ? "red"
+                  : "yellow"
+              }`}
           >
             {row.admin_approve == "1"
               ? "APPROVED"
               : row.admin_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -247,15 +245,14 @@ const ListRequest = () => {
         return (
           <span
             title={row.status}
-            className={`text-color-${
-              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-            }`}
+            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+              }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-              ? "REJECTED"
-              : "PENDING"}
+                ? "REJECTED"
+                : "PENDING"}
           </span>
         );
       },
@@ -729,55 +726,52 @@ const ListRequest = () => {
                       <div className="display-element">
                         <h6>IB APPROVE</h6>
                         <div
-                          className={`col s12 text-color-${
-                            ibdata.sponsor_approve == "1"
+                          className={`col s12 text-color-${ibdata.sponsor_approve == "1"
                               ? "green"
                               : ibdata.sponsor_approve == "2"
-                              ? "red"
-                              : "yellow"
-                          }`}
+                                ? "red"
+                                : "yellow"
+                            }`}
                         >
                           {ibdata.sponsor_approve == "1"
                             ? "APPROVED"
                             : ibdata.sponsor_approve == "2"
-                            ? "REJECTED"
-                            : "PENDING"}
+                              ? "REJECTED"
+                              : "PENDING"}
                         </div>
                       </div>
                       <div className="display-element">
                         <h6>ADMIN APPROVE</h6>
                         <div
-                          className={`col s12 text-color-${
-                            ibdata.admin_approve == "1"
+                          className={`col s12 text-color-${ibdata.admin_approve == "1"
                               ? "green"
                               : ibdata.admin_approve == "2"
-                              ? "red"
-                              : "yellow"
-                          }`}
+                                ? "red"
+                                : "yellow"
+                            }`}
                         >
                           {ibdata.admin_approve == "1"
                             ? "APPROVED"
                             : ibdata.admin_approve == "2"
-                            ? "REJECTED"
-                            : "PENDING"}
+                              ? "REJECTED"
+                              : "PENDING"}
                         </div>
                       </div>
                       <div className="display-element">
                         <h6>STATUS</h6>
                         <div
-                          className={`col s12 text-color-${
-                            ibdata.status == "1"
+                          className={`col s12 text-color-${ibdata.status == "1"
                               ? "green"
                               : ibdata.status == "2"
-                              ? "red"
-                              : "yellow"
-                          }`}
+                                ? "red"
+                                : "yellow"
+                            }`}
                         >
                           {ibdata.status == "1"
                             ? "APPROVED"
                             : ibdata.status == "2"
-                            ? "REJECTED"
-                            : "PENDING"}
+                              ? "REJECTED"
+                              : "PENDING"}
                         </div>
                       </div>{" "}
                     </div>
@@ -811,52 +805,86 @@ const ListRequest = () => {
                                 <div>
                                   {/* <span>Rebate</span> */}
                                   <input
-                                    type="number"
+                                    type="text"
                                     className="Rebate_amount"
                                     placeholder="Rebate"
                                     value={item.group_rebate}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
-                                      updateDate.structure_data[index][
-                                        "group_rebate"
-                                      ] = e.target.value;
-                                      updateDate.structure_data[index][
-                                        "pair_data"
-                                      ].forEach((value, valueIndex) => {
+                                      if (Number(e.target.value) > 0) {
+                                        updateDate.structure_data[index][
+                                          "group_rebate"
+                                        ] = parseInt(e.target.value);
                                         updateDate.structure_data[index][
                                           "pair_data"
-                                        ][valueIndex]["rebate"] =
-                                          e.target.value;
-                                      });
-                                      setUpdateDate({
-                                        ...updateDate,
-                                      });
+                                        ].forEach((value, valueIndex) => {
+                                          updateDate.structure_data[index][
+                                            "pair_data"
+                                          ][valueIndex]["rebate"] =
+                                            parseInt(e.target.value);
+                                        });
+                                        setUpdateDate({
+                                          ...updateDate,
+                                        });
+                                      }
+                                      else if (e.target.value == "" || e.target.value == 0) {
+                                        updateDate.structure_data[index][
+                                          "group_rebate"
+                                        ] = 0;
+                                        updateDate.structure_data[index][
+                                          "pair_data"
+                                        ].forEach((value, valueIndex) => {
+                                          updateDate.structure_data[index][
+                                            "pair_data"
+                                          ][valueIndex]["rebate"] =
+                                            0;
+                                        });
+                                        setUpdateDate({
+                                          ...updateDate,
+                                        });
+                                      }
                                     }}
                                   />
                                 </div>
                                 <div>
                                   {/* <span>Commission</span> */}
                                   <input
-                                    type="number"
+                                    type="text"
                                     className="commission_amount"
                                     placeholder="Commission"
                                     value={item.group_commission}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
-                                      updateDate.structure_data[index][
-                                        "group_commission"
-                                      ] = e.target.value;
-                                      updateDate.structure_data[index][
-                                        "pair_data"
-                                      ].forEach((value, valueIndex) => {
+                                      if (Number(e.target.value) > 0) {
+                                        updateDate.structure_data[index][
+                                          "group_commission"
+                                        ] = Number(e.target.value);
                                         updateDate.structure_data[index][
                                           "pair_data"
-                                        ][valueIndex]["commission"] =
-                                          e.target.value;
-                                      });
-                                      setUpdateDate({
-                                        ...updateDate,
-                                      });
+                                        ].forEach((value, valueIndex) => {
+                                          updateDate.structure_data[index][
+                                            "pair_data"
+                                          ][valueIndex]["commission"] =
+                                            Number(e.target.value);
+                                        });
+                                        setUpdateDate({
+                                          ...updateDate,
+                                        });
+                                      } else if (e.target.value == "" || e.target.value == 0) {
+                                        updateDate.structure_data[index][
+                                          "group_commission"
+                                        ] = 0;
+                                        updateDate.structure_data[index][
+                                          "pair_data"
+                                        ].forEach((value, valueIndex) => {
+                                          updateDate.structure_data[index][
+                                            "pair_data"
+                                          ][valueIndex]["commission"] = 0;
+                                        });
+                                        setUpdateDate({
+                                          ...updateDate,
+                                        });
+                                      }
                                     }}
                                   />
                                 </div>
@@ -914,20 +942,18 @@ const ListRequest = () => {
                                   }}
                                 >
                                   <i
-                                    class={`fa ${
-                                      item.is_visible
+                                    class={`fa ${item.is_visible
                                         ? "fa-angle-up"
                                         : "fa-angle-down"
-                                    }`}
+                                      }`}
                                     aria-hidden="true"
                                   ></i>
                                 </span>
                               </div>
                             </div>
                             <div
-                              className={`pair-section ${
-                                item.is_visible ? "child-section-visible" : ""
-                              }`}
+                              className={`pair-section ${item.is_visible ? "child-section-visible" : ""
+                                }`}
                             >
                               {item.pair_data.map((item1, index1) => {
                                 return (
@@ -937,36 +963,54 @@ const ListRequest = () => {
                                     </div>
                                     <div>
                                       <input
-                                        type="number"
+                                        type="text"
                                         className="rebert_amount"
                                         placeholder="Rebert"
                                         value={item1.rebate}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
-                                          updateDate.structure_data[index][
-                                            "pair_data"
-                                          ][index1]["rebate"] = e.target.value;
-                                          setUpdateDate({
-                                            ...updateDate,
-                                          });
+                                          if (Number(e.target.value) > 0) {
+                                            updateDate.structure_data[index][
+                                              "pair_data"
+                                            ][index1]["rebate"] = Number(e.target.value);
+                                            setUpdateDate({
+                                              ...updateDate,
+                                            });
+                                          } else if (e.target.value == "" || e.target.value == 0) {
+                                            updateDate.structure_data[index][
+                                              "pair_data"
+                                            ][index1]["rebate"] = 0;
+                                            setUpdateDate({
+                                              ...updateDate,
+                                            });
+                                          }
                                         }}
                                       />
                                     </div>
                                     <div>
                                       <input
-                                        type="number"
+                                        type="text"
                                         className="commission_amount"
                                         placeholder="Commission"
                                         value={item1.commission}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
-                                          updateDate.structure_data[index][
-                                            "pair_data"
-                                          ][index1]["commission"] =
-                                            e.target.value;
-                                          setUpdateDate({
-                                            ...updateDate,
-                                          });
+                                          if (Number(e.target.value) > 0) {
+                                            updateDate.structure_data[index][
+                                              "pair_data"
+                                            ][index1]["commission"] =
+                                              Number(e.target.value);
+                                            setUpdateDate({
+                                              ...updateDate,
+                                            });
+                                          } else if (e.target.value == "" || e.target.value == 0) {
+                                            updateDate.structure_data[index][
+                                              "pair_data"
+                                            ][index1]["commission"] = 0;
+                                            setUpdateDate({
+                                              ...updateDate,
+                                            });
+                                          }
                                         }}
                                       />
                                     </div>

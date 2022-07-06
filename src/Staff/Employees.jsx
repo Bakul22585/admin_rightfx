@@ -421,9 +421,21 @@ const Employees = () => {
                 label="Phone"
                 variant="standard"
                 sx={{ width: "100%" }}
-                type="number"
+                type="text"
                 name="user_phone"
-                onChange={input}
+                onChange={(e) => {
+                  if (Number(e.target.value) > 0) {
+                    form.user_phone = Number(e.target.value);
+                    setForm({
+                      ...form
+                    });
+                  } else if (e.target.value == "" || e.target.value == 0) {
+                    form.user_phone = 0;
+                    setForm({
+                      ...form
+                    });
+                  }
+                }}
                 value={form.user_phone}
               />
             </div>{" "}
@@ -482,21 +494,45 @@ const Employees = () => {
                   <TextField
                     label="Account Target"
                     variant="standard"
-                    type="number"
+                    type="text"
                     sx={{ width: "100%" }}
                     name="ac_target"
-                    onChange={input}
+                    onChange={(e) => {
+                      if (Number(e.target.value) > 0) {
+                        form.ac_target = Number(e.target.value);
+                        setForm({
+                          ...form
+                        });
+                      } else if (e.target.value == "" || e.target.value == 0) {
+                        form.ac_target = 0;
+                        setForm({
+                          ...form
+                        });
+                      }
+                    }}
                     value={form.ac_target}
                   />
                 </div>{" "}
                 <div className="element w-100">
                   <TextField
                     label="Money In Target"
-                    type="number"
+                    type="text"
                     variant="standard"
                     sx={{ width: "100%" }}
                     name="money_in_target"
-                    onChange={input}
+                    onChange={(e) => {
+                      if (Number(e.target.value) > 0) {
+                        form.money_in_target = Number(e.target.value);
+                        setForm({
+                          ...form
+                        });
+                      } else if (e.target.value == "" || e.target.value == 0) {
+                        form.money_in_target = 0;
+                        setForm({
+                          ...form
+                        });
+                      }
+                    }}
                     value={form.money_in_target}
                   />
                 </div>{" "}
