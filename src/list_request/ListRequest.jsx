@@ -141,7 +141,7 @@ const ListRequest = () => {
       name: "REFFEERED",
       selector: (row) => {
         return (
-          <span title={row.structure_name}>
+          <span title={row.structure_name == "0" ? "NO" : "YES"}>
             {row.is_reffered == "0" ? "NO" : "YES"}
           </span>
         );
@@ -155,7 +155,7 @@ const ListRequest = () => {
       name: "WEBSITE",
       selector: (row) => {
         return (
-          <span title={row.is_website}>
+          <span title={row.is_website == "0" ? "NO" : "YES"}>
             {row.is_website == "0" ? "NO" : "YES"}
           </span>
         );
@@ -192,7 +192,11 @@ const ListRequest = () => {
       selector: (row) => {
         return (
           <span
-            title={row.sponsor_approve}
+            title={row.sponsor_approve == "1"
+            ? "APPROVED"
+            : row.sponsor_approve == "2"
+              ? "REJECTED"
+              : "PENDING"}
             className={`text-color-${row.sponsor_approve == "1"
                 ? "green"
                 : row.sponsor_approve == "2"
@@ -218,7 +222,11 @@ const ListRequest = () => {
       selector: (row) => {
         return (
           <span
-            title={row.admin_approve}
+            title={row.admin_approve == "1"
+            ? "APPROVED"
+            : row.admin_approve == "2"
+              ? "REJECTED"
+              : "PENDING"}
             className={`text-color-${row.admin_approve == "1"
                 ? "green"
                 : row.admin_approve == "2"
@@ -244,7 +252,11 @@ const ListRequest = () => {
       selector: (row) => {
         return (
           <span
-            title={row.status}
+            title={row.status == "1"
+            ? "APPROVED"
+            : row.status == "2"
+              ? "REJECTED"
+              : "PENDING"}
             className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
               }`}
           >
@@ -713,7 +725,7 @@ const ListRequest = () => {
                       </div>
                       <div className="display-element">
                         <h6>WEBSITE</h6>
-                        <div>{ibdata.is_website}</div>
+                        <div>{ibdata.is_website == "0" ? "NO" : "YES"}</div>
                       </div>
                       <div className="display-element">
                         <h6>WEBSITE URL</h6>
@@ -811,17 +823,17 @@ const ListRequest = () => {
                                     value={item.group_rebate}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
-                                      if (Number(e.target.value) > 0) {
+                                      if (!isNaN(Number(e.target.value))) {
                                         updateDate.structure_data[index][
                                           "group_rebate"
-                                        ] = parseInt(e.target.value);
+                                        ] = e.target.value;
                                         updateDate.structure_data[index][
                                           "pair_data"
                                         ].forEach((value, valueIndex) => {
                                           updateDate.structure_data[index][
                                             "pair_data"
                                           ][valueIndex]["rebate"] =
-                                            parseInt(e.target.value);
+                                            e.target.value;
                                         });
                                         setUpdateDate({
                                           ...updateDate,
@@ -855,17 +867,17 @@ const ListRequest = () => {
                                     value={item.group_commission}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
-                                      if (Number(e.target.value) > 0) {
+                                      if (!isNaN(Number(e.target.value))) {
                                         updateDate.structure_data[index][
                                           "group_commission"
-                                        ] = Number(e.target.value);
+                                        ] = e.target.value;
                                         updateDate.structure_data[index][
                                           "pair_data"
                                         ].forEach((value, valueIndex) => {
                                           updateDate.structure_data[index][
                                             "pair_data"
                                           ][valueIndex]["commission"] =
-                                            Number(e.target.value);
+                                            e.target.value;
                                         });
                                         setUpdateDate({
                                           ...updateDate,
@@ -969,10 +981,10 @@ const ListRequest = () => {
                                         value={item1.rebate}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
-                                          if (Number(e.target.value) > 0) {
+                                          if (!isNaN(Number(e.target.value))) {
                                             updateDate.structure_data[index][
                                               "pair_data"
-                                            ][index1]["rebate"] = Number(e.target.value);
+                                            ][index1]["rebate"] = e.target.value;
                                             setUpdateDate({
                                               ...updateDate,
                                             });
@@ -995,11 +1007,11 @@ const ListRequest = () => {
                                         value={item1.commission}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
-                                          if (Number(e.target.value) > 0) {
+                                          if (!isNaN(Number(e.target.value))) {
                                             updateDate.structure_data[index][
                                               "pair_data"
                                             ][index1]["commission"] =
-                                              Number(e.target.value);
+                                              e.target.value;
                                             setUpdateDate({
                                               ...updateDate,
                                             });

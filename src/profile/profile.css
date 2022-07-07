@@ -641,3 +641,243 @@ text.highcharts-credits {
 .IB-Dedicated-Links .master-structure-section .user-links .user-link-body {
     border-bottom: 0px;
 }
+.bankDetailsTabSection.pamm-section {
+    padding: 25px;
+}
+.bankDetailsTabSection.pamm-section .groupButtonSection {
+    display: flex;
+    justify-content: end;
+}
+.pamm-section .setBoxs .boxSection .boxsize {
+    padding: 0px;
+}
+.pamm-section .setBoxs .boxSection .boxsize h5 {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    vertical-align: middle;
+    word-break: break-all;
+}
+.pamm-section .setBoxs .boxSection .boxsize p {
+    color: rgba(0,0,0,.4);
+    display: block;
+    font-size: .99rem;
+    font-size: .9rem;
+    letter-spacing: 0;
+    letter-spacing: 1px;
+    text-transform: none;
+}
+.pamm-section .pamm-withdraw-history-filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: end;
+}
+.pamm-section .pamm-withdraw-history-filter-section .filter-element {
+    width: 150px;
+}
+.text-color-green {
+    color: green;
+}
+.text-color-red {
+    color: red;
+}
+
+.pamm-section .money-manager-card-list-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 305px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-header-section {
+    background-color: #2a3f73;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    padding: 5px 10px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section {
+    padding: 15px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-footer-action-section {
+    display: flex;
+}
+.pamm-section .navlink-color-white {
+    color: #fff!important;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-header-section label {
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element:first-child {
+    border-top: 0;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element {
+    border-bottom: 1.5px solid #adadad;
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element div {
+    width: 100%;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element .right-side-border {
+    border-right: 1px solid #adadad;
+    padding-right: 10px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element label {
+    font-weight: 700;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element div:first-child p {
+    margin: 0;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-footer-action-section .third-view-button,
+.pamm-section  .money-manager-card-list-section .money-manager-content .money-manager-footer-action-section button {
+    width: 100%;
+}
+.pamm-section .money-manager-footer-action-section .skyblue {
+    background-color: #d7ecd9;
+    border: 0;
+    border-radius: 0 0 0 10px;
+    color: #3d972f;
+    font-weight: 700;
+    height: 35px;
+    outline: 0;
+}
+.pamm-section .money-manager-footer-action-section .third-view-button {
+    align-items: center;
+    background-color: #1d326669;
+    border-radius: 0 0 10px 0;
+    color: #314678!important;
+    display: flex;
+    font-weight: 700;
+    justify-content: center;
+    width: 100%;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-footer-action-section button.danger {
+    background-color: #ebd7d7;
+    border: 0;
+    border-radius: 0 0 0 10px;
+    color: #972f2f;
+    font-weight: 700;
+    height: 35px;
+    outline: 0;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-footer-action-section button.success {
+    background-color: #d7ecd9;
+    border: 0;
+    /* border-radius: 0 0 10px 0; */
+    color: #3d972f;
+    font-weight: 700;
+    height: 35px;
+    outline: 0;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element div:nth-child(2) img {
+    width: 40px;
+}
+.pamm-section .money-manager-card-list-section .money-manager-content .money-manager-body-section .money-manager-body-content-element.marge-element:last-child {
+    border-bottom: 0;
+}
+.pamm-section .loader-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+}
+.pamm-section .myportfolio-card-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.pamm-section .myportfolio-card-section .myportfolio-card-content {
+    background-color: #f3fdff;
+    border-radius: 10px;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+    margin-top: 10px;
+    width: auto;
+}
+.myportfolio-card-section .myportfolio-card-content .width-100-with-border.header-sction {
+    background-color: #243a6f;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+}
+.myportfolio-card-section .myportfolio-card-content .width-100-with-border {
+    border-bottom: 1px solid rgba(0,0,0,.15);
+    display: flex;
+    gap: 70px;
+    justify-content: space-between;
+    padding: 15px;
+}
+.myportfolio-card-section .myportfolio-card-content .width-100-no-border div, .myportfolio-card-section .myportfolio-card-content .width-100-with-border div {
+    display: flex;
+    flex-direction: column;
+}
+.portfolio-link-color {
+    color: skyblue!important;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.myportfolio-card-section .myportfolio-card-content .width-100-no-border .text-bold-700, .myportfolio-card-section .myportfolio-card-content .width-100-with-border .text-bold-700 {
+    font-weight: 700;
+}
+.myportfolio-card-section .myportfolio-card-content .footer-action-button {
+    display: flex;
+}
+.myportfolio-card-section .myportfolio-card-content .footer-action-button button:first-child {
+    background-color: #ebd7d7;
+    border: 0;
+    border-radius: 0 0 0 10px;
+    color: #972f2f;
+    font-weight: 700;
+    height: 35px;
+    outline: 0;
+    width: 100%;
+}
+.myportfolio-card-section .myportfolio-card-content .footer-action-button button:nth-child(2) {
+    background-color: #d7ecd9;
+    border: 0;
+    border-radius: 0 0 0 0;
+    color: #3d972f;
+    font-weight: 700;
+    height: 35px;
+    outline: 0;
+    width: 100%;
+}
+.myportfolio-card-section .myportfolio-card-content .footer-action-button .third-view-button {
+    align-items: center;
+    background-color: #1d326669;
+    border-radius: 0 0 10px 0;
+    color: #314678;
+    display: flex;
+    font-weight: 700;
+    justify-content: center;
+    width: 100%;
+}
+.myportfolio-card-section .myportfolio-card-content .footer-action-button {
+    display: flex;
+}
+.spanportFolio1 {
+    align-items: center;
+    border-radius: 0 0 0 10px;
+    display: flex;
+    height: 35px;
+    justify-content: center;
+    width: 100%;
+}

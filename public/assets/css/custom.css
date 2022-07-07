@@ -17826,3 +17826,10 @@ input[type=number] {
     padding: 0 15px;
   }
 }
+.rdt_Table .rdt_TableHead .rdt_TableHeadRow {
+  text-transform: uppercase;
+  background-color: transparent!important;
+  color: #12aaeb!important;
+  font-size: 13px!important;
+  font-weight: 700;
+}

@@ -75,11 +75,11 @@ export default function Login1(prop) {
             console.log(values.email);
             notify("Email format is invaild ");
             errors.email = "Email format is invaild";
-        }else
-        if (!values.password) {
-            errors.password = " password is requied";
-            notify("Password is requied");
-        }
+        } else
+            if (!values.password) {
+                errors.password = " password is requied";
+                notify("Password is requied");
+            }
         return errors;
     };
     const notify = (p) => {
@@ -152,14 +152,17 @@ export default function Login1(prop) {
                             </div>
 
                             <div className="text-center w-50 mx-auto">
-                                {(loader == true) ?<ColorButton
+                                {(loader == true) ? <ColorButton
                                     tabindex="0"
                                     type="submit"
                                     size="large"
-                                    className=" font-weight-bold w-100 my-2 p-3 btn-disabled-login"
-                                    disabled
+                                    className=" font-weight-bold w-100 my-2 p-3"
                                 >
-                                    <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+                                    <i
+                                        class="fa fa-refresh fa-spin fa-3x fa-fw"
+                                        style={{ fontSize: "20px" }}
+                                    ></i>
+                                    <span style={{ textTransform: "capitalize" }}>Log In</span>
                                     <span className="MuiTouchRipple-root"></span>
                                 </ColorButton> : <ColorButton
                                     tabindex="0"
@@ -170,7 +173,7 @@ export default function Login1(prop) {
                                     <span style={{ textTransform: "capitalize" }}>Log In</span>
                                     <span className="MuiTouchRipple-root"></span>
                                 </ColorButton>}
-                                
+
                             </div>
                         </form>
                     </div>

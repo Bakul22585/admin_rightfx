@@ -731,9 +731,9 @@ const IBStructure = () => {
                       placeholder="Rebert"
                       value={item.group_rebate}
                       onChange={(e) => {
-                        if (Number(e.target.value) > 0) {
+                        if (!isNaN(Number(e.target.value))) {
                           form.structure_data[index]["group_rebate"] =
-                            Number(e.target.value);
+                            e.target.value;
                           setForm({
                             ...form,
                           });
@@ -753,9 +753,9 @@ const IBStructure = () => {
                       placeholder="Commission"
                       value={item.group_commission}
                       onChange={(e) => {
-                        if (Number(e.target.value) > 0) {
+                        if (!isNaN(Number(e.target.value))) {
                           form.structure_data[index]["group_commission"] =
-                            Number(e.target.value);
+                            e.target.value;
                           setForm({
                             ...form,
                           });
@@ -811,10 +811,10 @@ const IBStructure = () => {
                             placeholder="Rebert"
                             value={item1.rebate}
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
+                              if (!isNaN(Number(e.target.value))) {
                                 form.structure_data[index]["pair_data"][index1][
                                   "rebate"
-                                ] = Number(e.target.value);
+                                ] = e.target.value;
                                 setForm({
                                   ...form,
                                 });
@@ -837,10 +837,10 @@ const IBStructure = () => {
                             placeholder="Commission"
                             value={item1.commission}
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
+                              if (!isNaN(Number(e.target.value))) {
                                 form.structure_data[index]["pair_data"][index1][
                                   "commission"
-                                ] = Number(e.target.value);
+                                ] = e.target.value;
                                 setForm({
                                   ...form,
                                 });

@@ -285,8 +285,8 @@ const CopyTrading = () => {
                     className="formControl-input"
                     value={form.gain}
                     onChange={(e) => {
-                      if (Number(e.target.value) > 0) {
-                        form.gain = Number(e.target.value);
+                      if (!isNaN(Number(e.target.value))) {
+                        form.gain = e.target.value;
                         setForm({...form});
                       } else if (e.target.value == "" || e.target.value == 0) {
                         form.gain = 0;
@@ -305,8 +305,8 @@ const CopyTrading = () => {
                       className="formControl-input"
                       value={form.copiers_left}
                       onChange={(e) => {
-                        if (Number(e.target.value) > 0) {
-                          form.copiers_left = Number(e.target.value);
+                        if (!isNaN(Number(e.target.value))) {
+                          form.copiers_left = e.target.value;
                           setForm({...form});
                         } else if (e.target.value == "" || e.target.value == 0) {
                           form.copiers_left = 0;
@@ -322,8 +322,8 @@ const CopyTrading = () => {
                       className="formControl-input"
                       value={form.copiers_right}
                       onChange={(e) => {
-                        if (Number(e.target.value) > 0) {
-                          form.copiers_right = Number(e.target.value);
+                        if (!isNaN(Number(e.target.value))) {
+                          form.copiers_right = e.target.value;
                           setForm({...form});
                         } else if (e.target.value == "" || e.target.value == 0) {
                           form.copiers_right = 0;
@@ -344,8 +344,8 @@ const CopyTrading = () => {
                     className="formControl-input"
                     value={form.profit}
                     onChange={(e) => {
-                      if (Number(e.target.value) > 0) {
-                        form.profit = Number(e.target.value);
+                      if (!isNaN(Number(e.target.value))) {
+                        form.profit = e.target.value;
                         setForm({...form});
                       } else if (e.target.value == "" || e.target.value == 0) {
                         form.profit = 0;
@@ -360,8 +360,8 @@ const CopyTrading = () => {
                     className="formControl-input"
                     value={form.loss}
                     onChange={(e) => {
-                      if (Number(e.target.value) > 0) {
-                        form.loss = Number(e.target.value);
+                      if (!isNaN(Number(e.target.value))) {
+                        form.loss = e.target.value;
                         setForm({...form});
                       } else if (e.target.value == "" || e.target.value == 0) {
                         form.loss = 0;
@@ -380,8 +380,8 @@ const CopyTrading = () => {
                   className="formControl-input"
                   value={form.commission}
                   onChange={(e) => {
-                    if (Number(e.target.value) > 0) {
-                      form.commission = Number(e.target.value);
+                    if (!isNaN(Number(e.target.value))) {
+                      form.commission = e.target.value;
                       setForm({...form});
                     } else if (e.target.value == "" || e.target.value == 0) {
                       form.commission = 0;

@@ -125,8 +125,8 @@ const CurrencyRate = () => {
                             name="incentive_usd_rate"
                             type="text"
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
-                                data.incentive_usd_rate = Number(e.target.value);
+                              if (!isNaN(Number(e.target.value))) {
+                                data.incentive_usd_rate = e.target.value;
                                 setData({...data});
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 data.incentive_usd_rate = 0;
@@ -145,8 +145,8 @@ const CurrencyRate = () => {
                             name="deposit_rate"
                             type="text"
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
-                                data.deposit_rate = Number(e.target.value);
+                              if (!isNaN(Number(e.target.value))) {
+                                data.deposit_rate = e.target.value;
                                 setData({...data});
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 data.deposit_rate = 0;
@@ -165,8 +165,8 @@ const CurrencyRate = () => {
                             name="withdrawal_rate"
                             type="text"
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
-                                data.withdrawal_rate = Number(e.target.value);
+                              if (!isNaN(Number(e.target.value))) {
+                                data.withdrawal_rate = e.target.value;
                                 setData({...data});
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 data.withdrawal_rate = 0;

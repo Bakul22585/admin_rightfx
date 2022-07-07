@@ -498,8 +498,8 @@ const Employees = () => {
                     sx={{ width: "100%" }}
                     name="ac_target"
                     onChange={(e) => {
-                      if (Number(e.target.value) > 0) {
-                        form.ac_target = Number(e.target.value);
+                      if (!isNaN(Number(e.target.value))) {
+                        form.ac_target = e.target.value;
                         setForm({
                           ...form
                         });
@@ -521,8 +521,8 @@ const Employees = () => {
                     sx={{ width: "100%" }}
                     name="money_in_target"
                     onChange={(e) => {
-                      if (Number(e.target.value) > 0) {
-                        form.money_in_target = Number(e.target.value);
+                      if (!isNaN(Number(e.target.value))) {
+                        form.money_in_target = e.target.value;
                         setForm({
                           ...form
                         });

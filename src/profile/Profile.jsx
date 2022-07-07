@@ -15,6 +15,8 @@ import {
   FormControlLabel,
   Checkbox,
   Input,
+  ButtonGroup,
+  FormGroup,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -181,7 +183,12 @@ const Profile = () => {
   const { id } = useParams();
   const [value, setValue] = useState(0);
   const [dialogTitle, setDialogTitle] = useState("");
+  const [pammGroupButton, setPammGroupButton] = useState("dashboard");
+  const [pammPortfolioGroupButton, setPammPortfolioGroupButton] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
+  const [moneyManagerList, setMoneyManagerList] = useState([]);
+  const [myPortfolio, setMyPortfolio] = useState([]);
+  const [portfolioLoader, setPortfolioLoader] = useState(true);
   const [param, setParam] = useState({
     action: "my_referrals",
     user_id: id,
@@ -191,6 +198,7 @@ const Profile = () => {
   const [filterData, setFilterData] = useState(null);
   const [mt5AccountList, setMt5AccountList] = useState([]);
   const [salesList, setSalesList] = useState([]);
+  const [pammDashboardData, setPammDashboardData] = useState({});
   const [countryData, setCountryData] = useState({
     data: [],
   });
@@ -421,6 +429,7 @@ const Profile = () => {
   });
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
+  const [moneyManagerListMenu, setMoneyManagerListMenu] = useState([]);
   const [myStructureData, setMyStructureData] = useState({
     structure_name: "",
     structure_data: [],
@@ -431,6 +440,18 @@ const Profile = () => {
     group_id: "",
     isLoader: false,
     list: []
+  });
+
+  const [pammWithdrawParam, setPammWithdrawParam] = useState({
+    user_id: id
+  });
+
+  const [pammTradeParam, setPammTardeParam] = useState({
+    user_id: id
+  });
+
+  const [pammMyManagerParam, setPammMyManagerParam] = useState({
+    user_id: id
   });
 
   const depositColumn = [
@@ -1176,6 +1197,25 @@ const Profile = () => {
     isLoader: false,
     refresh: false,
   });
+  const [refreshCreatePortfolio1, SetRefreshCreatePortfolio1] = useState(false);
+  const [createPortfolioForm, setCreatePortfolioForm] = useState({
+    isLoader: false,
+    portfolio_name: "",
+    mm_mt5_acc_id: "",
+    investment_months: "",
+  });
+  const [investmentForm, setInvestmentForm] = useState({
+    isLoader: false,
+    user_id: "",
+    pid: "",
+    amount: "",
+  });
+  const [withdrawForm, setWithdrawForm] = useState({
+    isLoader: false,
+    allWithdraw: true,
+    amount: "",
+    pid: "",
+  });
 
   const input01 = (event) => {
     const { name, value } = event.target;
@@ -1362,6 +1402,237 @@ const Profile = () => {
       wrap: true,
     },
   ];
+
+  const pammWithdrawHistoryColumn = [
+    {
+      name: "SR NO",
+      selector: (row) => row.sr_no,
+      reorder: true,
+      grow: 0.1,
+    },
+    {
+      name: "DATE",
+      selector: (row) => {
+        return <span title={row.added_datetime}>{row.added_datetime}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Investor NAME",
+      selector: (row) => {
+        return <span title={row.investor_name}>{row.investor_name}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Portfolio Name",
+      selector: (row) => {
+        return <span title={row.portfolio_name}>{row.portfolio_name}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Account NAME",
+      selector: (row) => {
+        return <span title={row.mt5_name}>{row.mt5_name}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Portfolio Id",
+      selector: (row) => {
+        return <span title={row.portfolio_id}>{row.portfolio_id}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Amount",
+      selector: (row) => {
+        return <span title={'$' + row.amount}>{'$' + row.amount}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Approved Date",
+      selector: (row) => {
+        return <span title={row.approved_datetime}>{row.approved_datetime}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "STATUS",
+      selector: (row) => {
+        return <span title={row.withdrawal_status == "0" ? 'Pending' : (row.withdrawal_status == '1') ? 'Approves' : 'Rejected'} className={`status-text-${(row.withdrawal_status == '0') ? 'pending' : (row.withdrawal_status == '1') ? 'approved' : 'rejected'}`}>{row.withdrawal_status == "0" ? 'Pending' : (row.withdrawal_status == '1') ? 'Approves' : 'Rejected'}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+  ]
+
+  const pammTradeHistoryColumn = [
+    {
+      name: "Portfolio Id",
+      selector: (row) => {
+        return <span title={row.portfolio_id}>{row.portfolio_id}</span>;
+      },
+      reorder: true,
+      grow: 1,
+    },
+    {
+      name: "Portfolio Name",
+      selector: (row) => {
+        return <span title={row.portfolio_name}>{row.portfolio_name}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Date",
+      selector: (row) => {
+        return <span title={row.trade_datetime}>{row.trade_datetime}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Symbol",
+      selector: (row) => {
+        return <span title={row.symbol}>{row.symbol}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Action",
+      selector: (row) => {
+        return <span title={row.action} className={`text-color-${(row.action == 'Buy') ? 'green' : 'red'}`}>{row.action}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Price",
+      selector: (row) => {
+        return <span title={row.price}>{row.price}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Profit",
+      selector: (row) => {
+        return <span title={row.profit} className={`text-color-${(row.profit >= 0) ? 'green' : 'red'}`}>{row.profit}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "Lot",
+      selector: (row) => {
+        return <span title={row.volume}>{row.volume}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    }
+  ]
+
+  const pammMyManagerColumn = [
+    {
+      name: "SR.NO",
+      selector: (row) => {
+        return <span title={row.sr_no}>{row.sr_no}</span>;
+      },
+      reorder: true,
+      grow: 0.1,
+    },
+    {
+      name: "ACCOUNT NAME",
+      selector: (row) => {
+        return <span title={row.account_name}>{row.account_name}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "EMAIL",
+      selector: (row) => {
+        return <span title={row.user_email}>{row.user_email}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "MOBILE",
+      selector: (row) => {
+        return <span title={row.user_phone}>{row.user_phone}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "TOTAL DEPOSIT",
+      selector: (row) => {
+        return <span title={'$' + row.total_deposit}>{'$' + row.total_deposit}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.5,
+      wrap: true,
+    },
+    {
+      name: "DATETIME",
+      selector: (row) => {
+        return <span title={row.added_datetime}>{row.added_datetime}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    }
+  ]
 
   const getAccountList = () => {
     const param = new FormData();
@@ -1655,7 +1926,8 @@ const Profile = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    if (newValue == 7) {
+    if (newValue == 7 && userData.data.is_ib_account != "0") {
+      console.log("normal user", true);
       setReferralData({
         data: [],
         structure_name: "",
@@ -1669,7 +1941,8 @@ const Profile = () => {
       });
       getMasterStructureList();
     }
-    if (newValue == 8) {
+
+    if (newValue == 8 && userData.data.is_ib_account != "0") {
       setPartnershipMasterStructureData({
         structure_name: "",
         structure_data: [],
@@ -1678,11 +1951,25 @@ const Profile = () => {
       });
       getMasterStructureList();
     }
+
     if (newValue == 11) {
       getMyTraders();
     }
+
     if (newValue == 9) {
       getMyAssignedStructure();
+    }
+
+    if (newValue == 12 && userData.data.is_pamm == "1") {
+      getPammDashboard();
+      setPammGroupButton('dashboard');
+      getMoneyManagerList();
+    }
+
+    if (newValue == 8 && userData.data.is_pamm == "1" && userData.data.is_ib_account == "0") {
+      getPammDashboard();
+      setPammGroupButton('dashboard');
+      getMoneyManagerList();
     }
   };
 
@@ -2028,11 +2315,15 @@ const Profile = () => {
               <TextField
                 className="input-font-small"
                 label="MT5 Balance"
-                type="number"
+                type="text"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="mt5_balance"
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
           ) : (
@@ -2282,16 +2573,16 @@ const Profile = () => {
                             placeholder="Rebate"
                             value={item.group_rebate}
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
+                              if (!isNaN(Number(e.target.value))) {
                                 newMasterStructureData.structure_data[index][
                                   "group_rebate"
-                                ] = Number(e.target.value);
+                                ] = e.target.value;
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
                                 ].forEach((value, valueIndex) => {
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["rebate"] = Number(e.target.value);
+                                  ][valueIndex]["rebate"] = e.target.value;
                                 });
                                 setNewMasterStructureData({
                                   ...newMasterStructureData,
@@ -2322,16 +2613,16 @@ const Profile = () => {
                             placeholder="Commission"
                             value={item.group_commission}
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
+                              if (!isNaN(Number(e.target.value))) {
                                 newMasterStructureData.structure_data[index][
                                   "group_commission"
-                                ] = Number(e.target.value);
+                                ] = e.target.value;
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
                                 ].forEach((value, valueIndex) => {
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["commission"] = Number(e.target.value);
+                                  ][valueIndex]["commission"] = e.target.value;
                                 });
                                 setNewMasterStructureData({
                                   ...newMasterStructureData,
@@ -2418,7 +2709,7 @@ const Profile = () => {
                                 placeholder="Rebert"
                                 value={item1.rebate}
                                 onChange={(e) => {
-                                  if (Number(e.target.value) > 0) {
+                                  if (!isNaN(Number(e.target.value))) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
                                     ][index1]["rebate"] = e.target.value;
@@ -2432,7 +2723,7 @@ const Profile = () => {
                                     setNewMasterStructureData({
                                       ...newMasterStructureData,
                                     });
-                                  } 
+                                  }
                                 }}
                               />
                             </div>
@@ -2443,10 +2734,10 @@ const Profile = () => {
                                 placeholder="Commission"
                                 value={item1.commission}
                                 onChange={(e) => {
-                                  if (Number(e.target.value) > 0) {
+                                  if (!isNaN(Number(e.target.value))) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
-                                    ][index1]["commission"] = Number(e.target.value);
+                                    ][index1]["commission"] = e.target.value;
                                     setNewMasterStructureData({
                                       ...newMasterStructureData,
                                     });
@@ -2543,16 +2834,16 @@ const Profile = () => {
                             placeholder="Rebate"
                             value={item.group_rebate}
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
+                              if (!isNaN(Number(e.target.value))) {
                                 newMasterStructureData.structure_data[index][
                                   "group_rebate"
-                                ] = Number(e.target.value);
+                                ] = e.target.value;
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
                                 ].forEach((value, valueIndex) => {
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["rebate"] = Number(e.target.value);
+                                  ][valueIndex]["rebate"] = e.target.value;
                                 });
                                 setNewMasterStructureData({
                                   ...newMasterStructureData,
@@ -2583,16 +2874,16 @@ const Profile = () => {
                             placeholder="Commission"
                             value={item.group_commission}
                             onChange={(e) => {
-                              if (Number(e.target.value) > 0) {
+                              if (!isNaN(Number(e.target.value))) {
                                 newMasterStructureData.structure_data[index][
                                   "group_commission"
-                                ] = Number(e.target.value);
+                                ] = e.target.value;
                                 newMasterStructureData.structure_data[index][
                                   "pair_data"
                                 ].forEach((value, valueIndex) => {
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["commission"] = Number(e.target.value);
+                                  ][valueIndex]["commission"] = e.target.value;
                                 });
                                 setNewMasterStructureData({
                                   ...newMasterStructureData,
@@ -2665,10 +2956,10 @@ const Profile = () => {
                                 placeholder="Rebert"
                                 value={item1.rebate}
                                 onChange={(e) => {
-                                  if (Number(e.target.value) > 0) {
+                                  if (!isNaN(Number(e.target.value))) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
-                                    ][index1]["rebate"] = Number(e.target.value);
+                                    ][index1]["rebate"] = e.target.value;
                                     setNewMasterStructureData({
                                       ...newMasterStructureData,
                                     });
@@ -2690,10 +2981,10 @@ const Profile = () => {
                                 placeholder="Commission"
                                 value={item1.commission}
                                 onChange={(e) => {
-                                  if (Number(e.target.value) > 0) {
+                                  if (!isNaN(Number(e.target.value))) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
-                                    ][index1]["commission"] = Number(e.target.value);
+                                    ][index1]["commission"] = e.target.value;
                                     setNewMasterStructureData({
                                       ...newMasterStructureData,
                                     });
@@ -3189,11 +3480,15 @@ const Profile = () => {
               value={bankAccountForm.account_number}
               className="input-font-small"
               label="Account Number"
-              type="number"
+              type="text"
               variant="standard"
               sx={{ width: "100%" }}
               name="account_number"
-              onChange={bankInput}
+              onChange={(e) => {
+                if (Number(e.target.value)) {
+                  bankInput(e);
+                }
+              }}
             />
           </div>
           <br />
@@ -3316,11 +3611,15 @@ const Profile = () => {
               <TextField
                 className="input-font-small"
                 label="Amount"
-                type="number"
+                type="text"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
-                onChange={transactionInput}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    transactionInput(e);
+                  }
+                }}
               />
             </div>
             <br />
@@ -3869,17 +4168,16 @@ const Profile = () => {
                               placeholder="Rebate"
                               value={item.group_rebate}
                               onChange={(e) => {
-                                if (Number(e.target.value) > 0) {
+                                if (!isNaN(Number(e.target.value))) {
                                   partnershipMasterStructureData.structure_data[
                                     index
-                                  ]["group_rebate"] = Number(e.target.value);
+                                  ]["group_rebate"] = e.target.value;
                                   partnershipMasterStructureData.structure_data[
                                     index
                                   ]["pair_data"].forEach((value, valueIndex) => {
                                     partnershipMasterStructureData.structure_data[
                                       index
-                                    ]["pair_data"][valueIndex]["rebate"] =
-                                    Number(e.target.value);
+                                    ]["pair_data"][valueIndex]["rebate"] = e.target.value;
                                   });
                                   setPartnershipMasterStructureData({
                                     ...partnershipMasterStructureData,
@@ -3894,7 +4192,7 @@ const Profile = () => {
                                     partnershipMasterStructureData.structure_data[
                                       index
                                     ]["pair_data"][valueIndex]["rebate"] =
-                                    0;
+                                      0;
                                   });
                                   setPartnershipMasterStructureData({
                                     ...partnershipMasterStructureData,
@@ -3911,17 +4209,17 @@ const Profile = () => {
                               placeholder="Commission"
                               value={item.group_commission}
                               onChange={(e) => {
-                                if (Number(e.target.value) > 0) {
+                                if (!isNaN(Number(e.target.value))) {
                                   partnershipMasterStructureData.structure_data[
                                     index
-                                  ]["group_commission"] = Number(e.target.value);
+                                  ]["group_commission"] = e.target.value;
                                   partnershipMasterStructureData.structure_data[
                                     index
                                   ]["pair_data"].forEach((value, valueIndex) => {
                                     partnershipMasterStructureData.structure_data[
                                       index
                                     ]["pair_data"][valueIndex]["commission"] =
-                                    Number(e.target.value);
+                                      e.target.value;
                                   });
                                   setPartnershipMasterStructureData({
                                     ...partnershipMasterStructureData,
@@ -4012,10 +4310,10 @@ const Profile = () => {
                                   placeholder="Rebert"
                                   value={item1.rebate}
                                   onChange={(e) => {
-                                    if (Number(e.target.value) > 0) {
+                                    if (!isNaN(Number(e.target.value))) {
                                       partnershipMasterStructureData.structure_data[
                                         index
-                                      ]["pair_data"][index1]["rebate"] = Number(e.target.value);
+                                      ]["pair_data"][index1]["rebate"] = e.target.value;
                                       setPartnershipMasterStructureData({
                                         ...partnershipMasterStructureData,
                                       });
@@ -4037,10 +4335,10 @@ const Profile = () => {
                                   placeholder="Commission"
                                   value={item1.commission}
                                   onChange={(e) => {
-                                    if (Number(e.target.value) > 0) {
+                                    if (!isNaN(Number(e.target.value))) {
                                       partnershipMasterStructureData.structure_data[
                                         index
-                                      ]["pair_data"][index1]["commission"] = Number(e.target.value);
+                                      ]["pair_data"][index1]["commission"] = e.target.value;
                                       setPartnershipMasterStructureData({
                                         ...partnershipMasterStructureData,
                                       });
@@ -4498,6 +4796,102 @@ const Profile = () => {
           </FormControl>
         </div>
       )
+    } else if (dialogTitle == "Create Portfolio") {
+      return (
+        <div>
+          <div>
+            <TextField
+              className="input-font-small"
+              label="Name"
+              variant="standard"
+              value={createPortfolioForm.portfolio_name}
+              onChange={createPortfolioInput}
+              sx={{ width: "100%" }}
+              name="portfolio_name"
+            />
+          </div>
+          <br />
+          <div>
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>Money Manager</InputLabel>
+              <Select
+                label
+                className="select-font-small"
+                name="mm_mt5_acc_id"
+                value={createPortfolioForm.mm_mt5_acc_id}
+                onChange={createPortfolioInput}
+              >
+                {moneyManagerListMenu.map((item) => {
+                  return (
+                    <MenuItem value={item.mm_mt5_acc_id}>
+                      {item.mt5_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <br />
+          <div>
+            <TextField
+              className="input-font-small"
+              label="Investment Months"
+              type="number"
+              variant="standard"
+              onChange={createPortfolioInput}
+              sx={{ width: "100%" }}
+              name="investment_months"
+            />
+          </div>
+        </div>
+      );
+    } else if (dialogTitle == "Investment") {
+      return (
+        <div>
+          <div>
+            <TextField
+              className="input-font-small"
+              label="Amount"
+              variant="standard"
+              onChange={investmentInput}
+              sx={{ width: "100%" }}
+              name="amount"
+            />
+          </div>
+        </div>
+      );
+    } else if (dialogTitle == "Withdraw") {
+      return (
+        <div>
+          <div>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="allWithdraw"
+                    checked={withdrawForm.allWithdraw}
+                    onChange={withdrawInput}
+                  />
+                }
+                label="All Withdraw"
+              />
+            </FormGroup>
+          </div>
+          <div>
+            <TextField
+              className="input-font-small"
+              label="Amount"
+              type="number"
+              variant="standard"
+              onChange={withdrawInput}
+              sx={{ width: "100%" }}
+              name="amount"
+              disabled={withdrawForm.allWithdraw}
+              value={withdrawForm.allWithdraw ? 0 : withdrawForm.amount}
+            />
+          </div>
+        </div>
+      );
     }
   };
 
@@ -5154,7 +5548,166 @@ const Profile = () => {
           )}
         </div>
       );
+    } else if (dialogTitle == "Create Portfolio") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {createPortfolioForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              // onClick={createPortfolioFormSubmit}
+            >
+              Create
+            </Button>
+          )}
+        </div>
+      );
+    } else if (dialogTitle == "Investment") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {investmentForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              // onClick={investmentFormSubmit}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
+      );
+    } else if (dialogTitle == "Withdraw") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {withdrawForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              // onClick={withdrawFormSubmit}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
+      );
     }
+  };
+
+  const createPortfolioInput = (e) => {
+    const { name, value } = e.target;
+
+    setCreatePortfolioForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
+  const investmentInput = (e) => {
+    const { name, value } = e.target;
+
+    setInvestmentForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
+  const withdrawInput = (e) => {
+    var { name, value } = e.target;
+
+    if (e.target.getAttribute) {
+      if (e.target.getAttribute("type") == "checkbox") {
+        value = e.target.checked;
+      }
+    }
+
+    setWithdrawForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
   };
 
   const input = (event) => {
@@ -7430,6 +7983,106 @@ const Profile = () => {
       });
   };
 
+  const getPammDashboard = async () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("user_id", id);
+    await axios
+      .post(Url + "/ajaxfiles/pamm/pamm_dashboard.php", param)
+      .then((resData) => {
+        if (resData.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (resData.data.status == "error") {
+          toast.error(resData.data.message);
+        } else {
+          setPammDashboardData({ ...resData.data });
+          console.log('pamm dashboard data', pammDashboardData);
+        }
+      });
+  };
+
+  const getMyPortfolio = () => {
+    setPortfolioLoader(true);
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "my_portfolios");
+    param.append("user_id", id);
+    axios
+      .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        setPortfolioLoader(false);
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          setMyPortfolio([...res.data.data]);
+        }
+      });
+  };
+
+  const getMoneyManager = () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "money_manager_accounts");
+    param.append("user_id", id);
+    axios
+      .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          setMoneyManagerList([...res.data.data]);
+        }
+      });
+  };
+
+  const getMoneyManagerList = () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("action", "available_money_manager");
+    param.append("user_id", id);
+
+    axios
+      .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          setMoneyManagerListMenu([...res.data.data]);
+          console.log(res.data.data);
+        }
+      });
+  };
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
@@ -7573,6 +8226,11 @@ const Profile = () => {
                       ""
                     ) : (
                       <Tab label="DOWNLINE" />
+                    )}
+                    {userData.data.is_pamm == "1" ? (
+                      <Tab label="PAMM" />
+                    ) : (
+                      ""
                     )}
                   </Tabs>
                   <SwipeableViews
@@ -8996,7 +9654,180 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </TabPanel>
-                    <TabPanel value={value} index={7} dir={theme.direction}>
+                    {
+                      (userData.data.is_ib_account == "0") ?
+                        <TabPanel value={value} index={7} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section"
+                              >
+                                <div className="headerSection header-title">
+                                  <p className="margin-0">Notes</p>
+                                  <Button
+                                    variant="contained"
+                                    className="add_note"
+                                    onClick={openDialogbox}
+                                  >
+                                    Add Note
+                                  </Button>
+                                </div>
+                                <div className="bankDetailsTabSection">
+                                  <CommonTable
+                                    url={`${Url}/datatable/notes_list.php`}
+                                    column={noteColumn}
+                                    userId={id}
+                                    sort="2"
+                                    refresh={refresh}
+                                  />
+                                </div>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel> : <TabPanel value={value} index={7} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section"
+                              >
+                                <div className="headerSection header-title">
+                                  <p className="margin-0">Referrals</p>
+                                </div>
+                                <div className="bankDetailsTabSection">
+                                  <br />
+                                  <FormControl
+                                    variant="standard"
+                                    sx={{ width: "20%" }}
+                                  >
+                                    <InputLabel>Structure</InputLabel>
+                                    <Select
+                                      label
+                                      className="select-font-small"
+                                      name="structure"
+                                      onChange={(e) => {
+                                        getReferralData(e.target.value);
+                                        // setStructureList((prevalue) => {
+                                        //   return {
+                                        //     ...prevalue,
+                                        //     structure_name: structureList.data.filter(
+                                        //       (x) => x.structure_id == e.target.value
+                                        //     )[0].structure_name,
+                                        //     structure_id: e.target.value,
+                                        //   };
+                                        // });
+                                      }}
+                                    >
+                                      {structureList.data.map((item) => {
+                                        return (
+                                          <MenuItem value={item.structure_id}>
+                                            {item.structure_name}
+                                          </MenuItem>
+                                        );
+                                      })}
+                                    </Select>
+                                  </FormControl>
+                                  <br />
+                                  <div className="referrals-section">
+                                    <table>
+                                      <thead>
+                                        <tr>
+                                          <th>Name</th>
+                                          <th>Client Type</th>
+                                          <th>MT5 Account</th>
+                                          <th>Commission</th>
+                                          <th>Rebate</th>
+                                          <th>Sponsor Name</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {referralData.data.map((item, index) => {
+                                          return (
+                                            <>
+                                              <tr>
+                                                <td>
+                                                  <div className="collaps-content">
+                                                    <i
+                                                      class={`fa fa-angle-${item.is_collapse
+                                                        ? "up"
+                                                        : "down"
+                                                        }`}
+                                                      onClick={(e) => {
+                                                        referralData.data[
+                                                          index
+                                                        ].is_collapse =
+                                                          !item.is_collapse;
+                                                        setReferralData({
+                                                          ...referralData,
+                                                        });
+                                                      }}
+                                                    ></i>
+                                                    {item.ib_group_name}
+                                                  </div>
+                                                </td>
+                                                <td>{item.client_type}</td>
+                                                <td>{item.mt5_acc_no}</td>
+                                                <td>
+                                                  <div
+                                                    className="referral-commission_rebate-content"
+                                                    style={{
+                                                      backgroundColor: `${item.group_color}`,
+                                                    }}
+                                                  >
+                                                    {item.group_commission}
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <div
+                                                    className="referral-commission_rebate-content"
+                                                    style={{
+                                                      backgroundColor: `${item.group_color}`,
+                                                    }}
+                                                  >
+                                                    {item.group_rebate}
+                                                  </div>
+                                                </td>
+                                                <td>{item.sponsor_name}</td>
+                                              </tr>
+                                              {item.is_collapse
+                                                ? item.structure_users.map(
+                                                  (item1) => {
+                                                    return (
+                                                      <tr className="referral-child-structure-users">
+                                                        <td>
+                                                          {item1.client_name}
+                                                        </td>
+                                                        <td>{item1.client}</td>
+                                                        <td>
+                                                          {item1.mt5_acc_no}
+                                                        </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                          {item1.sponsor_name}
+                                                        </td>
+                                                      </tr>
+                                                    );
+                                                  }
+                                                )
+                                                : ""}
+                                            </>
+                                          );
+                                        })}
+                                        <tr></tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel>
+                    }
+                    {/* <TabPanel value={value} index={7} dir={theme.direction}>
                       <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
                           <Paper
@@ -9135,139 +9966,724 @@ const Profile = () => {
                           </Paper>
                         </Grid>
                       </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={8} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section partnership-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <div className="header-search-section">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                >
-                                  <InputLabel>Structure</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    name="structure"
-                                    onChange={(e) => {
-                                      getPartnershipMasterStructure(
-                                        e.target.value
-                                      );
-                                      partnershipMasterStructureData.structure_id =
-                                        e.target.value;
-                                      partnershipMasterStructureData.structure_name =
-                                        structureList.data.filter(
-                                          (x) =>
-                                            x.structure_id == e.target.value
-                                        )[0].structure_name;
-                                      setStructureList((prevalue) => {
-                                        return {
-                                          ...prevalue,
-                                          structure_name:
-                                            structureList.data.filter(
-                                              (x) =>
-                                                x.structure_id == e.target.value
-                                            )[0].structure_name,
-                                          structure_id: e.target.value,
-                                        };
-                                      });
-                                    }}
-                                  >
-                                    {structureList.data.map((item) => {
-                                      return (
-                                        <MenuItem value={item.structure_id}>
-                                          {item.structure_name}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                </FormControl>
-                                <Button
-                                  variant="contained"
-                                  className="add_master_structure btn-danger"
-                                  onClick={deleteStructureSubmit}
-                                >
-                                  Structure Delete
-                                </Button>
+                    </TabPanel> */}
+                    {
+                      (userData.data.is_ib_account == "0") ? <TabPanel value={value} index={8} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <p className="margin-0">PAMM</p>
                               </div>
-                              <div className="groun-button">
-                                <Button
-                                  variant="contained"
-                                  className="add_master_structure"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Master Structure
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="edit_structure"
-                                  onClick={openDialogbox}
-                                  disabled={
-                                    partnershipMasterStructureData.structure_name !=
-                                      ""
-                                      ? false
-                                      : true
-                                  }
-                                >
-                                  Edit Structure
-                                </Button>
-                              </div>
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              {partnershipMasterStructureData.structure_data
-                                .length > 0 ? (
-                                <div className="partnership-section">
-                                  <div className="master-structure-section">
-                                    <div className="structureNameSection view-ib-content-section">
-                                      <label>STRUCTURE NAME</label>
-                                      <span>
-                                        {
-                                          partnershipMasterStructureData.structure_name
-                                        }
-                                      </span>
+                              <div className="bankDetailsTabSection pamm-section">
+                                <div className="groupButtonSection">
+                                  <ButtonGroup variant="outlined">
+                                    <Button variant={`${pammGroupButton == "dashboard" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                      setPammGroupButton('dashboard');
+                                    }}>Dashboard</Button>
+                                    <Button variant={`${pammGroupButton == "portfolio_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                      getMoneyManager();
+                                      setPammPortfolioGroupButton('money_manager');
+                                      setPammGroupButton('portfolio_manage');
+                                    }}>Portfolio Manage</Button>
+                                    <Button variant={`${pammGroupButton == "my_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                      setPammGroupButton('my_manage');
+                                    }}>My Managers</Button>
+                                    <Button variant={`${pammGroupButton == "trade_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                      setPammGroupButton('trade_history');
+                                    }}>Trade History</Button>
+                                    <Button variant={`${pammGroupButton == "withdraw_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                      setPammGroupButton('withdraw_history');
+                                    }}>Withdrawal History</Button>
+                                  </ButtonGroup>
+                                </div>
+                                <br />
+                                {
+                                  (pammGroupButton == "dashboard") ? <div>
+                                    <div className="setBoxs">
+                                      <div className="row1 boxSection">
+                                        <div className="card padding-9 animate fadeLeft boxsize">
+                                          <div className="row">
+                                            <NavLink to="/pamm_user_management">
+                                              <div className="col s12 m12 text-align-center">
+                                                <h5 className="mb-0">
+                                                  {pammDashboardData.my_balance == null ? "$0" : '$' + pammDashboardData.my_balance}
+                                                </h5>
+                                                <p className="no-margin">Wallet Balance</p>
+                                              </div>
+                                            </NavLink>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="row1 boxSection">
+                                        <div className="card padding-9 animate fadeLeft boxsize">
+                                          <div className="row">
+                                            <NavLink to="/pamm_mm_management">
+                                              <div className="col s12 m12 text-align-center">
+                                                <h5 className="mb-0">
+                                                  {pammDashboardData.total_investment == null
+                                                    ? "$0"
+                                                    : '$' + pammDashboardData.total_investment}
+                                                </h5>
+                                                <p className="no-margin">Total Investment</p>
+                                              </div>
+                                            </NavLink>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="row1 boxSection">
+                                        <div className="card padding-9 animate fadeLeft boxsize">
+                                          <div className="row">
+                                            <NavLink to="/pamm_mm_management">
+                                              <div className="col s12 m12 text-align-center">
+                                                <h5 className="mb-0">
+                                                  {pammDashboardData.total_withdrawal == null
+                                                    ? "$0"
+                                                    : '$' + pammDashboardData.total_withdrawal}
+                                                </h5>
+                                                <p className="no-margin">Total Withdrawal</p>
+                                              </div>
+                                            </NavLink>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="main-content-input">
-                                      <div className="ib-structure view-commission-content-section">
-                                        {partnershipMasterStructureData.structure_data.map(
-                                          (item, index) => {
-                                            return (
-                                              <div className="group-structure-section">
-                                                <div className="main-section">
-                                                  <div className="main-section-title">
-                                                    {item.ib_group_name}
+                                  </div> : ""
+                                }
+
+                                {
+                                  (pammGroupButton == "portfolio_manage") ?
+                                    <div>
+                                      <div className="portfolio-manager-group-button">
+                                        <ButtonGroup variant="outlined">
+                                          <Button variant={`${pammPortfolioGroupButton == "money_manager" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                            getMoneyManager();
+                                            setPammPortfolioGroupButton('money_manager');
+                                          }}>MONEY MANAGER</Button>
+                                          <Button variant={`${pammPortfolioGroupButton == "my_portfolio" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                            getMyPortfolio();
+                                            setPammPortfolioGroupButton('my_portfolio');
+                                          }}>MY PORTFOLIO</Button>
+                                        </ButtonGroup>
+                                      </div>
+                                      <br />
+                                      {
+                                        (pammPortfolioGroupButton == "money_manager") ?
+                                          <div>
+                                            <div className="money-manager-card-list-section">
+                                              {moneyManagerList.map((item, index) => {
+                                                return (
+                                                  <div className="money-manager-content">
+                                                    <div className="money-manager-header-section">
+                                                      <NavLink
+                                                        className="navlink-color-white"
+                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}`}
+                                                      >
+                                                        <label>{item.mt5_name}</label>
+                                                      </NavLink>
+                                                    </div>
+                                                    <div className="money-manager-body-section">
+                                                      <div className="money-manager-body-content-element marge-element">
+                                                        <div className="right-side-border">
+                                                          <label>Minimum deposit</label>
+                                                          <p>${item.minimum_deposit_amount}</p>
+                                                        </div>
+                                                        <div>
+                                                          <label>Fees Percentage</label>
+                                                          <p>{item.fees_percentage}%</p>
+                                                        </div>
+                                                      </div>
+                                                      <div className="money-manager-body-content-element marge-element">
+                                                        <div className="right-side-border">
+                                                          <label>Approx Return</label>
+                                                          <p className="text-color-green">
+                                                            {item.fees_percentage}%
+                                                          </p>
+                                                        </div>
+                                                        <div>
+                                                          <label>Risk Score</label>
+                                                          <img src="./assets/img/rishScoreLow.jpg" />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    {item.is_closed == "0" ? (
+                                                      <div className="money-manager-footer-action-section">
+                                                        <button
+                                                          className="danger"
+                                                          onClick={(e) => {
+                                                            setWithdrawForm({
+                                                              isLoader: false,
+                                                              allWithdraw: true,
+                                                              amount: "",
+                                                              pid: item.pid,
+                                                            });
+                                                            setDialogTitle("Withdraw");
+                                                            SetRefreshCreatePortfolio1(true);
+                                                            setOpen(true);
+                                                          }}
+                                                        >
+                                                          Withdraw
+                                                        </button>
+                                                        <button
+                                                          className="success"
+                                                          onClick={(e) => {
+                                                            investmentForm.user_id =
+                                                              item.mm_user_id;
+                                                            investmentForm.pid = item.pid;
+                                                            investmentForm.amount = "";
+                                                            setInvestmentForm({
+                                                              ...investmentForm,
+                                                            });
+                                                            setDialogTitle("Investment");
+                                                            setOpen(true);
+                                                          }}
+                                                        >
+                                                          Invest
+                                                        </button>
+                                                        <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                          View
+                                                        </NavLink>
+                                                      </div>
+                                                    ) : item.is_closed == "2" ? (
+                                                      <div className="money-manager-footer-action-section">
+                                                        <button className="skyblue1">
+                                                          Pending
+                                                        </button>
+                                                        <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                          View
+                                                        </NavLink>
+                                                      </div>
+                                                    ) : (
+                                                      <div className="money-manager-footer-action-section">
+                                                        <button
+                                                          className="skyblue"
+                                                          onClick={(e) => {
+                                                            setMaxWidth("sm");
+                                                            createPortfolioForm.mm_mt5_acc_id =
+                                                              item.mm_mt5_acc_id;
+                                                            setCreatePortfolioForm({
+                                                              ...createPortfolioForm,
+                                                            });
+                                                            setDialogTitle("Create Portfolio");
+                                                            getMoneyManagerList();
+                                                            setOpen(true);
+                                                          }}
+                                                        >
+                                                          Create Portfolio
+                                                        </button>
+                                                        <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                          View
+                                                        </NavLink>
+                                                      </div>
+                                                    )}
                                                   </div>
-                                                  <div className="main-section-input-element">
-                                                    <div>
-                                                      {/* <span>Rebate</span> */}
-                                                      <input
-                                                        type="number"
-                                                        className="Rebate_amount"
-                                                        placeholder="Rebate"
-                                                        disabled
-                                                        value={
-                                                          item.group_rebate
-                                                        }
-                                                      />
+                                                );
+                                              })}
+                                            </div>
+                                          </div>
+                                          : ""
+                                      }
+                                      {
+                                        (pammPortfolioGroupButton == "my_portfolio") ?
+                                          <div className="myportfolio-card-section">
+                                            {
+                                              portfolioLoader ? <div className="loader-section">
+                                                <svg class="spinner" viewBox="0 0 50 50">
+                                                  <circle
+                                                    class="path"
+                                                    cx="25"
+                                                    cy="25"
+                                                    r="20"
+                                                    fill="none"
+                                                    stroke-width="5"
+                                                  ></circle>
+                                                </svg>
+                                              </div> :
+                                                myPortfolio.map((item) => {
+                                                  return (
+                                                    <div className="myportfolio-card-content">
+                                                      <div className="width-100-with-border header-sction">
+                                                        <div>
+                                                          <NavLink
+                                                            to={`/portfolio_profile/${item.pid}`}
+                                                            className="portfolio-link-color"
+                                                          >
+                                                            {item.portfolio_name}
+                                                          </NavLink>
+                                                          <span className="text-bold-700">
+                                                            {item.portfolio_id}
+                                                          </span>
+                                                        </div>
+                                                        <div>
+                                                          <span>Money Manager</span>
+                                                          <NavLink
+                                                            className="navlink-color-white"
+                                                            to={`/money_manager_profile/${item.pid}`}
+                                                          >
+                                                            <span className="text-bold-700">
+                                                              {item.account_name}
+                                                            </span>
+                                                          </NavLink>
+                                                        </div>
+                                                      </div>
+                                                      <div
+                                                        className="width-100-with-border"
+                                                        style={{
+                                                          backgroundColor:
+                                                            item.is_closed == "0"
+                                                              ? "white"
+                                                              : "#ebd7d7",
+                                                        }}
+                                                      >
+                                                        <div>
+                                                          <span>Investment</span>
+                                                          <span className="text-bold-700">
+                                                            ${item.my_investment}
+                                                          </span>
+                                                        </div>
+                                                        <div>
+                                                          <span>Current Value</span>
+                                                          <span
+                                                            className="text-bold-700"
+                                                            style={{
+                                                              color:
+                                                                item.my_investment <=
+                                                                  item.current_value
+                                                                  ? "green"
+                                                                  : "red",
+                                                            }}
+                                                          >
+                                                            ${item.current_value}
+                                                          </span>
+                                                        </div>
+
+                                                        <div>
+                                                          <span>PNL</span>
+                                                          <span
+                                                            className="text-bold-700"
+                                                            style={{
+                                                              color:
+                                                                item.pnl >= 0 ? "green" : "red",
+                                                            }}
+                                                          >
+                                                            ${item.pnl}
+                                                          </span>
+                                                        </div>
+                                                      </div>
+                                                      <div
+                                                        className="width-100-with-border"
+                                                        style={{
+                                                          backgroundColor:
+                                                            item.is_closed == "0"
+                                                              ? "white"
+                                                              : "#ebd7d7",
+                                                        }}
+                                                      >
+                                                        <div>
+                                                          <span>Return %</span>
+                                                          <span
+                                                            className="text-bold-700"
+                                                            style={{
+                                                              color:
+                                                                item.return_percentage >= 0
+                                                                  ? "green"
+                                                                  : "red",
+                                                            }}
+                                                          >
+                                                            {item.return_percentage}%
+                                                          </span>
+                                                        </div>
+
+                                                        <div>
+                                                          <span>Date Time</span>
+                                                          <span className="text-bold-700">
+                                                            {item.added_datetime}
+                                                          </span>
+                                                        </div>
+                                                      </div>
+                                                      <div
+                                                        className="width-100-with-border"
+                                                        style={{
+                                                          backgroundColor:
+                                                            item.is_closed == "0"
+                                                              ? "white"
+                                                              : "#ebd7d7",
+                                                        }}
+                                                      >
+                                                        <div>
+                                                          <span>Floating</span>
+                                                          <span
+                                                            className="text-bold-700"
+                                                            style={{
+                                                              color:
+                                                                item.current_floating >= 0
+                                                                  ? "green"
+                                                                  : "red",
+                                                            }}
+                                                          >
+                                                            {item.current_floating}
+                                                          </span>
+                                                        </div>
+
+                                                        <div>
+                                                          <span>Trade</span>
+                                                          <span className="cursor">
+                                                            <span
+                                                              class="material-icons"
+                                                              onClick={() => {
+                                                                //   filterData.pid = item.pid;
+                                                                //   setFilterData({ ...filterData });
+                                                                //   setDialogTitle("Trade History");
+                                                                //   setMaxWidth("xl");
+                                                                //   setOpen(true);
+                                                                //   console.log("hi");
+
+                                                                navigate(
+                                                                  `/pamm_trade_history/${item.pid}`
+                                                                );
+                                                              }}
+                                                            >
+                                                              insert_chart
+                                                            </span>
+                                                          </span>
+                                                        </div>
+                                                      </div>
+                                                      {item.is_closed == "0" ? (
+                                                        <div className="footer-action-button">
+                                                          <button
+                                                            onClick={(e) => {
+                                                              setMaxWidth("sm");
+                                                              setWithdrawForm({
+                                                                isLoader: false,
+                                                                allWithdraw: true,
+                                                                amount: "",
+                                                                pid: item.pid,
+                                                              });
+                                                              SetRefreshCreatePortfolio1(false);
+                                                              setDialogTitle("Withdraw");
+                                                              setOpen(true);
+                                                            }}
+                                                          >
+                                                            Withdraw
+                                                          </button>
+                                                          <button
+                                                            onClick={(e) => {
+                                                              investmentForm.user_id = "";
+                                                              investmentForm.pid = item.pid;
+                                                              investmentForm.amount = "";
+                                                              setMaxWidth("sm");
+                                                              setInvestmentForm({
+                                                                ...investmentForm,
+                                                              });
+                                                              setDialogTitle("Investment");
+                                                              setOpen(true);
+                                                            }}
+                                                          >
+                                                            Invest
+                                                          </button>
+                                                          <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                            View
+                                                          </NavLink>
+                                                        </div>
+                                                      ) : item.is_closed == "1" ? (
+                                                        <div className="footer-action-button">
+                                                          <div
+                                                            className="footer-action-button spanportFolio1"
+                                                            style={{
+                                                              backgroundColor:
+                                                                item.is_closed == "0"
+                                                                  ? "white"
+                                                                  : "#ebd7d7",
+                                                            }}
+                                                          >
+                                                            <span className="spanportFolio">
+                                                              Closed
+                                                            </span>
+                                                          </div>
+                                                          <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                            View
+                                                          </NavLink>
+                                                        </div>
+                                                      ) : (
+                                                        <div className="footer-action-button">
+                                                          <div
+                                                            className="footer-action-button spanportFolio1"
+                                                            style={{
+                                                              backgroundColor:
+                                                                item.is_closed == "0"
+                                                                  ? "white"
+                                                                  : "#ebe5c1",
+                                                            }}
+                                                          >
+                                                            <span className="spanportFoliopading">
+                                                              Pending
+                                                            </span>
+                                                          </div>
+                                                          <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                            View
+                                                          </NavLink>
+                                                        </div>
+                                                      )}
                                                     </div>
-                                                    <div>
-                                                      {/* <span>Commission</span> */}
-                                                      <input
-                                                        type="number"
-                                                        className="commission_amount"
-                                                        placeholder="Commission"
-                                                        disabled
-                                                        value={
-                                                          item.group_commission
-                                                        }
-                                                      />
+                                                  );
+                                                })
+                                            }
+                                          </div>
+                                          : ""
+                                      }
+                                    </div>
+                                    : ""
+                                }
+
+                                {
+                                  (pammGroupButton == "my_manage") ?
+                                    <div>
+                                      <CommonTable url={`${Url}/datatable/pamm/my_money_managers.php`} column={pammMyManagerColumn} sort="5" param={pammMyManagerParam} />
+                                    </div>
+                                    : ""
+                                }
+
+                                {
+                                  (pammGroupButton == "trade_history") ?
+                                    <div>
+                                      <div className="pamm-withdraw-history-filter-section">
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="From"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="from"
+                                            focused
+                                            onChange={(e) => {
+                                              pammTradeParam.start_date = e.target.value;
+                                              setPammTardeParam({ ...pammTradeParam });
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="To"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="to"
+                                            focused
+                                            onChange={(e) => {
+                                              pammTradeParam.end_date = e.target.value;
+                                              setPammTardeParam({ ...pammTradeParam });
+                                            }}
+                                          />
+                                        </div>
+
+                                      </div>
+                                      <CommonTable url={`${Url}/datatable/pamm/pamm_trade_history.php`} column={pammTradeHistoryColumn} sort="2" param={pammTradeParam} />
+                                    </div>
+                                    : ""
+                                }
+
+                                {
+                                  (pammGroupButton == "withdraw_history") ?
+                                    <div>
+                                      <div className="pamm-withdraw-history-filter-section">
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="From"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="from"
+                                            focused
+                                            onChange={(e) => {
+                                              pammWithdrawParam.start_date = e.target.value;
+                                              setPammWithdrawParam({ ...pammWithdrawParam });
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="To"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="to"
+                                            focused
+                                            onChange={(e) => {
+                                              pammWithdrawParam.end_date = e.target.value;
+                                              setPammWithdrawParam({ ...pammWithdrawParam });
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="filter-element">
+                                          <FormControl variant="standard" sx={{ width: "100%" }}>
+                                            <InputLabel>Status</InputLabel>
+                                            <Select
+                                              label
+                                              className="select-font-small"
+                                              name="account_type"
+                                              onChange={(e) => {
+                                                pammWithdrawParam.status = e.target.value;
+                                                setPammWithdrawParam({ ...pammWithdrawParam });
+                                              }}
+                                              focused
+                                            >
+                                              <MenuItem value="0">Pending</MenuItem>
+                                              <MenuItem value="1">Approved</MenuItem>
+                                              <MenuItem value="2">Rejected</MenuItem>
+                                            </Select>
+                                          </FormControl>
+                                        </div>
+
+                                      </div>
+                                      <CommonTable url={`${Url}/datatable/pamm/pamm_withdraw_request.php`} column={pammWithdrawHistoryColumn} sort="1" param={pammWithdrawParam} />
+                                    </div>
+                                    : ""
+                                }
+
+                              </div>
+                            </Paper>
+                          </Grid>
+                        </Grid>
+                      </TabPanel> : <TabPanel value={value} index={8} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section partnership-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <div className="header-search-section">
+                                  <FormControl
+                                    variant="standard"
+                                    sx={{ width: "100%" }}
+                                  >
+                                    <InputLabel>Structure</InputLabel>
+                                    <Select
+                                      label
+                                      className="select-font-small"
+                                      name="structure"
+                                      onChange={(e) => {
+                                        getPartnershipMasterStructure(
+                                          e.target.value
+                                        );
+                                        partnershipMasterStructureData.structure_id =
+                                          e.target.value;
+                                        partnershipMasterStructureData.structure_name =
+                                          structureList.data.filter(
+                                            (x) =>
+                                              x.structure_id == e.target.value
+                                          )[0].structure_name;
+                                        setStructureList((prevalue) => {
+                                          return {
+                                            ...prevalue,
+                                            structure_name:
+                                              structureList.data.filter(
+                                                (x) =>
+                                                  x.structure_id == e.target.value
+                                              )[0].structure_name,
+                                            structure_id: e.target.value,
+                                          };
+                                        });
+                                      }}
+                                    >
+                                      {structureList.data.map((item) => {
+                                        return (
+                                          <MenuItem value={item.structure_id}>
+                                            {item.structure_name}
+                                          </MenuItem>
+                                        );
+                                      })}
+                                    </Select>
+                                  </FormControl>
+                                  <Button
+                                    variant="contained"
+                                    className="add_master_structure btn-danger"
+                                    onClick={deleteStructureSubmit}
+                                  >
+                                    Structure Delete
+                                  </Button>
+                                </div>
+                                <div className="groun-button">
+                                  <Button
+                                    variant="contained"
+                                    className="add_master_structure"
+                                    onClick={openDialogbox}
+                                  >
+                                    Add Master Structure
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    className="edit_structure"
+                                    onClick={openDialogbox}
+                                    disabled={
+                                      partnershipMasterStructureData.structure_name !=
+                                        ""
+                                        ? false
+                                        : true
+                                    }
+                                  >
+                                    Edit Structure
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="bankDetailsTabSection">
+                                {partnershipMasterStructureData.structure_data
+                                  .length > 0 ? (
+                                  <div className="partnership-section">
+                                    <div className="master-structure-section">
+                                      <div className="structureNameSection view-ib-content-section">
+                                        <label>STRUCTURE NAME</label>
+                                        <span>
+                                          {
+                                            partnershipMasterStructureData.structure_name
+                                          }
+                                        </span>
+                                      </div>
+                                      <div className="main-content-input">
+                                        <div className="ib-structure view-commission-content-section">
+                                          {partnershipMasterStructureData.structure_data.map(
+                                            (item, index) => {
+                                              return (
+                                                <div className="group-structure-section">
+                                                  <div className="main-section">
+                                                    <div className="main-section-title">
+                                                      {item.ib_group_name}
                                                     </div>
-                                                    {/* <div>
+                                                    <div className="main-section-input-element">
+                                                      <div>
+                                                        {/* <span>Rebate</span> */}
+                                                        <input
+                                                          type="number"
+                                                          className="Rebate_amount"
+                                                          placeholder="Rebate"
+                                                          disabled
+                                                          value={
+                                                            item.group_rebate
+                                                          }
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        {/* <span>Commission</span> */}
+                                                        <input
+                                                          type="number"
+                                                          className="commission_amount"
+                                                          placeholder="Commission"
+                                                          disabled
+                                                          value={
+                                                            item.group_commission
+                                                          }
+                                                        />
+                                                      </div>
+                                                      {/* <div>
                                                       {
                                                         (item.ibGroup != undefined) ?
                                                           <FormControl variant="standard">
@@ -9290,140 +10706,142 @@ const Profile = () => {
                                                           </FormControl> : ''
                                                       }
                                                     </div> */}
+                                                    </div>
+                                                    <div className="action-section">
+                                                      <span
+                                                        onClick={(e) => {
+                                                          partnershipMasterStructureData.structure_data[
+                                                            index
+                                                          ]["is_visible"] =
+                                                            !item.is_visible;
+                                                          setUpdateDate({
+                                                            ...newMasterStructureData,
+                                                          });
+                                                        }}
+                                                      >
+                                                        <i
+                                                          class={`fa ${item.is_visible
+                                                            ? "fa-angle-up"
+                                                            : "fa-angle-down"
+                                                            }`}
+                                                          aria-hidden="true"
+                                                        ></i>
+                                                      </span>
+                                                    </div>
                                                   </div>
-                                                  <div className="action-section">
-                                                    <span
-                                                      onClick={(e) => {
-                                                        partnershipMasterStructureData.structure_data[
-                                                          index
-                                                        ]["is_visible"] =
-                                                          !item.is_visible;
-                                                        setUpdateDate({
-                                                          ...newMasterStructureData,
-                                                        });
-                                                      }}
-                                                    >
-                                                      <i
-                                                        class={`fa ${item.is_visible
-                                                          ? "fa-angle-up"
-                                                          : "fa-angle-down"
-                                                          }`}
-                                                        aria-hidden="true"
-                                                      ></i>
-                                                    </span>
+                                                  <div
+                                                    className={`pair-section ${item.is_visible
+                                                      ? "child-section-visible"
+                                                      : ""
+                                                      }`}
+                                                  >
+                                                    {item.pair_data.map(
+                                                      (item1, index1) => {
+                                                        return (
+                                                          <div className="pair-data">
+                                                            <div className="pair-data-title">
+                                                              {item1.pair_name}
+                                                            </div>
+                                                            <div>
+                                                              <input
+                                                                type="number"
+                                                                className="rebert_amount"
+                                                                placeholder="Rebert"
+                                                                value={
+                                                                  item1.rebate
+                                                                }
+                                                                disabled
+                                                              />
+                                                            </div>
+                                                            <div>
+                                                              <input
+                                                                type="number"
+                                                                className="commission_amount"
+                                                                placeholder="Commission"
+                                                                value={
+                                                                  item1.commission
+                                                                }
+                                                                disabled
+                                                              />
+                                                            </div>
+                                                          </div>
+                                                        );
+                                                      }
+                                                    )}
                                                   </div>
                                                 </div>
-                                                <div
-                                                  className={`pair-section ${item.is_visible
-                                                    ? "child-section-visible"
-                                                    : ""
-                                                    }`}
-                                                >
-                                                  {item.pair_data.map(
-                                                    (item1, index1) => {
-                                                      return (
-                                                        <div className="pair-data">
-                                                          <div className="pair-data-title">
-                                                            {item1.pair_name}
-                                                          </div>
-                                                          <div>
-                                                            <input
-                                                              type="number"
-                                                              className="rebert_amount"
-                                                              placeholder="Rebert"
-                                                              value={
-                                                                item1.rebate
-                                                              }
-                                                              disabled
-                                                            />
-                                                          </div>
-                                                          <div>
-                                                            <input
-                                                              type="number"
-                                                              className="commission_amount"
-                                                              placeholder="Commission"
-                                                              value={
-                                                                item1.commission
-                                                              }
-                                                              disabled
-                                                            />
-                                                          </div>
-                                                        </div>
+                                              );
+                                            }
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="master-structure-section">
+                                      <div className="structureNameSection view-ib-content-section">
+                                        <h4 style={{ fontWeight: 600 }}>
+                                          IB Dedicated Links
+                                        </h4>
+                                        {/* <label>STRUCTURE NAME</label>
+                                        <span>{partnershipMasterStructureData.structure_name}</span> */}
+                                      </div>
+                                      <div className="user-links">
+                                        <div className="user-link-header">
+                                          <label>Link Type</label>
+                                          <label>Link</label>
+                                        </div>
+                                        <div className="user-link-body">
+                                          <label>Register</label>
+                                          <div className="link-section">
+                                            <a
+                                              href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
+                                              target="_blank"
+                                            >
+                                              {ClientUrl +
+                                                `/register/sponsor/${profileForm.wallet_code}`}
+                                            </a>
+                                            <button
+                                              className="copy_link"
+                                              onClick={(e) => {
+                                                navigator.clipboard
+                                                  .writeText(
+                                                    ClientUrl +
+                                                    `/register/sponsor/${profileForm.wallet_code}`
+                                                  )
+                                                  .then(
+                                                    function () {
+                                                      toast.success(
+                                                        "The sponsor link has been successfully copying"
+                                                      );
+                                                    },
+                                                    function (err) {
+                                                      toast.error(
+                                                        "The sponsor link Could not copy, Please try again"
                                                       );
                                                     }
-                                                  )}
-                                                </div>
-                                              </div>
-                                            );
-                                          }
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="master-structure-section">
-                                    <div className="structureNameSection view-ib-content-section">
-                                      <h4 style={{ fontWeight: 600 }}>
-                                        IB Dedicated Links
-                                      </h4>
-                                      {/* <label>STRUCTURE NAME</label>
-                                        <span>{partnershipMasterStructureData.structure_name}</span> */}
-                                    </div>
-                                    <div className="user-links">
-                                      <div className="user-link-header">
-                                        <label>Link Type</label>
-                                        <label>Link</label>
-                                      </div>
-                                      <div className="user-link-body">
-                                        <label>Register</label>
-                                        <div className="link-section">
-                                          <a
-                                            href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
-                                            target="_blank"
-                                          >
-                                            {ClientUrl +
-                                              `/register/sponsor/${profileForm.wallet_code}`}
-                                          </a>
-                                          <button
-                                            className="copy_link"
-                                            onClick={(e) => {
-                                              navigator.clipboard
-                                                .writeText(
-                                                  ClientUrl +
-                                                  `/register/sponsor/${profileForm.wallet_code}`
-                                                )
-                                                .then(
-                                                  function () {
-                                                    toast.success(
-                                                      "The sponsor link has been successfully copying"
-                                                    );
-                                                  },
-                                                  function (err) {
-                                                    toast.error(
-                                                      "The sponsor link Could not copy, Please try again"
-                                                    );
-                                                  }
-                                                );
-                                            }}
-                                          >
-                                            <span className="blinking">
-                                              <i className="material-icons">
-                                                content_copy
-                                              </i>
-                                            </span>
-                                          </button>
+                                                  );
+                                              }}
+                                            >
+                                              <span className="blinking">
+                                                <i className="material-icons">
+                                                  content_copy
+                                                </i>
+                                              </span>
+                                            </button>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </Paper>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            </Paper>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </TabPanel>
+                      </TabPanel>
+                    }
+
                     <TabPanel value={value} index={9} dir={theme.direction}>
                       <Grid container spacing={3} className="grid-handle">
                         <Grid item md={12} lg={12} xl={12}>
@@ -9750,6 +11168,584 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </TabPanel>
+                    <TabPanel value={value} index={12} dir={theme.direction}>
+                      <Grid container spacing={3} className="grid-handle">
+                        <Grid item md={12} lg={12} xl={12}>
+                          <Paper
+                            elevation={2}
+                            style={{ borderRadius: "10px" }}
+                            className="paper-main-section"
+                          >
+                            <div className="headerSection header-title">
+                              <p className="margin-0">PAMM</p>
+                            </div>
+                            <div className="bankDetailsTabSection pamm-section">
+                              <div className="groupButtonSection">
+                                <ButtonGroup variant="outlined">
+                                  <Button variant={`${pammGroupButton == "dashboard" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('dashboard');
+                                  }}>Dashboard</Button>
+                                  <Button variant={`${pammGroupButton == "portfolio_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    getMoneyManager();
+                                    setPammPortfolioGroupButton('money_manager');
+                                    setPammGroupButton('portfolio_manage');
+                                  }}>Portfolio Manage</Button>
+                                  <Button variant={`${pammGroupButton == "my_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('my_manage');
+                                  }}>My Managers</Button>
+                                  <Button variant={`${pammGroupButton == "trade_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('trade_history');
+                                  }}>Trade History</Button>
+                                  <Button variant={`${pammGroupButton == "withdraw_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('withdraw_history');
+                                  }}>Withdrawal History</Button>
+                                </ButtonGroup>
+                              </div>
+                              <br />
+                              {
+                                (pammGroupButton == "dashboard") ? <div>
+                                  <div className="setBoxs">
+                                    <div className="row1 boxSection">
+                                      <div className="card padding-9 animate fadeLeft boxsize">
+                                        <div className="row">
+                                          <NavLink to="/pamm_user_management">
+                                            <div className="col s12 m12 text-align-center">
+                                              <h5 className="mb-0">
+                                                {pammDashboardData.my_balance == null ? "$0" : '$' + pammDashboardData.my_balance}
+                                              </h5>
+                                              <p className="no-margin">Wallet Balance</p>
+                                            </div>
+                                          </NavLink>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="row1 boxSection">
+                                      <div className="card padding-9 animate fadeLeft boxsize">
+                                        <div className="row">
+                                          <NavLink to="/pamm_mm_management">
+                                            <div className="col s12 m12 text-align-center">
+                                              <h5 className="mb-0">
+                                                {pammDashboardData.total_investment == null
+                                                  ? "$0"
+                                                  : '$' + pammDashboardData.total_investment}
+                                              </h5>
+                                              <p className="no-margin">Total Investment</p>
+                                            </div>
+                                          </NavLink>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="row1 boxSection">
+                                      <div className="card padding-9 animate fadeLeft boxsize">
+                                        <div className="row">
+                                          <NavLink to="/pamm_mm_management">
+                                            <div className="col s12 m12 text-align-center">
+                                              <h5 className="mb-0">
+                                                {pammDashboardData.total_withdrawal == null
+                                                  ? "$0"
+                                                  : '$' + pammDashboardData.total_withdrawal}
+                                              </h5>
+                                              <p className="no-margin">Total Withdrawal</p>
+                                            </div>
+                                          </NavLink>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div> : ""
+                              }
+
+                              {
+                                (pammGroupButton == "portfolio_manage") ?
+                                  <div>
+                                    <div className="portfolio-manager-group-button">
+                                      <ButtonGroup variant="outlined">
+                                        <Button variant={`${pammPortfolioGroupButton == "money_manager" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                          getMoneyManager();
+                                          setPammPortfolioGroupButton('money_manager');
+                                        }}>MONEY MANAGER</Button>
+                                        <Button variant={`${pammPortfolioGroupButton == "my_portfolio" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                          getMyPortfolio();
+                                          setPammPortfolioGroupButton('my_portfolio');
+                                        }}>MY PORTFOLIO</Button>
+                                      </ButtonGroup>
+                                    </div>
+                                    <br />
+                                    {
+                                      (pammPortfolioGroupButton == "money_manager") ?
+                                        <div>
+                                          <div className="money-manager-card-list-section">
+                                            {moneyManagerList.map((item, index) => {
+                                              return (
+                                                <div className="money-manager-content">
+                                                  <div className="money-manager-header-section">
+                                                    <NavLink
+                                                      className="navlink-color-white"
+                                                      to={`/money_manager_profile/${item.mm_mt5_acc_id}`}
+                                                    >
+                                                      <label>{item.mt5_name}</label>
+                                                    </NavLink>
+                                                  </div>
+                                                  <div className="money-manager-body-section">
+                                                    <div className="money-manager-body-content-element marge-element">
+                                                      <div className="right-side-border">
+                                                        <label>Minimum deposit</label>
+                                                        <p>${item.minimum_deposit_amount}</p>
+                                                      </div>
+                                                      <div>
+                                                        <label>Fees Percentage</label>
+                                                        <p>{item.fees_percentage}%</p>
+                                                      </div>
+                                                    </div>
+                                                    <div className="money-manager-body-content-element marge-element">
+                                                      <div className="right-side-border">
+                                                        <label>Approx Return</label>
+                                                        <p className="text-color-green">
+                                                          {item.fees_percentage}%
+                                                        </p>
+                                                      </div>
+                                                      <div>
+                                                        <label>Risk Score</label>
+                                                        <img src="./assets/img/rishScoreLow.jpg" />
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  {item.is_closed == "0" ? (
+                                                    <div className="money-manager-footer-action-section">
+                                                      <button
+                                                        className="danger"
+                                                        onClick={(e) => {
+                                                          setWithdrawForm({
+                                                            isLoader: false,
+                                                            allWithdraw: true,
+                                                            amount: "",
+                                                            pid: item.pid,
+                                                          });
+                                                          setDialogTitle("Withdraw");
+                                                          SetRefreshCreatePortfolio1(true);
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Withdraw
+                                                      </button>
+                                                      <button
+                                                        className="success"
+                                                        onClick={(e) => {
+                                                          investmentForm.user_id =
+                                                            item.mm_user_id;
+                                                          investmentForm.pid = item.pid;
+                                                          investmentForm.amount = "";
+                                                          setInvestmentForm({
+                                                            ...investmentForm,
+                                                          });
+                                                          setDialogTitle("Investment");
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Invest
+                                                      </button>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  ) : item.is_closed == "2" ? (
+                                                    <div className="money-manager-footer-action-section">
+                                                      <button className="skyblue1">
+                                                        Pending
+                                                      </button>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  ) : (
+                                                    <div className="money-manager-footer-action-section">
+                                                      <button
+                                                        className="skyblue"
+                                                        onClick={(e) => {
+                                                          setMaxWidth("sm");
+                                                          createPortfolioForm.mm_mt5_acc_id =
+                                                            item.mm_mt5_acc_id;
+                                                          setCreatePortfolioForm({
+                                                            ...createPortfolioForm,
+                                                          });
+                                                          setDialogTitle("Create Portfolio");
+                                                          getMoneyManagerList();
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Create Portfolio
+                                                      </button>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                        : ""
+                                    }
+                                    {
+                                      (pammPortfolioGroupButton == "my_portfolio") ?
+                                        <div className="myportfolio-card-section">
+                                          {
+                                            portfolioLoader ? <div className="loader-section">
+                                              <svg class="spinner" viewBox="0 0 50 50">
+                                                <circle
+                                                  class="path"
+                                                  cx="25"
+                                                  cy="25"
+                                                  r="20"
+                                                  fill="none"
+                                                  stroke-width="5"
+                                                ></circle>
+                                              </svg>
+                                            </div> :
+                                              myPortfolio.map((item) => {
+                                                return (
+                                                  <div className="myportfolio-card-content">
+                                                    <div className="width-100-with-border header-sction">
+                                                      <div>
+                                                        <NavLink
+                                                          to={`/portfolio_profile/${item.pid}`}
+                                                          className="portfolio-link-color"
+                                                        >
+                                                          {item.portfolio_name}
+                                                        </NavLink>
+                                                        <span className="text-bold-700">
+                                                          {item.portfolio_id}
+                                                        </span>
+                                                      </div>
+                                                      <div>
+                                                        <span>Money Manager</span>
+                                                        <NavLink
+                                                          className="navlink-color-white"
+                                                          to={`/money_manager_profile/${item.pid}`}
+                                                        >
+                                                          <span className="text-bold-700">
+                                                            {item.account_name}
+                                                          </span>
+                                                        </NavLink>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className="width-100-with-border"
+                                                      style={{
+                                                        backgroundColor:
+                                                          item.is_closed == "0"
+                                                            ? "white"
+                                                            : "#ebd7d7",
+                                                      }}
+                                                    >
+                                                      <div>
+                                                        <span>Investment</span>
+                                                        <span className="text-bold-700">
+                                                          ${item.my_investment}
+                                                        </span>
+                                                      </div>
+                                                      <div>
+                                                        <span>Current Value</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.my_investment <=
+                                                                item.current_value
+                                                                ? "green"
+                                                                : "red",
+                                                          }}
+                                                        >
+                                                          ${item.current_value}
+                                                        </span>
+                                                      </div>
+
+                                                      <div>
+                                                        <span>PNL</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.pnl >= 0 ? "green" : "red",
+                                                          }}
+                                                        >
+                                                          ${item.pnl}
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className="width-100-with-border"
+                                                      style={{
+                                                        backgroundColor:
+                                                          item.is_closed == "0"
+                                                            ? "white"
+                                                            : "#ebd7d7",
+                                                      }}
+                                                    >
+                                                      <div>
+                                                        <span>Return %</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.return_percentage >= 0
+                                                                ? "green"
+                                                                : "red",
+                                                          }}
+                                                        >
+                                                          {item.return_percentage}%
+                                                        </span>
+                                                      </div>
+
+                                                      <div>
+                                                        <span>Date Time</span>
+                                                        <span className="text-bold-700">
+                                                          {item.added_datetime}
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className="width-100-with-border"
+                                                      style={{
+                                                        backgroundColor:
+                                                          item.is_closed == "0"
+                                                            ? "white"
+                                                            : "#ebd7d7",
+                                                      }}
+                                                    >
+                                                      <div>
+                                                        <span>Floating</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.current_floating >= 0
+                                                                ? "green"
+                                                                : "red",
+                                                          }}
+                                                        >
+                                                          {item.current_floating}
+                                                        </span>
+                                                      </div>
+
+                                                      <div>
+                                                        <span>Trade</span>
+                                                        <span className="cursor">
+                                                          <span
+                                                            class="material-icons"
+                                                            onClick={() => {
+                                                              navigate(
+                                                                `/pamm_trade_history/${item.pid}`
+                                                              );
+                                                            }}
+                                                          >
+                                                            insert_chart
+                                                          </span>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    {item.is_closed == "0" ? (
+                                                      <div className="footer-action-button">
+                                                        <button
+                                                          onClick={(e) => {
+                                                            setMaxWidth("sm");
+                                                            setWithdrawForm({
+                                                              isLoader: false,
+                                                              allWithdraw: true,
+                                                              amount: "",
+                                                              pid: item.pid,
+                                                            });
+                                                            SetRefreshCreatePortfolio1(false);
+                                                            setDialogTitle("Withdraw");
+                                                            setOpen(true);
+                                                          }}
+                                                        >
+                                                          Withdraw
+                                                        </button>
+                                                        <button
+                                                          onClick={(e) => {
+                                                            investmentForm.user_id = "";
+                                                            investmentForm.pid = item.pid;
+                                                            investmentForm.amount = "";
+                                                            setMaxWidth("sm");
+                                                            setInvestmentForm({
+                                                              ...investmentForm,
+                                                            });
+                                                            setDialogTitle("Investment");
+                                                            setOpen(true);
+                                                          }}
+                                                        >
+                                                          Invest
+                                                        </button>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                          View
+                                                        </NavLink>
+                                                      </div>
+                                                    ) : item.is_closed == "1" ? (
+                                                      <div className="footer-action-button">
+                                                        <div
+                                                          className="footer-action-button spanportFolio1"
+                                                          style={{
+                                                            backgroundColor:
+                                                              item.is_closed == "0"
+                                                                ? "white"
+                                                                : "#ebd7d7",
+                                                          }}
+                                                        >
+                                                          <span className="spanportFolio">
+                                                            Closed
+                                                          </span>
+                                                        </div>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                          View
+                                                        </NavLink>
+                                                      </div>
+                                                    ) : (
+                                                      <div className="footer-action-button">
+                                                        <div
+                                                          className="footer-action-button spanportFolio1"
+                                                          style={{
+                                                            backgroundColor:
+                                                              item.is_closed == "0"
+                                                                ? "white"
+                                                                : "#ebe5c1",
+                                                          }}
+                                                        >
+                                                          <span className="spanportFoliopading">
+                                                            Pending
+                                                          </span>
+                                                        </div>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                          View
+                                                        </NavLink>
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                );
+                                              })
+                                          }
+                                        </div>
+                                        : ""
+                                    }
+                                  </div>
+                                  : ""
+                              }
+
+                              {
+                                (pammGroupButton == "my_manage") ?
+                                  <div>
+                                    <CommonTable url={`${Url}/datatable/pamm/my_money_managers.php`} column={pammMyManagerColumn} sort="5" param={pammMyManagerParam} />
+                                  </div>
+                                  : ""
+                              }
+
+                              {
+                                (pammGroupButton == "trade_history") ?
+                                  <div>
+                                    <div className="pamm-withdraw-history-filter-section">
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="From"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="from"
+                                          focused
+                                          onChange={(e) => {
+                                            pammTradeParam.start_date = e.target.value;
+                                            setPammTardeParam({ ...pammTradeParam });
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="To"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="to"
+                                          focused
+                                          onChange={(e) => {
+                                            pammTradeParam.end_date = e.target.value;
+                                            setPammTardeParam({ ...pammTradeParam });
+                                          }}
+                                        />
+                                      </div>
+
+                                    </div>
+                                    <CommonTable url={`${Url}/datatable/pamm/pamm_trade_history.php`} column={pammTradeHistoryColumn} sort="2" param={pammTradeParam} />
+                                  </div>
+                                  : ""
+                              }
+
+                              {
+                                (pammGroupButton == "withdraw_history") ?
+                                  <div>
+                                    <div className="pamm-withdraw-history-filter-section">
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="From"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="from"
+                                          focused
+                                          onChange={(e) => {
+                                            pammWithdrawParam.start_date = e.target.value;
+                                            setPammWithdrawParam({ ...pammWithdrawParam });
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="To"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="to"
+                                          focused
+                                          onChange={(e) => {
+                                            pammWithdrawParam.end_date = e.target.value;
+                                            setPammWithdrawParam({ ...pammWithdrawParam });
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="filter-element">
+                                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                                          <InputLabel>Status</InputLabel>
+                                          <Select
+                                            label
+                                            className="select-font-small"
+                                            name="account_type"
+                                            onChange={(e) => {
+                                              pammWithdrawParam.status = e.target.value;
+                                              setPammWithdrawParam({ ...pammWithdrawParam });
+                                            }}
+                                            focused
+                                          >
+                                            <MenuItem value="0">Pending</MenuItem>
+                                            <MenuItem value="1">Approved</MenuItem>
+                                            <MenuItem value="2">Rejected</MenuItem>
+                                          </Select>
+                                        </FormControl>
+                                      </div>
+
+                                    </div>
+                                    <CommonTable url={`${Url}/datatable/pamm/pamm_withdraw_request.php`} column={pammWithdrawHistoryColumn} sort="1" param={pammWithdrawParam} />
+                                  </div>
+                                  : ""
+                              }
+
+                            </div>
+                          </Paper>
+                        </Grid>
+                      </Grid>
+                    </TabPanel>
                   </SwipeableViews>
                   {/* </Box> */}
                 </Grid>
@@ -9851,7 +11847,7 @@ const Profile = () => {
                   </div>
                   <div className="display-element">
                     <h6>WEBSITE</h6>
-                    <div>{ibdata.is_website}</div>
+                    <div>{ibdata.is_website == "0" ? "NO" : "YES"}</div>
                   </div>
                   <div className="display-element">
                     <h6>REMARK</h6>

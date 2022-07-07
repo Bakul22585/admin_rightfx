@@ -21,6 +21,7 @@
 .view-ib-content-section .main-content-display .display-element {
     flex-direction: row;
     gap: 5px;
+    word-break: break-word;
 }
 .view-ib-content-section .main-content-input .ib-structure.view-commission-content-section .group-structure-section:last-child {
     display: block;

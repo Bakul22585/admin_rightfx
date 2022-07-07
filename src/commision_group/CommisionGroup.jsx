@@ -1159,8 +1159,8 @@ const CommisionGroup = () => {
                 name="ib_company_forex"
                 value={form.ib_company_forex}
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_forex = Number(e.target.value);
+                  if (!isNaN(Number(e.target.value))) {
+                    form.ib_company_forex = e.target.value;
                     setForm({
                       ...form,
                     });
@@ -1182,8 +1182,8 @@ const CommisionGroup = () => {
                 name="ib_company_bullion"
                 value={form.ib_company_bullion}
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_bullion = Number(e.target.value);
+                  if (!isNaN(Number(e.target.value))) {
+                    form.ib_company_bullion = e.target.value;
                     setForm({
                       ...form,
                     });
@@ -1205,8 +1205,8 @@ const CommisionGroup = () => {
                 name="ib_company_indices"
                 value={form.ib_company_indices}
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_indices = Number(e.target.value);
+                  if (!isNaN(Number(e.target.value))) {
+                    form.ib_company_indices = e.target.value;
                     setForm({
                       ...form,
                     });
@@ -1228,8 +1228,8 @@ const CommisionGroup = () => {
                 name="ib_company_energy"
                 value={form.ib_company_energy}
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_energy = Number(e.target.value);
+                  if (!isNaN(Number(e.target.value))) {
+                    form.ib_company_energy = e.target.value;
                     setForm({
                       ...form,
                     });
@@ -1251,8 +1251,8 @@ const CommisionGroup = () => {
                 name="ib_company_crypto"
                 value={form.ib_company_crypto}
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_crypto = Number(e.target.value);
+                  if (!isNaN(Number(e.target.value))) {
+                    form.ib_company_crypto = e.target.value;
                     setForm({
                       ...form,
                     });
