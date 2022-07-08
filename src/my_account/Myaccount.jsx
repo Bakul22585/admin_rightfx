@@ -1,5 +1,5 @@
 import './myaccount.css';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, CardContent, Grid, IconButton, Paper, TextField } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import Dialog from '@mui/material/Dialog';
@@ -9,6 +9,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import DialogActions from '@mui/material/DialogActions';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@emotion/react';
+import { ClientUrl, IsApprove, Url } from '../global';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -52,14 +57,182 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 const Myaccount = () => {
 
     const theme = useTheme();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [prefrence, setPrefrence] = useState({
+        isLoader: false,
+        user_email: "",
+        user_first_name: "",
+        user_last_name: "",
+        user_name: "",
+        user_phone: "",
+    });
+    const [smtpData, setSMTPData] = useState({
+        smtp_host: '',
+        smtp_port: '',
+        smtp_secure: '',
+        smtp_user: '',
+        smtp_user_password: '',
+        isLoader: false,
+    });
+    toast.configure();
 
     const openDialogbox = (e) => {
         setOpen(true);
     };
+
     const handleClose = () => {
         setOpen(false);
     };
+
+    const getSMTPDetails = () => {
+        const param = new FormData();
+        if (IsApprove !== "") {
+            param.append("is_app", IsApprove.is_app);
+            param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+            param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+        }
+        param.append("action", "get_smtp_settings");
+
+        axios
+            .post(Url + "/ajaxfiles/smtp_settings.php", param)
+            .then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                if (res.data.status == "error") {
+                    toast.error(res.data.message);
+                } else {
+                    setSMTPData({
+                        smtp_host: res.data.data.smtp_host,
+                        smtp_port: res.data.data.smtp_port,
+                        smtp_secure: res.data.data.smtp_secure,
+                        smtp_user: res.data.data.smtp_user,
+                        smtp_user_password: res.data.data.smtp_user_password,
+                        isLoader: false,
+                    });
+                }
+            });
+    }
+
+    const input = (e) => {
+        const { name, value } = e.target;
+
+        setSMTPData((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value,
+            };
+        });
+    }
+
+    const submitSMTP = () => {
+        if (smtpData.smtp_host == "") {
+            toast.error("Please enter server");
+        } else if (smtpData.smtp_port == "") {
+            toast.error("Please enter port");
+        } else if (smtpData.smtp_user == "") {
+            toast.error("Please enter authentication email");
+        } else if (smtpData.smtp_user_password == "") {
+            toast.error("Please enter password");
+        } else {
+            smtpData.isLoader = true;
+            setSMTPData({ ...smtpData });
+            const param = new FormData();
+            if (IsApprove !== "") {
+                param.append("is_app", IsApprove.is_app);
+                param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+                param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+            }
+            param.append("action", "update_smtp");
+            param.append("smtp_user", smtpData.smtp_user);
+            param.append("smtp_user_password", smtpData.smtp_user_password);
+            param.append("smtp_secure", smtpData.smtp_secure);
+            param.append("smtp_host", smtpData.smtp_host);
+            param.append("smtp_port", smtpData.smtp_port);
+
+            axios
+                .post(Url + "/ajaxfiles/smtp_settings.php", param)
+                .then((res) => {
+                    if (res.data.message == "Session has been expired") {
+                        localStorage.setItem("login", true);
+                        navigate("/");
+                    }
+                    smtpData.isLoader = false;
+                    setSMTPData({ ...smtpData });
+                    if (res.data.status == "error") {
+                        toast.error(res.data.message);
+                    } else {
+                        toast.success(res.data.message);
+                    }
+                });
+        }
+    }
+
+    const fetchUserPref = async () => {
+        const param = new FormData();
+        if (IsApprove !== "") {
+            param.append("is_app", IsApprove.is_app);
+            param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+            param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+        }
+        await axios
+            .post(`${Url}/ajaxfiles/get_user_prefrence.php`, param)
+            .then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+
+                setPrefrence({
+                    isLoader: false,
+                    user_email: res.data.user_email,
+                    user_first_name: res.data.user_first_name,
+                    user_last_name: res.data.user_last_name,
+                    user_name: res.data.user_name,
+                    user_phone: res.data.user_phone,
+                });
+                console.log(prefrence);
+            });
+    };
+
+    const updateUser = async () => {
+        prefrence.isLoader = true;
+        setPrefrence({ ...prefrence });
+        const param = new FormData();
+        if (IsApprove !== "") {
+            param.append("is_app", IsApprove.is_app);
+            param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+            param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+        }
+        param.append("first_name", prefrence.user_first_name);
+        param.append("last_name", prefrence.user_last_name);
+        param.append("user_phone", prefrence.user_phone);
+        param.append("action", 'update_profile');
+        await axios
+            .post(`${Url}/ajaxfiles/profile_update.php`, param)
+            .then((res) => {
+                if (res.data.message == "Session has been expired") {
+                    localStorage.setItem("login", true);
+                    navigate("/");
+                }
+                prefrence.isLoader = false;
+                setPrefrence({ ...prefrence });
+                if (res.data.status == 'error') {
+                    toast.error(res.data.message);
+                } else {
+                    toast.success(res.data.message);
+                    setOpen(false);
+                }
+                console.log(prefrence);
+            });
+    };
+
+    useEffect(() => {
+        fetchUserPref();
+        getSMTPDetails();
+    }, [])
 
     return (
         <div>
@@ -72,7 +245,7 @@ const Myaccount = () => {
                                 <Paper elevation={2} style={{ borderRadius: "10px", height: '100%' }}>
                                     <div className='headerSection header-title'>
                                         <p className='margin-0'>My Account</p>
-                                        <IconButton aria-label="delete" className='padding-0px'>
+                                        <IconButton className='padding-0px' onClick={(e) => { setOpen(true) }}>
                                             <EditIcon />
                                         </IconButton>
                                     </div>
@@ -83,28 +256,28 @@ const Myaccount = () => {
                                                     <div className='full-section'>
                                                         <div className='element'>
                                                             <label>First Name</label>
-                                                            <span>Test</span>
+                                                            <span>{prefrence.user_first_name}</span>
                                                         </div>
                                                         <div className='element'>
                                                             <label>Last Name</label>
-                                                            <span>Admin</span>
+                                                            <span>{prefrence.user_last_name}</span>
                                                         </div>
                                                     </div>
                                                     <div className='full-section'>
                                                         <div className='element'>
                                                             <label>E-mail</label>
-                                                            <span>testadmin@mailinator.com</span>
+                                                            <span>{prefrence.user_email}</span>
                                                         </div>
                                                         <div className='element'>
                                                             <label>Mobile</label>
-                                                            <span></span>
+                                                            <span>{prefrence.user_phone}</span>
                                                         </div>
-                                                        <div className='element'>
+                                                        {/* <div className='element'>
                                                             <label>Phone</label>
                                                             <span></span>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
-                                                    <div className='full-section'>
+                                                    {/* <div className='full-section'>
                                                         <div className='element'>
                                                             <label>Password</label>
                                                             <span>*********</span>
@@ -119,7 +292,7 @@ const Myaccount = () => {
                                                             </label>
                                                             <span></span>
                                                         </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         </Grid>
@@ -136,17 +309,35 @@ const Myaccount = () => {
                                         <Grid item sm={12} md={12} lg={12}>
                                             <div className='referal-links-section'>
                                                 <div className='referal-link-element'>
-                                                    <p className='title'>Register Demo:</p>
+                                                    <p className='title'>Register:</p>
                                                     <div className='content'>
-                                                        <span>https://alphapixclients.com/forex/registerdemo.php?ref=541879</span>
-                                                        <button className="copy_link">
+                                                        <a href={ClientUrl +`/register/managercode/${prefrence.user_phone}`} target='_blank'>{ClientUrl +`/register/managercode/${prefrence.user_phone}`}</a>
+                                                        <button className="copy_link" onClick={(e) => {
+                                                            navigator.clipboard
+                                                                .writeText(
+                                                                    ClientUrl +
+                                                                    `/register/managercode/${prefrence.user_phone}`
+                                                                )
+                                                                .then(
+                                                                    function () {
+                                                                        toast.success(
+                                                                            "The link has been successfully copying"
+                                                                        );
+                                                                    },
+                                                                    function (err) {
+                                                                        toast.error(
+                                                                            "The link Could not copy, Please try again"
+                                                                        );
+                                                                    }
+                                                                );
+                                                        }}>
                                                             <span className="blinking">
                                                                 <i className="material-icons">content_copy</i>
                                                             </span>
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className='referal-link-element'>
+                                                {/* <div className='referal-link-element'>
                                                     <p className='title'>Register Live:</p>
                                                     <div className='content'>
                                                         <span>https://alphapixclients.com/forex/registerlive.php?ref=541879</span>
@@ -167,7 +358,7 @@ const Myaccount = () => {
                                                             </span>
                                                         </button>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </Grid>
                                     </Grid>
@@ -184,20 +375,36 @@ const Myaccount = () => {
                                             <div className='fromSection'>
                                                 <div className='inputSection'>
                                                     <div className='element'>
-                                                        <TextField label="Server" variant="outlined" sx={{ width: '100%' }} focused />
+                                                        <TextField label="Server" variant="outlined" sx={{ width: '100%' }} focused value={smtpData.smtp_host} onChange={input} />
                                                     </div>
                                                     <div className='element'>
-                                                        <TextField label="Port" variant="outlined" sx={{ width: '100%' }} focused />
+                                                        <TextField label="Port" variant="outlined" sx={{ width: '100%' }} focused value={smtpData.smtp_port} onChange={input} />
                                                     </div>
                                                     <div className='element'>
-                                                        <TextField label="Authentication Email" variant="outlined" sx={{ width: '100%' }} focused />
+                                                        <TextField label="Authentication Email" variant="outlined" sx={{ width: '100%' }} focused value={smtpData.smtp_user} onChange={input} />
                                                     </div>
                                                     <div className='element'>
-                                                        <TextField label="Password" variant="outlined" sx={{ width: '100%' }} focused />
+                                                        <TextField label="Password" variant="outlined" sx={{ width: '100%' }} focused value={smtpData.smtp_user_password} onChange={input} />
                                                     </div>
                                                 </div>
                                                 <div className='buttonSection'>
-                                                    <Button variant="contained">Add SMTP</Button>
+                                                    {
+                                                        (smtpData.isLoader) ?
+                                                            <Button variant="contained" disabled className="btn-gradient  btn-success createMt5Formloder">
+                                                                <svg class="spinner" viewBox="0 0 50 50">
+                                                                    <circle
+                                                                        class="path"
+                                                                        cx="25"
+                                                                        cy="25"
+                                                                        r="20"
+                                                                        fill="none"
+                                                                        stroke-width="5"
+                                                                    ></circle>
+                                                                </svg>
+                                                            </Button>
+                                                            : <Button variant="contained" className="btn-success" onClick={submitSMTP}>Add SMTP</Button>
+                                                    }
+
                                                 </div>
                                             </div>
                                         </Grid>
@@ -210,30 +417,46 @@ const Myaccount = () => {
                             onClose={handleClose}
                             aria-labelledby="customized-dialog-title"
                             open={open}
+                            fullWidth={true}
+                            maxWidth={`md`}
                             className='modalWidth100'
                         >
                             <BootstrapDialogTitle id="customized-dialog-title" className='dialogTitle' onClose={handleClose}>
-                                Change Your Password
+                                Change User Details
                             </BootstrapDialogTitle>
                             <DialogContent dividers>
                                 <div className='changePasswordSection'>
                                     <div className='element'>
-                                        <TextField id="standard-basic" label="Current Password" variant="standard" sx={{ width: '100%' }} focused/>
+                                        <TextField label="First Name" variant="standard" sx={{ width: '100%' }} focused value={prefrence.user_first_name} />
                                     </div>
                                     <br />
                                     <div className='element'>
-                                        <TextField id="standard-basic" label="New Password" variant="standard" sx={{ width: '100%' }} focused/>
+                                        <TextField label="Last Name" variant="standard" sx={{ width: '100%' }} focused value={prefrence.user_last_name} />
                                     </div>
                                     <br />
                                     <div className='element'>
-                                        <TextField id="standard-basic" label="Confirm Password" variant="standard" sx={{ width: '100%' }} focused/>
+                                        <TextField label="Mobile" variant="standard" sx={{ width: '100%' }} focused value={prefrence.user_phone} />
                                     </div>
                                 </div>
                             </DialogContent>
                             <DialogActions>
                                 <div className='dialogMultipleActionButton'>
                                     <Button variant="contained" className='cancelButton' onClick={handleClose}>Cancel</Button>
-                                    <Button variant="contained" className='btn-gradient'>Change Password</Button>
+                                    {
+                                        (prefrence.isLoader) ? <Button variant="contained" disabled className="btn-gradient  btn-success createMt5Formloder">
+                                            <svg class="spinner" viewBox="0 0 50 50">
+                                                <circle
+                                                    class="path"
+                                                    cx="25"
+                                                    cy="25"
+                                                    r="20"
+                                                    fill="none"
+                                                    stroke-width="5"
+                                                ></circle>
+                                            </svg>
+                                        </Button> : <Button variant="contained" className='btn-success' onClick={updateUser}>Update</Button>
+                                    }
+
                                 </div>
                             </DialogActions>
                         </BootstrapDialog>

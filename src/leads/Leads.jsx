@@ -387,6 +387,7 @@ const Leads = () => {
   };
 
   const manageDialogActionButton = () => {
+    console.log("View Lead (" + leadDetails.customer_name + ")");
     if (dialogTitle == "Add Lead") {
       return (
         <div className="dialogMultipleActionButton">
@@ -453,6 +454,18 @@ const Leads = () => {
               Complete Lead
             </Button>
           )}
+        </div>
+      );
+    } else if (dialogTitle == `View Lead (${leadDetails.customer_name})`) {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
         </div>
       );
     }

@@ -1,4 +1,4 @@
-import { Button, CardContent, Grid, Paper, TextField } from "@mui/material";
+import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { IsApprove, Url } from "../global";
 import axios from "axios";
@@ -60,6 +60,12 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 const Target = () => {
   const navigate = useNavigate();
   var [salesPerson, setSalesPerson] = useState({});
+  const [reportData, setReportData] = useState({
+    manager_id: "",
+    month: "",
+    year: "",
+    type: "",
+  });
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState("");
   const [open, setOpen] = useState(false);
@@ -189,22 +195,21 @@ const Target = () => {
               row.user_status == "0"
                 ? "Pending"
                 : row.user_status == "1"
-                ? "Approve"
-                : "Rejected"
+                  ? "Approve"
+                  : "Rejected"
             }
-            className={`text-color-${
-              row.user_status == "1"
+            className={`text-color-${row.user_status == "1"
                 ? "green"
                 : row.user_status == "2"
-                ? "red"
-                : "yellow"
-            }`}
+                  ? "red"
+                  : "yellow"
+              }`}
           >
             {row.user_status == "0"
               ? "Pending"
               : row.user_status == "1"
-              ? "Approve"
-              : "Rejected"}
+                ? "Approve"
+                : "Rejected"}
           </span>
         );
       },
@@ -226,6 +231,21 @@ const Target = () => {
       grow: 0.5,
     },
     {
+      name: "Report",
+      button: true,
+      cell: (row) => {
+        return (
+          <div>
+            <Button onClick={(e) => report(row)}>
+              <i className="material-icons">stacked_bar_chart</i>
+            </Button>
+          </div>
+        );
+      },
+      ignoreRowClick: true,
+      allowOverflow: true,
+    },
+    {
       name: "Action",
       button: true,
       cell: (row) => {
@@ -241,6 +261,7 @@ const Target = () => {
       allowOverflow: true,
     },
   ];
+
   toast.configure();
 
   const getTarget = async () => {
@@ -319,6 +340,17 @@ const Target = () => {
     });
   };
 
+  const inputReport = (e) => {
+    const { name, value } = e.target;
+
+    setReportData((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+
   const edit = async (data) => {
     const param = new FormData();
     if (IsApprove !== "") {
@@ -353,6 +385,17 @@ const Target = () => {
     setOpen(false);
   };
 
+  const report = (data) => {
+    setReportData({
+      manager_id: data.user_id,
+      month: "",
+      year: "",
+      type: "",
+    });
+    setDialogTitle('Report');
+    setOpen(true);
+  }
+
   const manageContent = () => {
     if (dialogTitle == "Edit") {
       return (
@@ -377,6 +420,65 @@ const Target = () => {
               name="money_in_target"
               onChange={input}
               value={form.money_in_target}
+              focused
+            />
+          </div>
+        </div>
+      );
+    } else if (dialogTitle == "Report") {
+      return (
+        <div>
+          <div className="element">
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>Report Type</InputLabel>
+              <Select
+                label
+                className="select-font-small"
+                name="type"
+                onChange={inputReport}
+              >
+                <MenuItem value="1">Salesman Incentive</MenuItem>
+                <MenuItem value="2">Salesman Target</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <br />
+          <div className="element">
+            <TextField
+              type="text"
+              label="Month"
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="month"
+              value={reportData.month}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  reportData.month = Number(e.target.value);
+                  setReportData({
+                    ...reportData,
+                  });
+                }
+              }}
+              focused
+            />
+          </div>
+          <br />
+          <div className="element">
+            <TextField
+              type="text"
+              label="year"
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="year"
+              value={reportData.year}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  reportData.year = Number(e.target.value);
+                  setReportData({
+                    ...reportData,
+                  });
+                }
+              }}
               focused
             />
           </div>
@@ -426,6 +528,25 @@ const Target = () => {
           )}
         </div>
       );
+    } else if (dialogTitle == "Report") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            className="btn-gradient btn-success"
+            onClick={downloadReport}
+          >
+            Download
+          </Button>
+        </div>
+      );
     }
   };
 
@@ -470,6 +591,19 @@ const Target = () => {
         });
     }
   };
+
+  const downloadReport = async() => {
+    if (reportData.type == "") {
+      toast.error('Please select type');
+    } else if (reportData.month == "") {
+      toast.error('Please enter month');
+    } else if (reportData.year == "") {
+      toast.error('Please enter year');
+    } else {
+      setOpen(false);
+      window.open(`${Url}/${(reportData.type == "1")? 'ajaxfiles/salesman_insantive_report.php' : 'ajaxfiles/salesman_target_report.php'}?manager_id=${reportData.manager_id}&month=${reportData.month}&year=${reportData.year}`, "_blank");
+    }
+  }
 
   return (
     <div>
