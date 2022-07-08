@@ -61,6 +61,8 @@ import SalesReport from "./report/SalesReport";
 import Employees from "./Staff/Employees";
 import MenuItems from "./setting/MenuItems";
 import UsersGroups from "./users_group/userGroup";
+import PammPortfolioProfile from "./pamm/PammPortfolioProfile";
+import MoneyManagerProfile from "./pamm/MoneyManagerProfile";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -255,6 +257,14 @@ const App = () => {
                   exact
                   path="/user_groups"
                   element={<UsersGroups />}
+                />
+                <Route
+                  path="/portfolio_profile/:id/:portfolioUserId"
+                  element={<PammPortfolioProfile />}
+                />
+                <Route
+                  path="/money_manager_profile/:id/:moneyManagerUserId"
+                  element={<MoneyManagerProfile />}
                 />
               </Routes>
               {/* <Footer /> */}

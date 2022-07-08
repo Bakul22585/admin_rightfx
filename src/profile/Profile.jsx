@@ -1927,7 +1927,6 @@ const Profile = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     if (newValue == 7 && userData.data.is_ib_account != "0") {
-      console.log("normal user", true);
       setReferralData({
         data: [],
         structure_name: "",
@@ -5581,7 +5580,7 @@ const Profile = () => {
             <Button
               variant="contained"
               className="btn-gradient btn-success"
-              // onClick={createPortfolioFormSubmit}
+              onClick={createPortfolioFormSubmit}
             >
               Create
             </Button>
@@ -5621,7 +5620,7 @@ const Profile = () => {
             <Button
               variant="contained"
               className="btn-gradient btn-success"
-              // onClick={investmentFormSubmit}
+              onClick={investmentFormSubmit}
             >
               Submit
             </Button>
@@ -5661,7 +5660,7 @@ const Profile = () => {
             <Button
               variant="contained"
               className="btn-gradient btn-success"
-              // onClick={withdrawFormSubmit}
+              onClick={withdrawFormSubmit}
             >
               Submit
             </Button>
@@ -8083,6 +8082,143 @@ const Profile = () => {
       });
   };
 
+  const createPortfolioFormSubmit = () => {
+    if (createPortfolioForm.portfolio_name == "") {
+      toast.error("Please enter portfolio name");
+    } else if (createPortfolioForm.mm_mt5_acc_id == "") {
+      toast.error("Please select money manager");
+    } else if (createPortfolioForm.investment_months == "") {
+      toast.error("Please enter investment month");
+    } else {
+      createPortfolioForm.isLoader = true;
+      setCreatePortfolioForm({ ...createPortfolioForm });
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("user_id", id);
+      param.append("portfolio_name", createPortfolioForm.portfolio_name);
+      param.append("mm_mt5_acc_id", createPortfolioForm.mm_mt5_acc_id);
+      param.append("investment_months", createPortfolioForm.investment_months);
+      param.append("action", "create_portfolio");
+      axios
+        .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          createPortfolioForm.isLoader = false;
+          setCreatePortfolioForm({ ...createPortfolioForm });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            getMyPortfolio();
+            toast.success(res.data.message);
+            setRefresh(!refresh);
+            setOpen(false);
+          }
+        });
+    }
+  };
+
+  
+  const investmentFormSubmit = () => {
+    if (investmentForm.pid == "") {
+      toast.error("Please enter pid");
+    } else if (investmentForm.amount == "") {
+      toast.error("Please enter amount");
+    } else {
+      investmentForm.isLoader = true;
+      setInvestmentForm({ ...investmentForm });
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("user_id", id);
+      param.append("pid", investmentForm.pid);
+      param.append("amount", investmentForm.amount);
+      param.append("action", "add_investment");
+      axios
+        .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          investmentForm.isLoader = false;
+          setInvestmentForm({ ...investmentForm });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+            setInvestmentForm({
+              user_id: "",
+              isLoader: false,
+              pid: "",
+              amount: "",
+            });
+          }
+        });
+    }
+  };
+
+  const withdrawFormSubmit = () => {
+    if (withdrawForm.amount == "" && !withdrawForm.allWithdraw) {
+      toast.error("Please enter amount");
+    } else {
+      withdrawForm.isLoader = true;
+      setWithdrawForm({ ...withdrawForm });
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("user_id", id);
+      param.append("pid", withdrawForm.pid);
+      param.append(
+        "amount",
+        withdrawForm.allWithdraw ? 0 : withdrawForm.amount
+      );
+      param.append("withdraw_all", withdrawForm.allWithdraw ? 1 : 0);
+      param.append("action", "withdraw_request");
+      axios
+        .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          withdrawForm.isLoader = false;
+          setWithdrawForm({ ...withdrawForm });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            if (refreshCreatePortfolio1) {
+              getMoneyManager();
+            } else {
+              getMyPortfolio();
+            }
+            toast.success(res.data.message);
+            setOpen(false);
+
+            setWithdrawForm({
+              user_id: "",
+              isLoader: false,
+              pid: "",
+              amount: "",
+            });
+          }
+        });
+    }
+  };
+
   useEffect(() => {
     getProfilePageData();
     getUserDetails();
@@ -9968,173 +10104,424 @@ const Profile = () => {
                       </Grid>
                     </TabPanel> */}
                     {
-                      (userData.data.is_ib_account == "0") ? <TabPanel value={value} index={8} dir={theme.direction}>
+                      (userData.data.is_pamm == "1" && userData.data.is_ib_account == "0") ? 
+                      <TabPanel value={value} index={8} dir={theme.direction}>
                         <Grid container spacing={3} className="grid-handle">
-                          <Grid item md={12} lg={12} xl={12}>
-                            <Paper
-                              elevation={2}
-                              style={{ borderRadius: "10px" }}
-                              className="paper-main-section"
-                            >
-                              <div className="headerSection header-title">
-                                <p className="margin-0">PAMM</p>
+                        <Grid item md={12} lg={12} xl={12}>
+                          <Paper
+                            elevation={2}
+                            style={{ borderRadius: "10px" }}
+                            className="paper-main-section"
+                          >
+                            <div className="headerSection header-title">
+                              <p className="margin-0">PAMM</p>
+                            </div>
+                            <div className="bankDetailsTabSection pamm-section">
+                              <div className="groupButtonSection">
+                                <ButtonGroup variant="outlined">
+                                  <Button variant={`${pammGroupButton == "dashboard" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('dashboard');
+                                  }}>Dashboard</Button>
+                                  <Button variant={`${pammGroupButton == "portfolio_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    getMoneyManager();
+                                    setPammPortfolioGroupButton('money_manager');
+                                    setPammGroupButton('portfolio_manage');
+                                  }}>Portfolio Manage</Button>
+                                  <Button variant={`${pammGroupButton == "my_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('my_manage');
+                                  }}>My Managers</Button>
+                                  <Button variant={`${pammGroupButton == "trade_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('trade_history');
+                                  }}>Trade History</Button>
+                                  <Button variant={`${pammGroupButton == "withdraw_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                    setPammGroupButton('withdraw_history');
+                                  }}>Withdrawal History</Button>
+                                </ButtonGroup>
                               </div>
-                              <div className="bankDetailsTabSection pamm-section">
-                                <div className="groupButtonSection">
-                                  <ButtonGroup variant="outlined">
-                                    <Button variant={`${pammGroupButton == "dashboard" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                      setPammGroupButton('dashboard');
-                                    }}>Dashboard</Button>
-                                    <Button variant={`${pammGroupButton == "portfolio_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                      getMoneyManager();
-                                      setPammPortfolioGroupButton('money_manager');
-                                      setPammGroupButton('portfolio_manage');
-                                    }}>Portfolio Manage</Button>
-                                    <Button variant={`${pammGroupButton == "my_manage" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                      setPammGroupButton('my_manage');
-                                    }}>My Managers</Button>
-                                    <Button variant={`${pammGroupButton == "trade_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                      setPammGroupButton('trade_history');
-                                    }}>Trade History</Button>
-                                    <Button variant={`${pammGroupButton == "withdraw_history" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                      setPammGroupButton('withdraw_history');
-                                    }}>Withdrawal History</Button>
-                                  </ButtonGroup>
-                                </div>
-                                <br />
-                                {
-                                  (pammGroupButton == "dashboard") ? <div>
-                                    <div className="setBoxs">
-                                      <div className="row1 boxSection">
-                                        <div className="card padding-9 animate fadeLeft boxsize">
-                                          <div className="row">
-                                            <NavLink to="/pamm_user_management">
-                                              <div className="col s12 m12 text-align-center">
-                                                <h5 className="mb-0">
-                                                  {pammDashboardData.my_balance == null ? "$0" : '$' + pammDashboardData.my_balance}
-                                                </h5>
-                                                <p className="no-margin">Wallet Balance</p>
-                                              </div>
-                                            </NavLink>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="row1 boxSection">
-                                        <div className="card padding-9 animate fadeLeft boxsize">
-                                          <div className="row">
-                                            <NavLink to="/pamm_mm_management">
-                                              <div className="col s12 m12 text-align-center">
-                                                <h5 className="mb-0">
-                                                  {pammDashboardData.total_investment == null
-                                                    ? "$0"
-                                                    : '$' + pammDashboardData.total_investment}
-                                                </h5>
-                                                <p className="no-margin">Total Investment</p>
-                                              </div>
-                                            </NavLink>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="row1 boxSection">
-                                        <div className="card padding-9 animate fadeLeft boxsize">
-                                          <div className="row">
-                                            <NavLink to="/pamm_mm_management">
-                                              <div className="col s12 m12 text-align-center">
-                                                <h5 className="mb-0">
-                                                  {pammDashboardData.total_withdrawal == null
-                                                    ? "$0"
-                                                    : '$' + pammDashboardData.total_withdrawal}
-                                                </h5>
-                                                <p className="no-margin">Total Withdrawal</p>
-                                              </div>
-                                            </NavLink>
-                                          </div>
+                              <br />
+                              {
+                                (pammGroupButton == "dashboard") ? <div>
+                                  <div className="setBoxs">
+                                    <div className="row1 boxSection">
+                                      <div className="card padding-9 animate fadeLeft boxsize">
+                                        <div className="row">
+                                          <NavLink to="/pamm_user_management">
+                                            <div className="col s12 m12 text-align-center">
+                                              <h5 className="mb-0">
+                                                {pammDashboardData.my_balance == null ? "$0" : '$' + pammDashboardData.my_balance}
+                                              </h5>
+                                              <p className="no-margin">Wallet Balance</p>
+                                            </div>
+                                          </NavLink>
                                         </div>
                                       </div>
                                     </div>
-                                  </div> : ""
-                                }
-
-                                {
-                                  (pammGroupButton == "portfolio_manage") ?
-                                    <div>
-                                      <div className="portfolio-manager-group-button">
-                                        <ButtonGroup variant="outlined">
-                                          <Button variant={`${pammPortfolioGroupButton == "money_manager" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                            getMoneyManager();
-                                            setPammPortfolioGroupButton('money_manager');
-                                          }}>MONEY MANAGER</Button>
-                                          <Button variant={`${pammPortfolioGroupButton == "my_portfolio" ? 'contained' : 'outlined'}`} onClick={(e) => {
-                                            getMyPortfolio();
-                                            setPammPortfolioGroupButton('my_portfolio');
-                                          }}>MY PORTFOLIO</Button>
-                                        </ButtonGroup>
+                                    <div className="row1 boxSection">
+                                      <div className="card padding-9 animate fadeLeft boxsize">
+                                        <div className="row">
+                                          <NavLink to="/pamm_mm_management">
+                                            <div className="col s12 m12 text-align-center">
+                                              <h5 className="mb-0">
+                                                {pammDashboardData.total_investment == null
+                                                  ? "$0"
+                                                  : '$' + pammDashboardData.total_investment}
+                                              </h5>
+                                              <p className="no-margin">Total Investment</p>
+                                            </div>
+                                          </NavLink>
+                                        </div>
                                       </div>
-                                      <br />
-                                      {
-                                        (pammPortfolioGroupButton == "money_manager") ?
-                                          <div>
-                                            <div className="money-manager-card-list-section">
-                                              {moneyManagerList.map((item, index) => {
-                                                return (
-                                                  <div className="money-manager-content">
-                                                    <div className="money-manager-header-section">
-                                                      <NavLink
-                                                        className="navlink-color-white"
-                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}`}
+                                    </div>
+                                    <div className="row1 boxSection">
+                                      <div className="card padding-9 animate fadeLeft boxsize">
+                                        <div className="row">
+                                          <NavLink to="/pamm_mm_management">
+                                            <div className="col s12 m12 text-align-center">
+                                              <h5 className="mb-0">
+                                                {pammDashboardData.total_withdrawal == null
+                                                  ? "$0"
+                                                  : '$' + pammDashboardData.total_withdrawal}
+                                              </h5>
+                                              <p className="no-margin">Total Withdrawal</p>
+                                            </div>
+                                          </NavLink>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div> : ""
+                              }
+
+                              {
+                                (pammGroupButton == "portfolio_manage") ?
+                                  <div>
+                                    <div className="portfolio-manager-group-button">
+                                      <ButtonGroup variant="outlined">
+                                        <Button variant={`${pammPortfolioGroupButton == "money_manager" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                          getMoneyManager();
+                                          setPammPortfolioGroupButton('money_manager');
+                                        }}>MONEY MANAGER</Button>
+                                        <Button variant={`${pammPortfolioGroupButton == "my_portfolio" ? 'contained' : 'outlined'}`} onClick={(e) => {
+                                          getMyPortfolio();
+                                          setPammPortfolioGroupButton('my_portfolio');
+                                        }}>MY PORTFOLIO</Button>
+                                      </ButtonGroup>
+                                    </div>
+                                    <br />
+                                    {
+                                      (pammPortfolioGroupButton == "my_portfolio") ? <div className="pamm-create-my-portfolio-button">
+                                      <Button variant='contained' onClick={(e) => {
+                                        setMaxWidth("sm");
+                                        setDialogTitle("Create Portfolio");
+                                        getMoneyManagerList();
+                                        setCreatePortfolioForm({
+                                          isLoader: false,
+                                          portfolio_name: "",
+                                          mm_mt5_acc_id: "",
+                                          investment_months: "",
+                                        });
+                                        setOpen(true);
+                                      }}>Create Portfolio</Button>
+                                      </div> : ""
+                                    }
+                                    {
+                                      (pammPortfolioGroupButton == "money_manager") ?
+                                        <div>
+                                          <div className="money-manager-card-list-section">
+                                            {moneyManagerList.map((item, index) => {
+                                              return (
+                                                <div className="money-manager-content">
+                                                  <div className="money-manager-header-section">
+                                                    <NavLink
+                                                      className="navlink-color-white"
+                                                      to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                    >
+                                                      <label>{item.mt5_name}</label>
+                                                    </NavLink>
+                                                  </div>
+                                                  <div className="money-manager-body-section">
+                                                    <div className="money-manager-body-content-element marge-element">
+                                                      <div className="right-side-border">
+                                                        <label>Minimum deposit</label>
+                                                        <p>${item.minimum_deposit_amount}</p>
+                                                      </div>
+                                                      <div>
+                                                        <label>Fees Percentage</label>
+                                                        <p>{item.fees_percentage}%</p>
+                                                      </div>
+                                                    </div>
+                                                    <div className="money-manager-body-content-element marge-element">
+                                                      <div className="right-side-border">
+                                                        <label>Approx Return</label>
+                                                        <p className="text-color-green">
+                                                          {item.fees_percentage}%
+                                                        </p>
+                                                      </div>
+                                                      <div>
+                                                        <label>Risk Score</label>
+                                                        <img src="./assets/img/rishScoreLow.jpg" />
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  {item.is_closed == "0" ? (
+                                                    <div className="money-manager-footer-action-section">
+                                                      <button
+                                                        className="danger"
+                                                        onClick={(e) => {
+                                                          setWithdrawForm({
+                                                            isLoader: false,
+                                                            allWithdraw: true,
+                                                            amount: "",
+                                                            pid: item.pid,
+                                                          });
+                                                          setDialogTitle("Withdraw");
+                                                          SetRefreshCreatePortfolio1(true);
+                                                          setOpen(true);
+                                                        }}
                                                       >
-                                                        <label>{item.mt5_name}</label>
+                                                        Withdraw
+                                                      </button>
+                                                      <button
+                                                        className="success"
+                                                        onClick={(e) => {
+                                                          investmentForm.user_id =
+                                                            item.mm_user_id;
+                                                          investmentForm.pid = item.pid;
+                                                          investmentForm.amount = "";
+                                                          setInvestmentForm({
+                                                            ...investmentForm,
+                                                          });
+                                                          setDialogTitle("Investment");
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Invest
+                                                      </button>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}>
+                                                        View
                                                       </NavLink>
                                                     </div>
-                                                    <div className="money-manager-body-section">
-                                                      <div className="money-manager-body-content-element marge-element">
-                                                        <div className="right-side-border">
-                                                          <label>Minimum deposit</label>
-                                                          <p>${item.minimum_deposit_amount}</p>
-                                                        </div>
-                                                        <div>
-                                                          <label>Fees Percentage</label>
-                                                          <p>{item.fees_percentage}%</p>
-                                                        </div>
+                                                  ) : item.is_closed == "2" ? (
+                                                    <div className="money-manager-footer-action-section">
+                                                      <button className="skyblue1">
+                                                        Pending
+                                                      </button>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}>
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  ) : (
+                                                    <div className="money-manager-footer-action-section">
+                                                      <button
+                                                        className="skyblue"
+                                                        onClick={(e) => {
+                                                          setMaxWidth("sm");
+                                                          createPortfolioForm.mm_mt5_acc_id =
+                                                            item.mm_mt5_acc_id;
+                                                          setCreatePortfolioForm({
+                                                            ...createPortfolioForm,
+                                                          });
+                                                          setDialogTitle("Create Portfolio");
+                                                          getMoneyManagerList();
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Create Portfolio
+                                                      </button>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}>
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                        : ""
+                                    }
+                                    {
+                                      (pammPortfolioGroupButton == "my_portfolio") ?
+                                        <div className="myportfolio-card-section">
+                                          {
+                                            portfolioLoader ? <div className="loader-section">
+                                              <svg class="spinner" viewBox="0 0 50 50">
+                                                <circle
+                                                  class="path"
+                                                  cx="25"
+                                                  cy="25"
+                                                  r="20"
+                                                  fill="none"
+                                                  stroke-width="5"
+                                                ></circle>
+                                              </svg>
+                                            </div> :
+                                              myPortfolio.map((item) => {
+                                                return (
+                                                  <div className="myportfolio-card-content">
+                                                    <div className="width-100-with-border header-sction">
+                                                      <div>
+                                                        <NavLink
+                                                          to={`/portfolio_profile/${item.pid}/${id}`}
+                                                          className="portfolio-link-color"
+                                                        >
+                                                          {item.portfolio_name}
+                                                        </NavLink>
+                                                        <span className="text-bold-700">
+                                                          {item.portfolio_id}
+                                                        </span>
                                                       </div>
-                                                      <div className="money-manager-body-content-element marge-element">
-                                                        <div className="right-side-border">
-                                                          <label>Approx Return</label>
-                                                          <p className="text-color-green">
-                                                            {item.fees_percentage}%
-                                                          </p>
-                                                        </div>
-                                                        <div>
-                                                          <label>Risk Score</label>
-                                                          <img src="./assets/img/rishScoreLow.jpg" />
-                                                        </div>
+                                                      <div>
+                                                        <span>Money Manager</span>
+                                                        <NavLink
+                                                          className="navlink-color-white"
+                                                          to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                        >
+                                                          <span className="text-bold-700">
+                                                            {item.account_name}
+                                                          </span>
+                                                        </NavLink>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className="width-100-with-border"
+                                                      style={{
+                                                        backgroundColor:
+                                                          item.is_closed == "0"
+                                                            ? "white"
+                                                            : "#ebd7d7",
+                                                      }}
+                                                    >
+                                                      <div>
+                                                        <span>Investment</span>
+                                                        <span className="text-bold-700">
+                                                          ${item.my_investment}
+                                                        </span>
+                                                      </div>
+                                                      <div>
+                                                        <span>Current Value</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.my_investment <=
+                                                                item.current_value
+                                                                ? "green"
+                                                                : "red",
+                                                          }}
+                                                        >
+                                                          ${item.current_value}
+                                                        </span>
+                                                      </div>
+
+                                                      <div>
+                                                        <span>PNL</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.pnl >= 0 ? "green" : "red",
+                                                          }}
+                                                        >
+                                                          ${item.pnl}
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className="width-100-with-border"
+                                                      style={{
+                                                        backgroundColor:
+                                                          item.is_closed == "0"
+                                                            ? "white"
+                                                            : "#ebd7d7",
+                                                      }}
+                                                    >
+                                                      <div>
+                                                        <span>Return %</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.return_percentage >= 0
+                                                                ? "green"
+                                                                : "red",
+                                                          }}
+                                                        >
+                                                          {item.return_percentage}%
+                                                        </span>
+                                                      </div>
+
+                                                      <div>
+                                                        <span>Date Time</span>
+                                                        <span className="text-bold-700">
+                                                          {item.added_datetime}
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className="width-100-with-border"
+                                                      style={{
+                                                        backgroundColor:
+                                                          item.is_closed == "0"
+                                                            ? "white"
+                                                            : "#ebd7d7",
+                                                      }}
+                                                    >
+                                                      <div>
+                                                        <span>Floating</span>
+                                                        <span
+                                                          className="text-bold-700"
+                                                          style={{
+                                                            color:
+                                                              item.current_floating >= 0
+                                                                ? "green"
+                                                                : "red",
+                                                          }}
+                                                        >
+                                                          {item.current_floating}
+                                                        </span>
+                                                      </div>
+
+                                                      <div>
+                                                        <span>Trade</span>
+                                                        <span className="cursor">
+                                                          <span
+                                                            class="material-icons"
+                                                            onClick={() => {
+                                                              navigate(
+                                                                `/pamm_trade_history/${item.pid}`
+                                                              );
+                                                            }}
+                                                          >
+                                                            insert_chart
+                                                          </span>
+                                                        </span>
                                                       </div>
                                                     </div>
                                                     {item.is_closed == "0" ? (
-                                                      <div className="money-manager-footer-action-section">
+                                                      <div className="footer-action-button">
                                                         <button
-                                                          className="danger"
                                                           onClick={(e) => {
+                                                            setMaxWidth("sm");
                                                             setWithdrawForm({
                                                               isLoader: false,
                                                               allWithdraw: true,
                                                               amount: "",
                                                               pid: item.pid,
                                                             });
+                                                            SetRefreshCreatePortfolio1(false);
                                                             setDialogTitle("Withdraw");
-                                                            SetRefreshCreatePortfolio1(true);
                                                             setOpen(true);
                                                           }}
                                                         >
                                                           Withdraw
                                                         </button>
                                                         <button
-                                                          className="success"
                                                           onClick={(e) => {
-                                                            investmentForm.user_id =
-                                                              item.mm_user_id;
+                                                            investmentForm.user_id = "";
                                                             investmentForm.pid = item.pid;
                                                             investmentForm.amount = "";
+                                                            setMaxWidth("sm");
                                                             setInvestmentForm({
                                                               ...investmentForm,
                                                             });
@@ -10144,415 +10531,176 @@ const Profile = () => {
                                                         >
                                                           Invest
                                                         </button>
-                                                        <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}/${id}`}>
                                                           View
                                                         </NavLink>
                                                       </div>
-                                                    ) : item.is_closed == "2" ? (
-                                                      <div className="money-manager-footer-action-section">
-                                                        <button className="skyblue1">
-                                                          Pending
-                                                        </button>
-                                                        <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                    ) : item.is_closed == "1" ? (
+                                                      <div className="footer-action-button">
+                                                        <div
+                                                          className="footer-action-button spanportFolio1"
+                                                          style={{
+                                                            backgroundColor:
+                                                              item.is_closed == "0"
+                                                                ? "white"
+                                                                : "#ebd7d7",
+                                                          }}
+                                                        >
+                                                          <span className="spanportFolio">
+                                                            Closed
+                                                          </span>
+                                                        </div>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}/${id}`}>
                                                           View
                                                         </NavLink>
                                                       </div>
                                                     ) : (
-                                                      <div className="money-manager-footer-action-section">
-                                                        <button
-                                                          className="skyblue"
-                                                          onClick={(e) => {
-                                                            setMaxWidth("sm");
-                                                            createPortfolioForm.mm_mt5_acc_id =
-                                                              item.mm_mt5_acc_id;
-                                                            setCreatePortfolioForm({
-                                                              ...createPortfolioForm,
-                                                            });
-                                                            setDialogTitle("Create Portfolio");
-                                                            getMoneyManagerList();
-                                                            setOpen(true);
+                                                      <div className="footer-action-button">
+                                                        <div
+                                                          className="footer-action-button spanportFolio1"
+                                                          style={{
+                                                            backgroundColor:
+                                                              item.is_closed == "0"
+                                                                ? "white"
+                                                                : "#ebe5c1",
                                                           }}
                                                         >
-                                                          Create Portfolio
-                                                        </button>
-                                                        <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                          <span className="spanportFoliopading">
+                                                            Pending
+                                                          </span>
+                                                        </div>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}/${id}`}>
                                                           View
                                                         </NavLink>
                                                       </div>
                                                     )}
                                                   </div>
                                                 );
-                                              })}
-                                            </div>
-                                          </div>
-                                          : ""
-                                      }
-                                      {
-                                        (pammPortfolioGroupButton == "my_portfolio") ?
-                                          <div className="myportfolio-card-section">
-                                            {
-                                              portfolioLoader ? <div className="loader-section">
-                                                <svg class="spinner" viewBox="0 0 50 50">
-                                                  <circle
-                                                    class="path"
-                                                    cx="25"
-                                                    cy="25"
-                                                    r="20"
-                                                    fill="none"
-                                                    stroke-width="5"
-                                                  ></circle>
-                                                </svg>
-                                              </div> :
-                                                myPortfolio.map((item) => {
-                                                  return (
-                                                    <div className="myportfolio-card-content">
-                                                      <div className="width-100-with-border header-sction">
-                                                        <div>
-                                                          <NavLink
-                                                            to={`/portfolio_profile/${item.pid}`}
-                                                            className="portfolio-link-color"
-                                                          >
-                                                            {item.portfolio_name}
-                                                          </NavLink>
-                                                          <span className="text-bold-700">
-                                                            {item.portfolio_id}
-                                                          </span>
-                                                        </div>
-                                                        <div>
-                                                          <span>Money Manager</span>
-                                                          <NavLink
-                                                            className="navlink-color-white"
-                                                            to={`/money_manager_profile/${item.pid}`}
-                                                          >
-                                                            <span className="text-bold-700">
-                                                              {item.account_name}
-                                                            </span>
-                                                          </NavLink>
-                                                        </div>
-                                                      </div>
-                                                      <div
-                                                        className="width-100-with-border"
-                                                        style={{
-                                                          backgroundColor:
-                                                            item.is_closed == "0"
-                                                              ? "white"
-                                                              : "#ebd7d7",
-                                                        }}
-                                                      >
-                                                        <div>
-                                                          <span>Investment</span>
-                                                          <span className="text-bold-700">
-                                                            ${item.my_investment}
-                                                          </span>
-                                                        </div>
-                                                        <div>
-                                                          <span>Current Value</span>
-                                                          <span
-                                                            className="text-bold-700"
-                                                            style={{
-                                                              color:
-                                                                item.my_investment <=
-                                                                  item.current_value
-                                                                  ? "green"
-                                                                  : "red",
-                                                            }}
-                                                          >
-                                                            ${item.current_value}
-                                                          </span>
-                                                        </div>
-
-                                                        <div>
-                                                          <span>PNL</span>
-                                                          <span
-                                                            className="text-bold-700"
-                                                            style={{
-                                                              color:
-                                                                item.pnl >= 0 ? "green" : "red",
-                                                            }}
-                                                          >
-                                                            ${item.pnl}
-                                                          </span>
-                                                        </div>
-                                                      </div>
-                                                      <div
-                                                        className="width-100-with-border"
-                                                        style={{
-                                                          backgroundColor:
-                                                            item.is_closed == "0"
-                                                              ? "white"
-                                                              : "#ebd7d7",
-                                                        }}
-                                                      >
-                                                        <div>
-                                                          <span>Return %</span>
-                                                          <span
-                                                            className="text-bold-700"
-                                                            style={{
-                                                              color:
-                                                                item.return_percentage >= 0
-                                                                  ? "green"
-                                                                  : "red",
-                                                            }}
-                                                          >
-                                                            {item.return_percentage}%
-                                                          </span>
-                                                        </div>
-
-                                                        <div>
-                                                          <span>Date Time</span>
-                                                          <span className="text-bold-700">
-                                                            {item.added_datetime}
-                                                          </span>
-                                                        </div>
-                                                      </div>
-                                                      <div
-                                                        className="width-100-with-border"
-                                                        style={{
-                                                          backgroundColor:
-                                                            item.is_closed == "0"
-                                                              ? "white"
-                                                              : "#ebd7d7",
-                                                        }}
-                                                      >
-                                                        <div>
-                                                          <span>Floating</span>
-                                                          <span
-                                                            className="text-bold-700"
-                                                            style={{
-                                                              color:
-                                                                item.current_floating >= 0
-                                                                  ? "green"
-                                                                  : "red",
-                                                            }}
-                                                          >
-                                                            {item.current_floating}
-                                                          </span>
-                                                        </div>
-
-                                                        <div>
-                                                          <span>Trade</span>
-                                                          <span className="cursor">
-                                                            <span
-                                                              class="material-icons"
-                                                              onClick={() => {
-                                                                //   filterData.pid = item.pid;
-                                                                //   setFilterData({ ...filterData });
-                                                                //   setDialogTitle("Trade History");
-                                                                //   setMaxWidth("xl");
-                                                                //   setOpen(true);
-                                                                //   console.log("hi");
-
-                                                                navigate(
-                                                                  `/pamm_trade_history/${item.pid}`
-                                                                );
-                                                              }}
-                                                            >
-                                                              insert_chart
-                                                            </span>
-                                                          </span>
-                                                        </div>
-                                                      </div>
-                                                      {item.is_closed == "0" ? (
-                                                        <div className="footer-action-button">
-                                                          <button
-                                                            onClick={(e) => {
-                                                              setMaxWidth("sm");
-                                                              setWithdrawForm({
-                                                                isLoader: false,
-                                                                allWithdraw: true,
-                                                                amount: "",
-                                                                pid: item.pid,
-                                                              });
-                                                              SetRefreshCreatePortfolio1(false);
-                                                              setDialogTitle("Withdraw");
-                                                              setOpen(true);
-                                                            }}
-                                                          >
-                                                            Withdraw
-                                                          </button>
-                                                          <button
-                                                            onClick={(e) => {
-                                                              investmentForm.user_id = "";
-                                                              investmentForm.pid = item.pid;
-                                                              investmentForm.amount = "";
-                                                              setMaxWidth("sm");
-                                                              setInvestmentForm({
-                                                                ...investmentForm,
-                                                              });
-                                                              setDialogTitle("Investment");
-                                                              setOpen(true);
-                                                            }}
-                                                          >
-                                                            Invest
-                                                          </button>
-                                                          <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
-                                                            View
-                                                          </NavLink>
-                                                        </div>
-                                                      ) : item.is_closed == "1" ? (
-                                                        <div className="footer-action-button">
-                                                          <div
-                                                            className="footer-action-button spanportFolio1"
-                                                            style={{
-                                                              backgroundColor:
-                                                                item.is_closed == "0"
-                                                                  ? "white"
-                                                                  : "#ebd7d7",
-                                                            }}
-                                                          >
-                                                            <span className="spanportFolio">
-                                                              Closed
-                                                            </span>
-                                                          </div>
-                                                          <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
-                                                            View
-                                                          </NavLink>
-                                                        </div>
-                                                      ) : (
-                                                        <div className="footer-action-button">
-                                                          <div
-                                                            className="footer-action-button spanportFolio1"
-                                                            style={{
-                                                              backgroundColor:
-                                                                item.is_closed == "0"
-                                                                  ? "white"
-                                                                  : "#ebe5c1",
-                                                            }}
-                                                          >
-                                                            <span className="spanportFoliopading">
-                                                              Pending
-                                                            </span>
-                                                          </div>
-                                                          <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
-                                                            View
-                                                          </NavLink>
-                                                        </div>
-                                                      )}
-                                                    </div>
-                                                  );
-                                                })
-                                            }
-                                          </div>
-                                          : ""
-                                      }
-                                    </div>
-                                    : ""
-                                }
-
-                                {
-                                  (pammGroupButton == "my_manage") ?
-                                    <div>
-                                      <CommonTable url={`${Url}/datatable/pamm/my_money_managers.php`} column={pammMyManagerColumn} sort="5" param={pammMyManagerParam} />
-                                    </div>
-                                    : ""
-                                }
-
-                                {
-                                  (pammGroupButton == "trade_history") ?
-                                    <div>
-                                      <div className="pamm-withdraw-history-filter-section">
-                                        <div className="filter-element">
-                                          <TextField
-                                            className="input-font-small"
-                                            label="From"
-                                            type="date"
-                                            variant="standard"
-                                            sx={{ width: "100%" }}
-                                            name="from"
-                                            focused
-                                            onChange={(e) => {
-                                              pammTradeParam.start_date = e.target.value;
-                                              setPammTardeParam({ ...pammTradeParam });
-                                            }}
-                                          />
+                                              })
+                                          }
                                         </div>
-                                        <div className="filter-element">
-                                          <TextField
-                                            className="input-font-small"
-                                            label="To"
-                                            type="date"
-                                            variant="standard"
-                                            sx={{ width: "100%" }}
-                                            name="to"
-                                            focused
-                                            onChange={(e) => {
-                                              pammTradeParam.end_date = e.target.value;
-                                              setPammTardeParam({ ...pammTradeParam });
-                                            }}
-                                          />
-                                        </div>
+                                        : ""
+                                    }
+                                  </div>
+                                  : ""
+                              }
 
+                              {
+                                (pammGroupButton == "my_manage") ?
+                                  <div>
+                                    <CommonTable url={`${Url}/datatable/pamm/my_money_managers.php`} column={pammMyManagerColumn} sort="5" param={pammMyManagerParam} />
+                                  </div>
+                                  : ""
+                              }
+
+                              {
+                                (pammGroupButton == "trade_history") ?
+                                  <div>
+                                    <div className="pamm-withdraw-history-filter-section">
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="From"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="from"
+                                          focused
+                                          onChange={(e) => {
+                                            pammTradeParam.start_date = e.target.value;
+                                            setPammTardeParam({ ...pammTradeParam });
+                                          }}
+                                        />
                                       </div>
-                                      <CommonTable url={`${Url}/datatable/pamm/pamm_trade_history.php`} column={pammTradeHistoryColumn} sort="2" param={pammTradeParam} />
-                                    </div>
-                                    : ""
-                                }
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="To"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="to"
+                                          focused
+                                          onChange={(e) => {
+                                            pammTradeParam.end_date = e.target.value;
+                                            setPammTardeParam({ ...pammTradeParam });
+                                          }}
+                                        />
+                                      </div>
 
-                                {
-                                  (pammGroupButton == "withdraw_history") ?
-                                    <div>
-                                      <div className="pamm-withdraw-history-filter-section">
-                                        <div className="filter-element">
-                                          <TextField
-                                            className="input-font-small"
-                                            label="From"
-                                            type="date"
-                                            variant="standard"
-                                            sx={{ width: "100%" }}
-                                            name="from"
-                                            focused
+                                    </div>
+                                    <CommonTable url={`${Url}/datatable/pamm/pamm_trade_history.php`} column={pammTradeHistoryColumn} sort="2" param={pammTradeParam} />
+                                  </div>
+                                  : ""
+                              }
+
+                              {
+                                (pammGroupButton == "withdraw_history") ?
+                                  <div>
+                                    <div className="pamm-withdraw-history-filter-section">
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="From"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="from"
+                                          focused
+                                          onChange={(e) => {
+                                            pammWithdrawParam.start_date = e.target.value;
+                                            setPammWithdrawParam({ ...pammWithdrawParam });
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="filter-element">
+                                        <TextField
+                                          className="input-font-small"
+                                          label="To"
+                                          type="date"
+                                          variant="standard"
+                                          sx={{ width: "100%" }}
+                                          name="to"
+                                          focused
+                                          onChange={(e) => {
+                                            pammWithdrawParam.end_date = e.target.value;
+                                            setPammWithdrawParam({ ...pammWithdrawParam });
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="filter-element">
+                                        <FormControl variant="standard" sx={{ width: "100%" }}>
+                                          <InputLabel>Status</InputLabel>
+                                          <Select
+                                            label
+                                            className="select-font-small"
+                                            name="account_type"
                                             onChange={(e) => {
-                                              pammWithdrawParam.start_date = e.target.value;
+                                              pammWithdrawParam.status = e.target.value;
                                               setPammWithdrawParam({ ...pammWithdrawParam });
                                             }}
-                                          />
-                                        </div>
-                                        <div className="filter-element">
-                                          <TextField
-                                            className="input-font-small"
-                                            label="To"
-                                            type="date"
-                                            variant="standard"
-                                            sx={{ width: "100%" }}
-                                            name="to"
                                             focused
-                                            onChange={(e) => {
-                                              pammWithdrawParam.end_date = e.target.value;
-                                              setPammWithdrawParam({ ...pammWithdrawParam });
-                                            }}
-                                          />
-                                        </div>
-                                        <div className="filter-element">
-                                          <FormControl variant="standard" sx={{ width: "100%" }}>
-                                            <InputLabel>Status</InputLabel>
-                                            <Select
-                                              label
-                                              className="select-font-small"
-                                              name="account_type"
-                                              onChange={(e) => {
-                                                pammWithdrawParam.status = e.target.value;
-                                                setPammWithdrawParam({ ...pammWithdrawParam });
-                                              }}
-                                              focused
-                                            >
-                                              <MenuItem value="0">Pending</MenuItem>
-                                              <MenuItem value="1">Approved</MenuItem>
-                                              <MenuItem value="2">Rejected</MenuItem>
-                                            </Select>
-                                          </FormControl>
-                                        </div>
-
+                                          >
+                                            <MenuItem value="0">Pending</MenuItem>
+                                            <MenuItem value="1">Approved</MenuItem>
+                                            <MenuItem value="2">Rejected</MenuItem>
+                                          </Select>
+                                        </FormControl>
                                       </div>
-                                      <CommonTable url={`${Url}/datatable/pamm/pamm_withdraw_request.php`} column={pammWithdrawHistoryColumn} sort="1" param={pammWithdrawParam} />
-                                    </div>
-                                    : ""
-                                }
 
-                              </div>
-                            </Paper>
-                          </Grid>
+                                    </div>
+                                    <CommonTable url={`${Url}/datatable/pamm/pamm_withdraw_request.php`} column={pammWithdrawHistoryColumn} sort="1" param={pammWithdrawParam} />
+                                  </div>
+                                  : ""
+                              }
+
+                            </div>
+                          </Paper>
                         </Grid>
-                      </TabPanel> : <TabPanel value={value} index={8} dir={theme.direction}>
+                      </Grid>
+                      </TabPanel> : 
+                        (userData.data.is_ib_account == "1") ? 
+                        <TabPanel value={value} index={8} dir={theme.direction}>
                         <Grid container spacing={3} className="grid-handle">
                           <Grid item md={12} lg={12} xl={12}>
                             <Paper
@@ -10839,7 +10987,7 @@ const Profile = () => {
                             </Paper>
                           </Grid>
                         </Grid>
-                      </TabPanel>
+                      </TabPanel> : ""
                     }
 
                     <TabPanel value={value} index={9} dir={theme.direction}>
@@ -11272,6 +11420,22 @@ const Profile = () => {
                                     </div>
                                     <br />
                                     {
+                                      (pammPortfolioGroupButton == "my_portfolio") ? <div className="pamm-create-my-portfolio-button">
+                                      <Button variant='contained' onClick={(e) => {
+                                        setMaxWidth("sm");
+                                        setDialogTitle("Create Portfolio");
+                                        getMoneyManagerList();
+                                        setCreatePortfolioForm({
+                                          isLoader: false,
+                                          portfolio_name: "",
+                                          mm_mt5_acc_id: "",
+                                          investment_months: "",
+                                        });
+                                        setOpen(true);
+                                      }}>Create Portfolio</Button>
+                                      </div> : ""
+                                    }
+                                    {
                                       (pammPortfolioGroupButton == "money_manager") ?
                                         <div>
                                           <div className="money-manager-card-list-section">
@@ -11281,7 +11445,7 @@ const Profile = () => {
                                                   <div className="money-manager-header-section">
                                                     <NavLink
                                                       className="navlink-color-white"
-                                                      to={`/money_manager_profile/${item.mm_mt5_acc_id}`}
+                                                      to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
                                                     >
                                                       <label>{item.mt5_name}</label>
                                                     </NavLink>
@@ -11344,7 +11508,7 @@ const Profile = () => {
                                                       >
                                                         Invest
                                                       </button>
-                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}>
                                                         View
                                                       </NavLink>
                                                     </div>
@@ -11353,7 +11517,7 @@ const Profile = () => {
                                                       <button className="skyblue1">
                                                         Pending
                                                       </button>
-                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}>
                                                         View
                                                       </NavLink>
                                                     </div>
@@ -11375,7 +11539,7 @@ const Profile = () => {
                                                       >
                                                         Create Portfolio
                                                       </button>
-                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}`}>
+                                                      <NavLink className='third-view-button' to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}>
                                                         View
                                                       </NavLink>
                                                     </div>
@@ -11409,7 +11573,7 @@ const Profile = () => {
                                                     <div className="width-100-with-border header-sction">
                                                       <div>
                                                         <NavLink
-                                                          to={`/portfolio_profile/${item.pid}`}
+                                                          to={`/portfolio_profile/${item.pid}/${id}`}
                                                           className="portfolio-link-color"
                                                         >
                                                           {item.portfolio_name}
@@ -11422,7 +11586,7 @@ const Profile = () => {
                                                         <span>Money Manager</span>
                                                         <NavLink
                                                           className="navlink-color-white"
-                                                          to={`/money_manager_profile/${item.pid}`}
+                                                          to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
                                                         >
                                                           <span className="text-bold-700">
                                                             {item.account_name}
@@ -11578,7 +11742,7 @@ const Profile = () => {
                                                         >
                                                           Invest
                                                         </button>
-                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}/${id}`}>
                                                           View
                                                         </NavLink>
                                                       </div>
@@ -11597,7 +11761,7 @@ const Profile = () => {
                                                             Closed
                                                           </span>
                                                         </div>
-                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}/${id}`}>
                                                           View
                                                         </NavLink>
                                                       </div>
@@ -11616,7 +11780,7 @@ const Profile = () => {
                                                             Pending
                                                           </span>
                                                         </div>
-                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}`}>
+                                                        <NavLink className='third-view-button' to={`/portfolio_profile/${item.pid}/${id}`}>
                                                           View
                                                         </NavLink>
                                                       </div>
