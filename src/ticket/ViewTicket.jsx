@@ -17,6 +17,7 @@ import {
 import "./ticket.css";
 import { IsApprove, Url } from "../global";
 import { styled } from "@mui/material/styles";
+import CustomImageModal from "../common/CustomImageModal";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -96,6 +97,7 @@ const ViewTicket = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("ticket_id", id);
     await axios.post(`${Url}/ajaxfiles/view_ticket.php`, param).then((res) => {
@@ -126,6 +128,7 @@ const ViewTicket = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("ticketChatID", id);
       param.append("ticketTitle", viewTicketData.data.tickettitle);
@@ -217,52 +220,60 @@ const ViewTicket = () => {
                               <div className="content-area">
                                 {viewTicketData.data.conversation
                                   ? viewTicketData.data.conversation.map(
-                                      (item) => {
-                                        if (item.position == "right") {
-                                          return (
-                                            <div className="chat right-side">
-                                              <div className="chat-body">
-                                                <div className="chat-text">
-                                                  <p>
-                                                    {item.ticketconversation}
-                                                  </p>
-                                                </div>
-                                              </div>
-                                              <div className="chat-avatar">
-                                                <a className="avatar">
-                                                  <img
-                                                    src={item.avtar}
-                                                    class="circle"
-                                                    alt="avatar"
-                                                  />
-                                                </a>
+                                    (item) => {
+                                      if (item.position == "right") {
+                                        return (
+                                          <div className="chat right-side">
+                                            <div className="chat-body">
+                                              <div className="chat-text">
+                                                <p>
+                                                {
+                                                  (item.attachment != "") ? <CustomImageModal image={item.attachment} className='ticket-upload-image'/> : ""
+                                                }
+                                                  {item.ticketconversation}
+                                                </p>
                                               </div>
                                             </div>
-                                          );
-                                        } else {
-                                          return (
-                                            <div className="chat left-side">
-                                              <div className="chat-avatar">
-                                                <a className="avatar">
-                                                  <img
-                                                    src={item.avtar}
-                                                    class="circle"
-                                                    alt="avatar"
-                                                  />
-                                                </a>
-                                              </div>
-                                              <div className="chat-body">
-                                                <div className="chat-text">
-                                                  <p>
-                                                    {item.ticketconversation}
-                                                  </p>
-                                                </div>
+                                            <div className="chat-avatar">
+                                              <a className="avatar">
+                                                <img
+                                                  src={item.avtar}
+                                                  class="circle"
+                                                  alt="avatar"
+                                                />
+                                              </a>
+                                            </div>
+                                          </div>
+                                        );
+                                      } else {
+                                        return (
+                                          <div className="chat left-side">
+                                            <div className="chat-avatar">
+                                              <a className="avatar">
+                                                <img
+                                                  src={item.avtar}
+                                                  class="circle"
+                                                  alt="avatar"
+                                                />
+                                              </a>
+                                            </div>
+                                            <div className="chat-body">
+                                              <div className="chat-text">
+                                                {
+                                                  (item.attachment != "") ? <img
+                                                    src={item.attachment}
+                                                  /> : ""
+                                                }
+                                                <p>
+                                                  {item.ticketconversation}
+                                                </p>
                                               </div>
                                             </div>
-                                          );
-                                        }
+                                          </div>
+                                        );
                                       }
-                                    )
+                                    }
+                                  )
                                   : ""}
 
                                 {/* <div className="chat left-side">

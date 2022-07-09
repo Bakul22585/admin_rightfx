@@ -35,7 +35,7 @@
 }
 .sidebar-navigation ul li a {
   display: flex;
-  gap: 16px;
+  gap: 5px;
 }
 @media screen and (min-width: 1100px) {
   /* .app-sidebar:hover .sidebar-open-close {

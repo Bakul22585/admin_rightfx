@@ -89,6 +89,7 @@
     border-radius: 5px;
     display: flex;
     position: relative;
+    flex-direction: column;
 }
 .view-ticket-page .chat.right-side P::after {
     content: '';
@@ -141,4 +142,7 @@
 }
 .site-button-color {
     height: 100%;
+}
+.view-ticket-page .chat .ticket-upload-image {
+    border-radius: 0px;
 }
