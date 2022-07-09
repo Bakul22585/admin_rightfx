@@ -225,7 +225,7 @@ const PendingKYC = () => {
       sortable: true,
       reorder: true,
       wrap: true,
-      grow: 1,
+      grow: 0.1,
     },
     {
       name: "Action",

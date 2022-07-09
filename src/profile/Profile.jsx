@@ -8124,7 +8124,6 @@ const Profile = () => {
     }
   };
 
-  
   const investmentFormSubmit = () => {
     if (investmentForm.pid == "") {
       toast.error("Please enter pid");

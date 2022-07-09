@@ -1380,6 +1380,7 @@ const MmManagement = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("user_first_name", form.first_name);
       param.append("user_last_name", form.last_name);
@@ -1393,7 +1394,7 @@ const MmManagement = () => {
       param.append("address", form.address);
       param.append("user_password", form.password);
       param.append("user_conf_password", form.confirm_password);
-      param.append("user_status ", form.status);
+      param.append("user_status", form.status);
 
       await axios
         .post(`${Url}/ajaxfiles/pamm/create_pamm.php`, param)

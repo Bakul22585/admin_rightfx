@@ -335,3 +335,13 @@
     display: flex;
     justify-content: end;
 }
+.pamm-dashboard-new-user-section {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.filter-with-group-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
