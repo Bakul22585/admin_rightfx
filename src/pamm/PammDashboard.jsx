@@ -205,7 +205,7 @@ const PammDashboard = () => {
                 <p className="main-heading">Pamm Dashboard</p>
                 <Grid container spacing={2}>
                   <Grid item sm={12} md={6} lg={6}>
-                    <div className="setBoxs">
+                    <div className="setBoxs pamm-dashboard-boxSection">
                       <div className="row1 boxSection">
                         <div className="card padding-9 animate fadeLeft boxsize">
                           <div className="row">
