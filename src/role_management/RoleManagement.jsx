@@ -42,6 +42,15 @@ const RoleManagement = () => {
       wrap: true,
     },
     {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      grow: 0.3,
+      wrap: true,
+    },
+    {
       name: "Action",
       button: true,
       cell: (row) => {
@@ -77,6 +86,7 @@ const RoleManagement = () => {
   const navigate = useNavigate();
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [param, setParam] = useState({});
+  const [resData, setResData] = useState({});
   const [searchBy, setSearchBy] = useState([
     {
       label: "ROLE NAME",
@@ -178,6 +188,7 @@ const RoleManagement = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -199,6 +210,7 @@ const RoleManagement = () => {
                     searchWord={searchKeyword}
                     param={param}
                     refresh={refresh}
+                    setResData={setResData}
                   />
                 </Paper>
               </Grid>

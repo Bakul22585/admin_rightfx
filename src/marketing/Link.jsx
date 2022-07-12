@@ -78,6 +78,7 @@ const Link = () => {
   const [maxWidth, setMaxWidth] = useState("sm");
   const [open, setOpen] = useState(false);
   var [sourceMasterList, setSourceMasterList] = useState({});
+  const [resData, setResData] = useState({});
   const [form, setForm] = useState({
     isLoader: false,
     source_name: "",
@@ -216,6 +217,15 @@ const Link = () => {
       reorder: true,
       grow: 1,
       wrap: true,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
     },
     {
       name: "Action",
@@ -696,6 +706,7 @@ const Link = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -724,6 +735,7 @@ const Link = () => {
                           searchWord={searchKeyword}
                           param={param}
                           refresh={refresh}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

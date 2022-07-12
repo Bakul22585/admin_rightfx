@@ -172,6 +172,7 @@ const Leads = () => {
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("md");
   const navigate = useNavigate();
+  const [resData, setResData] = useState({});
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [filterDate, setFilterDate] = useState({
     filter: id,
@@ -1415,6 +1416,47 @@ const Leads = () => {
       ],
     },
     {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      grow: 0.3,
+      wrap: true,
+      conditionalCellStyles: [
+        {
+          when: (row) => row.color == "f4510b",
+          style: {
+            backgroundColor: "#ffe6e6",
+          },
+        },
+        {
+          when: (row) => row.color == "ff8000",
+          style: {
+            backgroundColor: "#fff2e6",
+          },
+        },
+        {
+          when: (row) => row.color == "00d5d5",
+          style: {
+            backgroundColor: "#00d5d5",
+          },
+        },
+        {
+          when: (row) => row.color == "0080ff",
+          style: {
+            backgroundColor: "#e6ffff",
+          },
+        },
+        {
+          when: (row) => row.color == "25138c",
+          style: {
+            backgroundColor: "#ebe9fc",
+          },
+        },
+      ],
+    },
+    {
       name: "Action",
       button: true,
       cell: (row) => {
@@ -2285,6 +2327,7 @@ const Leads = () => {
                   setParam={setFilterDate}
                   salesAgent={true}
                   setsaleStatus={setcheckStatus}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -2375,6 +2418,7 @@ const Leads = () => {
                     searchWord={searchKeyword}
                     param={filterDate}
                     checkStatus={checkStatus}
+                    setResData={setResData}
                   />
                 </Paper>
 

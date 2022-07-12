@@ -154,6 +154,7 @@ const ClientList = () => {
   const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [resData, setResData] = useState({});
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
   const [dialogTitle, setDialogTitle] = useState("");
@@ -452,6 +453,15 @@ const ClientList = () => {
       reorder: true,
       wrap: true,
       grow: 0.5,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      grow: 0.3,
+      wrap: true,
     },
     {
       name: "Lead Close",
@@ -1002,6 +1012,7 @@ const ClientList = () => {
                   searchWord={setSearchKeyword}
                   setParam={setParam}
                   kycStatus={true}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -1025,6 +1036,7 @@ const ClientList = () => {
                     search={searchBy}
                     searchWord={searchKeyword}
                     param={param}
+                    setResData={setResData}
                   />
                 </Paper>
 

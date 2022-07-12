@@ -195,7 +195,7 @@ const CommonFilter = (prop) => {
     });
     return checkbox;
   };
-  // console.log("filter prop", prop);
+  console.log("filter prop", prop);
   return (
     <div>
       <Grid container>
@@ -217,7 +217,7 @@ const CommonFilter = (prop) => {
                     // value={prop.searchWord}
                     onChange={(e) => prop.searchWord(e.target.value)}
                   />
-                  <Button onClick={(event) => setFilterSection(!filterSection)}>
+                  <Button onClick={(event) => {setFilterSection(!filterSection);}}>
                     <i className="material-icons">
                       {" "}
                       {filterSection ? "menu" : "filter_list"}
@@ -330,6 +330,11 @@ const CommonFilter = (prop) => {
                             )}
                             {prop.userGroup ? (
                               <MenuItem value="userGroup">User Group</MenuItem>
+                            ) : (
+                              ""
+                            )}
+                            {prop.lastUpdatedBy ? (
+                              <MenuItem value="lastUpdatedBy">Last Updated By</MenuItem>
                             ) : (
                               ""
                             )}
@@ -729,6 +734,37 @@ const CommonFilter = (prop) => {
                                 return (
                                   <MenuItem value={item.user_group_id}>
                                     {item.user_group_name}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                          </FormControl>
+                        ) : (
+                          ""
+                        )}
+
+                        {filterBy == "lastUpdatedBy" ? (
+                          <FormControl
+                            sx={{ m: 1, width: 300 }}
+                            className="multipleSelect"
+                          >
+                            <InputLabel>Last Updated By</InputLabel>
+                            <Select
+                              onChange={(e) => {
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    ...prevalue,
+                                    modified_by: e.target.value,
+                                  };
+                                });
+                              }}
+                              input={<BootstrapInput />}
+                              sx={{ width: "200px" }}
+                            >
+                              {prop.lastUpdatedBy.map((item) => {
+                                return (
+                                  <MenuItem value={item.modified_by}>
+                                    {item.name}
                                   </MenuItem>
                                 );
                               })}

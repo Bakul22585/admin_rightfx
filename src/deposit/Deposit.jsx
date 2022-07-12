@@ -138,6 +138,7 @@ const Deposit = () => {
   const [accountOption, setAccountOption] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [checkStatus, setcheckStatus] = useState("");
+  const [resData, setResData] = useState({});
   const [depositForm, setDepositForm] = useState({
     live_account: "",
     account: "",
@@ -347,6 +348,15 @@ const Deposit = () => {
       reorder: true,
       grow: 0.5,
       wrap: true,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
     },
     {
       name: "Action",
@@ -1163,6 +1173,7 @@ const Deposit = () => {
                   setParam={setParam}
                   searchWord={setSearchKeyword}
                   setcheckStatus={setcheckStatus}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
 
@@ -1187,6 +1198,7 @@ const Deposit = () => {
                           param={param}
                           searchWord={searchKeyword}
                           checkStatus={checkStatus}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

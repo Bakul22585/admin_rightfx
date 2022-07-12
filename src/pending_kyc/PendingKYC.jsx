@@ -82,6 +82,7 @@ const PendingKYC = () => {
   const [dialogTitle, setDialogTitle] = useState("");
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [resData, setResData] = useState({});
   const [selectedAadharCardFrontFile, setSelectedAadharCardFrontFile] =
     useState();
   const [previewAadharCardFront, setPreviewAadharCardFront] = useState();
@@ -226,6 +227,15 @@ const PendingKYC = () => {
       reorder: true,
       wrap: true,
       grow: 0.1,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
     },
     {
       name: "Action",
@@ -1096,6 +1106,7 @@ const PendingKYC = () => {
                   searchWord={setSearchKeyword}
                   setcheckStatus={setcheckStatus}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -1118,6 +1129,7 @@ const PendingKYC = () => {
                           param={param}
                           search={searchBy}
                           searchWord={searchKeyword}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

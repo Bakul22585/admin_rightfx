@@ -45,6 +45,7 @@ const CommisionGroup = () => {
   const [viewData, setViewData] = useState({});
   const [param, setParam] = useState({});
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [resData, setResData] = useState({});
 
   const [form, setForm] = useState({
     ib_group_level_id: "",
@@ -231,6 +232,15 @@ const CommisionGroup = () => {
       reorder: true,
       grow: 0.1,
       wrap: true,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
     },
     {
       name: "ACTION",
@@ -1680,6 +1690,7 @@ const CommisionGroup = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -1701,6 +1712,7 @@ const CommisionGroup = () => {
                     refresh={refresh}
                     param={param}
                     searchWord={searchKeyword}
+                    setResData={setResData}
                   />
                 </Paper>
               </Grid>

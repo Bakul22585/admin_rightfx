@@ -33,6 +33,7 @@ const ListRequest = () => {
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [openModel, setOpenModel] = useState(false);
   const [isDefaultStructure, setIsDefaultStructure] = useState(true);
+  const [resData, setResData] = useState({});
   const [updateDate, setUpdateDate] = useState({
     structure_id: "",
     sponsor_approve: "",
@@ -273,6 +274,15 @@ const ListRequest = () => {
       grow: 0.3,
     },
     {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
+    {
       name: "ACTION",
       selector: (row) => {
         return (
@@ -309,7 +319,7 @@ const ListRequest = () => {
       grow: 0.1,
     },
   ];
-  console.log("updateDate", updateDate);
+  // console.log("updateDate", updateDate);
   const viewRequest = async (prop) => {
     // setOpenModel(true);
     console.log("prop", prop);
@@ -635,6 +645,7 @@ const ListRequest = () => {
                   searchWord={setSearchKeyword}
                   ibList={true}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -650,6 +661,7 @@ const ListRequest = () => {
                     refresh={updateDate.refresh}
                     searchWord={searchKeyword}
                     param={param}
+                    setResData={setResData}
                   />
                 </Paper>
               </Grid>

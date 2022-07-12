@@ -118,6 +118,7 @@ const MmManagement = () => {
   const [maxWidth, setMaxWidth] = useState("md");
   const [refresh, setRefresh] = useState(false);
   const [value, setValue] = useState(0);
+  const [resData, setResData] = useState({});
   const [selectedAadharCardFrontFile, setSelectedAadharCardFrontFile] =
     useState();
   const [previewAadharCardFront, setPreviewAadharCardFront] = useState();
@@ -288,6 +289,15 @@ const MmManagement = () => {
       grow: 0.5,
     },
     {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
+    {
       name: "Action",
       button: true,
       cell: (row) => {
@@ -386,6 +396,15 @@ const MmManagement = () => {
       sortable: true,
       reorder: true,
       grow: 0.7,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
     },
     {
       name: "Action",
@@ -1692,6 +1711,7 @@ const MmManagement = () => {
                       search={searchBy}
                       searchWord={setSearchKeyword}
                       setParam={setParam}
+                      lastUpdatedBy={resData.modified_by_users}
                     />
                     <br />
                     <Paper
@@ -1720,6 +1740,7 @@ const MmManagement = () => {
                               searchWord={searchKeyword}
                               param={param}
                               refresh={refresh}
+                              setResData={setResData}
                             />
                           </Grid>
                         </Grid>
@@ -1731,6 +1752,7 @@ const MmManagement = () => {
                       search={kycSearchBy}
                       searchWord={setSearchKeyword}
                       setParam={setParam}
+                      lastUpdatedBy={resData.modified_by_users}
                     />
                     <br />
                     <Paper
@@ -1753,6 +1775,7 @@ const MmManagement = () => {
                               searchWord={searchKeyword}
                               param={param}
                               refresh={refresh}
+                              setResData={setResData}
                             />
                           </Grid>
                         </Grid>

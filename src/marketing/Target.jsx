@@ -74,6 +74,7 @@ const Target = () => {
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
   const [checkStatus, setcheckStatus] = useState("");
+  const [resData, setResData] = useState({});
   const [form, setForm] = useState({
     ac_target: "",
     money_in_target: "",
@@ -228,6 +229,15 @@ const Target = () => {
       wrap: true,
       sortable: true,
       reorder: true,
+      grow: 0.5,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
       grow: 0.5,
     },
     {
@@ -618,6 +628,7 @@ const Target = () => {
                   searchWord={setSearchKeyword}
                   setParam={setParam}
                   setcheckStatus={setcheckStatus}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -641,6 +652,7 @@ const Target = () => {
                           param={param}
                           refresh={refresh}
                           checkStatus={checkStatus}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

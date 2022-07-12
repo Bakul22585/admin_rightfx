@@ -17,6 +17,7 @@ import { Url } from "../global";
 const IBWithdraw = () => {
   const [refresh, setRefresh] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [resData, setResData] = useState({});
   const [searchBy, setSearchBy] = useState([
     {
       label: "NAME",
@@ -128,6 +129,15 @@ const IBWithdraw = () => {
       reorder: true,
       grow: 0.3,
     },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
   ];
 
   return (
@@ -142,6 +152,7 @@ const IBWithdraw = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -160,6 +171,7 @@ const IBWithdraw = () => {
                           search={searchBy}
                           searchWord={searchKeyword}
                           param={param}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

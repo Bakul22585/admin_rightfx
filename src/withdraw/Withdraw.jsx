@@ -136,6 +136,7 @@ const Withdraw = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState({});
   const [checkStatus, setcheckStatus] = useState("");
+  const [resData, setResData] = useState({});
   const [Form, setForm] = useState({
     account_type: "",
     account: "",
@@ -287,6 +288,15 @@ const Withdraw = () => {
         );
       },
       sortable: true,
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
       reorder: true,
       wrap: true,
       grow: 0.5,
@@ -1027,6 +1037,7 @@ const Withdraw = () => {
                   searchWord={setSearchKeyword}
                   setParam={setParam}
                   setcheckStatus={setcheckStatus}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -1050,6 +1061,7 @@ const Withdraw = () => {
                           searchWord={searchKeyword}
                           param={param}
                           checkStatus={checkStatus}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

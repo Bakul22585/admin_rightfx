@@ -24,6 +24,7 @@ const InvestorRequest = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [open, setOpen] = useState(false);
+  const [resData, setResData] = useState({});
   const navigate = useNavigate();
   toast.configure();
   const [searchBy, setSearchBy] = useState([
@@ -176,6 +177,15 @@ const InvestorRequest = () => {
       wrap: true,
       sortable: true,
       reorder: true,
+      grow: 0.5,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
       grow: 0.5,
     },
     {
@@ -430,6 +440,7 @@ const InvestorRequest = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -466,6 +477,7 @@ const InvestorRequest = () => {
                             searchWord={searchKeyword}
                             param={param}
                             refresh={refresh}
+                            setResData={setResData}
                           />
                         )}
                       </Grid>

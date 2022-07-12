@@ -92,6 +92,7 @@ const UsersGroups = () => {
     const [open, setOpen] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState("sm");
+    const [resData, setResData] = useState({});
     const [dialogTitle, setDialogTitle] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [form, setForm] = useState({
@@ -178,6 +179,15 @@ const UsersGroups = () => {
             sortable: true,
             reorder: true,
             grow: 0.3,
+        },
+        {
+            name: "Updated By",
+            selector: (row) => {
+                return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+            },
+            reorder: true,
+            grow: 0.3,
+            wrap: true,
         },
         {
             name: "Action",
@@ -447,6 +457,7 @@ const UsersGroups = () => {
                                     search={searchBy}
                                     searchWord={setSearchKeyword}
                                     setParam={setParam}
+                                    lastUpdatedBy={resData.modified_by_users}
                                 />
                                 <br />
                                 <Paper
@@ -475,6 +486,7 @@ const UsersGroups = () => {
                                                     search={searchBy}
                                                     searchWord={searchKeyword}
                                                     param={param}
+                                                    setResData={setResData}
                                                 />
                                             </Grid>
                                         </Grid>

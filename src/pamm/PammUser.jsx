@@ -109,6 +109,7 @@ const PammUser = () => {
   const [refresh, setRefresh] = useState(false);
   const [title, setTitle] = useState("Client List");
   const [value, setValue] = useState(0);
+  const [resData, setResData] = useState({});
   const [searchBy, setSearchBy] = useState([
     {
       label: "USER NAME",
@@ -289,6 +290,15 @@ const PammUser = () => {
       sortable: true,
       reorder: true,
       grow: 1,
+    },
+    {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
     },
     {
       name: "Action",
@@ -818,6 +828,7 @@ const PammUser = () => {
                   search={searchBy}
                   searchWord={setSearchKeyword}
                   setParam={setParam}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
                 <Paper
@@ -840,6 +851,7 @@ const PammUser = () => {
                           searchWord={searchKeyword}
                           param={param}
                           refresh={refresh}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>

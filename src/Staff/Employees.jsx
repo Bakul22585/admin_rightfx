@@ -110,6 +110,7 @@ const Employees = () => {
   const [open, setOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [fullWidth, setFullWidth] = useState(true);
+  const [resData, setResData] = useState({});
   const [maxWidth, setMaxWidth] = useState("sm");
   const [searchBy, setSearchBy] = useState([
     {
@@ -836,6 +837,15 @@ const Employees = () => {
       wrap: true,
     },
     {
+      name: "Updated By",
+      selector: (row) => {
+        return <span title={row.modified_by_name}>{row.modified_by_name}</span>;
+      },
+      reorder: true,
+      grow: 0.3,
+      wrap: true,
+    },
+    {
       name: "Action",
       selector: (row) => {
         return (
@@ -908,6 +918,7 @@ const Employees = () => {
                   setParam={setParam}
                   searchWord={setSearchKeyword}
                   setcheckStatus={setcheckStatus}
+                  lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />
 
@@ -952,6 +963,7 @@ const Employees = () => {
                           param={param}
                           searchWord={searchKeyword}
                           checkStatus={checkStatus}
+                          setResData={setResData}
                         />
                       </Grid>
                     </Grid>
