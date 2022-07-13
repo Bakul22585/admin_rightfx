@@ -197,14 +197,18 @@ const Link = () => {
             <button
               className="copy_link"
               onClick={(e) => {
-                navigator.clipboard.writeText(`${ClientUrl}/register/campaign/${row.campaign_url}`).then(
-                  function () {
-                    toast.success("URL has been successfully copied");
-                  },
-                  function (err) {
-                    toast.error("URL Could not copy, Please try again");
-                  }
-                );
+                navigator.clipboard
+                  .writeText(
+                    `${ClientUrl}/register/campaign/${row.campaign_url}`
+                  )
+                  .then(
+                    function () {
+                      toast.success("URL has been successfully copied");
+                    },
+                    function (err) {
+                      toast.error("URL Could not copy, Please try again");
+                    }
+                  );
               }}
             >
               <span className="blinking">
@@ -215,7 +219,7 @@ const Link = () => {
         );
       },
       reorder: true,
-      grow: 1,
+      grow: 3,
       wrap: true,
     },
     {

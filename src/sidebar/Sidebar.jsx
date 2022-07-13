@@ -15,7 +15,7 @@ import axios from "axios";
 // import { useTranslation } from "react-i18next";
 // import Dashboard from "./Dashboard.svg"
 const style = {
-  margin: "0 0 0 0",
+  margin: "0 10px 0 0",
 };
 const Sidebar = (prop) => {
   // const { t } = useTranslation();
@@ -61,24 +61,25 @@ const Sidebar = (prop) => {
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
-    param.append('action', 'sidebar_menus');
+    param.append("action", "sidebar_menus");
     axios.post(`${Url}/ajaxfiles/menu_manage.php`, param).then((res) => {
-      if (res.data.status == 'error') {
+      if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
         setMenuData([...res.data.data]);
       }
     });
-  }
+  };
 
   useEffect(() => {
     getSidebarMenu();
-  }, [])
+  }, []);
 
   return (
     <div
-      className={`main-sidebar-content  ${isSidebarOpen ? "sidebar-with-4rem" : ""
-        }`}
+      className={`main-sidebar-content  ${
+        isSidebarOpen ? "sidebar-with-4rem" : ""
+      }`}
     >
       <div className={`app-sidebar app-sidebar--light app-sidebar--shadow`}>
         <div className="app-sidebar--header">
@@ -128,49 +129,63 @@ const Sidebar = (prop) => {
           <div>
             <div className="sidebar-navigation">
               <ul className="pt-2">
-                {
-                  menuData.map((item, index) => {
-                    return (
-                      (item.sub_menu_list.length > 0) ? <li>
-                        <a
-                          className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""}`}
-                          onClick={handleClick}
-                        >
-                          <span className="material-icons" style={style}>{item.icon_class}</span>
-                          {item.menu_name}
-                          <span className="sidebar-icon-indicator">
-                            {open[`menu-${index}`] ? <ExpandMore /> : <ExpandLess />}
-                          </span>
-                        </a>
-                        <Collapse in={open[`menu-${index}`]} timeout="auto" unmountOnExit>
-                          <ul>
-                            {
-                              item.sub_menu_list.map((subMenu) => {
-                                return (
-                                  <li>
-                                    <NavLink to={`/${subMenu.menu_url}`} onClick={CloseSidebar}>
-                                      {subMenu.menu_name}
-                                    </NavLink>
-                                  </li>
-                                )
-                              })
-                            }
-                          </ul>
-                        </Collapse>
-                      </li> :
-                        <li>
-                          <NavLink
-                            className="nav-link-simple"
-                            to={`/${item.menu_url}`}
-                            onClick={CloseSidebar}
-                          >
-                            <span className="material-icons" style={style}>{item.icon_class}</span>
-                            {item.menu_name}
-                          </NavLink>
-                        </li>
-                    );
-                  })
-                }
+                {menuData.map((item, index) => {
+                  return item.sub_menu_list.length > 0 ? (
+                    <li>
+                      <a
+                        className={`menu-${index} ${
+                          open[`menu-${index}`] ? "active" : ""
+                        }`}
+                        onClick={handleClick}
+                      >
+                        <span className="material-icons" style={style}>
+                          {item.icon_class}
+                        </span>
+                        {item.menu_name}
+                        <span className="sidebar-icon-indicator">
+                          {open[`menu-${index}`] ? (
+                            <ExpandMore />
+                          ) : (
+                            <ExpandLess />
+                          )}
+                        </span>
+                      </a>
+                      <Collapse
+                        in={open[`menu-${index}`]}
+                        timeout="auto"
+                        unmountOnExit
+                      >
+                        <ul>
+                          {item.sub_menu_list.map((subMenu) => {
+                            return (
+                              <li>
+                                <NavLink
+                                  to={`/${subMenu.menu_url}`}
+                                  onClick={CloseSidebar}
+                                >
+                                  {subMenu.menu_name}
+                                </NavLink>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </Collapse>
+                    </li>
+                  ) : (
+                    <li>
+                      <NavLink
+                        className="nav-link-simple"
+                        to={`/${item.menu_url}`}
+                        onClick={CloseSidebar}
+                      >
+                        <span className="material-icons" style={style}>
+                          {item.icon_class}
+                        </span>
+                        {item.menu_name}
+                      </NavLink>
+                    </li>
+                  );
+                })}
                 {/* <li>
                   <NavLink
                     className="nav-link-simple "
