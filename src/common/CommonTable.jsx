@@ -103,6 +103,7 @@ const CommonTable = (prop) => {
     const { name, value } = event.target;
     setClientSearch(value);
   };
+  console.log("prop.footer", prop.footer);
   const CustomLoader = () => (
     <div style={{ padding: "24px" }}>
       <Spinner />
@@ -372,6 +373,7 @@ const CommonTable = (prop) => {
         data={clientData}
         progressPending={clientLoading}
         onSort={handleClientSort}
+        footer={prop.footer}
         sortServer
         pagination
         paginationServer

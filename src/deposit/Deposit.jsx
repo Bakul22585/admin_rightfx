@@ -281,9 +281,7 @@ const Deposit = () => {
     },
     {
       name: "AMOUNT",
-      selector: (row) => {
-        return <span title={row.amount}>{row.amount}</span>;
-      },
+      selector: "amount",
       sortable: true,
       reorder: true,
       grow: 0.5,
@@ -426,6 +424,9 @@ const Deposit = () => {
       allowOverflow: true,
     },
   ];
+  const footer = {
+    amount: "das",
+  };
 
   const handleContextClick = (event, index) => {
     console.log(event.currentTarget.getAttribute("id"), index);
@@ -1195,6 +1196,7 @@ const Deposit = () => {
                           sort="2"
                           refresh={refresh}
                           search={searchBy}
+                          footer={footer}
                           param={param}
                           searchWord={searchKeyword}
                           checkStatus={checkStatus}
