@@ -294,7 +294,7 @@ const Deposit = () => {
       },
       sortable: true,
       reorder: true,
-      grow: 1,
+      grow: 2,
       wrap: true,
     },
     {
@@ -1205,8 +1205,36 @@ const Deposit = () => {
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <div className="d-flex">
+                  <Grid container>
+                  <Grid item md={6}>
+                <div className="row1 boxSection">
+                    <div className="card padding-9 animate fadeLeft boxsize">
+                      <div className="row">
+                        <div className="col s12 m12 text-align-center">
+                          <h5 className="mb-0">{resData.total_deposits_footer}</h5>
+                          <p className="no-margin">Total Deposit</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </Grid>
+                  <Grid item md={6}>
+                  <div className="row1 boxSection">
+                    <div className="card padding-9 animate fadeLeft boxsize">
+                      <div className="row">
+                        <div className="col s12 m12 text-align-center">
+                          <h5 className="mb-0">{resData.total_deposit}</h5>
+                          <p className="no-margin">Deposit</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </Grid>
+                  </Grid>
+                  </div>
                 </Paper>
-
+               
                 <BootstrapDialog
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"
