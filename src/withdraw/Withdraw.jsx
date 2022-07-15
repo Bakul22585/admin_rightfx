@@ -1066,6 +1066,38 @@ const Withdraw = () => {
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <div className="d-flex">
+                    <Grid container>
+                      <Grid item md={6}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_withdrawal_footer}
+                                </h5>
+                                <p className="no-margin">Total Withdrawal</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid item md={6}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_withdraw}
+                                </h5>
+                                <p className="no-margin">Withdrawal</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                    </Grid>
+                  </div>
                 </Paper>
 
                 <BootstrapDialog

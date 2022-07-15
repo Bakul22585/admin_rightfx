@@ -56,6 +56,7 @@ const DepositHistory = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [checkStatus, setcheckStatus] = useState("");
+  const [resData, setResData] = useState({});
   const [searchBy, setSearchBy] = useState([
     {
       label: "REFERENCE NO",
@@ -239,11 +240,40 @@ const DepositHistory = () => {
                           param={param}
                           searchWord={searchKeyword}
                           checkStatus={checkStatus}
+                          setResData={setResData}
                           csv="datatable/deposit_list_export.php"
                         />
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <Grid container>
+                    <Grid item md={6}>
+                      <div className="row1 boxSection">
+                        <div className="card padding-9 animate fadeLeft boxsize">
+                          <div className="row">
+                            <div className="col s12 m12 text-align-center">
+                              <h5 className="mb-0">
+                                {resData.total_deposits_footer}
+                              </h5>
+                              <p className="no-margin">Total Deposit</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Grid>
+                    <Grid item md={6}>
+                      <div className="row1 boxSection">
+                        <div className="card padding-9 animate fadeLeft boxsize">
+                          <div className="row">
+                            <div className="col s12 m12 text-align-center">
+                              <h5 className="mb-0">{resData.total_deposit}</h5>
+                              <p className="no-margin">Deposit</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Grid>
+                  </Grid>
                 </Paper>
               </Grid>
             </Grid>
