@@ -20,6 +20,8 @@ const UserProfitAndLoss = () => {
   });
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [resData, setResData] = useState({});
+
   const [searchBy, setSearchBy] = useState([
     {
       label: "NAME",
@@ -97,6 +99,8 @@ const UserProfitAndLoss = () => {
                           column={column}
                           sort="1"
                           refresh={refresh}
+                          setResData={setResData}
+
                           search={searchBy}
                           param={param}
                           searchWord={searchKeyword}
@@ -105,6 +109,23 @@ const UserProfitAndLoss = () => {
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <Grid container>
+                      <Grid item md={12}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_profit_loss_footer}
+                                </h5>
+                                <p className="no-margin">Total P&L</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                     
+                    </Grid>
                 </Paper>
               </Grid>
             </Grid>

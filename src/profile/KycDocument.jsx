@@ -45,9 +45,7 @@ const KycDocument = (prop) => {
     fontimg: "",
     backimg: "",
   });
-  console.log("doc backimg", doc.backimg);
-  console.log("backimg", backimg);
-
+ 
   const onSubmit = () => {
     if (!doc.fontimg) {
       toast.error("Front Side of image is required");
@@ -161,7 +159,6 @@ const KycDocument = (prop) => {
 
       const objectUrl = URL.createObjectURL(doc.fontimg);
       setFontimg(objectUrl);
-      console.log("objectUrl", objectUrl);
 
       return () => URL.revokeObjectURL(objectUrl);
     }
@@ -176,7 +173,6 @@ const KycDocument = (prop) => {
 
       const objectUrl = URL.createObjectURL(doc.backimg);
       setBackimg(objectUrl);
-      console.log("objectUrl", objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [doc]);
@@ -189,7 +185,6 @@ const KycDocument = (prop) => {
         [name]: value,
       };
     });
-    console.log(event.target.value);
   };
   toast.configure();
   const buttonstyle = {

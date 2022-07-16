@@ -110,7 +110,6 @@ const MenuItems = () => {
     };
 
     const handleClickOpen = (e, data) => {
-        console.log("e.target.classList", e.target.classList);
         if (e.target.classList.contains("add-main-menu")) {
             setForm({
                 name: '',
@@ -867,7 +866,7 @@ const MenuItems = () => {
                     event.target.classList.remove('over')
                 }
         }
-        else console.log('nothing happened')
+        else 
         document.querySelector(".over").closest(".dnd-list").classList.remove('over');
         event.target.classList.remove('over')
     }

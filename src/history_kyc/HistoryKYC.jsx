@@ -87,6 +87,11 @@ const HistoryKYC = () => {
   const [previewAadharCardFront, setPreviewAadharCardFront] = useState();
   const [selectedAadharCardBackFile, setSelectedAadharCardBackFile] =
     useState();
+    const [selectedAdditionalDocuments, setSelectedAdditionalDocuments] =useState(); 
+    const [selectedAdditionalDocumentsBack, setSelectedAdditionalDocumentsBack] =useState();
+    const [previewAdditionalDocuments, setPreviewAdditionalDocuments] = useState();
+    const [previewAdditionalDocumentsBack, setPreviewAdditionalDocumentsBack] = useState();
+
   const [resData, setResData] = useState({});
   const [previewAadharCardBack, setPreviewAadharCardBack] = useState();
   const [selectedPanCardFile, setSelectedPanCardFile] = useState();
@@ -102,6 +107,8 @@ const HistoryKYC = () => {
     aadhar_card_number: "",
     aadhar_front_img: "",
     aadhar_back_img: "",
+    additional_documents:"",
+    additional_documents_back:"",
     pan_card_img: "",
     passbook_img: "",
     account_number: "",
@@ -260,7 +267,6 @@ const HistoryKYC = () => {
   ];
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -284,6 +290,7 @@ const HistoryKYC = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", data.user_id);
     param.append("kyc_id", data.kyc_id);
@@ -305,6 +312,8 @@ const HistoryKYC = () => {
             aadhar_card_number: res.data.kyc_data.aadhar_card_number,
             aadhar_front_img: res.data.kyc_data.aadhar_card_front_image,
             aadhar_back_img: res.data.kyc_data.aadhar_card_back_image,
+            additional_documents:res.data.kyc_data.additional_documents,
+            additional_documents_back:res.data.kyc_data.additional_documents_back,
             pan_card_img: res.data.kyc_data.pancard_image,
             passbook_img: res.data.kyc_data.bank_passbook_image,
             account_number: res.data.kyc_data.bank_account_number,
@@ -317,7 +326,6 @@ const HistoryKYC = () => {
             kyc_id: data.kyc_id,
           };
         });
-        console.log(form);
       }
     });
   };
@@ -391,6 +399,8 @@ const HistoryKYC = () => {
         aadhar_card_number: "",
         aadhar_front_img: "",
         aadhar_back_img: "",
+        additional_documents:"",
+        additional_documents_back:"",
         pan_card_img: "",
         passbook_img: "",
         account_number: "",
@@ -412,6 +422,8 @@ const HistoryKYC = () => {
         email: "",
         aadhar_card_number: "",
         aadhar_front_img: "",
+        additional_documents:"",
+        additional_documents_back:"",
         aadhar_back_img: "",
         pan_card_img: "",
         passbook_img: "",
@@ -438,6 +450,8 @@ const HistoryKYC = () => {
       aadhar_card_number: "",
       aadhar_front_img: "",
       aadhar_back_img: "",
+      additional_documents:"",
+      additional_documents_back:"",
       pan_card_img: "",
       passbook_img: "",
       account_number: "",
@@ -534,31 +548,33 @@ const HistoryKYC = () => {
               ) : (
                 ""
               )}
-              {/* {(form.pan_card_img != '') ? <div className='element'>
-                            <label>Pan Card Img :</label>
-                            {(form.pan_card_img != "") ? <CustomImageModal image={`${form.pan_card_img}`} /> : ""}
-                        </div> : ''}
-                        {(form.passbook_img != '') ? <div className='element'>
-                            <label>Passbook Img :</label>
-                            {(form.passbook_img != "")? <CustomImageModal image={`${form.passbook_img}`} /> : ""}
-                        </div> : ''} */}
+              {form.additional_documents != "" ? (
+                <div className="element">
+                  <label>additional ID Front Img :</label>
+                  {form.additional_documents != "" ? (
+                    <CustomImageModal image={`${form.additional_documents}`} />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-            {/* <br />
-                    <div className='margeField'>
-                        <CustomImageModal image={`${form.aadhar_front_img}`}/>
-                        <CustomImageModal image={`${form.aadhar_back_img}`}/>
-                        <CustomImageModal image={`${form.pan_card_img}`}/>
-                        <CustomImageModal image={`${form.passbook_img}`}/>
-                    </div>
-                    <br />
-                    <div className='margeField'>
-                        <FormControlLabel
-                            control={
-                                <Checkbox name="isActive" size="small" onChange={input}/>
-                            }
-                            label="Active"
-                        />
-                    </div> */}
+            <div className="view-image-section">
+      {form.additional_documents_back != "" ? (
+                <div className="element">
+                  <label> additional ID Back Img :</label>
+                  {form.additional_documents_back != "" ? (
+                    <CustomImageModal image={`${form.additional_documents_back}`} />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
+      </div>
           </div>
         );
       }
@@ -958,7 +974,6 @@ const HistoryKYC = () => {
   };
 
   const formSubmit = async () => {
-    console.log(form);
     /* if (form.aadhar_card_number == '') {
             toast.error('Please enter aadhar card number');
         } else if (form.account_number == '') {
@@ -982,6 +997,7 @@ const HistoryKYC = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("aadhar_card_number", form.aadhar_card_number);
       /* param.append('bank_account_number', form.account_number);
@@ -1014,6 +1030,8 @@ const HistoryKYC = () => {
               aadhar_card_number: "",
               aadhar_front_img: "",
               aadhar_back_img: "",
+              additional_documents:"",
+              additional_documents_back:"",
               pan_card_img: "",
               passbook_img: "",
               account_number: "",
@@ -1052,13 +1070,13 @@ const HistoryKYC = () => {
   };
 
   const changeStatus = async (status, data) => {
-    console.log(status, data);
     if (status == "approved") {
       const param = new FormData();
       param.append("action", "approve_kyc");
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("kyc_id", data.kyc_id);
 
@@ -1080,6 +1098,7 @@ const HistoryKYC = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("kyc_id", data.kyc_id);
 
@@ -1099,7 +1118,6 @@ const HistoryKYC = () => {
   };
 
   useEffect(() => {
-    console.log("aadhar front");
     if (!selectedAadharCardFrontFile) {
       setPreviewAadharCardFront(undefined);
       return;
@@ -1111,7 +1129,6 @@ const HistoryKYC = () => {
   }, [selectedAadharCardFrontFile]);
 
   useEffect(() => {
-    console.log("aadhar back");
     if (!selectedAadharCardBackFile) {
       setPreviewAadharCardBack(undefined);
       return;
@@ -1121,9 +1138,28 @@ const HistoryKYC = () => {
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedAadharCardBackFile]);
+  useEffect(() => {
+    if (!selectedAdditionalDocuments) {
+      setPreviewAdditionalDocuments(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedAdditionalDocuments);
+    setPreviewAdditionalDocuments(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedAdditionalDocuments]);
+  useEffect(() => {
+    if (!selectedAdditionalDocumentsBack) {
+      setPreviewAdditionalDocuments(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedAdditionalDocumentsBack);
+    setPreviewAdditionalDocuments(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedAdditionalDocumentsBack]);
 
   useEffect(() => {
-    console.log("pancard");
     if (!selectedPanCardFile) {
       setPreviewPancard(undefined);
       return;
@@ -1135,7 +1171,6 @@ const HistoryKYC = () => {
   }, [selectedPanCardFile]);
 
   useEffect(() => {
-    console.log("passbok");
     if (!selectedPassbookFile) {
       setPreviewPassbook(undefined);
       return;
@@ -1147,7 +1182,6 @@ const HistoryKYC = () => {
   }, [selectedPassbookFile]);
 
   useEffect(() => {
-    console.log("checkStatus", checkStatus);
     if (checkStatus != "" && checkStatus != undefined) {
       param.kyc_status = checkStatus;
       setParam({ ...param });
@@ -1155,7 +1189,6 @@ const HistoryKYC = () => {
   }, [checkStatus]);
 
   const onSelectFile = (e, flag) => {
-    console.log(e, flag);
     if (flag == "aadhar_front") {
       if (!e.target.files || e.target.files.length === 0) {
         setPreviewAadharCardFront(undefined);

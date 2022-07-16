@@ -1,4 +1,3 @@
-import "./deposit.css";
 import React, { useState, useEffect } from "react";
 import {
   Autocomplete,
@@ -124,7 +123,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Deposit = () => {
+const MT5BonusRequests = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -193,24 +192,18 @@ const Deposit = () => {
     date: "",
     name: "",
     email: "",
-    phone: "",
-    deposit_method: "",
-    amount: "",
+    modified_by_name: "",
+    mt5_acc_no: "",
+    mt5_bonus_percentage:"",
+    transfer_amount: "",
+    transfer_bonus_amount: "",
     remark: "",
     status: "",
-    deposit_id: "",
+    mt5_bonus_id: "",
     isLoader: false,
   });
   const [storeDepositData, setStoreDepositData] = useState({
-    date: "",
-    name: "",
-    email: "",
-    phone: "",
-    deposit_method: "",
-    amount: "",
-    remark: "",
     status: "",
-    deposit_id: "",
     isLoader: false,
   });
   const [param, setParam] = useState({
@@ -228,16 +221,6 @@ const Deposit = () => {
       reorder: true,
       wrap: true,
       grow: 0.1,
-    },
-    {
-      name: "REFERENCE NO.",
-      selector: (row) => {
-        return <span title={row.refrence_no}>{row.refrence_no}</span>;
-      },
-      sortable: true,
-      reorder: true,
-      grow: 0.7,
-      wrap: true,
     },
     {
       name: "DATE",
@@ -260,9 +243,19 @@ const Deposit = () => {
       wrap: true,
     },
     {
-      name: "WALLET CODE",
+      name: "email",
       selector: (row) => {
-        return <span title={row.wallet_code}>{row.wallet_code}</span>;
+        return <span title={row.email}>{row.email}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: "bonus percentage",
+      selector: (row) => {
+        return <span title={row.mt5_bonus_percentage}>{row.mt5_bonus_percentage}%</span>;
       },
       sortable: true,
       reorder: true,
@@ -270,9 +263,25 @@ const Deposit = () => {
       wrap: true,
     },
     {
-      name: "PAYMENT METHOD",
+        name: "Account",
+        selector: "mt5_acc_no",
+        sortable: true,
+        reorder: true,
+        grow: 0.5,
+        wrap: true,
+      },
+    {
+      name: "transfer amount",
+      selector: "transfer_amount",
+      sortable: true,
+      reorder: true,
+      grow: 0.5,
+      wrap: true,
+    },
+    {
+      name: "transfer bonus amount",
       selector: (row) => {
-        return <span title={row.method}>{row.method}</span>;
+        return <span title={row.transfer_amount}>{row.transfer_amount}</span>;
       },
       sortable: true,
       reorder: true,
@@ -280,63 +289,38 @@ const Deposit = () => {
       wrap: true,
     },
     {
-      name: "AMOUNT",
-      selector: "amount",
-      sortable: true,
-      reorder: true,
-      grow: 0.5,
-      wrap: true,
-    },
-    {
-      name: "REMARK",
-      selector: (row) => {
-        return <span title={row.deposit_remarks}>{row.deposit_remarks}</span>;
+        name: "remarks",
+        selector: (row) => {
+          return <span title={row.remarks}>{row.remarks}</span>;
+        },
+        sortable: true,
+        reorder: true,
+        grow: 0.5,
+        wrap: true,
       },
-      sortable: true,
-      reorder: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: "PROOF",
-      selector: (row) => {
-        return row.proof != "" ? (
-          <CustomImageModal
-            image={row.proof}
-            isIcon={true}
-            className="tableImg"
-          />
-        ) : (
-          ""
-        );
-      },
-      reorder: true,
-      grow: 0.5,
-      wrap: true,
-    },
     {
       name: "STATUS",
       selector: (row) => {
         return (
           <span
             className={
-              row.status == "1"
+              row.claim_status == "1"
                 ? "status-text-approved"
-                : row.status == "2"
+                : row.claim_status == "2"
                 ? "status-text-rejected"
                 : "status-text-pending"
             }
             title={
-              row.status == "1"
+              row.claim_status == "1"
                 ? "Approved"
-                : row.status == "2"
+                : row.claim_status == "2"
                 ? "Rejected"
                 : "Pending"
             }
           >
-            {row.status == "1"
+            {row.claim_status == "1"
               ? "Approved"
-              : row.status == "2"
+              : row.claim_status == "2"
               ? "Rejected"
               : "Pending"}
           </span>
@@ -363,27 +347,27 @@ const Deposit = () => {
         return (
           <div>
             <Button
-              id={`actionButton_${row.deposit_id}`}
-              aria-controls={open ? `basic-menu-${row.deposit_id}` : undefined}
+              id={`actionButton_${row.mt5_bonus_id}`}
+              aria-controls={open ? `basic-menu-${row.mt5_bonus_id}` : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.deposit_id)}
+              onClick={(event) => handleContextClick(event, row.mt5_bonus_id)}
               {...row}
               style={{ color: "rgb(144 145 139)" }}
             >
               <i className="material-icons">more_horiz</i>
             </Button>
             <Menu
-              id={`basic-menu-${row.deposit_id}`}
-              anchorEl={openTableMenus[row.deposit_id]}
-              open={Boolean(openTableMenus[row.deposit_id])}
-              onClose={(event) => handleContextClose(row.deposit_id)}
+              id={`basic-menu-${row.mt5_bonus_id}`}
+              anchorEl={openTableMenus[row.mt5_bonus_id]}
+              open={Boolean(openTableMenus[row.mt5_bonus_id])}
+              onClose={(event) => handleContextClose(row.mt5_bonus_id)}
             >
-              {row.status != "0" ? (
+              {row.claim_status != "0" ? (
                 <MenuItem
                   className="view"
                   {...row}
-                  onClick={(event) => viewDeposit(row.deposit_id)}
+                  onClick={(event) => viewDeposit(row)}
                 >
                   <i className="material-icons">receipt</i>&nbsp;&nbsp;View
                 </MenuItem>
@@ -392,14 +376,14 @@ const Deposit = () => {
                   <MenuItem
                     className="view"
                     {...row}
-                    onClick={(event) => viewDeposit(row.deposit_id)}
+                    onClick={(event) => viewDeposit(row)}
                   >
                     <i className="material-icons">receipt</i>&nbsp;&nbsp;View
                   </MenuItem>
                   <MenuItem
                     className="approve"
                     {...row}
-                    onClick={(event) => actionMenuPopup(event, row.deposit_id)}
+                    onClick={(event) => actionMenuPopup(event, row.mt5_bonus_id)}
                   >
                     <i className="material-icons font-color-approved">
                       task_alt
@@ -409,7 +393,7 @@ const Deposit = () => {
                   <MenuItem
                     className="reject"
                     {...row}
-                    onClick={(event) => actionMenuPopup(event, row.deposit_id)}
+                    onClick={(event) => actionMenuPopup(event, row.mt5_bonus_id)}
                   >
                     <i className="material-icons font-color-rejected">cancel</i>
                     &nbsp;&nbsp;Rejected
@@ -500,7 +484,7 @@ const Deposit = () => {
           </Button>
         </div>
       );
-    } else if (dialogTitle == "Update Deposit Request") {
+    } else if (dialogTitle == "Update Mt5 Bonus Request") {
       return (
         <div className="dialogMultipleActionButton">
           <Button
@@ -564,6 +548,8 @@ const Deposit = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+
       }
       param.append("user_id", depositForm.account);
       param.append("deposit_to", depositForm.deposit_to);
@@ -605,13 +591,14 @@ const Deposit = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
-      param.append("deposit_id", viewDepositForm.deposit_id);
+      param.append("id", viewDepositForm.id);
       param.append("amount", viewDepositForm.amount);
       param.append("deposit_remarks", viewDepositForm.remark);
       param.append("deposit_status", viewDepositForm.status);
       await axios
-        .post(`${Url}/ajaxfiles/deposit_manage.php`, param)
+        .post(`${Url}/ajaxfiles/mt5_bonus_offers_manage.php`, param)
         .then((res) => {
           if (res.data.message == "Session has been expired") {
             localStorage.setItem("login", true);
@@ -816,7 +803,7 @@ const Deposit = () => {
           </div>
         </div>
       );
-    } else if (dialogTitle == "Update Deposit Request") {
+    } else if (dialogTitle == "Update Mt5 Bonus Request") {
       return (
         <div>
           <div className="update-withdraw-request-section">
@@ -1012,17 +999,18 @@ const Deposit = () => {
   const handleAction = async (id, flag) => {
     const param = new FormData();
     if (flag == "approve") {
-      param.append("action", "approve_deposite");
+      param.append("action", "approve_mt5_bonus_request");
     } else {
-      param.append("action", "reject_deposite");
+      param.append("action", "reject_mt5_bonus_request");
     }
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
-    param.append("deposit_id", id);
+    param.append("mt5_bonus_id", id);
     await axios
-      .post(`${Url}/ajaxfiles/deposit_manage.php`, param)
+      .post(`${Url}/ajaxfiles/mt5_bonus_request_manage.php`, param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
           localStorage.setItem("login", true);
@@ -1037,50 +1025,45 @@ const Deposit = () => {
       });
   };
 
-  const viewDeposit = async (id) => {
+  const viewDeposit = async (row) => {
     const param = new FormData();
-    param.append("action", "view_deposit");
+    param.append("action", "view_mt5_bonus_request");
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
-    param.append("deposit_id", id);
+    param.append("mt5_bonus_id", row.mt5_bonus_id);
     await axios
-      .post(`${Url}/ajaxfiles/deposit_manage.php`, param)
+      .post(`${Url}/ajaxfiles/mt5_bonus_request_manage.php`, param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
           localStorage.setItem("login", true);
           navigate("/");
         }
-        handleContextClose(id);
+        handleContextClose( row.mt5_bonus_id);
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
           setviewDepositForm({
-            date: res.data.deposit_data.deposit_datetime,
-            name: res.data.deposit_data.name,
-            email: res.data.deposit_data.user_email,
-            phone: res.data.deposit_data.user_phone,
-            deposit_method: res.data.deposit_data.deposit_method,
-            amount: res.data.deposit_data.deposit_amount,
-            remark: res.data.deposit_data.deposit_remarks,
-            status: res.data.deposit_data.deposit_status,
-            deposit_id: id,
+            date: res.data.data.date,
+            name: res.data.data.name,
+            email: res.data.data.email,
+            modified_by_name: res.data.data.modified_by_name,
+            mt5_acc_no: res.data.data.mt5_acc_no,
+            mt5_bonus_percentage:res.data.data.mt5_bonus_percentage,
+            transfer_amount: res.data.data.transfer_amount,
+            transfer_bonus_amount: res.data.data.transfer_bonus_amount,
+            remark: res.data.data.remark,
+            claim_status: res.data.data.claim_status,
+            mt5_bonus_id: res.data.data.mt5_bonus_id,
             isLoader: false,
           });
           setStoreDepositData({
-            date: res.data.deposit_data.deposit_datetime,
-            name: res.data.deposit_data.name,
-            email: res.data.deposit_data.user_email,
-            phone: res.data.deposit_data.user_phone,
-            deposit_method: res.data.deposit_data.deposit_method,
-            amount: res.data.deposit_data.deposit_amount,
-            remark: res.data.deposit_data.deposit_remarks,
-            status: res.data.deposit_data.deposit_status,
-            deposit_id: id,
+            claim_status: res.data.data.claim_status,
             isLoader: false,
           });
-          setDialogTitle("Update Deposit Request");
+          setDialogTitle("Update Mt5 Bonus Request");
           setOpen(true);
         }
       });
@@ -1127,6 +1110,8 @@ const Deposit = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+
     }
     param.append("search", search);
     param.append("type", depositForm.live_account);
@@ -1162,7 +1147,7 @@ const Deposit = () => {
           <div style={{ opacity: 1 }}>
             <Grid container>
               <Grid item md={12} lg={12} xl={12}>
-                <p className="main-heading">Deposit</p>
+                <p className="main-heading">Bonus Requests</p>
                 <CommonFilter
                   search={searchBy}
                   setParam={setParam}
@@ -1185,7 +1170,7 @@ const Deposit = () => {
                     <Grid container spacing={2}>
                       <Grid item sm={12} md={12} lg={12}>
                         <CommonTable
-                          url={`${Url}/datatable/deposit_list.php`}
+                          url={`${Url}/datatable/mt5_bonus_request_list.php`}
                           column={columns}
                           sort="2"
                           refresh={refresh}
@@ -1199,34 +1184,7 @@ const Deposit = () => {
                       </Grid>
                     </Grid>
                   </CardContent>
-                  <div className="d-flex">
-                  <Grid container>
-                  <Grid item md={6}>
-                <div className="row1 boxSection">
-                    <div className="card padding-9 animate fadeLeft boxsize">
-                      <div className="row">
-                        <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{resData.total_deposits_footer}</h5>
-                          <p className="no-margin">Total Deposit</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </Grid>
-                  <Grid item md={6}>
-                  <div className="row1 boxSection">
-                    <div className="card padding-9 animate fadeLeft boxsize">
-                      <div className="row">
-                        <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{resData.total_deposit}</h5>
-                          <p className="no-margin">Deposit</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </Grid>
-                  </Grid>
-                  </div>
+               
                 </Paper>
                
                 <BootstrapDialog
@@ -1254,4 +1212,4 @@ const Deposit = () => {
   );
 };
 
-export default Deposit;
+export default MT5BonusRequests;

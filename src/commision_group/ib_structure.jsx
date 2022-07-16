@@ -334,7 +334,6 @@ const IBStructure = () => {
   };
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -888,41 +887,7 @@ const IBStructure = () => {
       toast.error("Please enter structure name");
       error = true;
     } else {
-      /* form.structure_data.forEach((element) => {
-        console.log(element.ib_group_name, element.group_rebate);
-        if (element.group_rebate === "") {
-          toast.error(`Please enter ${element.ib_group_name} rebate`);
-          error = true;
-          return false;
-        } else if (element.group_commission === "") {
-          toast.error(`Please enter ${element.ib_group_name} commission`);
-          error = true;
-          return false;
-        } else if (element.ib_group_level_id === 0) {
-          toast.error(`Please enter ${element.ib_group_name} ib group`);
-          error = true;
-          return false;
-        } else {
-          element.pair_data.forEach((element1) => {
-            if (element1.rebate === "") {
-              toast.error(
-                `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
-              );
-              error = true;
-              return false;
-            } else if (element1.commission === "") {
-              toast.error(
-                `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
-              );
-              error = true;
-              return false;
-            }
-          });
-        }
-        if (error) {
-          return false;
-        }
-      }); */
+      
     }
     if (error) {
       return false;
@@ -960,7 +925,6 @@ const IBStructure = () => {
   };
 
   const submitUpdate = async () => {
-    console.log("form", form);
     if (form.group_name == "") {
       toast.error("Please enter group name");
     } else if (form.ib_mt5group_name == "") {
@@ -1061,7 +1025,6 @@ const IBStructure = () => {
         } else {
           form.structure_data = res.data.data;
           setForm({ ...form });
-          console.log("form", form);
           setMaxWidth("md");
           setDialogTitle("Add");
           setOpenModel(true);

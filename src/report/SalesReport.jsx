@@ -19,6 +19,7 @@ const SalesReport = () => {
     start_date: "",
     end_date: "",
   });
+  const [resData, setResData] = useState({});
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [searchBy, setSearchBy] = useState([
@@ -317,12 +318,43 @@ const SalesReport = () => {
                           refresh={refresh}
                           search={searchBy}
                           param={param}
+                          setResData={setResData}
                           searchWord={searchKeyword}
                           csv="datatable/sales_report_export.php"
                         />
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <Grid container>
+						  <Grid item md={6}>
+							<div className="row1 boxSection">
+							  <div className="card padding-9 animate fadeLeft boxsize">
+								<div className="row">
+								  <div className="col s12 m12 text-align-center">
+									<h5 className="mb-0">
+									  {resData.total_ac_target_footer}
+									</h5>
+									<p className="no-margin">Total Target</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </Grid>
+						  <Grid item md={6}>
+							<div className="row1 boxSection">
+							  <div className="card padding-9 animate fadeLeft boxsize">
+								<div className="row">
+								  <div className="col s12 m12 text-align-center">
+									<h5 className="mb-0">
+									  {resData.total_incentive}
+									</h5>
+									<p className="no-margin">Total Incentive</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </Grid>
+						</Grid>
                 </Paper>
               </Grid>
             </Grid>

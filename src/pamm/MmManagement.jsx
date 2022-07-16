@@ -484,7 +484,6 @@ const MmManagement = () => {
   ];
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -607,9 +606,7 @@ const MmManagement = () => {
   };
 
   const changeStatus = (status, data) => {
-    console.log(status, data);
     if (status == "approved") {
-      console.log("data", data);
       const param = new FormData();
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
@@ -620,11 +617,14 @@ const MmManagement = () => {
       axios
         .post(Url + "/ajaxfiles/pamm/mm_kyc_manage.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           setRefresh(!refresh);
           toast.success(res.data.message);
         });
     } else if (status == "rejected") {
-      console.log("data", data);
       const param = new FormData();
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
@@ -635,6 +635,10 @@ const MmManagement = () => {
       axios
         .post(Url + "/ajaxfiles/pamm/mm_kyc_manage.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           setRefresh(!refresh);
           toast.success(res.data.message);
         });
@@ -1363,7 +1367,6 @@ const MmManagement = () => {
   };
 
   const formSubmit = async () => {
-    console.log("form", form);
     if (form.first_name == "") {
       toast.error("Please enter first name");
     } else if (form.last_name == "") {
@@ -1428,14 +1431,12 @@ const MmManagement = () => {
             toast.success(res.data.message);
             setOpen(false);
             setRefresh(!refresh);
-            console.log(form);
           }
         });
     }
   };
 
   const updateFormSubmit = async () => {
-    console.log("form", form);
     if (form.first_name == "") {
       toast.error("Please enter first name");
     } else if (form.last_name == "") {
@@ -1503,7 +1504,6 @@ const MmManagement = () => {
             toast.success(res.data.message);
             setOpen(false);
             setRefresh(!refresh);
-            console.log(form);
           }
         });
     }
@@ -1569,7 +1569,6 @@ const MmManagement = () => {
         } else {
           setApprovestatus(false);
         }
-        console.log("form", form);
         setOpen(true);
         setDialogTitle("Edit");
       }
@@ -1655,7 +1654,6 @@ const MmManagement = () => {
   };
 
   useEffect(() => {
-    console.log("aadhar front");
     if (!selectedAadharCardFrontFile) {
       setPreviewAadharCardFront(undefined);
       return;
@@ -1667,7 +1665,6 @@ const MmManagement = () => {
   }, [selectedAadharCardFrontFile]);
 
   useEffect(() => {
-    console.log("aadhar back");
     if (!selectedAadharCardBackFile) {
       setPreviewAadharCardBack(undefined);
       return;

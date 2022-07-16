@@ -193,7 +193,6 @@ const Myaccount = () => {
                     user_name: res.data.user_name,
                     user_phone: res.data.user_phone,
                 });
-                console.log(prefrence);
             });
     };
 
@@ -225,7 +224,6 @@ const Myaccount = () => {
                     toast.success(res.data.message);
                     setOpen(false);
                 }
-                console.log(prefrence);
             });
     };
 

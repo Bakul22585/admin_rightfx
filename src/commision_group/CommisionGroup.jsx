@@ -393,7 +393,6 @@ const CommisionGroup = () => {
   };
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -1328,7 +1327,6 @@ const CommisionGroup = () => {
   };
 
   const submit = async () => {
-    console.log("form", form);
     if (form.group_name == "") {
       toast.error("Please enter group name");
     } else if (form.ib_group_main_id == "") {
@@ -1462,7 +1460,6 @@ const CommisionGroup = () => {
   };
 
   const submitUpdate = async () => {
-    console.log("form", form);
     if (form.group_name == "") {
       toast.error("Please enter group name");
     } else if (form.ib_mt5group_name == "") {

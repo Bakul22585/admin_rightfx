@@ -100,7 +100,6 @@ const Ticket = () => {
     ];
 
     const chatSection = (data) => {
-        console.log(data);
         navigate(`/view_ticket/${data.ticketChatID}`);
     }
 

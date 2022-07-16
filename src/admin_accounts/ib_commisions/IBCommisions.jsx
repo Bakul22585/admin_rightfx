@@ -32,6 +32,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IsApprove, Url } from "../../global.js";
+import { useNavigate } from "react-router-dom";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -125,6 +126,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const IBCommisions = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
@@ -137,6 +139,7 @@ const IBCommisions = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [preview, setPreview] = useState();
+
   const [refresh, setRefresh] = useState(false);
   const [accountOption, setAccountOption] = useState([]);
   const [depositForm, setDepositForm] = useState({
@@ -303,7 +306,6 @@ const IBCommisions = () => {
   ];
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -364,7 +366,6 @@ const IBCommisions = () => {
   };
 
   const depositFormSubmit = async () => {
-    console.log(depositForm);
     if (depositForm.live_account == "") {
       toast.error("Please select account type");
     } else if (depositForm.account == "") {
@@ -402,6 +403,10 @@ const IBCommisions = () => {
       await axios
         .post(`${Url}/ajaxfiles/user_manage.php`, param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           depositForm.isLoader = false;
           setDepositForm({ ...depositForm });
           if (res.data.status == "error") {
@@ -449,7 +454,6 @@ const IBCommisions = () => {
               }}
               onChange={(event, newValue) => {
                 // setValue(newValue);
-                console.log(event, newValue);
                 setDepositForm((prevalue) => {
                   return {
                     ...prevalue,
@@ -632,8 +636,7 @@ const IBCommisions = () => {
   };
 
   const actionMenuPopup = (e, index) => {
-    console.log(e.target.getAttribute("class"));
-    console.log(e.target.classList.contains("reject"));
+   
     handleContextClose(index);
     if (e.target.classList.contains("reject")) {
       setDialogTitle("Reject");
@@ -781,7 +784,6 @@ const IBCommisions = () => {
   };
 
   const fetchAccount = async (event, search) => {
-    console.log(search);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -792,6 +794,10 @@ const IBCommisions = () => {
     await axios
       .post(`${Url}/ajaxfiles/fetch_user_account.php`, param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
@@ -914,8 +920,65 @@ const IBCommisions = () => {
                       </Grid>
                     </Grid>
                   </CardContent>
+                       <Grid container>
+                <Grid item md={3}>
+							<div className="row1 boxSection">
+							  <div className="card padding-9 animate fadeLeft boxsize">
+								<div className="row">
+								  <div className="col s12 m12 text-align-center">
+									<h5 className="mb-0">
+									  {resData.total_amount}
+									</h5>
+									<p className="no-margin">Total Amount</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </Grid>
+						  <Grid item md={3}>
+							<div className="row1 boxSection">
+							  <div className="card padding-9 animate fadeLeft boxsize">
+								<div className="row">
+								  <div className="col s12 m12 text-align-center">
+									<h5 className="mb-0">
+									  {resData.total_ib_comission_amount_footer}
+									</h5>
+									<p className="no-margin">Comission Amount</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </Grid>
+              <Grid item md={3}>
+							<div className="row1 boxSection">
+							  <div className="card padding-9 animate fadeLeft boxsize">
+								<div className="row">
+								  <div className="col s12 m12 text-align-center">
+									<h5 className="mb-0">
+									  {resData.total_trade_volume_footer}
+									</h5>
+									<p className="no-margin">Total Lot</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </Grid><Grid item md={3}>
+							<div className="row1 boxSection">
+							  <div className="card padding-9 animate fadeLeft boxsize">
+								<div className="row">
+								  <div className="col s12 m12 text-align-center">
+									<h5 className="mb-0">
+									  {resData.total_lot}
+									</h5>
+									<p className="no-margin">Lot</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </Grid>
+						</Grid>
                 </Paper>
-
+           
                 <BootstrapDialog
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"

@@ -46,21 +46,8 @@ const Notification = () => {
   }, []);
 
   const handleObserver = useCallback((entries) => {
-    console.log(
-      "pages console",
-      page,
-      "searchKeyword " + searchKeyword,
-      entries[0]
-    );
-    /* const target = entries[0];
-    console.log("isIntersecting", target.isIntersecting);
-    if (target.isIntersecting) {
-      console.log("page", page);
-      console.log("pages", page.totalPage, page.index, page.totalPage);
-      if (page.totalPage - 10 > page.index && page.totalPage > 0) {
-        fatchdata(page.index + 10, param.start_date, param.end_date);
-      }
-    } */
+ 
+   
   }, []);
 
   useEffect(() => {
@@ -77,7 +64,6 @@ const Notification = () => {
 
   const makeAsRead = async (item, index) => {
     // toast.error(item)
-    console.log(item);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -105,7 +91,6 @@ const Notification = () => {
   const fatchdata = async (start = 0, start_date = "", end_date = "") => {
     page.index = start;
     setPage({ ...page });
-    console.log("api page", page, "searchKeyword " + searchKeyword);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -157,23 +142,11 @@ const Notification = () => {
       rootMargin: "20px",
       threshold: 0,
     };
-    console.log("page kjdlkjasdg", page, searchKeyword);
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
   }, [handleObserver]);
 
-  /* function handleScroll() { 
-    
-    var isAtBottom = document.documentElement.scrollHeight - document.documentElement.scrollTop <= document.documentElement.clientHeight; 
-    
-    if (isAtBottom) { 
-      console.log("isAtBottom", isAtBottom);
-    } 
-    
-  }
-  
-
-  window.addEventListener("scroll", handleScroll); */
+ 
   return (
     <div>
       <div className="app-content--inner">

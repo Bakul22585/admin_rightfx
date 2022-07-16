@@ -85,17 +85,14 @@ const CommonTable = (prop) => {
   toast.configure();
 
   const handleClientPageChange = (page) => {
-    console.log("page", page);
     fetchClient(page == 1 ? 0 : page * clientPerPage - 10);
   };
 
   const handleClientPerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page);
     setClientPerPage(newPerPage);
   };
 
   const handleClientSort = async (column, sortDirection) => {
-    console.log("cusotm sort", column.id - 1, sortDirection);
     setClientSort(column.id - 1);
     setClientDir(sortDirection);
   };
@@ -103,7 +100,6 @@ const CommonTable = (prop) => {
     const { name, value } = event.target;
     setClientSearch(value);
   };
-  console.log("prop.footer", prop.footer);
   const CustomLoader = () => (
     <div style={{ padding: "24px" }}>
       <Spinner />
@@ -158,9 +154,7 @@ const CommonTable = (prop) => {
     if (prop.userId) {
       param.append("user_id", prop.userId);
     }
-    console.log("searchWord", prop.searchWord);
     if (prop.searchWord != "" && prop.searchWord != undefined) {
-      // console.log(prop.search.filter((x) => x.value == true).length);
       if (prop.search.filter((x) => x.value == true).length == 0) {
         param.append("search[value]", prop.searchWord);
       } else {
@@ -170,7 +164,6 @@ const CommonTable = (prop) => {
             return x.name;
           })
           .join(",");
-        console.log("columns", columns);
         param.append("columns", columns);
         param.append("columnSearch", prop.searchWord);
         /* prop.search.forEach(element => {
@@ -202,7 +195,6 @@ const CommonTable = (prop) => {
         cancelToken: cancelTokenSource.token,
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data["status"]) {
           if (
             res.data["status"] == "error" &&
@@ -214,7 +206,7 @@ const CommonTable = (prop) => {
         }
 
         if (res.data["status"] == "error") {
-          toast.error(res.data.message);
+          // toast.error(res.data.message);
           setClientLoading(false);
         } else {
           setClientData(res.data.aaData);
@@ -225,13 +217,11 @@ const CommonTable = (prop) => {
           }
         }
       });
-    /* cancelTokenSource.cancel();
-        console.log("cancel token"); */
+   
   };
 
   useEffect(() => {
     fetchClient(0);
-    // console.log('useEffect', prop);
     var Link = Url + "/" + prop.csv + `?sort=${clientDir}&column=${clientSort}`;
     if (prop.param) {
       for (const key in prop.param) {
@@ -303,7 +293,6 @@ const CommonTable = (prop) => {
     prop.salesAgent,
     prop.checkStatus,
   ]);
-  // console.log("common table",prop);
   return (
     <div className={`${prop.className ? prop.className : ""}`}>
       <div className={`tableSearchField ${prop.csv ? "space-between" : ""}`}>

@@ -49,14 +49,11 @@ const Setting = () => {
 
   const input = (event) => {
     var { name, value } = event.target;
-    console.log(name, event.target.checked);
     if (event.target.getAttribute) {
       if (event.target.getAttribute("type") == "checkbox") {
-        console.log(event.target.checked);
         value = event.target.checked;
       }
     }
-    console.log(event.target);
 
     setForm((prevalue) => {
       return {
@@ -108,13 +105,11 @@ const Setting = () => {
                     usdt_trc_20_qr_code: res.data.settings_list.usdt_trc_20_qr_code, */
           isloader: false,
         });
-        console.log(form);
       }
     });
   };
 
   const saveSetting = async () => {
-    console.log("submit", form);
     form.isloader = true;
     setForm({ ...form });
     const param = new FormData();
@@ -235,7 +230,6 @@ const Setting = () => {
     getSetting();
   }, []);
 
-  console.log("upiSelectedFile", upiSelectedFile);
   return (
     <div>
       <div className="app-content--inner">

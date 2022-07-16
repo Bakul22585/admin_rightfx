@@ -448,7 +448,6 @@ const Mt5Group = () => {
   };
 
   const formSubmit = async () => {
-    console.log(form);
     if (form.group_name == "") {
       toast.error("Please enter group name");
     } else if (form.mt5_group_name == "") {

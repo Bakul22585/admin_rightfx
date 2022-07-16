@@ -136,6 +136,7 @@ const Withdraw = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState({});
   const [checkStatus, setcheckStatus] = useState("");
+  const[buttonDis,setButttonDis]=useState()
   const [resData, setResData] = useState({});
   const [Form, setForm] = useState({
     account_type: "",
@@ -377,7 +378,6 @@ const Withdraw = () => {
   ];
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -459,7 +459,7 @@ const Withdraw = () => {
           >
             Cancel
           </Button>
-          {viewWithdrawForm.status == "0" ? (
+          {buttonDis == "0" ? (
             viewWithdrawForm.isLoader == true ? (
               <Button
                 variant="contained"
@@ -520,7 +520,6 @@ const Withdraw = () => {
               }}
               onChange={(event, newValue) => {
                 // setValue(newValue);
-                console.log(event, newValue);
                 setForm((prevalue) => {
                   return {
                     ...prevalue,
@@ -674,7 +673,7 @@ const Withdraw = () => {
               value={viewWithdrawForm.amount}
               onChange={input1}
               focused
-              disabled={viewWithdrawForm.status == "0" ? false : true}
+              disabled={buttonDis == "0" ? false : true}
             />
           </div>
           <br />
@@ -688,7 +687,7 @@ const Withdraw = () => {
               value={viewWithdrawForm.remark}
               onChange={input1}
               focused
-              disabled={viewWithdrawForm.status == "0" ? false : true}
+              disabled={buttonDis == "0" ? false : true}
             />
             {/* <TextField id="standard-basic" label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewWithdrawForm.status} onChange={input1} focused/> */}
             <FormControl variant="standard" sx={{ width: "100%" }} focused>
@@ -697,7 +696,7 @@ const Withdraw = () => {
                 value={viewWithdrawForm.status}
                 name="status"
                 onChange={input1}
-                disabled={viewWithdrawForm.status == "0" ? false : true}
+                disabled={buttonDis == "0" ? false : true}
               >
                 <MenuItem value="0">Pending</MenuItem>
                 <MenuItem value="1">Approve</MenuItem>
@@ -747,8 +746,6 @@ const Withdraw = () => {
   };
 
   const actionMenuPopup = (e, index) => {
-    console.log(e.target.getAttribute("class"));
-    console.log(e.target.classList.contains("reject"));
     handleContextClose(index);
     if (e.target.classList.contains("reject")) {
       setDialogTitle("Reject");
@@ -814,7 +811,6 @@ const Withdraw = () => {
       });
     }
 
-    // setOpen(true);
   };
 
   const input = (event) => {
@@ -838,7 +834,6 @@ const Withdraw = () => {
   };
 
   const fetchAccount = async (event, search) => {
-    console.log(search);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -862,7 +857,6 @@ const Withdraw = () => {
   };
 
   const submitForm = async () => {
-    console.log(Form);
     if (Form.account_type == "") {
       toast.error("Please select account type");
     } else if (Form.account == "") {
@@ -910,13 +904,11 @@ const Withdraw = () => {
             setOpen(false);
           }
         });
-      /* handleClose();
-            toast.success('withdraw has been added successfully.'); */
+    
     }
   };
 
   const submitUpdate = async () => {
-    console.log(viewWithdrawForm);
     if (viewWithdrawForm.amount == "") {
       toast.error("Please enter amount");
     } else if (viewWithdrawForm.remark == "") {
@@ -953,8 +945,7 @@ const Withdraw = () => {
             setOpen(false);
           }
         });
-      /* handleClose();
-            toast.success('withdraw has been added successfully.'); */
+     
     }
   };
 
@@ -1018,6 +1009,7 @@ const Withdraw = () => {
             withdrawal_id: id,
             isLoader: false,
           });
+          setButttonDis(res.data.withdrawal_data.withdrawal_status)
           setDialogTitle("Update Withdrawal Request");
           setOpen(true);
         }

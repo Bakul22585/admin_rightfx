@@ -152,7 +152,6 @@ const Header = (prop) => {
   const [age, setAge] = React.useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
-    console.log(event.target.value);
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -232,7 +231,6 @@ const Header = (prop) => {
       const str = prefrence.user_name.split(" ");
       const firstname = str[0].charAt(0);
       const lastname = str[1].charAt(0);
-      console.log("lastname", firstname + lastname);
       return (firstname + lastname).toUpperCase();
     }
   };

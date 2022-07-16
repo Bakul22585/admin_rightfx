@@ -90,10 +90,8 @@
     });
 
     client.on('connect', function (data) {
-      console.log("data websocket", data)
     });
     client.on('playSound1', function () {
-      console.log('play sound');
       var audio = document.getElementById("audio");
       audio.play();
     })

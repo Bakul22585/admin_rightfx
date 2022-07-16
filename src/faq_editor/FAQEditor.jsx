@@ -260,7 +260,6 @@ const FAQEditor = () => {
   const [openTableMenus, setOpenTableMenus] = useState([]);
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -489,7 +488,6 @@ const FAQEditor = () => {
   };
 
   const formSubmit = async () => {
-    console.log(form);
     if (form.question == "") {
       toast.error("Please enter question");
     } else if (form.answer == "") {

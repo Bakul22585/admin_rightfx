@@ -388,7 +388,6 @@ const PammDashboard = () => {
                             <Select
                               value={year}
                               onChange={(e) => {
-                                console.log("e.target.value", e.target.value);
                                 setYear(e.target.value)
                                 changeYear(e.target.value);
                               }}
@@ -457,7 +456,6 @@ const PammDashboard = () => {
                               <Select
                                 value={invetsmentYear}
                                 onChange={(e) => {
-                                  console.log("e.target.value", e.target.value);
                                   setInvestmentYear(e.target.value)
                                   changeInvetsmentYear(e.target.value);
                                 }}

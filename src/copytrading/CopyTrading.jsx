@@ -23,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { IsApprove, Url } from "../global";
 import { fromJS } from "draft-js/lib/CharacterMetadata";
+import { useNavigate } from "react-router-dom";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -158,6 +159,7 @@ const CopyTrading = () => {
     openAddCopyTradingAccountSection,
     setOpenAddCopyTradingAccountSection,
   ] = useState(false);
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("md");
@@ -466,7 +468,6 @@ const CopyTrading = () => {
   };
 
   const submitForm = async () => {
-    console.log(form);
     if (form.img == "") {
       toast.error("Please select profile image");
     } else if (form.name == "") {
@@ -521,6 +522,10 @@ const CopyTrading = () => {
       axios
         .post(`${Url}/ajaxfiles/create_copy_trading_account.php`, param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {

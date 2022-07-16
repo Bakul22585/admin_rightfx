@@ -241,7 +241,6 @@ const InvestorRequest = () => {
   ];
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -319,9 +318,7 @@ const InvestorRequest = () => {
   };
 
   const changeStatus = (status, data) => {
-    console.log(status, data);
     if (status == "approved") {
-      console.log("data", data);
       setIsLoader(true);
       const param = new FormData();
       if (IsApprove !== "") {
@@ -346,7 +343,6 @@ const InvestorRequest = () => {
         }
       });
     } else if (status == "rejected") {
-      console.log("data", data);
       setIsLoader(true);
       const param = new FormData();
       if (IsApprove !== "") {

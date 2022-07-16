@@ -31,11 +31,9 @@ const Sidebar = (prop) => {
   });
   const CloseSidebar = () => {
     prop.setSidebar(false);
-    console.log(prop);
   };
   const handleClick = (e) => {
     const name = e.target.classList[0];
-    console.log(name);
     if (name == "logout") {
       localStorage.setItem("login", true);
       prop.setLogin("true");
@@ -63,6 +61,10 @@ const Sidebar = (prop) => {
     }
     param.append("action", "sidebar_menus");
     axios.post(`${Url}/ajaxfiles/menu_manage.php`, param).then((res) => {
+      if (res.data.message == "Session has been expired") {
+        localStorage.setItem("login", true);
+        navigate("/");
+      }
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {

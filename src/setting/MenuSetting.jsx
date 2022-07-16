@@ -62,7 +62,7 @@ const MenuSetting = () => {
                     event.target.classList.remove('over')
                 }
         }
-        else console.log('nothing happened')
+        else 
         document.querySelector(".over").closest(".dnd-list").classList.remove('over');
         event.target.classList.remove('over')
     }

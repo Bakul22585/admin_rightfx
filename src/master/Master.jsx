@@ -65,13 +65,11 @@ const Master = () => {
     const [openCollapse, setOpen] = React.useState({});
     const handleCollapseClick = (e) => {
         const name = e.target.classList[0];
-        console.log(openCollapse[name]);
         setOpen((preValue) => {
             return {
                 [name]: !openCollapse[name],
             };
         });
-        console.log("collapse", openCollapse, name);
     };
     const input1 = (event) => {
         const { name, value } = event.target;
@@ -88,15 +86,12 @@ const Master = () => {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(info);
     };
     const [age, setAge] = React.useState("");
     const handleChange = (event) => {
         setAge(event.target.value);
-        console.log(event.target.value);
     };
     const handleClick = (event, index) => {
-        console.log(event.currentTarget.getAttribute('id'), index);
         let tableMenus = [...openTableMenus];
         tableMenus[index] = event.currentTarget;
         setOpenTableMenus(tableMenus);
@@ -671,13 +666,11 @@ const Master = () => {
     };
 
     const handlePageChange = page => {
-        console.log("page", page);
         fetchUsers(page);
     };
 
     const handlePerRowsChange = async (newPerPage, page) => {
         setLoading(true);
-        console.log(newPerPage, page);
         const response = await axios.get(`https://reqres.in/api/users?page=${page}&per_page=${newPerPage}&delay=1`);
 
         setData(response.data.data);
@@ -686,7 +679,6 @@ const Master = () => {
     };
 
     const handleSort = async (column, sortDirection) => {
-        console.log('cusotm sort', column, sortDirection);
     };
 
     const actionClick = (e) => {
@@ -695,16 +687,13 @@ const Master = () => {
         var first_name = e.target.getAttribute("first_name");
         var last_name = e.target.getAttribute("last_name");
         var avatar = e.target.getAttribute("avatar");
-        console.log("data", id, email, first_name, last_name, avatar);
     }
 
     const depositApproved = (e) => {
-        console.log('deposit approved', e);
     }
 
     const depositFilter = (e) => {
-        console.log(e.target.getAttribute('class'));
-        console.log(e.target.classList.contains('depositFilter'));
+
         
         if (e.target.classList.contains('depositFilter')) {
             if (filterData.deposit_from == undefined) {
@@ -712,7 +701,6 @@ const Master = () => {
             } else if (filterData.deposit_to == undefined) {
                 toast.error('Please select to date');
             } else {
-                console.log(filterData);
             }
         } else if (e.target.classList.contains('withdrawFilter')) {
             if (filterData.withdraw_from == undefined) {
@@ -720,7 +708,6 @@ const Master = () => {
             } else if (filterData.withdraw_to == undefined) {
                 toast.error('Please select to date');
             } else {
-                console.log(filterData);
 
             }
         }
@@ -730,7 +717,6 @@ const Master = () => {
         fetchUsers(1); // fetch page 1 of users
     }, []);
 
-    console.log(`search value ${id}`);
     return (
         <div>
             <div className="app-content--inner">

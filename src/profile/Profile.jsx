@@ -2250,7 +2250,6 @@ const Profile = () => {
     setOpen(false);
   };
 
-  // console.log("masterStructureData", masterStructureData);
   const handleContextClick = (event, index) => {
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
@@ -2644,35 +2643,7 @@ const Profile = () => {
                             }}
                           />
                         </div>
-                        {/* <div>
-                            {
-                              (item.ibGroup != undefined) ?
-                                <FormControl variant="standard">
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    value={item.ib_group_level_id}
-                                    name="title"
-                                    onChange={(e) => {
-                                      newMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
-                                      setNewMasterStructureData({
-                                        ...newMasterStructureData
-                                      });
-                                      console.log('newMasterStructureData', newMasterStructureData);
-                                    }}
-                                  >
-                                    <MenuItem value={0}>Select IB Group</MenuItem>
-                                    {
-                                      item.ibGroup.map((item1, index1) => {
-                                        return (
-                                          <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
-                                        );
-                                      })
-                                    }
-                                  </Select>
-                                </FormControl> : ''
-                            }
-                          </div> */}
+                    
                       </div>
                       <div className="action-section">
                         <span
@@ -2891,35 +2862,7 @@ const Profile = () => {
                             }}
                           />
                         </div>
-                        {/* <div>
-                            {
-                              (item.ibGroup != undefined) ?
-                                <FormControl variant="standard">
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    value={item.ib_group_level_id}
-                                    name="title"
-                                    onChange={(e) => {
-                                      newMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
-                                      setNewMasterStructureData({
-                                        ...newMasterStructureData
-                                      });
-                                      console.log('newMasterStructureData', newMasterStructureData);
-                                    }}
-                                  >
-                                    <MenuItem value={0}>Select IB Group</MenuItem>
-                                    {
-                                      item.ibGroup.map((item1, index1) => {
-                                        return (
-                                          <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
-                                        );
-                                      })
-                                    }
-                                  </Select>
-                                </FormControl> : ''
-                            }
-                          </div> */}
+                      
                       </div>
                       <div className="action-section">
                         <span
@@ -4241,35 +4184,7 @@ const Profile = () => {
                               }}
                             />
                           </div>
-                          {/* <div>
-                            {
-                              (item.ibGroup != undefined) ?
-                                <FormControl variant="standard">
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    value={item.ib_group_level_id}
-                                    name="title"
-                                    onChange={(e) => {
-                                      partnershipMasterStructureData.structure_data[index]['ib_group_level_id'] = e.target.value;
-                                      setPartnershipMasterStructureData({
-                                        ...partnershipMasterStructureData
-                                      });
-                                      console.log('partnershipMasterStructureData', partnershipMasterStructureData);
-                                    }}
-                                  >
-                                    <MenuItem value={0}>Select IB Group</MenuItem>
-                                    {
-                                      item.ibGroup.map((item1, index1) => {
-                                        return (
-                                          <MenuItem disabled={item1.isDisable} value={item1.ib_group_level_id}>{item1.ib_group_name}</MenuItem>
-                                        );
-                                      })
-                                    }
-                                  </Select>
-                                </FormControl> : ''
-                            }
-                          </div> */}
+                      
                         </div>
                         <div className="action-section">
                           <span
@@ -7948,7 +7863,6 @@ const Profile = () => {
         } else {
           groupForm.list = resData.data.group_data;
           setGroupForm({ ...groupForm });
-          console.log("group l;ist", groupForm);
         }
         return true;
       });
@@ -8001,7 +7915,6 @@ const Profile = () => {
           toast.error(resData.data.message);
         } else {
           setPammDashboardData({ ...resData.data });
-          console.log('pamm dashboard data', pammDashboardData);
         }
       });
   };
@@ -8077,7 +7990,6 @@ const Profile = () => {
           toast.error(res.data.message);
         } else {
           setMoneyManagerListMenu([...res.data.data]);
-          console.log(res.data.data);
         }
       });
   };
@@ -9339,7 +9251,6 @@ const Profile = () => {
                                             type="file"
                                             name="fontimg"
                                             onChange={(e) => {
-                                              console.log(proofAdd, "proof");
                                               setProofAdd([
                                                 ...proofAdd,
                                                 e.target.files[0],
@@ -9380,7 +9291,6 @@ const Profile = () => {
                                               className="fontimgclose"
                                               onClick={() => {
                                                 // proofAdd.splice(index, 1);
-                                                console.log(proofAdd, "asdASF");
                                                 setProofAdd(
                                                   proofAdd.filter(
                                                     (v, i) => i !== index

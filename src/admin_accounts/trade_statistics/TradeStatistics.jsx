@@ -4,7 +4,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { IsApprove, Url } from "../../global.js";
 import axios from "axios";
 import "./trandestatistics.css";
+import { useNavigate } from "react-router-dom";
 const TradeStatistics = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({});
   useEffect(() => {
     const param = new FormData();
@@ -15,6 +17,10 @@ const TradeStatistics = () => {
     axios
       .post(`${Url}/ajaxfiles/trading_statistics_manage.php`, param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         setData(res.data);
       });
   }, []);

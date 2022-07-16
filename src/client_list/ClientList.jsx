@@ -241,7 +241,6 @@ const ClientList = () => {
     }; */
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -254,11 +253,9 @@ const ClientList = () => {
   };
 
   const depositApproved = (e) => {
-    console.log("deposit approved", e);
   };
 
   const gotoProfile = (e) => {
-    console.log("goto profile page", e);
     navigate("/profile/" + e.user_id);
   };
 
@@ -275,7 +272,6 @@ const ClientList = () => {
   };
 
   const filterByChange = (e) => {
-    console.log("selected value", e.target.value);
     setFilterBy(e.target.value);
   };
 
@@ -579,8 +575,7 @@ const ClientList = () => {
   ];
 
   const actionMenuPopup = (e, data) => {
-    console.log(e.target.getAttribute("class"));
-    console.log(e.target.classList.contains("reject"));
+
     handleContextClose(data.sr_no);
     if (e.target.classList.contains("reject")) {
       // setDialogTitle('Reject');
@@ -648,7 +643,6 @@ const ClientList = () => {
   };
 
   const changeStatus = (status, data) => {
-    console.log(status, data);
     if (status == "approved") {
       toast.success("Client has been completed successfully.");
     } else if (status == "rejected") {
@@ -750,6 +744,7 @@ const ClientList = () => {
   };
 
   const getSalesList = () => {
+    
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -760,6 +755,10 @@ const ClientList = () => {
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           // toast.error(res.data.message);
         } else {
@@ -781,6 +780,10 @@ const ClientList = () => {
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {

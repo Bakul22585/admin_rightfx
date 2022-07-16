@@ -88,6 +88,12 @@ const PendingKYC = () => {
   const [previewAadharCardFront, setPreviewAadharCardFront] = useState();
   const [selectedAadharCardBackFile, setSelectedAadharCardBackFile] =
     useState();
+    const [previewAdditionalDocumentsBack, setPreviewAdditionalDocumentsBack] = useState();
+    const [selectedAdditionalDocumentsBack, setSelectedAdditionalDocumentsBack] =useState();
+
+	    const [previewAdditionalDocuments, setPreviewAdditionalDocuments] = useState();
+ 	    const [selectedAdditionalDocuments, setSelectedAdditionalDocuments] =useState(); 
+
   const [previewAadharCardBack, setPreviewAadharCardBack] = useState();
   const [selectedPanCardFile, setSelectedPanCardFile] = useState();
   const [previewPancard, setPreviewPancard] = useState();
@@ -116,6 +122,8 @@ const PendingKYC = () => {
     email: "",
     aadhar_card_number: "",
     aadhar_front_img: "",
+    additional_documents:"",
+    additional_documents_back:"",
     aadhar_back_img: "",
     pan_card_img: "",
     passbook_img: "",
@@ -326,7 +334,6 @@ const PendingKYC = () => {
   ];
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -407,6 +414,8 @@ const PendingKYC = () => {
         aadhar_card_number: "",
         aadhar_front_img: "",
         aadhar_back_img: "",
+        additional_documents:"",
+        additional_documents_back:"",
         pan_card_img: "",
         passbook_img: "",
         account_number: "",
@@ -429,6 +438,8 @@ const PendingKYC = () => {
         aadhar_card_number: "",
         aadhar_front_img: "",
         aadhar_back_img: "",
+        additional_documents:"",
+        additional_documents_back:"",
         pan_card_img: "",
         passbook_img: "",
         account_number: "",
@@ -459,6 +470,7 @@ const PendingKYC = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", data.user_id);
     param.append("kyc_id", data.kyc_id);
@@ -480,6 +492,8 @@ const PendingKYC = () => {
             aadhar_card_number: res.data.kyc_data.aadhar_card_number,
             aadhar_front_img: res.data.kyc_data.aadhar_card_front_image,
             aadhar_back_img: res.data.kyc_data.aadhar_card_back_image,
+            additional_documents:res.data.kyc_data.additional_documents,
+            additional_documents_back:res.data.kyc_data.additional_documents_back,
             pan_card_img: res.data.kyc_data.pancard_image,
             passbook_img: res.data.kyc_data.bank_passbook_image,
             account_number: res.data.kyc_data.bank_account_number,
@@ -487,24 +501,23 @@ const PendingKYC = () => {
             bank_holder_name: res.data.kyc_data.bank_holder_name,
             bank_ifsc_code: res.data.kyc_data.bank_ifsc_code,
             remark: res.data.kyc_data.feedback_remarks,
+            status:res.data.kyc_data.status,
             isLoader: false,
             user_id: data.user_id,
             kyc_id: data.kyc_id,
           };
         });
-        console.log(form);
       }
     });
   };
 
   const changeStatus = (status, data) => {
-    console.log(status, data);
     if (status == "approved") {
-      console.log("data", data);
       const param = new FormData();
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("kyc_id", data.kyc_id);
       param.append("action", "approve_kyc");
@@ -517,11 +530,11 @@ const PendingKYC = () => {
         toast.success(res.data.message);
       });
     } else if (status == "rejected") {
-      console.log("data", data);
       const param = new FormData();
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("kyc_id", data.kyc_id);
       param.append("action", "reject_kyc");
@@ -600,31 +613,33 @@ const PendingKYC = () => {
               ) : (
                 ""
               )}
-              {/* {(form.pan_card_img != '') ? <div className='element'>
-                            <label>Pan Card Img :</label>
-                            {(form.pan_card_img != "") ? <CustomImageModal image={`${form.pan_card_img}`} /> : ""}
-                        </div> : ''}
-                        {(form.passbook_img != '') ? <div className='element'>
-                            <label>Passbook Img :</label>
-                            {(form.passbook_img != "")? <CustomImageModal image={`${form.passbook_img}`} /> : ""}
-                        </div> : ''} */}
+              {form.additional_documents != "" ? (
+                <div className="element">
+                  <label>additional ID Front Img :</label>
+                  {form.additional_documents != "" ? (
+                    <CustomImageModal image={`${form.additional_documents}`} />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-            {/* <br />
-                    <div className='margeField'>
-                        <CustomImageModal image={`${form.aadhar_front_img}`}/>
-                        <CustomImageModal image={`${form.aadhar_back_img}`}/>
-                        <CustomImageModal image={`${form.pan_card_img}`}/>
-                        <CustomImageModal image={`${form.passbook_img}`}/>
-                    </div>
-                    <br />
-                    <div className='margeField'>
-                        <FormControlLabel
-                            control={
-                                <Checkbox name="isActive" size="small" onChange={input}/>
-                            }
-                            label="Active"
-                        />
-                    </div> */}
+      <div className="view-image-section">
+      {form.additional_documents_back != "" ? (
+                <div className="element">
+                  <label> additional ID Back Img :</label>
+                  {form.additional_documents_back != "" ? (
+                    <CustomImageModal image={`${form.additional_documents_back}`} />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
+      </div>
           </div>
         );
       }
@@ -695,10 +710,10 @@ const PendingKYC = () => {
               </div>
               <div className="element">
                 <FormControl variant="standard" sx={{ width: "100%" }}>
-                  <InputLabel id="demo-simple-select-standard-label">
+                  <InputLabel id="demo-simple-select-standard-label" >
                     Status
                   </InputLabel>
-                  <Select label="Status" name="status" onChange={input}>
+                  <Select label="Status" name="status" onChange={input} value={form.status}>
                     <MenuItem value="0">Pending</MenuItem>
                     <MenuItem value="1">Approved</MenuItem>
                     <MenuItem value="2">Rejected</MenuItem>
@@ -707,7 +722,7 @@ const PendingKYC = () => {
               </div>
             </div>
             <br />
-            <div className="view-image-section">
+            <div className="view-image-section" style={{gap: "34px"}}>
               <div className="element">
                 <label>ID Front Img :</label>
                 <label
@@ -766,25 +781,68 @@ const PendingKYC = () => {
                   )}
                 </label>
               </div>
-              {/* <div className='element'>
-                            <label>Pan Card Img :</label>
-                            <label htmlFor="contained-button-file_pan" className='fileuploadButton'>
-                                <Input accept="image/*" id="contained-button-file_pan" type="file" onChange={(e) => onSelectFile(e, 'pan_card')} />
-                                {selectedPanCardFile
-                                    ? <img src={previewPancard} className='deposit-upload-image-preview' />
-                                    : (form.pan_card_img != "") ? <img src={form.pan_card_img} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
-                            </label>
-                        </div>
-                        <div className='element'>
-                            <label>Passbook Img :</label>
-                            <label htmlFor="contained-button-file_passbook" className='fileuploadButton'>
-                                <Input accept="image/*" id="contained-button-file_passbook" type="file" onChange={(e) => onSelectFile(e, 'passbook')} />
-                                {selectedPassbookFile
-                                    ? <img src={previewPassbook} className='deposit-upload-image-preview' />
-                                    : (form.passbook_img != "") ? <img src={form.passbook_img} className='deposit-upload-image-preview' /> : <Button variant="contained" component="span"><i className="material-icons">backup</i>&nbsp;Upload</Button>}
-                            </label>
-                        </div> */}
+              <div className="element">
+                <label>Additional ID Front Img :</label>
+                <label
+                  htmlFor="contained-button-file_back1"
+                  className="fileuploadButton"
+                >
+                  <Input
+                    accept="image/*"
+                    id="contained-button-file_back1"
+                    type="file"
+                    onChange={(e) => onSelectFile(e, "additional_documents")}
+                  />
+                  {selectedAdditionalDocuments ? (
+                    <img
+                      src={previewAdditionalDocuments}
+                      className="deposit-upload-image-preview"
+                    />
+                  ) : form.additional_documents != "" ? (
+                    <img
+                      src={form.additional_documents}
+                      className="deposit-upload-image-preview"
+                    />
+                  ) : (
+                    <Button variant="contained" component="span">
+                      <i className="material-icons">backup</i>&nbsp;Upload
+                    </Button>
+                  )}
+                </label>
+              </div>
             </div>
+            <br/>
+            <div className="view-image-section">
+            <div className="element">
+                <label>Additional ID Front Img :</label>
+                <label
+                  htmlFor="contained-button-file_back11"
+                  className="fileuploadButton"
+                >
+                  <Input
+                    accept="image/*"
+                    id="contained-button-file_back11"
+                    type="file"
+                    onChange={(e) => onSelectFile(e, "additional_documents_back")}
+                  />
+                  {selectedAdditionalDocumentsBack ? (
+                    <img
+                      src={previewAdditionalDocumentsBack}
+                      className="deposit-upload-image-preview"
+                    />
+                  ) : form.additional_documents_back != "" ? (
+                    <img
+                      src={form.additional_documents_back}
+                      className="deposit-upload-image-preview"
+                    />
+                  ) : (
+                    <Button variant="contained" component="span">
+                      <i className="material-icons">backup</i>&nbsp;Upload
+                    </Button>
+                  )}
+                </label>
+              </div>
+              </div>
           </div>
         );
       }
@@ -904,7 +962,6 @@ const PendingKYC = () => {
   };
 
   const formSubmit = async () => {
-    console.log(form);
     /* if (form.aadhar_card_number == '') {
             toast.error('Please enter aadhar card number');
         } else if (form.account_number == '') {
@@ -928,6 +985,7 @@ const PendingKYC = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("aadhar_card_number", form.aadhar_card_number);
       /* param.append('bank_account_number', form.account_number);
@@ -945,6 +1003,11 @@ const PendingKYC = () => {
 
       if (selectedAadharCardBackFile) {
         param.append("aadhar_card_back_image", selectedAadharCardBackFile);
+      }
+      if (selectedAadharCardBackFile) {
+        param.append("additional_documents", selectedAadharCardBackFile);
+      }   if (selectedAdditionalDocuments) {
+        param.append("additional_documents", selectedAdditionalDocuments);
       }
 
       await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
@@ -966,6 +1029,8 @@ const PendingKYC = () => {
             aadhar_card_number: "",
             aadhar_front_img: "",
             aadhar_back_img: "",
+            additional_documents:"",
+            additional_documents_back:"",
             pan_card_img: "",
             passbook_img: "",
             account_number: "",
@@ -1004,7 +1069,6 @@ const PendingKYC = () => {
   };
 
   useEffect(() => {
-    console.log("aadhar front");
     if (!selectedAadharCardFrontFile) {
       setPreviewAadharCardFront(undefined);
       return;
@@ -1016,7 +1080,6 @@ const PendingKYC = () => {
   }, [selectedAadharCardFrontFile]);
 
   useEffect(() => {
-    console.log("aadhar back");
     if (!selectedAadharCardBackFile) {
       setPreviewAadharCardBack(undefined);
       return;
@@ -1033,35 +1096,29 @@ const PendingKYC = () => {
       setParam({ ...param });
     }
   }, [checkStatus]);
+  useEffect(() => {
+    if (!selectedAdditionalDocuments) {
+      setPreviewAdditionalDocuments(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedAdditionalDocuments);
+    setPreviewAdditionalDocuments(objectUrl);
 
-  /* useEffect(() => {
-        console.log('pancard');
-        if (!selectedPanCardFile) {
-            setPreviewPancard(undefined)
-            return
-        }
-        const objectUrl = URL.createObjectURL(selectedPanCardFile)
-        setPreviewPancard(objectUrl)
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedAdditionalDocuments]);
+  useEffect(() => {
+    if (!selectedAdditionalDocumentsBack) {
+      setPreviewAdditionalDocumentsBack(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedAdditionalDocumentsBack);
+    setPreviewAdditionalDocumentsBack(objectUrl);
 
-        return () => URL.revokeObjectURL(objectUrl)
-
-    }, [selectedPanCardFile])
-
-    useEffect(() => {
-        console.log('passbok');
-        if (!selectedPassbookFile) {
-            setPreviewPassbook(undefined)
-            return
-        }
-        const objectUrl = URL.createObjectURL(selectedPassbookFile)
-        setPreviewPassbook(objectUrl)
-
-        return () => URL.revokeObjectURL(objectUrl)
-
-    }, [selectedPassbookFile]) */
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedAdditionalDocumentsBack]);
+  
 
   const onSelectFile = (e, flag) => {
-    console.log(e, flag);
     if (flag == "aadhar_front") {
       if (!e.target.files || e.target.files.length === 0) {
         setPreviewAadharCardFront(undefined);
@@ -1076,6 +1133,20 @@ const PendingKYC = () => {
       }
 
       setSelectedAadharCardBackFile(e.target.files[0]);
+    } else if (flag == "additional_documents") {
+      if (!e.target.files || e.target.files.length === 0) {
+        setPreviewAdditionalDocuments(undefined);
+        return;
+      }
+
+      setSelectedAdditionalDocuments(e.target.files[0]);
+    } else if (flag == "additional_documents_back") {
+      if (!e.target.files || e.target.files.length === 0) {
+        setPreviewAdditionalDocumentsBack(undefined);
+        return;
+      }
+
+      setSelectedAdditionalDocumentsBack(e.target.files[0]);
     } else if (flag == "pan_card") {
       if (!e.target.files || e.target.files.length === 0) {
         setPreviewPancard(undefined);

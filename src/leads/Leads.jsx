@@ -297,7 +297,6 @@ const Leads = () => {
       if (res.data.status == "error") {
         // toast.error(res.data.message);
       } else {
-        console.log("res.data.managers", res.data.managers);
         setListManagers(res.data.managers);
         setSoure(res.data.inquiry_source_master);
       }
@@ -339,7 +338,6 @@ const Leads = () => {
   };
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -352,12 +350,10 @@ const Leads = () => {
   };
 
   const gotoProfile = (e) => {
-    console.log("goto profile page", e);
     navigate("/profile/" + e.user_id);
   };
 
   const viewFollowup = (e) => {
-    console.log("view followup", e);
     setNewFollowupForm({
       date: "",
       time: "",
@@ -388,7 +384,6 @@ const Leads = () => {
   };
 
   const manageDialogActionButton = () => {
-    console.log("View Lead (" + leadDetails.customer_name + ")");
     if (dialogTitle == "Add Lead") {
       return (
         <div className="dialogMultipleActionButton">
@@ -514,6 +509,10 @@ const Leads = () => {
       axios
         .post(Url + "/ajaxfiles/update_lead_status.php", param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           if (res.data.status == "error") {
             setCpData((preValue) => {
               return {
@@ -1733,7 +1732,6 @@ const Leads = () => {
   ];
 
   const submitForm = async () => {
-    console.log(form);
     if (form.customer_name == "") {
       toast.error("Please enter customer name");
     } else if (form.customer_mobile == "") {
@@ -1844,7 +1842,6 @@ const Leads = () => {
 
   const input3 = (event) => {
     const { name, value } = event.target;
-    console.log("text ", name, value);
     if (name == "demo_mt5" && value == "1") {
       getIBCommissionGroup();
     }
@@ -1854,7 +1851,6 @@ const Leads = () => {
         [name]: value,
       };
     });
-    console.log("cpData", cpData);
   };
 
   const input1 = (event) => {
@@ -1874,7 +1870,6 @@ const Leads = () => {
   };
 
   const changeInterestStatus = (e, data) => {
-    console.log(e.target, data);
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -1910,7 +1905,6 @@ const Leads = () => {
   };
 
   const approveInterestStatus = (e, data) => {
-    console.log(e.target.value, data);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -1967,7 +1961,6 @@ const Leads = () => {
   };
 
   const approvechangeAssign = (e, data) => {
-    console.log(e.target.value, data);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -2016,7 +2009,6 @@ const Leads = () => {
               ["ibCommissionGroupList"]: res.data.data,
             };
           });
-          console.log("ibCommissionGroupList", cpData);
         }
         /* toast.success(res.data.message);
         setRefresh(!refresh) */
@@ -2024,7 +2016,6 @@ const Leads = () => {
   };
 
   const changeFollowupDate = (e, data) => {
-    console.log(e.target.value, data);
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -2057,12 +2048,10 @@ const Leads = () => {
   };
 
   const approvechangeFollowupDate = (e, data) => {
-    console.log(e.target.value, data);
     toast.success("Assign sales executive has been updated successfully.");
   };
 
   const addNewFollowup = async () => {
-    console.log(newFollowupForm);
     const param = new FormData();
     param.append("inquiry_id", newFollowupForm.inquiry_id);
     if (newFollowupForm.date == "") {
@@ -2118,8 +2107,7 @@ const Leads = () => {
   };
 
   const actionMenuPopup = (e, data) => {
-    console.log(e.target.getAttribute("class"));
-    console.log(e.target.classList.contains("reject"));
+
     handleContextClose(data.sr_no);
     if (e.target.classList.contains("not_interested")) {
       confirmAlert({
@@ -2249,7 +2237,6 @@ const Leads = () => {
   };
 
   const changeLeadStatus = async (status, data) => {
-    console.log(status, data);
     const param = new FormData();
     param.append("inquiry_id", data.inquiry_id);
     if (status == "not_interested") {
@@ -2285,7 +2272,6 @@ const Leads = () => {
   };
 
   const handleAction = async () => {
-    console.log("doc", doc);
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);

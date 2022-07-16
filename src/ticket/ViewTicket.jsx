@@ -108,11 +108,9 @@ const ViewTicket = () => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
-        console.log(res.data);
         if (res.data.data.length > 0) {
           viewTicketData.data = res.data.data[0];
           setViewTicketData({ ...viewTicketData });
-          console.log("view ticket", viewTicketData.data);
         }
       }
     });
@@ -150,7 +148,6 @@ const ViewTicket = () => {
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
-            console.log(res.data);
             setSelectedFile(undefined);
             setForm({
               message: "",

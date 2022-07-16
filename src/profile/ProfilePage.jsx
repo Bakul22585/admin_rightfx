@@ -16,8 +16,10 @@ import { IsApprove, Url } from "../global";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const [profileForm, setProfileForm] = useState({
     title: "",
     first_name: "",
@@ -52,7 +54,6 @@ const ProfilePage = () => {
   toast.configure();
 
   const profileSubmit = async () => {
-    console.log(profileForm);
     if (profileForm.title == "") {
       toast.error("Please select title");
     } else if (profileForm.first_name == "") {
@@ -124,6 +125,10 @@ const ProfilePage = () => {
       axios
         .post(`${Url}/ajaxfiles/update_user_profile.php`, param)
         .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {

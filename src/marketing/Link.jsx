@@ -639,7 +639,6 @@ const Link = () => {
           toast.error(res.data.message);
         } else {
           setSourceMasterList({ ...res.data });
-          console.log("source master list", sourceMasterList);
         }
       });
   };

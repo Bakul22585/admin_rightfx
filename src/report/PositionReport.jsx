@@ -334,7 +334,6 @@ const PositionReport = () => {
                             sx={{ width: "100%" }}
                             value={param.mt5_acc_no}
                             onChange={(e) => {
-                              console.log(e.target.value);
                               param.mt5_acc_no = e.target.value;
                               setParam({ ...param });
                             }}

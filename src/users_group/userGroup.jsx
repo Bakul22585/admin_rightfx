@@ -381,7 +381,6 @@ const UsersGroups = () => {
     };
 
     const formSubmit = async () => {
-        console.log(form);
         if (form.user_group_name == "") {
             toast.error("Please enter group name");
         } else {

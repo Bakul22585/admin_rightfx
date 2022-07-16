@@ -310,7 +310,6 @@ const BasicReport = () => {
           toast.error(resData.data.message);
         } else {
           setGroupList([...resData.data.group_data]);
-          console.log("group l;ist", groupList);
         }
         return true;
       });

@@ -145,7 +145,6 @@ const CommonFilter = (prop) => {
       if (res.data.status == "error") {
         // toast.error(res.data.message);
       } else {
-        console.log("res.data.managers", res.data.managers);
         setListManagers(res.data.managers);
         setSoure(res.data.inquiry_source_master);
       }
@@ -163,7 +162,6 @@ const CommonFilter = (prop) => {
   };
 
   const filterByChange = (e) => {
-    console.log("selected value", e.target.value);
     setFilterBy(e.target.value);
     prop.setParam({});
   };
@@ -195,7 +193,6 @@ const CommonFilter = (prop) => {
     });
     return checkbox;
   };
-  console.log("filter prop", prop);
   return (
     <div>
       <Grid container>
@@ -404,7 +401,6 @@ const CommonFilter = (prop) => {
                                     lead_assign_user_id: e.target.value,
                                   };
                                 });
-                                console.log("e.tarhet", personName);
                               }}
                             >
                               {listManagers.map((item) => {
@@ -572,7 +568,6 @@ const CommonFilter = (prop) => {
                             <Select
                               value={checkStatus}
                               onChange={(e) => {
-                                console.log("e.target.value", e.target.value);
                                 setcheckStatus(e.target.value);
                                 prop.setParam((prevalue) => {
                                   return {

@@ -319,10 +319,7 @@ const ListRequest = () => {
       grow: 0.1,
     },
   ];
-  // console.log("updateDate", updateDate);
   const viewRequest = async (prop) => {
-    // setOpenModel(true);
-    console.log("prop", prop);
     setIbData(prop);
     if (prop.sponsor_id == "0") {
       const param = new FormData();
@@ -356,7 +353,6 @@ const ListRequest = () => {
 
             setUpdateDate({ ...updateDate });
 
-            console.log("form", updateDate);
             // setMaxWidth('md');
             // setDialogTitle('Add');
             setOpenModel(true);
@@ -394,7 +390,6 @@ const ListRequest = () => {
             updateDate.structure_name = prop.structure_name;
 
             setUpdateDate({ ...updateDate });
-            console.log("form", updateDate);
             setOpenModel(true);
           }
         });
@@ -471,7 +466,6 @@ const ListRequest = () => {
     //     error = true;
     //   } else {
     //     updateDate.structure_data.forEach((element) => {
-    //       console.log(element.ib_group_name, element.group_rebate);
     //       if (element.group_rebate === "") {
     //         toast.error(`Please enter ${element.ib_group_name} rebate`);
     //         error = true;
@@ -620,7 +614,6 @@ const ListRequest = () => {
   ]);
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);

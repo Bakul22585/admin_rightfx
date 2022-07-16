@@ -264,7 +264,6 @@ const Target = () => {
         } else {
           salesPerson = res.data.sales_person_target;
           setSalesPerson({ ...salesPerson });
-          console.log("source master list", salesPerson);
           setForm({
             ac_target: res.data.sales_person_target.sales_person_ac_target,
             money_in_target: res.data.sales_person_target.sales_person_money_in,

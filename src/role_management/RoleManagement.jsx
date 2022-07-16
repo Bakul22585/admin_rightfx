@@ -101,7 +101,6 @@ const RoleManagement = () => {
   ]);
 
   const handleContextClick = (event, index) => {
-    console.log(event.currentTarget.getAttribute("id"), index);
     let tableMenus = [...openTableMenus];
     tableMenus[index] = event.currentTarget;
     setOpenTableMenus(tableMenus);
@@ -114,7 +113,6 @@ const RoleManagement = () => {
   };
 
   const gotoRoleCreate = (e) => {
-    console.log("goto profile page", e);
     navigate("/createRole");
   };
 
@@ -175,7 +173,6 @@ const RoleManagement = () => {
       }
     });
   }
-  console.log(searchKeyword);
   return (
     <div>
       <div className="app-content--inner">

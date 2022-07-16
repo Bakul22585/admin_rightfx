@@ -52,7 +52,6 @@ const CssTextField = styled(TextField)({
 
 export default function Login1(prop) {
   const navigate = useNavigate();
-  // console.log(prop.setLogin);
   const [isSubmit, setisSubmit] = useState(false);
   const [infoErrors, setInfoErrors] = useState({});
   const [loader, setLoader] = useState(false);
@@ -69,7 +68,6 @@ export default function Login1(prop) {
       };
     });
 
-    // console.log(info);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,7 +82,6 @@ export default function Login1(prop) {
     } else if (
       !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)
     ) {
-      console.log(values.email);
       notify("Email format is invaild ");
       errors.email = "Email format is invaild";
     } else if (!values.password) {

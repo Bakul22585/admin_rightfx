@@ -2,16 +2,18 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    column-gap: 6px;
 }
 .row1 {
     margin-bottom: 0;
 }
 .boxSection .boxsize {
-    width: 270px;
-    margin-right: 13px;
-    margin-left: 13px;
+    width: 220px;
+    margin-right: 11px;
+    margin-left: 11px;
     cursor: pointer;
     border-radius: 10px;
+    padding: 15px !important;
     
 }
 
@@ -47,12 +49,13 @@
 }
 
 .boxSection .boxsize .text-align-center h5 {
-    /* font-size: 2.43rem; */
+    font-size: 1.2rem;
     font-weight: 500;
     letter-spacing: 1px;
     line-height: 1.2;
     display: inline-block;
     vertical-align: middle;
+    word-break: break-all;
 }
 .mb-0 {
     margin-bottom: 0!important;
@@ -69,9 +72,11 @@ h5.mb-0{
     font-size: 0.99rem;
     letter-spacing: 0px;
     display: block;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: rgba(0, 0, 0, 0.4);
     letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase !important;
 }
 .no-margin {
     margin: 0!important;

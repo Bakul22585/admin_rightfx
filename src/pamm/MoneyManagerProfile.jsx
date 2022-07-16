@@ -221,7 +221,6 @@ const MoneyManagerProfile = () => {
                 } else {
                     moneyManagerListMenu = res.data.data;
                     setMoneyManagerListMenu([...moneyManagerListMenu]);
-                    console.log(res.data.data);
                 }
             });
     };
@@ -610,7 +609,6 @@ const MoneyManagerProfile = () => {
                 setdailySalesOptions({ ...dailySalesOptions });
                 setYear(res.data.data.filter_profit_years[0])
 
-                console.log(res.data);
                 setIsLoader(false);
             });
     }, []);
@@ -964,7 +962,6 @@ const MoneyManagerProfile = () => {
                                                                 value={year}
 
                                                                 onChange={(e) => {
-                                                                    console.log("e.target.value", e.target.value);
                                                                     setYear(e.target.value)
 
                                                                     changeYear(e.target.value);

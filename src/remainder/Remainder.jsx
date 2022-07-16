@@ -105,7 +105,6 @@ const Remainder = () => {
   });
   toast.configure();
   const openDialogbox = (e) => {
-    console.log("popup info", e);
     setForm({
       type: "",
       note: "",
@@ -132,7 +131,6 @@ const Remainder = () => {
             })
         } */
     setEventData(selectInfo);
-    console.log("click event", selectInfo);
     openDialogbox(selectInfo);
   };
 
@@ -149,7 +147,6 @@ const Remainder = () => {
   };
 
   const addNewEvent = () => {
-    console.log("new event addede");
   };
 
   const insertNewEvent = () => {
@@ -158,7 +155,6 @@ const Remainder = () => {
     } else if (form.note == "") {
       toast.error("Please enter notes");
     } else {
-      console.log("insert new event", eventData);
       let title = eventData.note;
       let calendarApi = eventData.view.calendar;
 
@@ -198,7 +194,6 @@ const Remainder = () => {
           toast.error(res.data.message);
           setPageLoader(false);
         } else {
-          toast.success(res.data.message);
           setData(res.data.data);
           setRefresh(!refresh);
           setPageLoader(false);
@@ -219,12 +214,10 @@ const Remainder = () => {
   };
   const changeMonth = async (e) => {
     let date = new Date(e.startStr);
-    console.log(date.getMonth(), confirmdate);
     // date.getDate() == 1 && date.getMonth() + 1 == confirmdate;
-    var cdate = null;
     if (
-      (date.getDate() == 1 && (date.getMonth() + 1) == confirmdate) ||
-      (date.getDate() !== 1 && (date.getMonth() + 2)== confirmdate)
+      (date.getDate() == 1 && (date.getMonth() + 1) !== confirmdate) ||
+      (date.getDate() !== 1 && (date.getMonth() + 2) !== confirmdate)
     ) {
       const param = new FormData();
 
@@ -234,19 +227,14 @@ const Remainder = () => {
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       }
       if (date.getDate() == 1) {
-        console.log("true", date.getMonth());
         param.append("month", date.getMonth() + 1);
-        cdate = date.getMonth() + 1;
         param.append("year", date.getFullYear());
       } else {
-        console.log("false", date.getMonth());
         param.append("month", date.getMonth() + 2);
 
         param.append("year", date.getFullYear());
-        cdate = date.getMonth() + 2;
       }
       param.append("action", "day_wise_lead_count");
-      setPageLoader(cdate);
       await axios
         .post(Url + "/ajaxfiles/change_lead_data.php", param)
         .then((res) => {
@@ -258,8 +246,6 @@ const Remainder = () => {
             toast.error(res.data.message);
             setPageLoader(false);
           } else {
-            console.log("cdata", cdate);
-            toast.success(res.data.message);
             setData(res.data.data);
             setRefresh(!refresh);
             setPageLoader(false);
@@ -315,7 +301,7 @@ const Remainder = () => {
                             center: "title",
                             right: "dayGridMonth,timeGridWeek,timeGridDay",
                           }}
-                          onChange={(e) => console.log("e", e)}
+                        
                           droppable={false}
                           events={data}
                           //   events={[
@@ -332,13 +318,11 @@ const Remainder = () => {
                             changeMonth(e);
                           }}
                           eventClick={(e) => {
-                            console.log(e.event.title, e.event.start);
                             // let str = formatDate(e.event.start, {
                             //     month: "numeric",
                             //     year: "numeric",
                             //     day: "numeric",
                             // });
-                            console.log("event date", e);
                             // navigate(`/dashboard/${str}`)
                           }}
                           // editable={true}

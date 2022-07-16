@@ -412,7 +412,7 @@ const Dashboard = (prop) => {
   useEffect(() => {
     if (localStorage.getItem("login") == "true") {
       prop.setLogin("true");
-    }
+    }else{
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -424,11 +424,11 @@ const Dashboard = (prop) => {
         prop.setLogin("true");
         navigate("/");
       } else {
-        console.log("asd", res.data);
         setFullData(res.data);
         setPageLoader(false);
       }
     });
+  }
   }, []);
 
   const facthMapData = () => {

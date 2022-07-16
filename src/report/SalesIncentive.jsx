@@ -19,6 +19,8 @@ const SalesIncentive = () => {
     start_date: "",
     end_date: "",
   });
+  const [resData, setResData] = useState({});
+
   const [searchKeyword, setSearchKeyword] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [searchBy, setSearchBy] = useState([
@@ -131,6 +133,7 @@ const SalesIncentive = () => {
                   search={searchBy}
                   setParam={setParam}
                   searchWord={setSearchKeyword}
+                  setResData={setResData}
                 />
                 <br />
                 <Paper
@@ -150,11 +153,43 @@ const SalesIncentive = () => {
                           param={param}
                           searchWord={searchKeyword}
                           salesReport={true}
+                          setResData={setResData}
+
                           csv="datatable/salesman_incentive_list_export.php"
                         />
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <Grid container>
+                      <Grid item md={6}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_incentive_footer}
+                                </h5>
+                                <p className="no-margin">Total Incentive</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid item md={6}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_incentive}
+                                </h5>
+                                <p className="no-margin">Incentive</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                    </Grid>
                 </Paper>
               </Grid>
             </Grid>
