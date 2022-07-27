@@ -335,6 +335,11 @@ const CommonFilter = (prop) => {
                             ) : (
                               ""
                             )}
+                            {prop.checkStatusBonus ? (
+                              <MenuItem value="Bonus Status">Bonus Status</MenuItem>
+                            ) : (
+                              ""
+                            )}
                             {/* {
                               prop.ibList ? <>
                                 <MenuItem value="sponsor">Sponsor</MenuItem>
@@ -554,6 +559,35 @@ const CommonFilter = (prop) => {
                                   </MenuItem>
                                 );
                               })}
+                            </Select>
+                          </FormControl>
+                        ) : (
+                          ""
+                        )}
+                        {filterBy == "Bonus Status" ? (
+                          <FormControl
+                            sx={{ m: 1, width: 300 }}
+                            className="multipleSelect"
+                          >
+                            <InputLabel>Status</InputLabel>
+                            <Select
+                              value={checkStatus}
+                              onChange={(e) => {
+                                setcheckStatus(e.target.value);
+
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    ...prevalue,
+                                    bonus_offer_status: e.target.value,
+                                  };
+                                });
+                              }}
+                              input={<BootstrapInput />}
+                              sx={{ width: "200px" }}
+                            >
+                              <MenuItem>Select Option</MenuItem>
+                              <MenuItem value="0">Disable</MenuItem>
+                              <MenuItem value="1">Enable</MenuItem>
                             </Select>
                           </FormControl>
                         ) : (

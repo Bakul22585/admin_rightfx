@@ -64,6 +64,7 @@ import UsersGroups from "./users_group/userGroup";
 import PammPortfolioProfile from "./pamm/PammPortfolioProfile";
 import MoneyManagerProfile from "./pamm/MoneyManagerProfile";
 import MT5BonusRequests from "./MT5BonusManage/MT5BonusRequests";
+import Mt5BonusOffer from "./MT5BonusManage/Mt5BonusOffer";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -270,6 +271,10 @@ const App = () => {
                 <Route
                   path="/mt5_bonus_request"
                   element={<MT5BonusRequests />}
+                />
+                 <Route
+                  path="/mt5_bonus_offer"
+                  element={<Mt5BonusOffer />}
                 />
               </Routes>
               

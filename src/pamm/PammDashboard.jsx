@@ -38,7 +38,7 @@ const PammDashboard = () => {
     },
     colors: ["#3d9730"],
     stroke: {
-      curve: "straight",
+      curve: "smooth",
     },
 
     grid: {
@@ -70,7 +70,7 @@ const PammDashboard = () => {
     },
     colors: ["#3d9730"],
     stroke: {
-      curve: "straight",
+      curve: "smooth",
     },
 
     grid: {

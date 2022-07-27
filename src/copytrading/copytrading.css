@@ -9,7 +9,7 @@
 }
 .card-header {
     padding: 16px;
-    background-color: #f6f7f8;
+    /* background-color: #f6f7f8; */
     display: flex;
     gap: 15px;
 }

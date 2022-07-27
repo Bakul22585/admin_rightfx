@@ -718,7 +718,7 @@ const ClientList = () => {
 
   const closeLead = async (data) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
@@ -746,7 +746,7 @@ const ClientList = () => {
   const getSalesList = () => {
     
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
@@ -769,7 +769,7 @@ const ClientList = () => {
 
   const changeUserSales = (row, managerId) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
@@ -826,7 +826,7 @@ const ClientList = () => {
 
   const getUserLoginToken = (data) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
@@ -848,7 +848,7 @@ const ClientList = () => {
   
   const transactionStatus = (data) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);

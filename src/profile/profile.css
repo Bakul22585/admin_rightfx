@@ -309,10 +309,7 @@ text.highcharts-credits {
     cursor: pointer;
 }
 
-.uploaderDropZone {
-    width: 150px;
-    height: 50px;
-}
+
 
 .uploaderDropZone>.received-file {
     width: 100%;
@@ -375,7 +372,7 @@ text.highcharts-credits {
   }
   .uploaderDropZone {
     width: 150px;
-    height: 50px;
+    height: 150px;
   }
   .uploaderDropZone>.received-file {
     width: 100%;

@@ -1131,7 +1131,7 @@ const ListRequest = () => {
                         </ColorButton>
                       ) : (
                         <ColorButton onClick={updatePartnership}>
-                          {updateDate.structure_id == "" ? "Insert" : "Update"}
+                          {updateDate.structure_id == "" ? "Approve structure" : "Update structure"}
                         </ColorButton>
                       )}
                       {/* <ColorButton onClick={updatePartnership}>Update</ColorButton> */}

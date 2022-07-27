@@ -152,6 +152,32 @@ const BasicReport = () => {
       grow: 0.3,
     },
     {
+      name: "days Account From",
+      selector: (row) => {
+        return <span title={row.days_account_from}>{row.days_account_from}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    }, {
+      name: "Highest Traded Pair",
+      selector: (row) => {
+        return <span title={row.highest_traded_pair}>{row.highest_traded_pair}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
+      name: "one Minute Trades",
+      selector: (row) => {
+        return <span title={row.total_trade_closed_in_minusts}>{row.total_trade_closed_in_minusts}</span>;
+      },
+      sortable: true,
+      reorder: true,
+      grow: 0.3,
+    },
+    {
       name: "Total Deposit",
       selector: (row) => {
         return <span title={row.total_deposit}>${row.total_deposit}</span>;

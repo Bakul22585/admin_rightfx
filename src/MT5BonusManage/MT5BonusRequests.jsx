@@ -153,29 +153,29 @@ const MT5BonusRequests = () => {
   });
   const [searchBy, setSearchBy] = useState([
     {
-      label: "REFERENCE NO",
-      value: false,
-      name: "reference_no",
-    },
-    {
-      label: "DATE",
-      value: false,
-      name: "date",
-    },
-    {
       label: "NAME",
       value: false,
       name: "name",
     },
     {
-      label: "WALLET CODE",
+      label: "Account",
       value: false,
-      name: "wallet_code",
+      name: "mt5_acc_no",
     },
     {
-      label: "PAYMENT METHOD",
+      label: "bonus percentage",
       value: false,
-      name: "payment_method",
+      name: "mt5_bonus_percentage",
+    },
+    {
+      label: "transfer amount",
+      value: false,
+      name: "transfer_amount",
+    },
+    {
+      label: "transfer bonus amount",
+      value: false,
+      name: "transfer_bonus_amount",
     },
     {
       label: "AMOUNT",
@@ -204,7 +204,7 @@ const MT5BonusRequests = () => {
   });
   const [storeDepositData, setStoreDepositData] = useState({
     status: "",
-    isLoader: false,
+    isLoader: true,
   });
   const [param, setParam] = useState({
     start_date: "",
@@ -579,26 +579,26 @@ const MT5BonusRequests = () => {
   };
 
   const submitUpdate = async () => {
-    if (viewDepositForm.amount == "") {
-      toast.error("Please enter amount");
+    if (viewDepositForm.transfer_bonus_amount == "") {
+      toast.error("Please enter bonus amount");
     } else if (viewDepositForm.remark == "") {
       toast.error("Please enter remark");
     } else {
       viewDepositForm.isLoader = true;
       setviewDepositForm({ ...viewDepositForm });
       const param = new FormData();
-      param.append("action", "view_update_deposit");
+      param.append("action", "update_mt5_bonus_request");
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
         param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
-      param.append("id", viewDepositForm.id);
-      param.append("amount", viewDepositForm.amount);
-      param.append("deposit_remarks", viewDepositForm.remark);
-      param.append("deposit_status", viewDepositForm.status);
+      param.append("mt5_bonus_id", viewDepositForm.mt5_bonus_id);
+      param.append("transfer_bonus_amount", viewDepositForm.transfer_bonus_amount);
+      param.append("remarks", viewDepositForm.remark);
+      param.append("claim_status", viewDepositForm.status);
       await axios
-        .post(`${Url}/ajaxfiles/mt5_bonus_offers_manage.php`, param)
+        .post(`${Url}/ajaxfiles/mt5_bonus_request_manage.php`, param)
         .then((res) => {
           if (res.data.message == "Session has been expired") {
             localStorage.setItem("login", true);
@@ -804,6 +804,23 @@ const MT5BonusRequests = () => {
         </div>
       );
     } else if (dialogTitle == "Update Mt5 Bonus Request") {
+      if(storeDepositData.isLoader)
+      {
+        return(
+          <div className="popup-loader">
+          <svg class="spinner" viewBox="0 0 50 50">
+            <circle
+              class="path"
+              cx="25"
+              cy="25"
+              r="20"
+              fill="none"
+              stroke-width="5"
+            ></circle>
+          </svg>
+        </div>
+        )
+      }else{
       return (
         <div>
           <div className="update-withdraw-request-section">
@@ -841,37 +858,41 @@ const MT5BonusRequests = () => {
           <br />
           <div className="update-withdraw-request-section">
             <TextField
-              label="Phone"
+              label="Update BY"
               variant="standard"
               sx={{ width: "100%" }}
-              name="phone"
-              value={viewDepositForm.phone}
+              name="modified_by_name"
+              value={viewDepositForm.modified_by_name}
               onChange={input1}
               focused
               disabled
             />
             <TextField
-              label="Method"
+              label="Bonus Percentage"
               variant="standard"
               sx={{ width: "100%" }}
-              name="deposit_method"
-              value={viewDepositForm.deposit_method}
+              name="mt5_bonus_percentage"
+              value={`${viewDepositForm.mt5_bonus_percentage}%`}
               onChange={input1}
               focused
               disabled
             />
-            <TextField
-              label="Amount"
+             <TextField
+              label="Bonus Amount"
               variant="standard"
               sx={{ width: "100%" }}
-              name="amount"
-              value={viewDepositForm.amount}
-              onChange={input1}
+              name="transfer_bonus_amount"
+              value={viewDepositForm.transfer_bonus_amount}
+              onChange={(e) => {
+                                if (!isNaN(Number(e.target.value))) {
+                                    input1(e)
+                                }
+                            }}
               focused
-              disabled={viewDepositForm.status == "0" ? false : true}
-            />
-          </div>
-          <br />
+              disabled={storeDepositData.status == "0" ? false : true}
+            />     
+        </div>
+        <br />
           <div className="update-withdraw-request-section">
             <TextField
               label="Remark"
@@ -900,6 +921,7 @@ const MT5BonusRequests = () => {
           </div>
         </div>
       );
+    }
     }
   };
 
@@ -1034,6 +1056,8 @@ const MT5BonusRequests = () => {
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("mt5_bonus_id", row.mt5_bonus_id);
+    storeDepositData.isLoader=true
+    setStoreDepositData({...storeDepositData})
     await axios
       .post(`${Url}/ajaxfiles/mt5_bonus_request_manage.php`, param)
       .then((res) => {
@@ -1044,6 +1068,7 @@ const MT5BonusRequests = () => {
         handleContextClose( row.mt5_bonus_id);
         if (res.data.status == "error") {
           toast.error(res.data.message);
+ 
         } else {
           setviewDepositForm({
             date: res.data.data.date,
@@ -1055,12 +1080,12 @@ const MT5BonusRequests = () => {
             transfer_amount: res.data.data.transfer_amount,
             transfer_bonus_amount: res.data.data.transfer_bonus_amount,
             remark: res.data.data.remark,
-            claim_status: res.data.data.claim_status,
+          status: res.data.data.claim_status,
             mt5_bonus_id: res.data.data.mt5_bonus_id,
             isLoader: false,
           });
           setStoreDepositData({
-            claim_status: res.data.data.claim_status,
+            status: res.data.data.claim_status,
             isLoader: false,
           });
           setDialogTitle("Update Mt5 Bonus Request");

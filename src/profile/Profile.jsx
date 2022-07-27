@@ -387,6 +387,7 @@ const Profile = () => {
   const [newMasterStructureData, setNewMasterStructureData] = useState({
     structure_name: "",
     structure_data: [],
+    structure_dataOld:[],
     structure_id: "",
     isLoader: false,
   });
@@ -1797,6 +1798,8 @@ const Profile = () => {
           navigate("/");
         }
         newMasterStructureData.structure_data = res.data.data;
+        newMasterStructureData.structure_dataOld = res.data.data1;
+
         setNewMasterStructureData({ ...newMasterStructureData });
         // setMasterStructureData(res.data.data);
         // setStructureList((preValue) => {
@@ -2327,29 +2330,31 @@ const Profile = () => {
           ) : (
             ""
           )}
-          <div className="padingtopmy5create">
+          {createMt5Form.account_type == "0" || createMt5Form.account_type == "1" ?  <div className="padingtopmy5create">
             <TextField
               className="input-font-small hint-color-red"
               type="password"
-              label="Password"
+              label={createMt5Form.account_type == "0" ? "Password":"Main Password"}
               variant="standard"
               onChange={input}
               sx={{ width: "100%" }}
               name="password"
-              helperText="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+              // helperText="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
             />
-          </div>
+          </div> : ""}
+          
+          {createMt5Form.account_type == "0" || createMt5Form.account_type == "1" ? 
           <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               type="password"
-              label="Confirm Password"
+              label={createMt5Form.account_type == "0" ? "Password":"investor Password"}
               variant="standard"
               onChange={input}
               sx={{ width: "100%" }}
               name="confirm_password"
             />
-          </div>
+          </div>:""}
         </div>
       );
     } else if (dialogTitle == "MT5 Access") {
@@ -2556,6 +2561,7 @@ const Profile = () => {
           <div className="main-content-input">
             <div className="ib-structure view-commission-content-section">
               {newMasterStructureData.structure_data.map((item, index) => {
+                console.log("item.group_rebate*100/newMasterStructureData.structure_dataOld[index].group_rebate1",item.group_rebate*100/newMasterStructureData.structure_dataOld[index].group_rebate1)
                 return (
                   <div className="group-structure-section">
                     <div className="main-section">
@@ -2602,6 +2608,8 @@ const Profile = () => {
                               }
                             }}
                           />
+                                              <span style={{marginLeft:"4px"}}>{item.group_rebate=='0' ?"0%":<span className="fw-700">{item.group_rebate*100/newMasterStructureData.structure_dataOld[index].group_rebate1}%</span>}</span>
+
                         </div>
                         <div>
                           {/* <span>Commission</span> */}
@@ -2696,6 +2704,8 @@ const Profile = () => {
                                   }
                                 }}
                               />
+ {item1.rebate=="0" ? "0%":<span style={{marginLeft:"4px"}} className="fw-700">{item1.rebate*100/newMasterStructureData.structure_dataOld[index]["pair_data1"][index1]["rebate1"]}%</span>}
+
                             </div>
                             <div>
                               <input
@@ -2835,6 +2845,7 @@ const Profile = () => {
                               }
                             }}
                           />
+                      <span style={{marginLeft:"4px"}}>{item.group_rebate=='0' ?"0%":<span className="fw-700">{item.group_rebate*100/newMasterStructureData.structure_dataOld[index].group_rebate1}%</span>}</span>
                         </div>
                         <div>
                           {/* <span>Commission</span> */}
@@ -2915,6 +2926,8 @@ const Profile = () => {
                                   }
                                 }}
                               />
+                                                          {item1.rebate=="0" ? "0%":<span style={{marginLeft:"4px"}} className="fw-700">{item1.rebate*100/newMasterStructureData.structure_dataOld[index]["pair_data1"][index1]["rebate1"]}%</span>}
+
                             </div>
                             <div>
                               <input
@@ -5669,13 +5682,15 @@ const Profile = () => {
       )
     ) {
       toast.error(
-        "Please enter valid password. Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+        "Please enter valid password. Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character in Main password"
       );
     } else if (createMt5Form.confirm_password == "") {
       toast.error("Please enter confirm password");
-    } else if (createMt5Form.confirm_password != createMt5Form.password) {
-      toast.error("Confirm password must be the same as password");
-    } else {
+    } else if (createMt5Form.confirm_password == createMt5Form.password) {
+      toast.error("Investor password can't be the same as Main password");
+    } else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(createMt5Form.confirm_password)){
+      toast.error("Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character in Investor password");
+    }else {
       if (createMt5Form.account_type == "0") {
         param.append("mt5_balance", createMt5Form.mt5_balance);
       }
@@ -5683,8 +5698,8 @@ const Profile = () => {
         return { ...prevalue, isLoader: true };
       });
       param.append("user_id", id);
-      param.append("password", createMt5Form.password);
-      param.append("confirm_password", createMt5Form.confirm_password);
+      param.append("main_password", createMt5Form.password);
+      param.append("investor_password", createMt5Form.confirm_password);
       param.append("ib_group_id", createMt5Form.account_option);
       param.append("account_type", createMt5Form.account_type);
       param.append("action", "create_mt5_account");

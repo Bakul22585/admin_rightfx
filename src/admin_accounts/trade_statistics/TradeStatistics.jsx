@@ -10,7 +10,7 @@ const TradeStatistics = () => {
   const [data, setData] = useState({});
   useEffect(() => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }

@@ -389,7 +389,7 @@ const IBCommisions = () => {
       setDepositForm({ ...depositForm });
       const param = new FormData();
       param.append("action", "add_deposit");
-      if (IsApprove !== "") {
+      if (IsApprove != "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       }
@@ -785,7 +785,7 @@ const IBCommisions = () => {
 
   const fetchAccount = async (event, search) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
     }
@@ -978,7 +978,6 @@ const IBCommisions = () => {
 						  </Grid>
 						</Grid>
                 </Paper>
-           
                 <BootstrapDialog
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"
