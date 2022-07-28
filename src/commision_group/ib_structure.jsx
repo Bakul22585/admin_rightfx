@@ -730,12 +730,15 @@ const IBStructure = () => {
                       placeholder="Rebert"
                       value={item.group_rebate}
                       onChange={(e) => {
+                        var floatNumber = (e.target.value).split('.');
                         if (!isNaN(Number(e.target.value))) {
-                          form.structure_data[index]["group_rebate"] =
-                            e.target.value;
-                          setForm({
-                            ...form,
-                          });
+                          if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                            form.structure_data[index]["group_rebate"] =
+                              e.target.value;
+                            setForm({
+                              ...form,
+                            });
+                          }
                         } else if (e.target.value == "" || e.target.value == 0) {
                           form.structure_data[index]["group_rebate"] = 0;
                           setForm({
@@ -752,12 +755,15 @@ const IBStructure = () => {
                       placeholder="Commission"
                       value={item.group_commission}
                       onChange={(e) => {
+                        var floatNumber = (e.target.value).split('.');
                         if (!isNaN(Number(e.target.value))) {
-                          form.structure_data[index]["group_commission"] =
-                            e.target.value;
-                          setForm({
-                            ...form,
-                          });
+                          if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                            form.structure_data[index]["group_commission"] =
+                              e.target.value;
+                            setForm({
+                              ...form,
+                            });
+                          }
                         } else if (e.target.value == "" || e.target.value == 0) {
                           form.structure_data[index]["group_commission"] = 0;
                           setForm({
@@ -810,13 +816,16 @@ const IBStructure = () => {
                             placeholder="Rebert"
                             value={item1.rebate}
                             onChange={(e) => {
+                              var floatNumber = (e.target.value).split('.');
                               if (!isNaN(Number(e.target.value))) {
-                                form.structure_data[index]["pair_data"][index1][
-                                  "rebate"
-                                ] = e.target.value;
-                                setForm({
-                                  ...form,
-                                });
+                                if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                  form.structure_data[index]["pair_data"][index1][
+                                    "rebate"
+                                  ] = e.target.value;
+                                  setForm({
+                                    ...form,
+                                  });
+                                }
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 form.structure_data[index]["pair_data"][index1][
                                   "rebate"
@@ -836,13 +845,16 @@ const IBStructure = () => {
                             placeholder="Commission"
                             value={item1.commission}
                             onChange={(e) => {
+                              var floatNumber = (e.target.value).split('.');
                               if (!isNaN(Number(e.target.value))) {
-                                form.structure_data[index]["pair_data"][index1][
-                                  "commission"
-                                ] = e.target.value;
-                                setForm({
-                                  ...form,
-                                });
+                                if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                  form.structure_data[index]["pair_data"][index1][
+                                    "commission"
+                                  ] = e.target.value;
+                                  setForm({
+                                    ...form,
+                                  });
+                                }
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 form.structure_data[index]["pair_data"][index1][
                                   "commission"

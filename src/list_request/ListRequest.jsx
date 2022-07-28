@@ -828,21 +828,24 @@ const ListRequest = () => {
                                     value={item.group_rebate}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
+                                      var floatNumber = (e.target.value).split('.');
                                       if (!isNaN(Number(e.target.value))) {
-                                        updateDate.structure_data[index][
-                                          "group_rebate"
-                                        ] = e.target.value;
-                                        updateDate.structure_data[index][
-                                          "pair_data"
-                                        ].forEach((value, valueIndex) => {
+                                        if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                          updateDate.structure_data[index][
+                                            "group_rebate"
+                                          ] = e.target.value;
                                           updateDate.structure_data[index][
                                             "pair_data"
-                                          ][valueIndex]["rebate"] =
-                                            e.target.value;
-                                        });
-                                        setUpdateDate({
-                                          ...updateDate,
-                                        });
+                                          ].forEach((value, valueIndex) => {
+                                            updateDate.structure_data[index][
+                                              "pair_data"
+                                            ][valueIndex]["rebate"] =
+                                              e.target.value;
+                                          });
+                                          setUpdateDate({
+                                            ...updateDate,
+                                          });
+                                        }
                                       }
                                       else if (e.target.value == "" || e.target.value == 0) {
                                         updateDate.structure_data[index][
@@ -872,21 +875,24 @@ const ListRequest = () => {
                                     value={item.group_commission}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
+                                      var floatNumber = (e.target.value).split('.');
                                       if (!isNaN(Number(e.target.value))) {
-                                        updateDate.structure_data[index][
-                                          "group_commission"
-                                        ] = e.target.value;
-                                        updateDate.structure_data[index][
-                                          "pair_data"
-                                        ].forEach((value, valueIndex) => {
+                                        if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                          updateDate.structure_data[index][
+                                            "group_commission"
+                                          ] = e.target.value;
                                           updateDate.structure_data[index][
                                             "pair_data"
-                                          ][valueIndex]["commission"] =
-                                            e.target.value;
-                                        });
-                                        setUpdateDate({
-                                          ...updateDate,
-                                        });
+                                          ].forEach((value, valueIndex) => {
+                                            updateDate.structure_data[index][
+                                              "pair_data"
+                                            ][valueIndex]["commission"] =
+                                              e.target.value;
+                                          });
+                                          setUpdateDate({
+                                            ...updateDate,
+                                          });
+                                        }
                                       } else if (e.target.value == "" || e.target.value == 0) {
                                         updateDate.structure_data[index][
                                           "group_commission"
@@ -986,13 +992,16 @@ const ListRequest = () => {
                                         value={item1.rebate}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
+                                          var floatNumber = (e.target.value).split('.');
                                           if (!isNaN(Number(e.target.value))) {
-                                            updateDate.structure_data[index][
-                                              "pair_data"
-                                            ][index1]["rebate"] = e.target.value;
-                                            setUpdateDate({
-                                              ...updateDate,
-                                            });
+                                            if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                              updateDate.structure_data[index][
+                                                "pair_data"
+                                              ][index1]["rebate"] = e.target.value;
+                                              setUpdateDate({
+                                                ...updateDate,
+                                              });
+                                            }
                                           } else if (e.target.value == "" || e.target.value == 0) {
                                             updateDate.structure_data[index][
                                               "pair_data"
@@ -1012,14 +1021,17 @@ const ListRequest = () => {
                                         value={item1.commission}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
+                                          var floatNumber = (e.target.value).split('.');
                                           if (!isNaN(Number(e.target.value))) {
-                                            updateDate.structure_data[index][
-                                              "pair_data"
-                                            ][index1]["commission"] =
-                                              e.target.value;
-                                            setUpdateDate({
-                                              ...updateDate,
-                                            });
+                                            if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                              updateDate.structure_data[index][
+                                                "pair_data"
+                                              ][index1]["commission"] =
+                                                e.target.value;
+                                              setUpdateDate({
+                                                ...updateDate,
+                                              });
+                                            }
                                           } else if (e.target.value == "" || e.target.value == 0) {
                                             updateDate.structure_data[index][
                                               "pair_data"

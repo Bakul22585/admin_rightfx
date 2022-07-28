@@ -17,6 +17,7 @@ import {
   Input,
   ButtonGroup,
   FormGroup,
+  Autocomplete,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -381,9 +382,15 @@ const Profile = () => {
     structure: "",
   });
   const [allBank, setAllBank] = useState([]);
+  const [accountOption, setAccountOption] = useState([]);
+  const [IbAccountOption, setIBAccountOption] = useState([]);
   toast.configure();
   const [mtBalance, setMtBalance] = useState("");
   const [masterStructureData, setMasterStructureData] = useState([]);
+  const [userBlockUnblockStatus, setUserBlockUnblockStatus] = useState({
+    isLoader: false,
+    status: "",
+  });
   const [newMasterStructureData, setNewMasterStructureData] = useState({
     structure_name: "",
     structure_data: [],
@@ -2243,6 +2250,13 @@ const Profile = () => {
     } else if (e.target.classList.contains("user-group")) {
       getUserGroupList();
       setDialogTitle("Groups");
+    } else if (e.target.classList.contains("block_unblock")) {
+      setDialogTitle("Block/Unblock");
+      setUserBlockUnblockStatus({
+        isLoader: false,
+        status: ""
+      })
+      getUserBlockunblockSetting();
     }
     if (!e.target.classList.contains("unlink_ib")) {
       setOpen(true);
@@ -2577,20 +2591,23 @@ const Profile = () => {
                             placeholder="Rebate"
                             value={item.group_rebate}
                             onChange={(e) => {
+                              var floatNumber = (e.target.value).split('.');
                               if (!isNaN(Number(e.target.value))) {
-                                newMasterStructureData.structure_data[index][
-                                  "group_rebate"
-                                ] = e.target.value;
-                                newMasterStructureData.structure_data[index][
-                                  "pair_data"
-                                ].forEach((value, valueIndex) => {
+                                if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                  newMasterStructureData.structure_data[index][
+                                    "group_rebate"
+                                  ] = e.target.value;
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["rebate"] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData,
-                                });
+                                  ].forEach((value, valueIndex) => {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][valueIndex]["rebate"] = e.target.value;
+                                  });
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 newMasterStructureData.structure_data[index][
                                   "group_rebate"
@@ -2619,20 +2636,23 @@ const Profile = () => {
                             placeholder="Commission"
                             value={item.group_commission}
                             onChange={(e) => {
+                              var floatNumber = (e.target.value).split('.');
                               if (!isNaN(Number(e.target.value))) {
-                                newMasterStructureData.structure_data[index][
-                                  "group_commission"
-                                ] = e.target.value;
-                                newMasterStructureData.structure_data[index][
-                                  "pair_data"
-                                ].forEach((value, valueIndex) => {
+                                if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                  newMasterStructureData.structure_data[index][
+                                    "group_commission"
+                                  ] = e.target.value;
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["commission"] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData,
-                                });
+                                  ].forEach((value, valueIndex) => {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][valueIndex]["commission"] = e.target.value;
+                                  });
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 newMasterStructureData.structure_data[index][
                                   "group_commission"
@@ -2687,13 +2707,16 @@ const Profile = () => {
                                 placeholder="Rebert"
                                 value={item1.rebate}
                                 onChange={(e) => {
+                                  var floatNumber = (e.target.value).split('.');
                                   if (!isNaN(Number(e.target.value))) {
-                                    newMasterStructureData.structure_data[index][
-                                      "pair_data"
-                                    ][index1]["rebate"] = e.target.value;
-                                    setNewMasterStructureData({
-                                      ...newMasterStructureData,
-                                    });
+                                    if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                      newMasterStructureData.structure_data[index][
+                                        "pair_data"
+                                      ][index1]["rebate"] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData,
+                                      });
+                                    }
                                   } else if (e.target.value == "" || e.target.value == 0) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
@@ -2714,13 +2737,16 @@ const Profile = () => {
                                 placeholder="Commission"
                                 value={item1.commission}
                                 onChange={(e) => {
+                                  var floatNumber = (e.target.value).split('.');
                                   if (!isNaN(Number(e.target.value))) {
-                                    newMasterStructureData.structure_data[index][
-                                      "pair_data"
-                                    ][index1]["commission"] = e.target.value;
-                                    setNewMasterStructureData({
-                                      ...newMasterStructureData,
-                                    });
+                                    if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                      newMasterStructureData.structure_data[index][
+                                        "pair_data"
+                                      ][index1]["commission"] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData,
+                                      });
+                                    }
                                   } else if (e.target.value == "" || e.target.value == 0) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
@@ -2814,20 +2840,23 @@ const Profile = () => {
                             placeholder="Rebate"
                             value={item.group_rebate}
                             onChange={(e) => {
+                              var floatNumber = (e.target.value).split('.');
                               if (!isNaN(Number(e.target.value))) {
-                                newMasterStructureData.structure_data[index][
-                                  "group_rebate"
-                                ] = e.target.value;
-                                newMasterStructureData.structure_data[index][
-                                  "pair_data"
-                                ].forEach((value, valueIndex) => {
+                                if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                  newMasterStructureData.structure_data[index][
+                                    "group_rebate"
+                                  ] = e.target.value;
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["rebate"] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData,
-                                });
+                                  ].forEach((value, valueIndex) => {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][valueIndex]["rebate"] = e.target.value;
+                                  });
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }
                               } else if (e.target.value == "" || e.target.value == 0) {
                                 newMasterStructureData.structure_data[index][
                                   "group_rebate"
@@ -2855,20 +2884,23 @@ const Profile = () => {
                             placeholder="Commission"
                             value={item.group_commission}
                             onChange={(e) => {
+                              var floatNumber = (e.target.value).split('.');
                               if (!isNaN(Number(e.target.value))) {
-                                newMasterStructureData.structure_data[index][
-                                  "group_commission"
-                                ] = e.target.value;
-                                newMasterStructureData.structure_data[index][
-                                  "pair_data"
-                                ].forEach((value, valueIndex) => {
+                                if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                  newMasterStructureData.structure_data[index][
+                                    "group_commission"
+                                  ] = e.target.value;
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
-                                  ][valueIndex]["commission"] = e.target.value;
-                                });
-                                setNewMasterStructureData({
-                                  ...newMasterStructureData,
-                                });
+                                  ].forEach((value, valueIndex) => {
+                                    newMasterStructureData.structure_data[index][
+                                      "pair_data"
+                                    ][valueIndex]["commission"] = e.target.value;
+                                  });
+                                  setNewMasterStructureData({
+                                    ...newMasterStructureData,
+                                  });
+                                }
                               }
                             }}
                           />
@@ -2909,13 +2941,16 @@ const Profile = () => {
                                 placeholder="Rebert"
                                 value={item1.rebate}
                                 onChange={(e) => {
+                                  var floatNumber = (e.target.value).split('.');
                                   if (!isNaN(Number(e.target.value))) {
-                                    newMasterStructureData.structure_data[index][
-                                      "pair_data"
-                                    ][index1]["rebate"] = e.target.value;
-                                    setNewMasterStructureData({
-                                      ...newMasterStructureData,
-                                    });
+                                    if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                      newMasterStructureData.structure_data[index][
+                                        "pair_data"
+                                      ][index1]["rebate"] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData,
+                                      });
+                                    }
                                   } else if (e.target.value == "" || e.target.value == 0) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
@@ -2936,13 +2971,16 @@ const Profile = () => {
                                 placeholder="Commission"
                                 value={item1.commission}
                                 onChange={(e) => {
+                                  var floatNumber = (e.target.value).split('.');
                                   if (!isNaN(Number(e.target.value))) {
-                                    newMasterStructureData.structure_data[index][
-                                      "pair_data"
-                                    ][index1]["commission"] = e.target.value;
-                                    setNewMasterStructureData({
-                                      ...newMasterStructureData,
-                                    });
+                                    if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                      newMasterStructureData.structure_data[index][
+                                        "pair_data"
+                                      ][index1]["commission"] = e.target.value;
+                                      setNewMasterStructureData({
+                                        ...newMasterStructureData,
+                                      });
+                                    }
                                   } else if (e.target.value == "" || e.target.value == 0) {
                                     newMasterStructureData.structure_data[index][
                                       "pair_data"
@@ -3128,11 +3166,11 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Link Client") {
       return (
-        <div>
+        <div style={{height: '200px'}}>
           <div>
             <FormControl variant="standard" sx={{ width: "100%" }}>
-              <InputLabel>Client</InputLabel>
-              <Select
+              {/* <InputLabel>Client</InputLabel> */}
+              {/* <Select
                 label
                 className="select-font-small"
                 name="client"
@@ -3145,7 +3183,36 @@ const Profile = () => {
                     </MenuItem>
                   );
                 })}
-              </Select>
+              </Select> */}
+              <Autocomplete
+              disablePortal
+              options={accountOption}
+              getOptionLabel={(option) =>
+                option ? option.client_name : ""
+              }
+              onInputChange={(event, newInputValue) => {
+                console.log(event, newInputValue);
+                if (newInputValue != "") {
+                  var serachData = linkClientForm.list.filter((x) => x.client_name.toLowerCase().startsWith(newInputValue));
+                  setAccountOption([...serachData]);
+                } else {
+                  setAccountOption([...linkClientForm.list]);
+                }
+              }}
+              onChange={(event, newValue) => {
+                console.log(event, newValue);
+                setLinkClientForm((prevalue) => {
+                  return {
+                    ...prevalue,
+                    "client": (newValue != null) ? newValue.client_id : 0,
+                  };
+                });
+              }}
+              sx={{ width: "100%" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Client" variant="standard" />
+              )}
+            />
             </FormControl>
           </div>
           {/* <br />
@@ -3166,7 +3233,7 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Link To IB") {
       return (
-        <div>
+        <div style={{height: '200px'}}>
           {/* <div className="margeField">
             <TextField
               className="input-font-small"
@@ -3188,14 +3255,13 @@ const Profile = () => {
           <br /> */}
           <div>
             <FormControl variant="standard" sx={{ width: "100%" }}>
-              <InputLabel>IB User</InputLabel>
+              {/* <InputLabel>IB User</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="customer_name"
                 onChange={linkIBInput}
               >
-                {/* <MenuItem value="test">Test</MenuItem> */}
                 {linkIBForm.list?.map((item) => {
                   return (
                     <MenuItem value={item.sponser_id}>
@@ -3203,7 +3269,42 @@ const Profile = () => {
                     </MenuItem>
                   );
                 })}
-              </Select>
+              </Select> */}
+              <Autocomplete
+                disablePortal
+                options={IbAccountOption}
+                getOptionLabel={(option) =>
+                  option ? option.sponser_name : ""
+                }
+                onInputChange={(event, newInputValue) => {
+                  console.log(event, newInputValue);
+                  if (newInputValue != "") {
+                    var serachData = linkIBForm.list.filter((x) => x.sponser_name.toLowerCase().startsWith(newInputValue));
+                    setAccountOption([...serachData]);
+                  } else {
+                    setAccountOption([...linkIBForm.list]);
+                  }
+                }}
+                onChange={(event, newValue) => {
+                  console.log(event, newValue);
+                  setLinkIBForm((prevalue) => {
+                    return {
+                      ...prevalue,
+                      "customer_name": (newValue != null) ? newValue.sponser_id : 0,
+                    };
+                  });
+                  // setLinkClientForm((prevalue) => {
+                  //   return {
+                  //     ...prevalue,
+                  //     "client": (newValue != null) ? newValue.sponser_id : 0,
+                  //   };
+                  // });
+                }}
+                sx={{ width: "100%" }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Client" variant="standard" />
+                )}
+              />
             </FormControl>
           </div>
         </div>
@@ -3301,8 +3402,10 @@ const Profile = () => {
                 value={cpAccessForm.status}
                 onChange={input7}
               >
-                <MenuItem value="0">Active</MenuItem>
-                <MenuItem value="1">Blocked</MenuItem>
+                <MenuItem value="1">Enable</MenuItem>
+                <MenuItem value="0">Disable</MenuItem>
+                {/* <MenuItem value="0">Active</MenuItem>
+                <MenuItem value="1">Blocked</MenuItem> */}
               </Select>
             </FormControl>
           </div>
@@ -4123,20 +4226,23 @@ const Profile = () => {
                               placeholder="Rebate"
                               value={item.group_rebate}
                               onChange={(e) => {
+                                var floatNumber = (e.target.value).split('.');
                                 if (!isNaN(Number(e.target.value))) {
-                                  partnershipMasterStructureData.structure_data[
-                                    index
-                                  ]["group_rebate"] = e.target.value;
-                                  partnershipMasterStructureData.structure_data[
-                                    index
-                                  ]["pair_data"].forEach((value, valueIndex) => {
+                                  if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
                                     partnershipMasterStructureData.structure_data[
                                       index
-                                    ]["pair_data"][valueIndex]["rebate"] = e.target.value;
-                                  });
-                                  setPartnershipMasterStructureData({
-                                    ...partnershipMasterStructureData,
-                                  });
+                                    ]["group_rebate"] = e.target.value;
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"].forEach((value, valueIndex) => {
+                                      partnershipMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][valueIndex]["rebate"] = e.target.value;
+                                    });
+                                    setPartnershipMasterStructureData({
+                                      ...partnershipMasterStructureData,
+                                    });
+                                  }
                                 } else if (e.target.value == "" || e.target.value == 0) {
                                   partnershipMasterStructureData.structure_data[
                                     index
@@ -4164,21 +4270,24 @@ const Profile = () => {
                               placeholder="Commission"
                               value={item.group_commission}
                               onChange={(e) => {
+                                var floatNumber = (e.target.value).split('.');
                                 if (!isNaN(Number(e.target.value))) {
-                                  partnershipMasterStructureData.structure_data[
-                                    index
-                                  ]["group_commission"] = e.target.value;
-                                  partnershipMasterStructureData.structure_data[
-                                    index
-                                  ]["pair_data"].forEach((value, valueIndex) => {
+                                  if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
                                     partnershipMasterStructureData.structure_data[
                                       index
-                                    ]["pair_data"][valueIndex]["commission"] =
-                                      e.target.value;
-                                  });
-                                  setPartnershipMasterStructureData({
-                                    ...partnershipMasterStructureData,
-                                  });
+                                    ]["group_commission"] = e.target.value;
+                                    partnershipMasterStructureData.structure_data[
+                                      index
+                                    ]["pair_data"].forEach((value, valueIndex) => {
+                                      partnershipMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][valueIndex]["commission"] =
+                                        e.target.value;
+                                    });
+                                    setPartnershipMasterStructureData({
+                                      ...partnershipMasterStructureData,
+                                    });
+                                  }
                                 } else if (e.target.value == "" || e.target.value == 0) {
                                   partnershipMasterStructureData.structure_data[
                                     index
@@ -4237,13 +4346,16 @@ const Profile = () => {
                                   placeholder="Rebert"
                                   value={item1.rebate}
                                   onChange={(e) => {
+                                    var floatNumber = (e.target.value).split('.');
                                     if (!isNaN(Number(e.target.value))) {
-                                      partnershipMasterStructureData.structure_data[
-                                        index
-                                      ]["pair_data"][index1]["rebate"] = e.target.value;
-                                      setPartnershipMasterStructureData({
-                                        ...partnershipMasterStructureData,
-                                      });
+                                      if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                        partnershipMasterStructureData.structure_data[
+                                          index
+                                        ]["pair_data"][index1]["rebate"] = e.target.value;
+                                        setPartnershipMasterStructureData({
+                                          ...partnershipMasterStructureData,
+                                        });
+                                      }
                                     } else if (e.target.value == "" || e.target.value == 0) {
                                       partnershipMasterStructureData.structure_data[
                                         index
@@ -4262,13 +4374,16 @@ const Profile = () => {
                                   placeholder="Commission"
                                   value={item1.commission}
                                   onChange={(e) => {
+                                    var floatNumber = (e.target.value).split('.');
                                     if (!isNaN(Number(e.target.value))) {
-                                      partnershipMasterStructureData.structure_data[
-                                        index
-                                      ]["pair_data"][index1]["commission"] = e.target.value;
-                                      setPartnershipMasterStructureData({
-                                        ...partnershipMasterStructureData,
-                                      });
+                                      if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                        partnershipMasterStructureData.structure_data[
+                                          index
+                                        ]["pair_data"][index1]["commission"] = e.target.value;
+                                        setPartnershipMasterStructureData({
+                                          ...partnershipMasterStructureData,
+                                        });
+                                      }
                                     } else if (e.target.value == "" || e.target.value == 0) {
                                       partnershipMasterStructureData.structure_data[
                                         index
@@ -4816,6 +4931,33 @@ const Profile = () => {
               disabled={withdrawForm.allWithdraw}
               value={withdrawForm.allWithdraw ? 0 : withdrawForm.amount}
             />
+          </div>
+        </div>
+      );
+    } else if (dialogTitle == "Block/Unblock") {
+      return (
+        <div>
+          <div>
+            <FormControl variant="standard" sx={{ width: "100%" }}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                label
+                className="select-font-small"
+                name="status"
+                value={userBlockUnblockStatus.status}
+                onChange={(e) => {
+                  setUserBlockUnblockStatus((prevalue) => {
+                    return {
+                      ...prevalue,
+                      status: e.target.value,
+                    };
+                  });
+                }}
+              >
+                <MenuItem value="1">Block</MenuItem>
+                <MenuItem value="0">Un-block</MenuItem>
+              </Select>
+            </FormControl>
           </div>
         </div>
       );
@@ -5593,6 +5735,25 @@ const Profile = () => {
               Submit
             </Button>
           )}
+        </div>
+      );
+    } else if (dialogTitle == "Block/Unblock") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            className="btn-gradient btn-success"
+            onClick={UserBlockUnblockSubmit}
+          >
+            Update
+          </Button>
         </div>
       );
     }
@@ -6907,6 +7068,38 @@ const Profile = () => {
     }
   };
 
+  const UserBlockUnblockSubmit = () => {
+    if (userBlockUnblockStatus.status == "") {
+      toast.error("Please select user block/unblock status");
+    } else {
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("user_id", id);
+      param.append("action", "block_unblock_user");
+      param.append("login_block", userBlockUnblockStatus.status);
+
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            getUserDetails();
+            toast.success(res.data.message);
+            setOpen(false);
+          }
+        });
+    }
+  };
+
   const input8 = (event) => {
     var { name, value } = event.target;
     if (event.target.getAttribute) {
@@ -7641,6 +7834,7 @@ const Profile = () => {
         } else {
           linkClientForm.list = res.data.data;
           setLinkClientForm({ ...linkClientForm });
+          setAccountOption([...res.data.data]);
         }
       });
   };
@@ -7666,6 +7860,7 @@ const Profile = () => {
         } else {
           linkIBForm.list = res.data.data;
           setLinkIBForm({ ...linkIBForm });
+          setIBAccountOption([...res.data.data]);
         }
       });
   };
@@ -7741,8 +7936,34 @@ const Profile = () => {
         if (res.data.status == "error") {
           toast.error(res.data.message);
         } else {
-          cpAccessForm.status = res.data.login_block;
+          cpAccessForm.status = res.data.user_status;
           setCpAccessForm({ ...cpAccessForm });
+        }
+      });
+  };
+
+  const getUserBlockunblockSetting = () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("user_id", id);
+    param.append("action", "view_block_status");
+
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          userBlockUnblockStatus.status = res.data.login_block;
+          setUserBlockUnblockStatus({ ...userBlockUnblockStatus});
         }
       });
   };
@@ -8829,6 +9050,13 @@ const Profile = () => {
                                   onClick={openDialogbox}
                                 >
                                   Change Password
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  className="block_unblock btn-hover-css"
+                                  onClick={openDialogbox}
+                                >
+                                  Block/Unblock
                                 </Button>
                               </div>
                               <br />
