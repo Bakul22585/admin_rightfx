@@ -136,7 +136,7 @@ const Withdraw = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState({});
   const [checkStatus, setcheckStatus] = useState("");
-  const[buttonDis,setButttonDis]=useState()
+  const [buttonDis, setButttonDis] = useState();
   const [resData, setResData] = useState({});
   const [Form, setForm] = useState({
     account_type: "",
@@ -157,6 +157,7 @@ const Withdraw = () => {
     withdraw_method: "",
     amount: "",
     remark: "",
+    admin_notes: "",
     status: "",
     withdrawal_id: "",
     isLoader: false,
@@ -289,6 +290,15 @@ const Withdraw = () => {
         );
       },
       sortable: true,
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
+    {
+      name: "Admin Notes",
+      selector: (row) => {
+        return <span title={row.admin_notes}>{row.admin_notes}</span>;
+      },
       reorder: true,
       wrap: true,
       grow: 0.5,
@@ -667,11 +677,17 @@ const Withdraw = () => {
             <TextField
               id="standard-basic"
               label="Amount"
+              type="text"
               variant="standard"
               sx={{ width: "100%" }}
               name="amount"
               value={viewWithdrawForm.amount}
-              onChange={input1}
+              // onChange={input1}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input1(e);
+                }
+              }}
               focused
               disabled={buttonDis == "0" ? false : true}
             />
@@ -703,6 +719,20 @@ const Withdraw = () => {
                 <MenuItem value="2">Reject</MenuItem>
               </Select>
             </FormControl>
+          </div>
+          <br />
+          <div className="update-withdraw-request-section">
+            <TextField
+              id="standard-basic"
+              label="Admin Notes"
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="admin_notes"
+              value={viewWithdrawForm.admin_notes}
+              onChange={input1}
+              focused
+              disabled={buttonDis == "0" ? false : true}
+            />
           </div>
         </div>
       );
@@ -810,7 +840,6 @@ const Withdraw = () => {
         },
       });
     }
-
   };
 
   const input = (event) => {
@@ -838,6 +867,7 @@ const Withdraw = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("search", search);
     param.append("type", Form.account_type);
@@ -879,6 +909,7 @@ const Withdraw = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("user_id", Form.account);
       param.append("account_type", Form.account_type);
@@ -904,7 +935,6 @@ const Withdraw = () => {
             setOpen(false);
           }
         });
-    
     }
   };
 
@@ -923,9 +953,11 @@ const Withdraw = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("withdrawal_id", viewWithdrawForm.withdrawal_id);
       param.append("withdrawal_status", viewWithdrawForm.status);
+      param.append("admin_notes", viewWithdrawForm.admin_notes);
       param.append("withdrawal_remarks", viewWithdrawForm.remark);
       param.append("amount", viewWithdrawForm.amount);
       await axios
@@ -945,7 +977,6 @@ const Withdraw = () => {
             setOpen(false);
           }
         });
-     
     }
   };
 
@@ -959,6 +990,7 @@ const Withdraw = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("withdrawal_id", id);
     await axios
@@ -984,6 +1016,7 @@ const Withdraw = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("withdrawal_id", id);
     await axios
@@ -1005,11 +1038,12 @@ const Withdraw = () => {
             amount: res.data.withdrawal_data.withdrawal_amount,
             remark: res.data.withdrawal_data.withdrawal_remarks,
             status: res.data.withdrawal_data.withdrawal_status,
+            admin_notes: res.data.withdrawal_data.admin_notes,
             user_id: "",
             withdrawal_id: id,
             isLoader: false,
           });
-          setButttonDis(res.data.withdrawal_data.withdrawal_status)
+          setButttonDis(res.data.withdrawal_data.withdrawal_status);
           setDialogTitle("Update Withdrawal Request");
           setOpen(true);
         }

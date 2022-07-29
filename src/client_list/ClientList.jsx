@@ -252,8 +252,7 @@ const ClientList = () => {
     setOpenTableMenus(tableMenus);
   };
 
-  const depositApproved = (e) => {
-  };
+  const depositApproved = (e) => {};
 
   const gotoProfile = (e) => {
     navigate("/profile/" + e.user_id);
@@ -288,6 +287,16 @@ const ClientList = () => {
   };
 
   const depositColumn = [
+    {
+      name: "sr no",
+      selector: (row) => {
+        return <span>{row.sr_no}</span>;
+      },
+      // sortable: true,
+      reorder: true,
+      wrap: true,
+      grow: 0.05,
+    },
     {
       name: "MT5 ID",
       selector: (row) => {
@@ -575,7 +584,6 @@ const ClientList = () => {
   ];
 
   const actionMenuPopup = (e, data) => {
-
     handleContextClose(data.sr_no);
     if (e.target.classList.contains("reject")) {
       // setDialogTitle('Reject');
@@ -744,7 +752,6 @@ const ClientList = () => {
   };
 
   const getSalesList = () => {
-    
     const param = new FormData();
     if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
@@ -841,11 +848,13 @@ const ClientList = () => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
-        window.open(res.data.redirect_url, "_blank");
+        setTimeout(() => {
+          window.open(res.data.redirect_url, "_blank");
+        }, 1000);
       }
     });
   };
-  
+
   const transactionStatus = (data) => {
     const param = new FormData();
     if (IsApprove != "") {
@@ -856,86 +865,156 @@ const ClientList = () => {
     param.append("action", "transaction_access_status");
     param.append("user_id", data.user_id);
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        setTransactionAccessUserId(data.user_id);
-        setTransactionAccessData({...res.data});
-        setDialogTitle('Transaction Access');
-        setOpen(true);
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          setTransactionAccessUserId(data.user_id);
+          setTransactionAccessData({ ...res.data });
+          setDialogTitle("Transaction Access");
+          setOpen(true);
+        }
+      });
+  };
 
   const manageContent = () => {
-    if (dialogTitle == "Transaction Access"){
-      return(
+    if (dialogTitle == "Transaction Access") {
+      return (
         <div className="transaction-access-section">
           <div className="input-access-element">
             <label>Copy Invest Access</label>
-            <Switch checked={(transactionAccessData.is_copy_invest_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_copy_invest_active = (transactionAccessData.is_copy_invest_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <Switch
+              checked={
+                transactionAccessData.is_copy_invest_active == "1"
+                  ? true
+                  : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_copy_invest_active =
+                  transactionAccessData.is_copy_invest_active == "1"
+                    ? "0"
+                    : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>Copy Withdraw Access</label>
-            <Switch checked={(transactionAccessData.is_copy_withdraw_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_copy_withdraw_active = (transactionAccessData.is_copy_withdraw_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>Copy Withdraw Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_copy_withdraw_active == "1"
+                  ? true
+                  : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_copy_withdraw_active =
+                  transactionAccessData.is_copy_withdraw_active == "1"
+                    ? "0"
+                    : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>Deposit Access</label>
-            <Switch checked={(transactionAccessData.is_deposit_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_deposit_active = (transactionAccessData.is_deposit_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>Deposit Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_deposit_active == "1" ? true : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_deposit_active =
+                  transactionAccessData.is_deposit_active == "1" ? "0" : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>IB Withdraw Access</label>
-            <Switch checked={(transactionAccessData.is_ib_withdraw_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_ib_withdraw_active = (transactionAccessData.is_ib_withdraw_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>IB Withdraw Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_ib_withdraw_active == "1"
+                  ? true
+                  : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_ib_withdraw_active =
+                  transactionAccessData.is_ib_withdraw_active == "1"
+                    ? "0"
+                    : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>Pamm Invest Access</label>
-            <Switch checked={(transactionAccessData.is_pamm_invest_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_pamm_invest_active = (transactionAccessData.is_pamm_invest_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>Pamm Invest Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_pamm_invest_active == "1"
+                  ? true
+                  : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_pamm_invest_active =
+                  transactionAccessData.is_pamm_invest_active == "1"
+                    ? "0"
+                    : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>Pamm Withdraw Access</label>
-            <Switch checked={(transactionAccessData.is_pamm_withdraw_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_pamm_withdraw_active = (transactionAccessData.is_pamm_withdraw_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>Pamm Withdraw Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_pamm_withdraw_active == "1"
+                  ? true
+                  : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_pamm_withdraw_active =
+                  transactionAccessData.is_pamm_withdraw_active == "1"
+                    ? "0"
+                    : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>Transfer Access</label>
-            <Switch checked={(transactionAccessData.is_transfer_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_transfer_active = (transactionAccessData.is_transfer_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>Transfer Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_transfer_active == "1" ? true : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_transfer_active =
+                  transactionAccessData.is_transfer_active == "1" ? "0" : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
           <div className="input-access-element">
-          <label>Withdrawal Access</label>
-            <Switch checked={(transactionAccessData.is_withdrawal_active == "1") ? true: false} onChange={(e) => {
-              transactionAccessData.is_withdrawal_active = (transactionAccessData.is_withdrawal_active == "1")? "0" : "1";
-              setTransactionAccessData({...transactionAccessData});
-            }} />
+            <label>Withdrawal Access</label>
+            <Switch
+              checked={
+                transactionAccessData.is_withdrawal_active == "1" ? true : false
+              }
+              onChange={(e) => {
+                transactionAccessData.is_withdrawal_active =
+                  transactionAccessData.is_withdrawal_active == "1" ? "0" : "1";
+                setTransactionAccessData({ ...transactionAccessData });
+              }}
+            />
           </div>
         </div>
-      )
+      );
     }
-  }
+  };
 
   const manageDialogActionButton = () => {
     if (dialogTitle == "Transaction Access") {
@@ -952,21 +1031,23 @@ const ClientList = () => {
             <Button
               variant="contained"
               className="btn-gradient btn-success"
-              disabled>
+              disabled
+            >
               <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
             </Button>
           ) : (
             <Button
               variant="contained"
               className="btn-gradient btn-success"
-              onClick={accessSubmit}>
+              onClick={accessSubmit}
+            >
               Submit
             </Button>
           )}
         </div>
-      )
+      );
     }
-  }
+  };
 
   const accessSubmit = () => {
     setTransactionAccessLoader(true);
@@ -980,22 +1061,24 @@ const ClientList = () => {
     param.append("user_id", transactionAccessUserId);
     param.append("transaction_status", JSON.stringify(transactionAccessData));
 
-    axios.post(Url + "/ajaxfiles/update_user_profile.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        navigate("/");
-      }
-      setTransactionAccessLoader(false);
-      if (res.data.status == "error") {
-        toast.error(res.data.message);
-      } else {
-        toast.success(res.data.message);
-        setTransactionAccessUserId('');
-        setTransactionAccessData({});
-        setOpen(false);
-      }
-    });
-  }
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        setTransactionAccessLoader(false);
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          setTransactionAccessUserId("");
+          setTransactionAccessData({});
+          setOpen(false);
+        }
+      });
+  };
 
   useEffect(() => {
     getSalesList();
