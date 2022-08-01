@@ -726,7 +726,11 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_comapny_get"
                 value={form.ib_comapny_get}
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -736,7 +740,11 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_passon"
                 value={form.ib_company_passon}
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -756,7 +764,11 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="minimum_deposit"
                 value={form.minimum_deposit}
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -1040,6 +1052,7 @@ const CommisionGroup = () => {
               <TextField
                 label="Commission"
                 variant="standard"
+                type="text"
                 sx={{ width: "100%" }}
                 name="commission"
                 value={form.commission}
@@ -1053,7 +1066,11 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_comapny_get"
                 value={form.ib_comapny_get}
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -1063,7 +1080,11 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_passon"
                 value={form.ib_company_passon}
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -1083,7 +1104,11 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="minimum_deposit"
                 value={form.minimum_deposit}
-                onChange={input}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -1359,16 +1384,13 @@ const CommisionGroup = () => {
       toast.error("Please enter trading instrument");
     } else if (form.trading_plaform == "") {
       toast.error("Please enter trading plaform");
-    } else if (form.ib_company_forex == "" || form.ib_company_forex == "0") {
+    } else if (form.ib_company_forex == "") {
       toast.error("Please enter forex amount");
     } else if (Number(form.ib_company_forex) > Number(form.ib_company_passon)) {
       toast.error(
         "Forex amount should be less than to company passon, Please enter valid forex amount"
       );
-    } else if (
-      form.ib_company_bullion == "" ||
-      form.ib_company_bullion == "0"
-    ) {
+    } else if (form.ib_company_bullion == "") {
       toast.error("Please enter bullion amount");
     } else if (
       Number(form.ib_company_bullion) > Number(form.ib_company_passon)
@@ -1376,10 +1398,7 @@ const CommisionGroup = () => {
       toast.error(
         "Bullion amount should be less than to company passon, Please enter valid bullion amount"
       );
-    } else if (
-      form.ib_company_indices == "" ||
-      form.ib_company_indices == "0"
-    ) {
+    } else if (form.ib_company_indices == "") {
       toast.error("Please enter indices amount");
     } else if (
       Number(form.ib_company_indices) > Number(form.ib_company_passon)
@@ -1387,7 +1406,7 @@ const CommisionGroup = () => {
       toast.error(
         "Indices amount should be less than to company passon, Please enter valid indices amount"
       );
-    } else if (form.ib_company_energy == "" || form.ib_company_energy == "0") {
+    } else if (form.ib_company_energy == "" && form.ib_company_energy != 0) {
       toast.error("Please enter energy amount");
     } else if (
       Number(form.ib_company_energy) > Number(form.ib_company_passon)
@@ -1395,7 +1414,7 @@ const CommisionGroup = () => {
       toast.error(
         "Energy amount should be less than to company passon, Please enter valid energy amount"
       );
-    } else if (form.ib_company_crypto == "" || form.ib_company_crypto == "0") {
+    } else if (form.ib_company_crypto == "") {
       toast.error("Please enter crypto amount");
     } else if (
       Number(form.ib_company_crypto) > Number(form.ib_company_passon)
@@ -1410,6 +1429,7 @@ const CommisionGroup = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "add_ib_commission_group");
       // param.append('ib_group_level_id', form.ib_group_level_id);
@@ -1460,6 +1480,7 @@ const CommisionGroup = () => {
   };
 
   const submitUpdate = async () => {
+    console.log("ib_company_energy", form.ib_company_energy);
     if (form.group_name == "") {
       toast.error("Please enter group name");
     } else if (form.ib_mt5group_name == "") {
@@ -1490,16 +1511,13 @@ const CommisionGroup = () => {
       toast.error("Please enter trading instrument");
     } else if (form.trading_plaform == "") {
       toast.error("Please enter trading plaform");
-    } else if (form.ib_company_forex == "" || form.ib_company_forex == "0") {
+    } else if (form.ib_company_forex == "") {
       toast.error("Please enter forex amount");
     } else if (Number(form.ib_company_forex) > Number(form.ib_company_passon)) {
       toast.error(
         "Forex amount should be less than to company passon, Please enter valid forex amount"
       );
-    } else if (
-      form.ib_company_bullion == "" ||
-      form.ib_company_bullion == "0"
-    ) {
+    } else if (form.ib_company_bullion == "") {
       toast.error("Please enter bullion amount");
     } else if (
       Number(form.ib_company_bullion) > Number(form.ib_company_passon)
@@ -1507,10 +1525,7 @@ const CommisionGroup = () => {
       toast.error(
         "Bullion amount should be less than to company passon, Please enter valid bullion amount"
       );
-    } else if (
-      form.ib_company_indices == "" ||
-      form.ib_company_indices == "0"
-    ) {
+    } else if (form.ib_company_indices == "") {
       toast.error("Please enter indices amount");
     } else if (
       Number(form.ib_company_indices) > Number(form.ib_company_passon)
@@ -1518,7 +1533,7 @@ const CommisionGroup = () => {
       toast.error(
         "Indices amount should be less than to company passon, Please enter valid indices amount"
       );
-    } else if (form.ib_company_energy == "" || form.ib_company_energy == "0") {
+    } else if (form.ib_company_energy == "" && form.ib_company_energy != 0) {
       toast.error("Please enter energy amount");
     } else if (
       Number(form.ib_company_energy) > Number(form.ib_company_passon)
@@ -1526,7 +1541,7 @@ const CommisionGroup = () => {
       toast.error(
         "Energy amount should be less than to company passon, Please enter valid energy amount"
       );
-    } else if (form.ib_company_crypto == "" || form.ib_company_crypto == "0") {
+    } else if (form.ib_company_crypto == "") {
       toast.error("Please enter crypto amount");
     } else if (
       Number(form.ib_company_crypto) > Number(form.ib_company_passon)
@@ -1541,6 +1556,7 @@ const CommisionGroup = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "update_ib_commission_group");
       param.append("ib_group_level_id", form.ib_group_level_id);
@@ -1595,6 +1611,7 @@ const CommisionGroup = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "get_main_ib_groups");
     axios
@@ -1657,6 +1674,7 @@ const CommisionGroup = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("ib_group_level_id", id.ib_group_level_id);
     await axios

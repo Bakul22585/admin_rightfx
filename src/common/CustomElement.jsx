@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { InputBase } from '@mui/material';
+import { InputBase } from "@mui/material";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#ff0000"),
@@ -9,16 +9,14 @@ const ColorButton = styled(Button)(({ theme }) => ({
   textTransform: "initial",
 
   fontSize: "13px",
-  padding: "15px 22px",
+  padding: "10px 22px",
   "&:hover": {
     backgroundColor: "#243a6f",
   },
 }));
 const CustomElement = () => {
-  return (
-    <div>CustomElement</div>
-  )
-}
+  return <div>CustomElement</div>;
+};
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
     marginTop: theme.spacing(0),
@@ -33,9 +31,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     marginTop: 0,
     transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "Cairo, sans-serif",
-    ].join(","),
+    fontFamily: ["Cairo, sans-serif"].join(","),
     "&:hover": {
       borderColor: "#2A3F73;",
     },
@@ -47,5 +43,4 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
-export { CustomElement,BootstrapInput, ColorButton }
+export { CustomElement, BootstrapInput, ColorButton };

@@ -1271,7 +1271,7 @@ body .MuiButtonBase-root {
   outline: none !important;
 }
 body .MuiButton-root {
-  line-height: normal;
+  line-height: unset;
 }
 body .MuiButton-root:focus {
   outline: none;
@@ -5504,7 +5504,7 @@ a.text-success:hover {
   color: #12862d !important;
 }
 .text-info {
-  color: #b71c1c !important;
+  color: #12aaeb !important;
 }
 a.text-info:focus,
 a.text-info:hover {
@@ -17875,4 +17875,10 @@ input.MuiInputBase-input {
 .centerflexjus {
   display: flex;
   justify-content: center;
+}
+.MuiButtonBase-root{
+  font-family: 'Cairo', sans-serif !important; 
+}
+.MuiInputLabel-root{
+  font-family: 'Cairo', sans-serif !important; 
 }

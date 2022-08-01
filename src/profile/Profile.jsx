@@ -18,6 +18,8 @@ import {
   ButtonGroup,
   FormGroup,
   Autocomplete,
+  RadioGroup,
+  Radio,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -338,8 +340,13 @@ const Profile = () => {
     bank_address: "",
     iban_number: "",
     account_number: "",
-    swift_code: "",
-    currency_code: "",
+    confirm_account_number: "",
+    show: false,
+    ibanselect: "IFSC",
+    ifscdata: {},
+    show: false,
+    refresh: false,
+    visLoader: false,
     isLoader: false,
   });
   const [transactionForm, setTransactionForm] = useState({
@@ -1238,7 +1245,36 @@ const Profile = () => {
       };
     });
   };
-
+  const checkIfscCode = () => {
+    if (bankAccountForm.iban_number == "") {
+      toast.error("iban/IFSC code is requied");
+    } else {
+      bankAccountForm.visLoader = true;
+      setBankAccountForm({ ...bankAccountForm });
+      const param = new FormData();
+      param.append("ifsc_code", bankAccountForm.iban_number);
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      bankAccountForm.visLoader = true;
+      setBankAccountForm({ ...bankAccountForm.visLoader });
+      axios.post(`${Url}/ajaxfiles/check_ifsc_code.php`, param).then((res) => {
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+          bankAccountForm.visLoader = false;
+          setBankAccountForm({ ...bankAccountForm });
+        } else {
+          toast.success(res.data.message);
+          bankAccountForm.ifscdata = res.data.bank_data;
+          bankAccountForm.visLoader = false;
+          bankAccountForm.show = true;
+          setBankAccountForm({ ...bankAccountForm });
+        }
+      });
+    }
+  };
   const updatePartnership = () => {
     if (updateDate.sponsor_approve == "") {
       toast.error("Status is required");
@@ -2215,6 +2251,12 @@ const Profile = () => {
         setDialogTitle("Edit Account");
         setBankAccountForm({
           ...bankAccountForm,
+          ibanselect: "IFSC",
+          ifscdata: {},
+          isLoader: false,
+          visLoader: false,
+          show: false,
+          confirm_account_number: row.bank_account_number,
           name: row.bank_name,
           bank_name: row.bank_account_holder_name,
           iban_number: row.bank_ifsc,
@@ -2229,6 +2271,12 @@ const Profile = () => {
           bank_name: "",
           iban_number: "",
           account_number: "",
+          show: false,
+          ibanselect: "IFSC",
+          ifscdata: {},
+          confirm_account_number: "",
+          visLoader: false,
+          isLoader: false,
         });
       }
     } else if (e.target.classList.contains("add_transaction")) {
@@ -3704,18 +3752,6 @@ const Profile = () => {
 
           <div>
             <TextField
-              value={bankAccountForm.iban_number}
-              className="input-font-small"
-              label="IBAN/IFSC CODE"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="iban_number"
-              onChange={bankInput}
-            />
-          </div>
-          <br />
-          <div>
-            <TextField
               value={bankAccountForm.account_number}
               className="input-font-small"
               label="Account Number"
@@ -3729,6 +3765,125 @@ const Profile = () => {
                 }
               }}
             />
+          </div>
+          <br />
+          <div>
+            <TextField
+              value={bankAccountForm.confirm_account_number}
+              className="input-font-small"
+              label="Confirm Account Number"
+              type="text"
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="confirm_account_number"
+              onChange={(e) => {
+                if (Number(e.target.value)) {
+                  bankInput(e);
+                }
+              }}
+            />
+          </div>
+          <br />
+          <div>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="IFSC"
+                value={bankAccountForm.ibanselect}
+                name="ibanselect"
+                sx={{ display: "block" }}
+                onChange={bankInput}
+              >
+                <FormControlLabel
+                  value="IFSC"
+                  control={<Radio />}
+                  label="IFSC"
+                />
+                <FormControlLabel
+                  value="IBAN"
+                  control={<Radio />}
+                  label="IBAN"
+                />
+                <FormControlLabel
+                  value="SWIFT"
+                  control={<Radio />}
+                  label="SWIFT"
+                />
+              </RadioGroup>
+            </FormControl>
+            <Grid container>
+              <Grid item md={bankAccountForm.ibanselect == "IFSC" ? 8 : 12}>
+                <TextField
+                  value={bankAccountForm.iban_number}
+                  className="input-font-small"
+                  label="CODE"
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  name="iban_number"
+                  onChange={(e) => {
+                    if (bankAccountForm.show) {
+                      bankInput(e);
+                      bankAccountForm.ifscdata = {};
+                      bankAccountForm.show = false;
+                      setBankAccountForm({ ...bankAccountForm });
+                    } else {
+                      bankInput(e);
+                    }
+                  }}
+                />
+              </Grid>
+              {bankAccountForm.ibanselect == "IFSC" ? (
+                <Grid item md={4}>
+                  {bankAccountForm.visLoader != false ? (
+                    <Button
+                      sx={{
+                        marginLeft: "6px",
+                        marginTop: "5px",
+                        padding: "20px 64px",
+                      }}
+                      variant="contained"
+                      disabled
+                      className="add_bank"
+                    >
+                      <svg class="spinner" viewBox="0 0 50 50">
+                        <circle
+                          class="path"
+                          cx="25"
+                          cy="25"
+                          r="20"
+                          fill="none"
+                          stroke-width="5"
+                        ></circle>
+                      </svg>
+                    </Button>
+                  ) : (
+                    <Button
+                      sx={{ marginLeft: "6px", marginTop: "5px" }}
+                      variant="contained"
+                      className="add_bank"
+                      disabled={bankAccountForm.show}
+                      onClick={checkIfscCode}
+                    >
+                      Verify Code
+                    </Button>
+                  )}
+                </Grid>
+              ) : (
+                ""
+              )}
+
+              {bankAccountForm.show && bankAccountForm.ifscdata.BRANCH ? (
+                <div>
+                  <span>
+                    {bankAccountForm.ifscdata.BRANCH},
+                    {bankAccountForm.ifscdata.CENTRE},
+                    {bankAccountForm.ifscdata.STATE}
+                  </span>
+                </div>
+              ) : (
+                ""
+              )}
+            </Grid>
           </div>
           <br />
         </div>
@@ -5193,7 +5348,7 @@ const Profile = () => {
         <div>
           {createMt5Form.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5233,7 +5388,7 @@ const Profile = () => {
 
           {Mt5AccessForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5265,7 +5420,7 @@ const Profile = () => {
         <div>
           {linkAccountForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5305,7 +5460,7 @@ const Profile = () => {
 
           {resetMt5PasswordForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-danger font-color-white createMt5Formloder"
               disabled
@@ -5345,7 +5500,7 @@ const Profile = () => {
 
           {changeLeverageForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success addbankloder"
               disabled
@@ -5404,7 +5559,7 @@ const Profile = () => {
 
           {bankAccountForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success addbankloder"
               disabled
@@ -5444,7 +5599,7 @@ const Profile = () => {
 
           {noteForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5588,7 +5743,7 @@ const Profile = () => {
         <div className="dialogMultipleActionButton">
           {sendMailForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5666,7 +5821,7 @@ const Profile = () => {
 
           {changeAccountPasswordForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5718,7 +5873,7 @@ const Profile = () => {
 
           {changePassword.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5773,7 +5928,7 @@ const Profile = () => {
 
           {pammAccess.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5813,7 +5968,7 @@ const Profile = () => {
 
           {groupForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5853,7 +6008,7 @@ const Profile = () => {
 
           {createPortfolioForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5893,7 +6048,7 @@ const Profile = () => {
 
           {investmentForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -5933,7 +6088,7 @@ const Profile = () => {
 
           {withdrawForm.isLoader ? (
             <Button
-              tabindex="0"
+              tabIndex="0"
               size="large"
               className=" btn-gradient  btn-success createMt5Formloder"
               disabled
@@ -7409,22 +7564,36 @@ const Profile = () => {
         toast.error("Please enter beneficiary name");
       } else if (bankAccountForm.bank_name == "") {
         toast.error("Please enter beneficiary bank name");
-      } else if (bankAccountForm.iban_number == "") {
-        toast.error("Please enter IBAN Number");
       } else if (bankAccountForm.account_number == "") {
         toast.error("Please enter account number");
+      } else if (
+        bankAccountForm.account_number !==
+        bankAccountForm.confirm_account_number
+      ) {
+        toast.error("Account number must match");
+      } else if (bankAccountForm.iban_number == "") {
+        toast.error("Please enter IBAN Number");
+      } else if (
+        bankAccountForm.ifscdata == "" &&
+        bankAccountForm.ibanselect == "IFSC"
+      ) {
+        toast.error("Please first verify IFSC your code");
       } else {
         const param = new FormData();
         if (IsApprove !== "") {
           param.append("is_app", IsApprove.is_app);
           param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+          param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
         }
         param.append("user_id", id);
         param.append("bank_name", bankAccountForm.name);
         param.append("bank_ifsc", bankAccountForm.iban_number);
         param.append("bank_account_number", bankAccountForm.account_number);
         param.append("bank_account_name", bankAccountForm.bank_name);
-        param.append("user_bank_id", "");
+        param.append(
+          "confirm_bank_account_number",
+          bankAccountForm.confirm_account_number
+        );
 
         if (bankAccountForm.user_bank_id) {
           param.append("user_bank_id", bankAccountForm.user_bank_id);
@@ -7455,6 +7624,8 @@ const Profile = () => {
               toast.error(res.data.message);
             } else {
               toast.success(res.data.message);
+              bankAccountForm.refresh = !bankAccountForm.refresh;
+              setBankAccountForm({ ...bankAccountForm });
               setOpen(false);
             }
           });
@@ -7479,6 +7650,7 @@ const Profile = () => {
         if (IsApprove !== "") {
           param.append("is_app", IsApprove.is_app);
           param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+          param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
         }
         param.append("action", "add_user_bank");
         param.append("user_id", id);
@@ -7580,6 +7752,7 @@ const Profile = () => {
         if (IsApprove !== "") {
           param.append("is_app", IsApprove.is_app);
           param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+          param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
         }
         param.append("user_id", id);
         param.append("wallet_type", transactionForm.deposit_to);
@@ -7644,6 +7817,7 @@ const Profile = () => {
         if (IsApprove !== "") {
           param.append("is_app", IsApprove.is_app);
           param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+          param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
         }
         param.append("user_id", id);
         param.append("payment_method", transactionForm.payment_method);
@@ -7712,6 +7886,7 @@ const Profile = () => {
         if (IsApprove !== "") {
           param.append("is_app", IsApprove.is_app);
           param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+          param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
         }
         param.append("user_id", userData.data["user_id"]);
         param.append("from_transfer", transactionForm.account);
@@ -7769,6 +7944,7 @@ const Profile = () => {
         if (IsApprove !== "") {
           param.append("is_app", IsApprove.is_app);
           param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+          param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
         }
         param.append("user_id", id);
         param.append("action", "add_mt5_bonus");
@@ -7858,6 +8034,7 @@ const Profile = () => {
                         "AADMIN_LOGIN_ID",
                         IsApprove.AADMIN_LOGIN_ID
                       );
+                      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
                     }
                     param.append("user_id", id);
                     param.append("action", "delete_master_structure");
@@ -9281,7 +9458,7 @@ const Profile = () => {
                                   className="block_unblock btn-hover-css"
                                   onClick={openDialogbox}
                                 >
-                                  Block/Unblock
+                                  Block/ Unblock
                                 </Button>
                               </div>
                               <br />
@@ -9612,6 +9789,7 @@ const Profile = () => {
                                 url={`${Url}/datatable/get_bank_list.php`}
                                 column={bankColumn}
                                 sort="0"
+                                refresh={bankAccountForm.refresh}
                                 userId={id}
                                 filter={filterData}
                               />
@@ -12923,7 +13101,7 @@ const Profile = () => {
                 <div>
                   {updateDate.isLoader ? (
                     <ColorButton
-                      tabindex="0"
+                      tabIndex="0"
                       size="large"
                       className="createMt5Formloder "
                       disabled
