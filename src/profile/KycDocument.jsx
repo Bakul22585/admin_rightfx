@@ -292,6 +292,7 @@ const KycDocument = (prop) => {
     }
     param.append("remove_kyc_image", type);
     param.append("action", "remove_kyc_image");
+    param.append("user_id", prop.id);
 
     axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)

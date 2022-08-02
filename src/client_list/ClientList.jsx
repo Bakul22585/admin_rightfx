@@ -850,7 +850,7 @@ const ClientList = () => {
       } else {
         setTimeout(() => {
           window.open(res.data.redirect_url, "_blank");
-        }, 1000);
+        }, 3000);
       }
     });
   };
