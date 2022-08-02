@@ -848,8 +848,18 @@ const ClientList = () => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
-        setTimeout(() => {
+        if (res.data.redirect_url == "" && !res.data.redirect_url) {
+          window.open(
+            `${ClientUrl}/login_as/${res.data.login_token}`,
+            "_blank"
+          );
+          console.log("login by token");
+        } else {
           window.open(res.data.redirect_url, "_blank");
+          console.log("direct login");
+        }
+        setTimeout(() => {
+          // window.open(res.data.redirect_url, "_blank");
         }, 3000);
       }
     });

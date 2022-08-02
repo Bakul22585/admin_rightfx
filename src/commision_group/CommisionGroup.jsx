@@ -1606,7 +1606,7 @@ const CommisionGroup = () => {
     }
   };
 
-  const getMt5GroupName = () => {
+  const getMt5GroupName = async (prop) => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -1614,7 +1614,7 @@ const CommisionGroup = () => {
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "get_main_ib_groups");
-    axios
+    await axios
       .post(Url + "/ajaxfiles/ib_commission_group_manage.php", param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
@@ -1623,47 +1623,84 @@ const CommisionGroup = () => {
         }
         if (res.data.status != "error") {
           setmt5GroupName(res.data.data);
+          if (prop == "add") {
+            setForm({
+              ib_group_level_id: "",
+              ib_group_main_id: "",
+              group_name: "",
+              ib_mt5group_name: "",
+              ib_comapny_get: "",
+              ib_company_passon: "",
+              plan_title: "",
+              minimum_deposit: res.data.default_group_values.minimum_deposit,
+              spread: res.data.default_group_values.spread,
+              commission: res.data.default_group_values.commission,
+              leverage: res.data.default_group_values.leverage,
+              swap_free: res.data.default_group_values.swap_free,
+              trading_plaform: res.data.default_group_values.trading_plaform,
+              execution: res.data.default_group_values.execution,
+              trading_instrument:
+                res.data.default_group_values.trading_instrument,
+              account_currency: "",
+              minimum_trade_size:
+                res.data.default_group_values.minimum_trade_size,
+              stop_out_level: res.data.default_group_values.stop_out_level,
+              is_default: false,
+              is_private: false,
+              commission_type: "",
+              level: "",
+              will_get: "",
+              will_passon: "",
+              partnership: "",
+              ib_company_forex: "",
+              ib_company_bullion: "",
+              ib_company_indices: "",
+              ib_company_energy: "",
+              ib_company_crypto: "",
+              isLoader: false,
+            });
+          }
         }
       });
   };
 
   const AddCommissionGroup = () => {
     setDialogTitle("Add");
-    getMt5GroupName();
-    setForm({
-      ib_group_level_id: "",
-      ib_group_main_id: "",
-      group_name: "",
-      ib_mt5group_name: "",
-      ib_comapny_get: "",
-      ib_company_passon: "",
-      plan_title: "",
-      minimum_deposit: "",
-      spread: "",
-      commission: "",
-      leverage: "",
-      swap_free: "",
-      trading_plaform: "",
-      execution: "",
-      trading_instrument: "",
-      account_currency: "",
-      minimum_trade_size: "",
-      stop_out_level: "",
-      is_default: false,
-      is_private: false,
-      commission_type: "",
-      level: "",
-      will_get: "",
-      will_passon: "",
-      partnership: "",
-      ib_company_forex: "",
-      ib_company_bullion: "",
-      ib_company_indices: "",
-      ib_company_energy: "",
-      ib_company_crypto: "",
-      isLoader: false,
-    });
+    getMt5GroupName("add");
     setOpenModel(true);
+    // setForm({
+    //   ib_group_level_id: "",
+    //   ib_group_main_id: "",
+    //   group_name: "",
+    //   ib_mt5group_name: "",
+    //   ib_comapny_get: "",
+    //   ib_company_passon: "",
+    //   plan_title: "",
+    //   minimum_deposit: "",
+    //   spread: "",
+    //   commission: "",
+    //   leverage: "",
+    //   swap_free: "",
+    //   trading_plaform: "",
+    //   execution: "",
+    //   trading_instrument: "",
+    //   account_currency: "",
+    //   minimum_trade_size: "",
+    //   stop_out_level: "",
+    //   is_default: false,
+    //   is_private: false,
+    //   commission_type: "",
+    //   level: "",
+    //   will_get: "",
+    //   will_passon: "",
+    //   partnership: "",
+    //   ib_company_forex: "",
+    //   ib_company_bullion: "",
+    //   ib_company_indices: "",
+    //   ib_company_energy: "",
+    //   ib_company_crypto: "",
+    //   isLoader: false,
+    // });
   };
 
   const handleAction = async (id, flag) => {
