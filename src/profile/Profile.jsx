@@ -2398,8 +2398,8 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Account option</InputLabel>
               <Select
@@ -2471,7 +2471,7 @@ const Profile = () => {
                 type="password"
                 label={
                   createMt5Form.account_type == "0"
-                    ? "Password"
+                    ? "Confirm Password"
                     : "investor Password"
                 }
                 variant="standard"
@@ -2507,8 +2507,8 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Status</InputLabel>
               <Select
@@ -2538,8 +2538,8 @@ const Profile = () => {
               onChange={input2}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Account Type</InputLabel>
               <Select
@@ -2552,8 +2552,8 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Account Option</InputLabel>
               <Select
@@ -2642,8 +2642,7 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Leverage</InputLabel>
               <Select
@@ -3462,7 +3461,7 @@ const Profile = () => {
       );
     } else if (dialogTitle == "Link To IB") {
       return (
-        <div style={{ height: "200px" }}>
+        <div style={{ height: "100px" }}>
           {/* <div className="margeField">
             <TextField
               className="input-font-small"
@@ -3568,8 +3567,8 @@ const Profile = () => {
               onChange={sendMailInput}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               label="Subject"
@@ -3579,8 +3578,8 @@ const Profile = () => {
               onChange={sendMailInput}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               label="Template Title"
@@ -3590,8 +3589,8 @@ const Profile = () => {
               onChange={sendMailInput}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Language</InputLabel>
               <Select
@@ -3605,8 +3604,8 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div className="editor-section-border">
+
+          <div className="editor-section-border padingtopmy5create">
             <Editor
               // editorState={editorState}
               toolbarClassName="toolbarClassName"
@@ -3736,8 +3735,8 @@ const Profile = () => {
               onChange={bankInput}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <TextField
               value={bankAccountForm.bank_name}
               className="input-font-small"
@@ -3748,9 +3747,8 @@ const Profile = () => {
               onChange={bankInput}
             />
           </div>
-          <br />
 
-          <div>
+          <div className="padingtopmy5create">
             <TextField
               value={bankAccountForm.account_number}
               className="input-font-small"
@@ -3766,8 +3764,8 @@ const Profile = () => {
               }}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <TextField
               value={bankAccountForm.confirm_account_number}
               className="input-font-small"
@@ -3783,8 +3781,8 @@ const Profile = () => {
               }}
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
@@ -3885,7 +3883,6 @@ const Profile = () => {
               )}
             </Grid>
           </div>
-          <br />
         </div>
       );
     } else if (dialogTitle == "Add New Transaction") {
@@ -3935,8 +3932,8 @@ const Profile = () => {
                 </Select>
               </FormControl>
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <FormControl variant="standard" sx={{ width: "100%" }}>
                 <InputLabel>Deposit To</InputLabel>
                 <Select
@@ -3965,8 +3962,7 @@ const Profile = () => {
               </FormControl>
             </div>
             {transactionForm.deposit_to == "mt5" ? (
-              <div>
-                <br />
+              <div className="padingtopmy5create">
                 <FormControl variant="standard" sx={{ width: "100%" }}>
                   <InputLabel>MT5 Account</InputLabel>
                   <Select
@@ -3984,13 +3980,12 @@ const Profile = () => {
                     })}
                   </Select>
                 </FormControl>
-                <br />
               </div>
             ) : (
               ""
             )}
-            <br />
-            <div>
+
+            <div className="padingtopmy5create">
               <TextField
                 className="input-font-small"
                 label="Transation ID"
@@ -4000,8 +3995,8 @@ const Profile = () => {
                 onChange={transactionInput}
               />
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <TextField
                 className="input-font-small"
                 label="Amount"
@@ -4016,8 +4011,8 @@ const Profile = () => {
                 }}
               />
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <TextField
                 id="standard-textarea"
                 label="Notes"
@@ -4052,8 +4047,8 @@ const Profile = () => {
                 </Select>
               </FormControl>
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <FormControl variant="standard" sx={{ width: "100%" }}>
                 <InputLabel>TRANSACTION GATEWAYS </InputLabel>
                 <Select
@@ -4071,8 +4066,7 @@ const Profile = () => {
             </div>
             {transactionForm.payment_method == "UPI" ? (
               <>
-                <br />
-                <div>
+                <div className="padingtopmy5create">
                   <FormControl variant="standard" sx={{ width: "100%" }}>
                     <InputLabel>Upi type</InputLabel>
                     <Select
@@ -4087,10 +4081,9 @@ const Profile = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div>
+                <div className="padingtopmy5create">
                   {transactionForm.upi_name ? (
                     <>
-                      <br />
                       <TextField
                         className="input-font-small"
                         label={transactionForm.upi_name}
@@ -4127,10 +4120,9 @@ const Profile = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div>
+                <div className="padingtopmy5create">
                   {transactionForm.crypto_name ? (
                     <>
-                      <br />
                       <TextField
                         className="input-font-small"
                         label={transactionForm.crypto_name}
@@ -4150,8 +4142,7 @@ const Profile = () => {
             )}
             {transactionForm.payment_method == "Bank" ? (
               <>
-                <br />
-                <div>
+                <div className="padingtopmy5create">
                   <FormControl variant="standard" sx={{ width: "100%" }}>
                     <InputLabel>BANK ACCOUNT</InputLabel>
                     <Select
@@ -4176,8 +4167,8 @@ const Profile = () => {
             ) : (
               ""
             )}
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <TextField
                 id="standard-textarea"
                 label="Amount"
@@ -4212,9 +4203,9 @@ const Profile = () => {
                 </Select>
               </FormControl>
             </div>
-            <br />
-            <div className="margeField">
-              {/* <FormControl variant="standard" sx={{ width: "100%" }} focused>
+
+            {/* <div className="margeField padingtopmy5create"> */}
+            {/* <FormControl variant="standard" sx={{ width: "100%" }} focused>
                 <InputLabel>From Account Type</InputLabel>
                 <Select
                   label
@@ -4226,7 +4217,7 @@ const Profile = () => {
                   <MenuItem value="ib">IB Account</MenuItem>
                 </Select>
               </FormControl> */}
-              {/* <FormControl variant="standard" sx={{ width: "100%" }}>
+            {/* <FormControl variant="standard" sx={{ width: "100%" }}>
                 <InputLabel>Transfer To</InputLabel>
                 <Select
                   label
@@ -4238,9 +4229,9 @@ const Profile = () => {
                   <MenuItem value="clients">Client's Account</MenuItem>
                 </Select>
               </FormControl> */}
-            </div>
+            {/* </div> */}
 
-            <div className="margeField">
+            <div className="margeField padingtopmy5create">
               <FormControl variant="standard" sx={{ width: "100%" }}>
                 <InputLabel>From Account</InputLabel>
                 <Select
@@ -4280,8 +4271,8 @@ const Profile = () => {
                 </FormControl>
               )}
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               {transactionForm.account == "Wallet" ? (
                 <>
                   <TextField
@@ -4431,8 +4422,8 @@ const Profile = () => {
                 </Select>
               </FormControl>
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <FormControl variant="standard" sx={{ width: "100%" }} focused>
                 <InputLabel>Credit Type</InputLabel>
                 <Select
@@ -4463,8 +4454,8 @@ const Profile = () => {
                 </Select>
               </FormControl>
             </div>
-            <br />
-            <div className="margeField">
+
+            <div className="margeField padingtopmy5create">
               <TextField
                 className="input-font-small"
                 label="Amount"
@@ -4483,7 +4474,6 @@ const Profile = () => {
                 onChange={transactionInput}
               />
             </div>
-            <br />
           </div>
         );
       }
@@ -5230,8 +5220,8 @@ const Profile = () => {
               name="portfolio_name"
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Money Manager</InputLabel>
               <Select
@@ -5251,8 +5241,8 @@ const Profile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+
+          <div classNAme="padingtopmy5create">
             <TextField
               className="input-font-small"
               label="Investment Months"

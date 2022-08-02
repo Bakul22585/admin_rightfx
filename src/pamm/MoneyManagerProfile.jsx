@@ -251,8 +251,8 @@ const MoneyManagerProfile = () => {
               name="portfolio_name"
             />
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Money Manager</InputLabel>
               <Select
@@ -272,8 +272,8 @@ const MoneyManagerProfile = () => {
               </Select>
             </FormControl>
           </div>
-          <br />
-          <div>
+
+          <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               label="Investment Months"
