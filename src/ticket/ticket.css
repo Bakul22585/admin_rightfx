@@ -146,3 +146,8 @@
 .view-ticket-page .chat .ticket-upload-image {
     border-radius: 0px;
 }
+@media screen and (min-width: 320px) and (max-width: 600px) {
+    .action-section .input-section {
+        flex-wrap: wrap;
+    }
+}

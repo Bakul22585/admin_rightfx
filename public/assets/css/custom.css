@@ -17198,7 +17198,8 @@ body {
     align-items: flex-end;
   }
   .MuiDialog-root .MuiPaper-root {
-    width: 100vw;
+    /* width: 100vw; */
+    width: 100%;
     margin: 0;
     height: -webkit-fit-content;
     height: -moz-fit-content;
@@ -17881,4 +17882,19 @@ input.MuiInputBase-input {
 }
 .MuiInputLabel-root{
   font-family: 'Cairo', sans-serif !important; 
+}
+@media screen and (min-width: 320px) and (max-width: 1100px) {
+  .collapse-sidebar-open-close {
+    display: none !important;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 600px) {
+  .fc-media-screen .fc-header-toolbar {
+    overflow: auto;
+    gap: 20px;
+    overflow-y: hidden;
+  }
+  .fc-media-screen .fc-header-toolbar .fc-toolbar-chunk:nth-child(1){
+    display: flex;
+  }
 }

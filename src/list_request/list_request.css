@@ -29,3 +29,11 @@
 .autoComplete-input-remove-border input {
     border: 0px !important;
 }
+@media screen and (min-width: 320px) and (max-width: 1270px) {
+    
+}
+@media screen and (min-width: 320px) and (max-width: 1000px) {
+    .view-ib-content-section .main-content-display .display-element {
+        width: 100% !important;
+    }
+}

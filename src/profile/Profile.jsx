@@ -10383,6 +10383,7 @@ const Profile = () => {
                                 <br />
                                 <FormControl
                                   variant="standard"
+                                  className="referrals_structure_dropdown"
                                   sx={{ width: "20%" }}
                                 >
                                   <InputLabel>Structure</InputLabel>

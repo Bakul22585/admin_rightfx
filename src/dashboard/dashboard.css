@@ -157,6 +157,10 @@
     text-align: center;
     color: #4ea9f3;
 }
+.remainderContentSection .th-div label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .th-div label:nth-child(1) {
     border-bottom: 0px;
     text-align: left;

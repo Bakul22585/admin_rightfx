@@ -353,3 +353,12 @@
 .pamm-dashboard-boxSection .boxsize {
     width: 200px;
 }
+
+@media screen and (min-width: 320px) and (max-width: 623px) {
+    .mmManagement-section .input-element {
+        width: 100% !important;
+    }
+    .view-margeField {
+        grid-template-columns: 100% !important;
+    }
+}
