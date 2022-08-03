@@ -766,7 +766,6 @@ const KycDocument = (prop) => {
 
                           <div
                             className="text-dark font-size-xs d-flex justify-content-between align-items-center"
-                            style={{ marginTop: "100px" }}
                           >
                             <i>
                               (Maximum size of document 5MB) Allow File Formats

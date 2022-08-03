@@ -17888,6 +17888,11 @@ input.MuiInputBase-input {
     display: none !important;
   }
 }
+@media screen and (min-width: 320px) and (max-width: 400px) {
+  .MuiInputBase-input {
+    padding: 4px 5px !important;
+  }
+}
 @media screen and (min-width: 320px) and (max-width: 600px) {
   .fc-media-screen .fc-header-toolbar {
     overflow: auto;
