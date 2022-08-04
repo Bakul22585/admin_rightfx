@@ -1,6 +1,7 @@
 .client-detail-header {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: center;
     background-color: #efeeee;
     border-radius: 10px;
     gap: 15px;

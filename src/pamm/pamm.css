@@ -353,7 +353,9 @@
 .pamm-dashboard-boxSection .boxsize {
     width: 200px;
 }
-
+.btn_back-section {
+    padding: 10px 0;
+}
 @media screen and (min-width: 320px) and (max-width: 623px) {
     .mmManagement-section .input-element {
         width: 100% !important;

@@ -240,6 +240,7 @@ const Profile = () => {
   const [createMt5Form, setCreateMt5Form] = useState({
     account_type: "",
     account_option: "",
+    mt5_balance: "",
     isLoader: false,
   });
   const [createLiveType, setCreateLiveType] = useState([]);
@@ -2077,6 +2078,7 @@ const Profile = () => {
       setCreateMt5Form({
         account_type: "",
         account_option: "",
+        mt5_balance: "",
         isLoader: false,
       });
     } else if (e.target.classList.contains("mt5_access")) {
@@ -2431,9 +2433,11 @@ const Profile = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="mt5_balance"
+                value={createMt5Form.mt5_balance}
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
-                    input(e);
+                    createMt5Form.mt5_balance = e.target.value;
+                    setCreateMt5Form({...createMt5Form});
                   }
                 }}
               />
@@ -4004,6 +4008,7 @@ const Profile = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
+                value={transactionForm.amount}
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     transactionInput(e);
@@ -4176,7 +4181,12 @@ const Profile = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
-                onChange={transactionInput}
+                value={transactionForm.amount}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    transactionInput(e);
+                  }
+                }}
               />
             </div>
           </div>
@@ -4386,7 +4396,12 @@ const Profile = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
-                onChange={transactionInput}
+                value={transactionForm.amount}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    transactionInput(e);
+                  }
+                }}
               />
               <TextField
                 id="standard-textarea"
@@ -4462,7 +4477,12 @@ const Profile = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
-                onChange={transactionInput}
+                value={transactionForm.amount}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    transactionInput(e);
+                  }
+                }}
               />
               <TextField
                 id="standard-textarea"
@@ -6193,7 +6213,7 @@ const Profile = () => {
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
-
+    console.log("createMt5Form.password", createMt5Form.password.length);
     if (createMt5Form.account_type == "") {
       toast.error("Please select account type");
     } else if (createMt5Form.account_option == "") {
@@ -6205,25 +6225,23 @@ const Profile = () => {
       toast.error("Please select account option");
     } else if (createMt5Form.password == "") {
       toast.error("Please enter password");
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+    } else if (createMt5Form.password.length <= 7) {
+      /* !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
         createMt5Form.password
-      )
-    ) {
+      ) */
       toast.error(
-        "Please enter valid password. Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character in Main password"
+        "Minimum eight characters is required in Main password"
       );
     } else if (createMt5Form.confirm_password == "") {
       toast.error("Please enter confirm password");
     } else if (createMt5Form.confirm_password == createMt5Form.password) {
       toast.error("Investor password can't be the same as Main password");
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+    } else if (createMt5Form.confirm_password.length <= 7) {
+      /* !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
         createMt5Form.confirm_password
-      )
-    ) {
+      ) */
       toast.error(
-        "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character in Investor password"
+        "Minimum eight characters is required in Investor password"
       );
     } else {
       if (createMt5Form.account_type == "0") {
@@ -6254,6 +6272,7 @@ const Profile = () => {
             getAccountList();
             toast.success(res.data.message);
             setOpen(false);
+            setRefresh(!refresh);
           }
         });
     }
@@ -7764,6 +7783,7 @@ const Profile = () => {
             } else {
               toast.success(res.data.message);
               setOpen(false);
+              setRefresh(!refresh);
             }
           });
         /* toast.success('Deposit has been successfully added.');
@@ -7843,6 +7863,7 @@ const Profile = () => {
             } else {
               toast.success(res.data.message);
               setOpen(false);
+              setRefresh(!refresh);
             }
           });
       }
@@ -7913,6 +7934,7 @@ const Profile = () => {
             } else {
               toast.success(res.data.message);
               setOpen(false);
+              setRefresh(!refresh);
             }
           });
         // toast.success('Internal transfer has been successfully added.');
@@ -7956,6 +7978,7 @@ const Profile = () => {
             } else {
               toast.success(res.data.message);
               setOpen(false);
+              setRefresh(!refresh);
             }
           });
       }
@@ -8659,7 +8682,11 @@ const Profile = () => {
           if (res.data.status == "error") {
             toast.error(res.data.message);
           } else {
-            getMyPortfolio();
+            if (pammPortfolioGroupButton == "money_manager") {
+              getMoneyManager();
+            } else {
+              getMyPortfolio();
+            }
             toast.success(res.data.message);
             setRefresh(!refresh);
             setOpen(false);
@@ -10245,6 +10272,7 @@ const Profile = () => {
                                 userId={id}
                                 sort="0"
                                 filter={filterData}
+                                refresh={refresh}
                               />
                             </div>
                           </Paper>
@@ -10328,6 +10356,7 @@ const Profile = () => {
                                 url={`${Url}/datatable/wallet_history.php`}
                                 column={walletHistoryColumn}
                                 userId={id}
+                                refresh={refresh}
                                 sort="1"
                               />
                             </div>

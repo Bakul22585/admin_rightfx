@@ -824,6 +824,9 @@ const PammPortfolioProfile = () => {
                       <div className="money-manager-profile-view-section">
                         <Grid container spacing={1}>
                           <Grid item md={6}>
+                            <div className="btn_back-section">
+                              <Button variant="text" onClick={() => navigate(-1)}><i className="material-icons">arrow_back_ios</i> Go Back</Button>
+                            </div>
                             <div className="master__section">
                               <div className="m__profile">
                                 <div className="m__profile__preview">
