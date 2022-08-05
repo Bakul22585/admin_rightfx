@@ -20,6 +20,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { useNavigate } from "react-router-dom";
 import { BootstrapInput, ColorButton } from "../common/CustomElement";
 import { IsApprove, Url } from "../global";
+import ErrorIcon from "@mui/icons-material/Error";
+import './kycDocument.css';
 
 const KycDocument = (prop) => {
   const navigate = useNavigate();
@@ -531,42 +533,46 @@ const KycDocument = (prop) => {
                         </div>
                         <div className="divider"></div>
                         <div className="card-body">
-                          <div>
-                            <label
-                              htmlFor="upi_crypto_ac_number"
-                              className="text-info font-weight-bold form-label-head w-100 "
-                            >
-                              ID NUMBER
-                            </label>
-                            <BootstrapInput
-                              disabled={sendKycRequest.proof1}
-                              value={doc.idnumber}
-                              onChange={handleChange}
-                              name="idnumber"
-                              displayEmpty
-                              inputProps={{
-                                "aria-label": "Without label",
-                              }}
-                            />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input
-                              type="checkbox"
-                              name="tos"
-                              value={!twoSide.main}
-                              checked={twoSide.main}
-                              onChange={(e) => {
-                                twoSide.main = e.target.checked;
-                                setTwoSide({ ...twoSide });
-                              }}
-                              id="gridCheck"
-                              className="form-check-input marcheckbox"
-                            />
-                            <label
-                              htmlFor="gridCheck"
-                              className="form-check-label"
-                            >
-                              <span> Double side</span>
-                            </label>
+                          <div className="doument-input-section">
+                            <div>
+                              <label
+                                htmlFor="upi_crypto_ac_number"
+                                className="text-info font-weight-bold form-label-head w-100 "
+                              >
+                                ID NUMBER
+                              </label>
+                              <BootstrapInput
+                                disabled={sendKycRequest.proof1}
+                                value={doc.idnumber}
+                                onChange={handleChange}
+                                name="idnumber"
+                                displayEmpty
+                                inputProps={{
+                                  "aria-label": "Without label",
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <input
+                                type="checkbox"
+                                name="tos"
+                                value={!twoSide.main}
+                                checked={twoSide.main}
+                                disabled={kycStatus.master_status == 1 ? true : false}
+                                onChange={(e) => {
+                                  twoSide.main = e.target.checked;
+                                  setTwoSide({ ...twoSide });
+                                }}
+                                id="gridCheck"
+                                className="form-check-input marcheckbox"
+                              />
+                              <label
+                                htmlFor="gridCheck"
+                                className="form-check-label"
+                              >
+                                <span> Double side</span>
+                              </label>
+                            </div>
                             {/* </div> */}
                           </div>
 
@@ -850,6 +856,7 @@ const KycDocument = (prop) => {
                                   name="tos"
                                   value={!twoSide.addition}
                                   checked={twoSide.addition}
+                                  disabled={kycStatus.master_status == 1 ? true : false}
                                   onChange={(e) => {
                                     twoSide.addition = e.target.checked;
                                     setTwoSide({ ...twoSide });
@@ -1024,7 +1031,7 @@ const KycDocument = (prop) => {
                       </Grid>
                     )}
                   </Grid>
-                  <Grid item md={12}>
+                  {/* <Grid item md={12}>
                     <Grid item md={12} sx={{ marginTop: "10px" }}>
                       <Paper
                         elevation={1}
@@ -1098,6 +1105,105 @@ const KycDocument = (prop) => {
                                 - Local Authority Tax Bill
                               </p>
                               <br></br>
+                            </Grid>
+                          </Grid>
+                        </div>
+                      </Paper>
+                    </Grid>
+                  </Grid> */}
+                  <Grid item md={12} style={{marginTop: '10px'}}>
+                    <Grid item md={12}>
+                      <Paper
+                        elevation={1}
+                        style={{ borderRadius: "10px" }}
+                        className="w-100 mb-1"
+                      >
+                        <div className="card-header card-header-alt p-3 text-center" style={{justifyContent: 'center'}}>
+                          <h4 className="font-weight-bold mb-0 text-dark text-center">
+                            Uploaded Document
+                          </h4>
+                        </div>
+                        <div className="card-body position-relative py-3 px-3 px-md-5">
+                          <Grid
+                            container
+                            spacing={3}
+                            className="justify-xs-center"
+                          >
+                            <Grid
+                              item
+                              md={12}
+                              // className="font-italic text-dark"
+                            >
+                              <div className="docMain">
+                                <div className="centerflexjus">
+                                  <div className="docH1Text">
+                                    {" "}
+                                    <h5 className="d-flex">
+                                      <div>
+                                        <ErrorIcon
+                                          sx={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                            marginRight: "5px",
+                                          }}
+                                        />
+                                      </div>
+                                      <div>
+                                        Make sure the document shows your
+                                        photo,full name.date of birth and date
+                                        of issue
+                                      </div>
+                                    </h5>
+                                  </div>
+                                </div>
+                                <div className="picdocMain">
+                                  <div className="firstimageofdoc">
+                                    <img
+                                      src="./assets/img/image1.jpg"
+                                      alt=""
+                                      className="firstimageofdoc1"
+                                    />
+                                    <div>
+                                      <h2
+                                        style={{
+                                          color: "green",
+                                          fontWeight: "700",
+                                        }}
+                                      >
+                                        Do
+                                      </h2>
+                                      <ul style={{ listStyle: "disc inside" }}>
+                                        <li>Photo is clear</li>
+                                        <li>Good photo quality</li>
+                                        <li>All 4 corners are visible</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div className="firstimageofdoc">
+                                    <img
+                                      src="./assets/img/image2.jpg"
+                                      alt=""
+                                      className="firstimageofdoc2"
+                                    />
+                                    <div>
+                                      <h2
+                                        style={{
+                                          color: "red",
+                                          fontWeight: "700",
+                                        }}
+                                      >
+                                        Don't
+                                      </h2>
+                                      <ul style={{ listStyle: "disc inside" }}>
+                                        <li>Photo is blurred</li>
+                                        <li>Light reflection</li>
+                                        <li>Poor photo quality</li>
+                                        <li>Not all corners are visible</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </Grid>
                           </Grid>
                         </div>
