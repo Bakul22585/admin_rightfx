@@ -475,10 +475,14 @@ const PammUser = () => {
               className="input-font-small"
               label="Mobile"
               variant="standard"
-              onChange={input}
-              sx={{ width: "100%" }}
               name="user_phone"
               value={form.user_phone}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input(e);
+                }
+              }}
+              sx={{ width: "100%" }}
             />
           </div>
           <div className="input-element">

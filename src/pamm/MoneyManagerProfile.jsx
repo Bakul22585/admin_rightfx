@@ -278,6 +278,8 @@ const MoneyManagerProfile = () => {
               className="input-font-small"
               label="Investment Months"
               type="text"
+              name="investment_months"
+              value={createPortfolioForm.investment_months}
               variant="standard"
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
@@ -285,7 +287,6 @@ const MoneyManagerProfile = () => {
                 }
               }}
               sx={{ width: "100%" }}
-              name="investment_months"
             />
           </div>
         </div>
@@ -645,7 +646,13 @@ const MoneyManagerProfile = () => {
                           <Grid item md={6} sx={{ margin: "auto" }}>
                             {/* <button onClick={() => navigate(-1)}>go back</button> */}
                             <div className="btn_back-section">
-                              <Button variant="text" onClick={() => navigate(-1)}><i className="material-icons">arrow_back_ios</i> Go Back</Button>
+                              <Button
+                                variant="text"
+                                onClick={() => navigate(-1)}
+                              >
+                                <i className="material-icons">arrow_back_ios</i>{" "}
+                                Go Back
+                              </Button>
                             </div>
                             <div className="master__section">
                               <div className="m__profile">

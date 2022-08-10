@@ -723,9 +723,15 @@ const MmManagement = () => {
               className="input-font-small"
               label="Mobile"
               variant="standard"
-              onChange={input}
-              sx={{ width: "100%" }}
+              // onChange={input}
               name="mobile"
+              value={form.mobile}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input(e);
+                }
+              }}
+              sx={{ width: "100%" }}
             />
           </div>
           <div className="input-element">
@@ -892,10 +898,14 @@ const MmManagement = () => {
               className="input-font-small"
               label="Mobile"
               variant="standard"
-              onChange={input}
-              sx={{ width: "100%" }}
               name="mobile"
               value={form.mobile}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input(e);
+                }
+              }}
+              sx={{ width: "100%" }}
             />
           </div>
           <div className="input-element">

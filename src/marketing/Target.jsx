@@ -1,4 +1,14 @@
-import { Button, CardContent, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField } from "@mui/material";
+import {
+  Button,
+  CardContent,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { IsApprove, Url } from "../global";
 import axios from "axios";
@@ -196,21 +206,22 @@ const Target = () => {
               row.user_status == "0"
                 ? "Pending"
                 : row.user_status == "1"
-                  ? "Approve"
-                  : "Rejected"
+                ? "Approve"
+                : "Rejected"
             }
-            className={`text-color-${row.user_status == "1"
+            className={`text-color-${
+              row.user_status == "1"
                 ? "green"
                 : row.user_status == "2"
-                  ? "red"
-                  : "yellow"
-              }`}
+                ? "red"
+                : "yellow"
+            }`}
           >
             {row.user_status == "0"
               ? "Pending"
               : row.user_status == "1"
-                ? "Approve"
-                : "Rejected"}
+              ? "Approve"
+              : "Rejected"}
           </span>
         );
       },
@@ -401,9 +412,9 @@ const Target = () => {
       year: "",
       type: "",
     });
-    setDialogTitle('Report');
+    setDialogTitle("Report");
     setOpen(true);
-  }
+  };
 
   const manageContent = () => {
     if (dialogTitle == "Edit") {
@@ -415,8 +426,13 @@ const Target = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="ac_target"
-              onChange={input}
+              // onChange={input}
               value={form.ac_target}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input(e);
+                }
+              }}
               focused
             />
           </div>
@@ -427,7 +443,12 @@ const Target = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="money_in_target"
-              onChange={input}
+              // onChange={input}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input(e);
+                }
+              }}
               value={form.money_in_target}
               focused
             />
@@ -601,18 +622,27 @@ const Target = () => {
     }
   };
 
-  const downloadReport = async() => {
+  const downloadReport = async () => {
     if (reportData.type == "") {
-      toast.error('Please select type');
+      toast.error("Please select type");
     } else if (reportData.month == "") {
-      toast.error('Please enter month');
+      toast.error("Please enter month");
     } else if (reportData.year == "") {
-      toast.error('Please enter year');
+      toast.error("Please enter year");
     } else {
       setOpen(false);
-      window.open(`${Url}/${(reportData.type == "1")? 'ajaxfiles/salesman_insantive_report.php' : 'ajaxfiles/salesman_target_report.php'}?manager_id=${reportData.manager_id}&month=${reportData.month}&year=${reportData.year}`, "_blank");
+      window.open(
+        `${Url}/${
+          reportData.type == "1"
+            ? "ajaxfiles/salesman_insantive_report.php"
+            : "ajaxfiles/salesman_target_report.php"
+        }?manager_id=${reportData.manager_id}&month=${reportData.month}&year=${
+          reportData.year
+        }`,
+        "_blank"
+      );
     }
-  }
+  };
 
   return (
     <div>

@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { BootstrapInput, ColorButton } from "../common/CustomElement";
 import { IsApprove, Url } from "../global";
 import ErrorIcon from "@mui/icons-material/Error";
-import './kycDocument.css';
+import "./kycDocument.css";
 
 const KycDocument = (prop) => {
   const navigate = useNavigate();
@@ -132,9 +132,9 @@ const KycDocument = (prop) => {
     console.log("fontimg", fontimg);
 
     if (!doc.fontimg && !fontimg) {
-      toast.error("FRONT SIDE of image is required");
-    } else if (twoSide.main && !doc.backimg) {
-      toast.error("BACK SIDE of image is required");
+      toast.error("Please upload documents front side image");
+    } else if (twoSide.main && !doc.backimg && !backimg) {
+      toast.error("Please upload documents back side image");
     } else {
       doc.isLoder = true;
       setDoc({ ...doc });
@@ -175,9 +175,9 @@ const KycDocument = (prop) => {
   };
   const onaddsubmit = () => {
     if (!adddoc.fontimg && !addfontimg) {
-      toast.error("Front Side of image is required");
-    } else if (!adddoc.backimg && twoSide.addition) {
-      toast.error("Back Side of image is required");
+      toast.error("Please upload additional documents front side image");
+    } else if (!adddoc.backimg && twoSide.addition && !addbackimg) {
+      toast.error("Please upload additional documents back side image");
     } else {
       const param = new FormData();
       if (IsApprove !== "") {
@@ -558,7 +558,9 @@ const KycDocument = (prop) => {
                                 name="tos"
                                 value={!twoSide.main}
                                 checked={twoSide.main}
-                                disabled={kycStatus.master_status == 1 ? true : false}
+                                disabled={
+                                  kycStatus.master_status == 1 ? true : false
+                                }
                                 onChange={(e) => {
                                   twoSide.main = e.target.checked;
                                   setTwoSide({ ...twoSide });
@@ -770,9 +772,7 @@ const KycDocument = (prop) => {
                             </Grid>
                           )}
 
-                          <div
-                            className="text-dark font-size-xs d-flex justify-content-between align-items-center"
-                          >
+                          <div className="text-dark font-size-xs d-flex justify-content-between align-items-center">
                             <i>
                               (Maximum size of document 5MB) Allow File Formats
                               *jpg, *png)
@@ -856,7 +856,9 @@ const KycDocument = (prop) => {
                                   name="tos"
                                   value={!twoSide.addition}
                                   checked={twoSide.addition}
-                                  disabled={kycStatus.master_status == 1 ? true : false}
+                                  disabled={
+                                    kycStatus.master_status == 1 ? true : false
+                                  }
                                   onChange={(e) => {
                                     twoSide.addition = e.target.checked;
                                     setTwoSide({ ...twoSide });
@@ -1111,14 +1113,17 @@ const KycDocument = (prop) => {
                       </Paper>
                     </Grid>
                   </Grid> */}
-                  <Grid item md={12} style={{marginTop: '10px'}}>
+                  <Grid item md={12} style={{ marginTop: "10px" }}>
                     <Grid item md={12}>
                       <Paper
                         elevation={1}
                         style={{ borderRadius: "10px" }}
                         className="w-100 mb-1"
                       >
-                        <div className="card-header card-header-alt p-3 text-center" style={{justifyContent: 'center'}}>
+                        <div
+                          className="card-header card-header-alt p-3 text-center"
+                          style={{ justifyContent: "center" }}
+                        >
                           <h4 className="font-weight-bold mb-0 text-dark text-center">
                             Uploaded Document
                           </h4>

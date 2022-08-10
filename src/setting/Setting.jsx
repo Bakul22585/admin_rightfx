@@ -88,13 +88,17 @@ const Setting = () => {
           is_copy_invest_active:
             res.data.settings_list.is_copy_invest_active == "0" ? false : true,
           is_copy_withdraw_active:
-            res.data.settings_list.is_copy_withdraw_active == "0" ? false : true,
+            res.data.settings_list.is_copy_withdraw_active == "0"
+              ? false
+              : true,
           is_ib_withdraw_active:
             res.data.settings_list.is_ib_withdraw_active == "0" ? false : true,
           is_pamm_invest_active:
             res.data.settings_list.is_pamm_invest_active == "0" ? false : true,
           is_pamm_withdraw_active:
-            res.data.settings_list.is_pamm_withdraw_active == "0" ? false : true,
+            res.data.settings_list.is_pamm_withdraw_active == "0"
+              ? false
+              : true,
           transfer_wallet_to_wallet_charges:
             res.data.settings_list.transfer_wallet_to_wallet_charges,
           /* bank_ac_name: res.data.settings_list.bank_ac_name,
@@ -340,8 +344,12 @@ const Setting = () => {
                             variant="standard"
                             sx={{ width: "100%" }}
                             name="transfer_wallet_to_wallet_charges"
-                            onChange={input}
                             value={form.transfer_wallet_to_wallet_charges}
+                            onChange={(e) => {
+                              if (!isNaN(Number(e.target.value))) {
+                                input(e);
+                              }
+                            }}
                           />
                         </div>
                         {/* <br />

@@ -875,11 +875,17 @@ const Deposit = () => {
             />
             <TextField
               label="Amount"
+              type="text"
               variant="standard"
               sx={{ width: "100%" }}
               name="amount"
               value={viewDepositForm.amount}
-              onChange={input1}
+              // onChange={input1}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input1(e);
+                }
+              }}
               focused
               disabled={viewDepositForm.status == "0" ? false : true}
             />
@@ -940,7 +946,6 @@ const Deposit = () => {
   };
 
   const actionMenuPopup = (e, index) => {
- ;
     handleContextClose(index);
     if (e.target.classList.contains("reject")) {
       setDialogTitle("Reject");
@@ -1200,35 +1205,39 @@ const Deposit = () => {
                     </Grid>
                   </CardContent>
                   <div className="d-flex">
-                  <Grid container>
-                  <Grid item md={6}>
-                <div className="row1 boxSection">
-                    <div className="card padding-9 animate fadeLeft boxsize">
-                      <div className="row">
-                        <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{resData.total_deposits_footer}</h5>
-                          <p className="no-margin">Total Deposit</p>
+                    <Grid container>
+                      <Grid item md={6}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_deposits_footer}
+                                </h5>
+                                <p className="no-margin">Total Deposit</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  </Grid>
-                  <Grid item md={6}>
-                  <div className="row1 boxSection">
-                    <div className="card padding-9 animate fadeLeft boxsize">
-                      <div className="row">
-                        <div className="col s12 m12 text-align-center">
-                          <h5 className="mb-0">{resData.total_deposit}</h5>
-                          <p className="no-margin">Deposit</p>
+                      </Grid>
+                      <Grid item md={6}>
+                        <div className="row1 boxSection">
+                          <div className="card padding-9 animate fadeLeft boxsize">
+                            <div className="row">
+                              <div className="col s12 m12 text-align-center">
+                                <h5 className="mb-0">
+                                  {resData.total_deposit}
+                                </h5>
+                                <p className="no-margin">Deposit</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  </Grid>
-                  </Grid>
+                      </Grid>
+                    </Grid>
                   </div>
                 </Paper>
-               
+
                 <BootstrapDialog
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"

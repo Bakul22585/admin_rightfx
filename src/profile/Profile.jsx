@@ -2437,7 +2437,7 @@ const Profile = () => {
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     createMt5Form.mt5_balance = e.target.value;
-                    setCreateMt5Form({...createMt5Form});
+                    setCreateMt5Form({ ...createMt5Form });
                   }
                 }}
               />
@@ -5262,15 +5262,21 @@ const Profile = () => {
             </FormControl>
           </div>
 
-          <div classNAme="padingtopmy5create">
+          <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               label="Investment Months"
-              type="number"
-              variant="standard"
-              onChange={createPortfolioInput}
-              sx={{ width: "100%" }}
+              type="text"
+              value={createPortfolioForm.investment_months}
               name="investment_months"
+              variant="standard"
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  createPortfolioInput(e);
+                }
+              }}
+              // onChange={createPortfolioInput}
+              sx={{ width: "100%" }}
             />
           </div>
         </div>
@@ -5283,9 +5289,14 @@ const Profile = () => {
               className="input-font-small"
               label="Amount"
               variant="standard"
-              onChange={investmentInput}
-              sx={{ width: "100%" }}
+              value={investmentForm.amount}
               name="amount"
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  investmentInput(e);
+                }
+              }}
+              sx={{ width: "100%" }}
             />
           </div>
         </div>
@@ -5311,9 +5322,14 @@ const Profile = () => {
             <TextField
               className="input-font-small"
               label="Amount"
-              type="number"
+              type="text"
               variant="standard"
               onChange={withdrawInput}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  withdrawInput(e);
+                }
+              }}
               sx={{ width: "100%" }}
               name="amount"
               disabled={withdrawForm.allWithdraw}
@@ -6229,9 +6245,7 @@ const Profile = () => {
       /* !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
         createMt5Form.password
       ) */
-      toast.error(
-        "Minimum eight characters is required in Main password"
-      );
+      toast.error("Minimum eight characters is required in Main password");
     } else if (createMt5Form.confirm_password == "") {
       toast.error("Please enter confirm password");
     } else if (createMt5Form.confirm_password == createMt5Form.password) {
@@ -6240,9 +6254,7 @@ const Profile = () => {
       /* !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
         createMt5Form.confirm_password
       ) */
-      toast.error(
-        "Minimum eight characters is required in Investor password"
-      );
+      toast.error("Minimum eight characters is required in Investor password");
     } else {
       if (createMt5Form.account_type == "0") {
         param.append("mt5_balance", createMt5Form.mt5_balance);

@@ -14,6 +14,7 @@ import {
   InputLabel,
   Input,
   FormControlLabel,
+  FormGroup,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -88,11 +89,15 @@ const PendingKYC = () => {
   const [previewAadharCardFront, setPreviewAadharCardFront] = useState();
   const [selectedAadharCardBackFile, setSelectedAadharCardBackFile] =
     useState();
-    const [previewAdditionalDocumentsBack, setPreviewAdditionalDocumentsBack] = useState();
-    const [selectedAdditionalDocumentsBack, setSelectedAdditionalDocumentsBack] =useState();
+  const [previewAdditionalDocumentsBack, setPreviewAdditionalDocumentsBack] =
+    useState();
+  const [selectedAdditionalDocumentsBack, setSelectedAdditionalDocumentsBack] =
+    useState();
 
-	    const [previewAdditionalDocuments, setPreviewAdditionalDocuments] = useState();
- 	    const [selectedAdditionalDocuments, setSelectedAdditionalDocuments] =useState(); 
+  const [previewAdditionalDocuments, setPreviewAdditionalDocuments] =
+    useState();
+  const [selectedAdditionalDocuments, setSelectedAdditionalDocuments] =
+    useState();
 
   const [previewAadharCardBack, setPreviewAadharCardBack] = useState();
   const [selectedPanCardFile, setSelectedPanCardFile] = useState();
@@ -120,10 +125,12 @@ const PendingKYC = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    maincheck: true,
+    sencons: true,
     aadhar_card_number: "",
     aadhar_front_img: "",
-    additional_documents:"",
-    additional_documents_back:"",
+    additional_documents: "",
+    additional_documents_back: "",
     aadhar_back_img: "",
     pan_card_img: "",
     passbook_img: "",
@@ -411,11 +418,13 @@ const PendingKYC = () => {
       setForm({
         name: "",
         email: "",
+        maincheck: true,
+        sencons: true,
         aadhar_card_number: "",
         aadhar_front_img: "",
         aadhar_back_img: "",
-        additional_documents:"",
-        additional_documents_back:"",
+        additional_documents: "",
+        additional_documents_back: "",
         pan_card_img: "",
         passbook_img: "",
         account_number: "",
@@ -437,9 +446,11 @@ const PendingKYC = () => {
         email: "",
         aadhar_card_number: "",
         aadhar_front_img: "",
+        maincheck: true,
+        sencons: true,
         aadhar_back_img: "",
-        additional_documents:"",
-        additional_documents_back:"",
+        additional_documents: "",
+        additional_documents_back: "",
         pan_card_img: "",
         passbook_img: "",
         account_number: "",
@@ -482,6 +493,10 @@ const PendingKYC = () => {
       if (res.data.status == "error") {
         toast.error(res.data.message);
       } else {
+        setSelectedAadharCardBackFile("");
+        setSelectedAadharCardFrontFile("");
+        setSelectedAdditionalDocuments("");
+        setSelectedAdditionalDocumentsBack("");
         setForm((prevalue) => {
           return {
             ...prevalue,
@@ -492,16 +507,21 @@ const PendingKYC = () => {
             aadhar_card_number: res.data.kyc_data.aadhar_card_number,
             aadhar_front_img: res.data.kyc_data.aadhar_card_front_image,
             aadhar_back_img: res.data.kyc_data.aadhar_card_back_image,
-            additional_documents:res.data.kyc_data.additional_documents,
-            additional_documents_back:res.data.kyc_data.additional_documents_back,
+            additional_documents: res.data.kyc_data.additional_documents,
+            additional_documents_back:
+              res.data.kyc_data.additional_documents_back,
             pan_card_img: res.data.kyc_data.pancard_image,
+            maincheck:
+              res.data.kyc_data.aadhar_card_back_image == "" ? false : true,
+            sencons:
+              res.data.kyc_data.additional_documents_back == "" ? false : true,
             passbook_img: res.data.kyc_data.bank_passbook_image,
             account_number: res.data.kyc_data.bank_account_number,
             bank_name: res.data.kyc_data.bank_name,
             bank_holder_name: res.data.kyc_data.bank_holder_name,
             bank_ifsc_code: res.data.kyc_data.bank_ifsc_code,
             remark: res.data.kyc_data.feedback_remarks,
-            status:res.data.kyc_data.status,
+            status: res.data.kyc_data.status,
             isLoader: false,
             user_id: data.user_id,
             kyc_id: data.kyc_id,
@@ -626,12 +646,14 @@ const PendingKYC = () => {
                 ""
               )}
             </div>
-      <div className="view-image-section">
-      {form.additional_documents_back != "" ? (
+            <div className="view-image-section">
+              {form.additional_documents_back != "" ? (
                 <div className="element">
                   <label> additional ID Back Img :</label>
                   {form.additional_documents_back != "" ? (
-                    <CustomImageModal image={`${form.additional_documents_back}`} />
+                    <CustomImageModal
+                      image={`${form.additional_documents_back}`}
+                    />
                   ) : (
                     ""
                   )}
@@ -639,7 +661,7 @@ const PendingKYC = () => {
               ) : (
                 ""
               )}
-      </div>
+            </div>
           </div>
         );
       }
@@ -710,10 +732,15 @@ const PendingKYC = () => {
               </div>
               <div className="element">
                 <FormControl variant="standard" sx={{ width: "100%" }}>
-                  <InputLabel id="demo-simple-select-standard-label" >
+                  <InputLabel id="demo-simple-select-standard-label">
                     Status
                   </InputLabel>
-                  <Select label="Status" name="status" onChange={input} value={form.status}>
+                  <Select
+                    label="Status"
+                    name="status"
+                    onChange={input}
+                    value={form.status}
+                  >
                     <MenuItem value="0">Pending</MenuItem>
                     <MenuItem value="1">Approved</MenuItem>
                     <MenuItem value="2">Rejected</MenuItem>
@@ -722,7 +749,21 @@ const PendingKYC = () => {
               </div>
             </div>
             <br />
-            <div className="view-image-section" style={{gap: "34px"}}>
+            <div className="view-image-section" style={{ gap: "34px" }}>
+              <div className="element">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={form.maincheck}
+                      onChange={(e) => {
+                        form.maincheck = !form.maincheck;
+                        setForm({ ...form });
+                      }}
+                    />
+                  }
+                  label="Double side"
+                />
+              </div>
               <div className="element">
                 <label>ID Front Img :</label>
                 <label
@@ -752,34 +793,55 @@ const PendingKYC = () => {
                   )}
                 </label>
               </div>
+              {form.maincheck == true ? (
+                <div className="element">
+                  <label>ID Back Img :</label>
+                  <label
+                    htmlFor="contained-button-file_back"
+                    className="fileuploadButton"
+                  >
+                    <Input
+                      accept="image/*"
+                      id="contained-button-file_back"
+                      type="file"
+                      onChange={(e) => onSelectFile(e, "aadhar_back")}
+                    />
+                    {selectedAadharCardBackFile ? (
+                      <img
+                        src={previewAadharCardBack}
+                        className="deposit-upload-image-preview"
+                      />
+                    ) : form.aadhar_back_img != "" ? (
+                      <img
+                        src={form.aadhar_back_img}
+                        className="deposit-upload-image-preview"
+                      />
+                    ) : (
+                      <Button variant="contained" component="span">
+                        <i className="material-icons">backup</i>&nbsp;Upload
+                      </Button>
+                    )}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <br />
+            <div className="view-image-section">
               <div className="element">
-                <label>ID Back Img :</label>
-                <label
-                  htmlFor="contained-button-file_back"
-                  className="fileuploadButton"
-                >
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file_back"
-                    type="file"
-                    onChange={(e) => onSelectFile(e, "aadhar_back")}
-                  />
-                  {selectedAadharCardBackFile ? (
-                    <img
-                      src={previewAadharCardBack}
-                      className="deposit-upload-image-preview"
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={form.sencons}
+                      onChange={(e) => {
+                        form.sencons = !form.sencons;
+                        setForm({ ...form });
+                      }}
                     />
-                  ) : form.aadhar_back_img != "" ? (
-                    <img
-                      src={form.aadhar_back_img}
-                      className="deposit-upload-image-preview"
-                    />
-                  ) : (
-                    <Button variant="contained" component="span">
-                      <i className="material-icons">backup</i>&nbsp;Upload
-                    </Button>
-                  )}
-                </label>
+                  }
+                  label="Double side"
+                />
               </div>
               <div className="element">
                 <label>Additional ID Front Img :</label>
@@ -810,39 +872,42 @@ const PendingKYC = () => {
                   )}
                 </label>
               </div>
+              {form.sencons == true ? (
+                <div className="element">
+                  <label>Additional ID Back Img :</label>
+                  <label
+                    htmlFor="contained-button-file_back11"
+                    className="fileuploadButton"
+                  >
+                    <Input
+                      accept="image/*"
+                      id="contained-button-file_back11"
+                      type="file"
+                      onChange={(e) =>
+                        onSelectFile(e, "additional_documents_back")
+                      }
+                    />
+                    {selectedAdditionalDocumentsBack ? (
+                      <img
+                        src={previewAdditionalDocumentsBack}
+                        className="deposit-upload-image-preview"
+                      />
+                    ) : form.additional_documents_back != "" ? (
+                      <img
+                        src={form.additional_documents_back}
+                        className="deposit-upload-image-preview"
+                      />
+                    ) : (
+                      <Button variant="contained" component="span">
+                        <i className="material-icons">backup</i>&nbsp;Upload
+                      </Button>
+                    )}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-            <br/>
-            <div className="view-image-section">
-            <div className="element">
-                <label>Additional ID Front Img :</label>
-                <label
-                  htmlFor="contained-button-file_back11"
-                  className="fileuploadButton"
-                >
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file_back11"
-                    type="file"
-                    onChange={(e) => onSelectFile(e, "additional_documents_back")}
-                  />
-                  {selectedAdditionalDocumentsBack ? (
-                    <img
-                      src={previewAdditionalDocumentsBack}
-                      className="deposit-upload-image-preview"
-                    />
-                  ) : form.additional_documents_back != "" ? (
-                    <img
-                      src={form.additional_documents_back}
-                      className="deposit-upload-image-preview"
-                    />
-                  ) : (
-                    <Button variant="contained" component="span">
-                      <i className="material-icons">backup</i>&nbsp;Upload
-                    </Button>
-                  )}
-                </label>
-              </div>
-              </div>
           </div>
         );
       }
@@ -1004,11 +1069,17 @@ const PendingKYC = () => {
       if (selectedAadharCardBackFile) {
         param.append("aadhar_card_back_image", selectedAadharCardBackFile);
       }
-      if (selectedAadharCardBackFile) {
-        param.append("additional_documents", selectedAadharCardBackFile);
-      }   if (selectedAdditionalDocuments) {
+      if (selectedAdditionalDocumentsBack) {
+        param.append(
+          "additional_documents_back",
+          selectedAdditionalDocumentsBack
+        );
+      }
+      if (selectedAdditionalDocuments) {
         param.append("additional_documents", selectedAdditionalDocuments);
       }
+      param.append("double_sided_documents", form.maincheck == true ? 1 : 0);
+      param.append("additional_double_sided", form.sencons == true ? 1 : 0);
 
       await axios.post(`${Url}/ajaxfiles/kyc_manage.php`, param).then((res) => {
         if (res.data.message == "Session has been expired") {
@@ -1026,11 +1097,13 @@ const PendingKYC = () => {
           setForm({
             name: "",
             email: "",
+            maincheck: true,
+            sencons: true,
             aadhar_card_number: "",
             aadhar_front_img: "",
             aadhar_back_img: "",
-            additional_documents:"",
-            additional_documents_back:"",
+            additional_documents: "",
+            additional_documents_back: "",
             pan_card_img: "",
             passbook_img: "",
             account_number: "",
@@ -1116,7 +1189,6 @@ const PendingKYC = () => {
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedAdditionalDocumentsBack]);
-  
 
   const onSelectFile = (e, flag) => {
     if (flag == "aadhar_front") {
