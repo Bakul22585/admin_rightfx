@@ -169,9 +169,7 @@ const ListRequest = () => {
     {
       name: "WEBSITE URL",
       selector: (row) => {
-        return (
-          <span title={row.website_url}>{row.website_url}</span>
-        );
+        return <span title={row.website_url}>{row.website_url}</span>;
       },
       wrap: true,
       sortable: true,
@@ -193,23 +191,26 @@ const ListRequest = () => {
       selector: (row) => {
         return (
           <span
-            title={row.sponsor_approve == "1"
-            ? "APPROVED"
-            : row.sponsor_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
-            className={`text-color-${row.sponsor_approve == "1"
+            title={
+              row.sponsor_approve == "1"
+                ? "APPROVED"
+                : row.sponsor_approve == "2"
+                ? "REJECTED"
+                : "PENDING"
+            }
+            className={`text-color-${
+              row.sponsor_approve == "1"
                 ? "green"
                 : row.sponsor_approve == "2"
-                  ? "red"
-                  : "yellow"
-              }`}
+                ? "red"
+                : "yellow"
+            }`}
           >
             {row.sponsor_approve == "1"
               ? "APPROVED"
               : row.sponsor_approve == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -223,23 +224,26 @@ const ListRequest = () => {
       selector: (row) => {
         return (
           <span
-            title={row.admin_approve == "1"
-            ? "APPROVED"
-            : row.admin_approve == "2"
-              ? "REJECTED"
-              : "PENDING"}
-            className={`text-color-${row.admin_approve == "1"
+            title={
+              row.admin_approve == "1"
+                ? "APPROVED"
+                : row.admin_approve == "2"
+                ? "REJECTED"
+                : "PENDING"
+            }
+            className={`text-color-${
+              row.admin_approve == "1"
                 ? "green"
                 : row.admin_approve == "2"
-                  ? "red"
-                  : "yellow"
-              }`}
+                ? "red"
+                : "yellow"
+            }`}
           >
             {row.admin_approve == "1"
               ? "APPROVED"
               : row.admin_approve == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -253,19 +257,22 @@ const ListRequest = () => {
       selector: (row) => {
         return (
           <span
-            title={row.status == "1"
-            ? "APPROVED"
-            : row.status == "2"
-              ? "REJECTED"
-              : "PENDING"}
-            className={`text-color-${row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
-              }`}
+            title={
+              row.status == "1"
+                ? "APPROVED"
+                : row.status == "2"
+                ? "REJECTED"
+                : "PENDING"
+            }
+            className={`text-color-${
+              row.status == "1" ? "green" : row.status == "2" ? "red" : "yellow"
+            }`}
           >
             {row.status == "1"
               ? "APPROVED"
               : row.status == "2"
-                ? "REJECTED"
-                : "PENDING"}
+              ? "REJECTED"
+              : "PENDING"}
           </span>
         );
       },
@@ -743,52 +750,55 @@ const ListRequest = () => {
                       <div className="display-element">
                         <h6>IB APPROVE</h6>
                         <div
-                          className={`col s12 text-color-${ibdata.sponsor_approve == "1"
+                          className={`col s12 text-color-${
+                            ibdata.sponsor_approve == "1"
                               ? "green"
                               : ibdata.sponsor_approve == "2"
-                                ? "red"
-                                : "yellow"
-                            }`}
+                              ? "red"
+                              : "yellow"
+                          }`}
                         >
                           {ibdata.sponsor_approve == "1"
                             ? "APPROVED"
                             : ibdata.sponsor_approve == "2"
-                              ? "REJECTED"
-                              : "PENDING"}
+                            ? "REJECTED"
+                            : "PENDING"}
                         </div>
                       </div>
                       <div className="display-element">
                         <h6>ADMIN APPROVE</h6>
                         <div
-                          className={`col s12 text-color-${ibdata.admin_approve == "1"
+                          className={`col s12 text-color-${
+                            ibdata.admin_approve == "1"
                               ? "green"
                               : ibdata.admin_approve == "2"
-                                ? "red"
-                                : "yellow"
-                            }`}
+                              ? "red"
+                              : "yellow"
+                          }`}
                         >
                           {ibdata.admin_approve == "1"
                             ? "APPROVED"
                             : ibdata.admin_approve == "2"
-                              ? "REJECTED"
-                              : "PENDING"}
+                            ? "REJECTED"
+                            : "PENDING"}
                         </div>
                       </div>
                       <div className="display-element">
                         <h6>STATUS</h6>
                         <div
-                          className={`col s12 text-color-${ibdata.status == "1"
+                          className={`col s12 text-color-${
+                            ibdata.status == "1"
                               ? "green"
                               : ibdata.status == "2"
-                                ? "red"
-                                : "yellow"
-                            }`}
+                              ? "red"
+                              : "yellow"
+                          }`}
                         >
                           {ibdata.status == "1"
                             ? "APPROVED"
                             : ibdata.status == "2"
-                              ? "REJECTED"
-                              : "PENDING"}
+                            ? "REJECTED"
+                            : "PENDING"}
                         </div>
                       </div>{" "}
                     </div>
@@ -828,9 +838,14 @@ const ListRequest = () => {
                                     value={item.group_rebate}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
-                                      var floatNumber = (e.target.value).split('.');
+                                      var floatNumber =
+                                        e.target.value.split(".");
                                       if (!isNaN(Number(e.target.value))) {
-                                        if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                        if (
+                                          floatNumber.length == 1 ||
+                                          (floatNumber.length == 2 &&
+                                            floatNumber[1].length <= 3)
+                                        ) {
                                           updateDate.structure_data[index][
                                             "group_rebate"
                                           ] = e.target.value;
@@ -846,8 +861,10 @@ const ListRequest = () => {
                                             ...updateDate,
                                           });
                                         }
-                                      }
-                                      else if (e.target.value == "" || e.target.value == 0) {
+                                      } else if (
+                                        e.target.value == "" ||
+                                        e.target.value == 0
+                                      ) {
                                         updateDate.structure_data[index][
                                           "group_rebate"
                                         ] = 0;
@@ -856,8 +873,7 @@ const ListRequest = () => {
                                         ].forEach((value, valueIndex) => {
                                           updateDate.structure_data[index][
                                             "pair_data"
-                                          ][valueIndex]["rebate"] =
-                                            0;
+                                          ][valueIndex]["rebate"] = 0;
                                         });
                                         setUpdateDate({
                                           ...updateDate,
@@ -875,9 +891,14 @@ const ListRequest = () => {
                                     value={item.group_commission}
                                     disabled={!isDefaultStructure}
                                     onChange={(e) => {
-                                      var floatNumber = (e.target.value).split('.');
+                                      var floatNumber =
+                                        e.target.value.split(".");
                                       if (!isNaN(Number(e.target.value))) {
-                                        if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                        if (
+                                          floatNumber.length == 1 ||
+                                          (floatNumber.length == 2 &&
+                                            floatNumber[1].length <= 3)
+                                        ) {
                                           updateDate.structure_data[index][
                                             "group_commission"
                                           ] = e.target.value;
@@ -893,7 +914,10 @@ const ListRequest = () => {
                                             ...updateDate,
                                           });
                                         }
-                                      } else if (e.target.value == "" || e.target.value == 0) {
+                                      } else if (
+                                        e.target.value == "" ||
+                                        e.target.value == 0
+                                      ) {
                                         updateDate.structure_data[index][
                                           "group_commission"
                                         ] = 0;
@@ -911,8 +935,10 @@ const ListRequest = () => {
                                     }}
                                   />
                                 </div>
+                              </div>
+                              <div className="action-section">
                                 {isDefaultStructure ? (
-                                  <div>
+                                  <div style={{ width: "95%" }}>
                                     {item.ibGroup != undefined ? (
                                       <Autocomplete
                                         className="autoComplete-input-remove-border"
@@ -954,8 +980,6 @@ const ListRequest = () => {
                                 ) : (
                                   ""
                                 )}
-                              </div>
-                              <div className="action-section">
                                 <span
                                   onClick={(e) => {
                                     updateDate.structure_data[index][
@@ -965,18 +989,20 @@ const ListRequest = () => {
                                   }}
                                 >
                                   <i
-                                    class={`fa ${item.is_visible
+                                    class={`fa ${
+                                      item.is_visible
                                         ? "fa-angle-up"
                                         : "fa-angle-down"
-                                      }`}
+                                    }`}
                                     aria-hidden="true"
                                   ></i>
                                 </span>
                               </div>
                             </div>
                             <div
-                              className={`pair-section ${item.is_visible ? "child-section-visible" : ""
-                                }`}
+                              className={`pair-section ${
+                                item.is_visible ? "child-section-visible" : ""
+                              }`}
                             >
                               {item.pair_data.map((item1, index1) => {
                                 return (
@@ -992,17 +1018,26 @@ const ListRequest = () => {
                                         value={item1.rebate}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
-                                          var floatNumber = (e.target.value).split('.');
+                                          var floatNumber =
+                                            e.target.value.split(".");
                                           if (!isNaN(Number(e.target.value))) {
-                                            if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                            if (
+                                              floatNumber.length == 1 ||
+                                              (floatNumber.length == 2 &&
+                                                floatNumber[1].length <= 3)
+                                            ) {
                                               updateDate.structure_data[index][
                                                 "pair_data"
-                                              ][index1]["rebate"] = e.target.value;
+                                              ][index1]["rebate"] =
+                                                e.target.value;
                                               setUpdateDate({
                                                 ...updateDate,
                                               });
                                             }
-                                          } else if (e.target.value == "" || e.target.value == 0) {
+                                          } else if (
+                                            e.target.value == "" ||
+                                            e.target.value == 0
+                                          ) {
                                             updateDate.structure_data[index][
                                               "pair_data"
                                             ][index1]["rebate"] = 0;
@@ -1021,9 +1056,14 @@ const ListRequest = () => {
                                         value={item1.commission}
                                         disabled={!isDefaultStructure}
                                         onChange={(e) => {
-                                          var floatNumber = (e.target.value).split('.');
+                                          var floatNumber =
+                                            e.target.value.split(".");
                                           if (!isNaN(Number(e.target.value))) {
-                                            if (floatNumber.length == 1 || floatNumber.length == 2 && floatNumber[1].length <= 3) {
+                                            if (
+                                              floatNumber.length == 1 ||
+                                              (floatNumber.length == 2 &&
+                                                floatNumber[1].length <= 3)
+                                            ) {
                                               updateDate.structure_data[index][
                                                 "pair_data"
                                               ][index1]["commission"] =
@@ -1032,7 +1072,10 @@ const ListRequest = () => {
                                                 ...updateDate,
                                               });
                                             }
-                                          } else if (e.target.value == "" || e.target.value == 0) {
+                                          } else if (
+                                            e.target.value == "" ||
+                                            e.target.value == 0
+                                          ) {
                                             updateDate.structure_data[index][
                                               "pair_data"
                                             ][index1]["commission"] = 0;
@@ -1143,7 +1186,9 @@ const ListRequest = () => {
                         </ColorButton>
                       ) : (
                         <ColorButton onClick={updatePartnership}>
-                          {updateDate.structure_id == "" ? "Approve structure" : "Update structure"}
+                          {updateDate.structure_id == ""
+                            ? "Approve structure"
+                            : "Update structure"}
                         </ColorButton>
                       )}
                       {/* <ColorButton onClick={updatePartnership}>Update</ColorButton> */}

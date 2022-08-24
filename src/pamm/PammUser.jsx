@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +37,7 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
+const re = /^[A-Za-z_ ]*$/;
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -184,6 +186,19 @@ const PammUser = () => {
     login_block: "",
     user_dob: "",
     user_city: "",
+  });
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    user_first_name: false,
+    user_last_name: false,
+    user_email: false,
+    user_phone: false,
+    user_gender: false,
+    user_country: false,
+    user_address_1: false,
+    user_address_2: false,
+    login_block: false,
+    user_dob: false,
+    user_city: false,
   });
   const [countryData, setCountryData] = useState({
     data: [],
@@ -442,7 +457,28 @@ const PammUser = () => {
               className="input-font-small"
               label="First Name"
               variant="standard"
-              onChange={input}
+              // onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
+              onBlur={inputtrueFalse}
+              error={
+                form.user_first_name == "" && inputinfoTrue.user_first_name
+                  ? true
+                  : false
+              }
+              helperText={
+                form.user_first_name == "" && inputinfoTrue.user_first_name
+                  ? "First Name is required"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="user_first_name"
               value={form.user_first_name}
@@ -453,8 +489,29 @@ const PammUser = () => {
               className="input-font-small"
               label="Last Name"
               variant="standard"
-              onChange={input}
+              // onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
+              error={
+                form.user_last_name == "" && inputinfoTrue.user_last_name
+                  ? true
+                  : false
+              }
+              helperText={
+                form.user_last_name == "" && inputinfoTrue.user_last_name
+                  ? "Last Name is required"
+                  : ""
+              }
               name="user_last_name"
               value={form.user_last_name}
             />
@@ -465,8 +522,27 @@ const PammUser = () => {
               label="Email"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="user_email"
+              helperText={
+                form.user_email == "" && inputinfoTrue.user_email
+                  ? "Email is required"
+                  : !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                      form.user_email
+                    ) && inputinfoTrue.user_email
+                  ? "Enter a valid email"
+                  : ""
+              }
+              error={
+                (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                  form.user_email
+                ) ||
+                  form.user_email == "") &&
+                inputinfoTrue.user_email == true
+                  ? true
+                  : false
+              }
               value={form.user_email}
             />
           </div>
@@ -476,7 +552,16 @@ const PammUser = () => {
               label="Mobile"
               variant="standard"
               name="user_phone"
+              onBlur={inputtrueFalse}
               value={form.user_phone}
+              error={
+                form.user_phone == "" && inputinfoTrue.user_phone ? true : false
+              }
+              helperText={
+                form.user_phone == "" && inputinfoTrue.user_phone
+                  ? "Mobile Number is required"
+                  : ""
+              }
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
                   input(e);
@@ -493,6 +578,7 @@ const PammUser = () => {
                 className="select-font-small"
                 name="user_gender"
                 onChange={input}
+                onBlur={inputtrueFalse}
                 value={form.user_gender}
               >
                 <MenuItem value="male">Male</MenuItem>
@@ -506,9 +592,18 @@ const PammUser = () => {
               label="Date Of Birth"
               type="date"
               variant="standard"
+              onBlur={inputtrueFalse}
               onChange={input}
               sx={{ width: "100%" }}
               name="user_dob"
+              error={
+                form.user_phone == "" && inputinfoTrue.user_phone ? true : false
+              }
+              helperText={
+                form.user_phone == "" && inputinfoTrue.user_phone
+                  ? "Mobile Number is required"
+                  : ""
+              }
               value={form.user_dob}
               focused
             />
@@ -519,6 +614,17 @@ const PammUser = () => {
               label="Address 1"
               variant="standard"
               onChange={input}
+              error={
+                form.user_address_1 == "" && inputinfoTrue.user_address_1
+                  ? true
+                  : false
+              }
+              helperText={
+                form.user_address_1 == "" && inputinfoTrue.user_address_1
+                  ? "Address 1 is required"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="user_address_1"
               value={form.user_address_1}
@@ -532,19 +638,29 @@ const PammUser = () => {
               variant="standard"
               onChange={input}
               sx={{ width: "100%" }}
+              onBlur={inputtrueFalse}
               name="user_address_2"
               value={form.user_address_2}
               multiline
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.user_country == "" && inputinfoTrue.user_country
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Country</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="user_country"
                 onChange={input}
+                onBlur={inputtrueFalse}
                 value={form.user_country}
               >
                 {countryData.data.map((item) => {
@@ -553,6 +669,11 @@ const PammUser = () => {
                   );
                 })}
               </Select>
+              {form.user_country == "" && inputinfoTrue.user_country ? (
+                <FormHelperText>Country is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -560,7 +681,18 @@ const PammUser = () => {
               className="input-font-small"
               label="City"
               variant="standard"
-              onChange={input}
+              // onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="user_city"
               value={form.user_city}
@@ -574,6 +706,7 @@ const PammUser = () => {
                 className="select-font-small"
                 name="login_block"
                 onChange={input}
+                onBlur={inputtrueFalse}
                 value={form.login_block}
               >
                 <MenuItem value="0">Active</MenuItem>
@@ -676,6 +809,15 @@ const PammUser = () => {
       };
     });
   };
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
 
   const edit = (data) => {
     const param = new FormData();
@@ -707,6 +849,19 @@ const PammUser = () => {
           login_block: res.data.data.login_block,
           user_city: res.data.data.user_city,
           user_dob: res.data.data.user_dob,
+        });
+        setinputinfoTrue({
+          user_first_name: false,
+          user_last_name: false,
+          user_email: false,
+          user_phone: false,
+          user_gender: false,
+          user_country: false,
+          user_address_1: false,
+          user_address_2: false,
+          login_block: false,
+          user_dob: false,
+          user_city: false,
         });
         setDialogTitle("Edit");
         setOpen(true);
@@ -750,6 +905,7 @@ const PammUser = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "update_user_details");
       param.append("user_id", form.user_id);

@@ -8,6 +8,7 @@ import {
   Chip,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   Input,
   InputLabel,
@@ -204,6 +205,21 @@ const Leads = () => {
     isAdminSendsms: false,
     isLoader: false,
   });
+
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    customer_name: false,
+    customer_mobile: false,
+    customer_email: false,
+    customer_address: false,
+    source_id: false,
+    source_desc: false,
+    interest: false,
+    assign: false,
+    date: false,
+    time: false,
+    remark: false,
+    customer_country: false,
+  });
   const [newFollowupForm, setNewFollowupForm] = useState({
     date: "",
     time: "",
@@ -267,6 +283,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     axios.post(Url + "/datatable/get_countries.php", param).then((res) => {
       if (res.data.message == "Session has been expired") {
@@ -286,6 +303,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "list_managers");
 
@@ -327,6 +345,20 @@ const Leads = () => {
       isAssignSendsms: false,
       isAdminSendsms: false,
       isLoader: false,
+    });
+    setinputinfoTrue({
+      customer_name: false,
+      customer_mobile: false,
+      customer_email: false,
+      customer_address: false,
+      source_id: false,
+      source_desc: false,
+      interest: false,
+      assign: false,
+      date: false,
+      time: false,
+      remark: false,
+      customer_country: false,
     });
     setDialogTitle("Add Lead");
     setMaxWidth("md");
@@ -489,6 +521,7 @@ const Leads = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("cp_access", cpData.cp_access);
       param.append("leads_status", "1");
@@ -547,6 +580,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("cp_access", "");
     param.append("leads_status", "2");
@@ -589,7 +623,29 @@ const Leads = () => {
               sx={{ width: "100%" }}
               focused
               name="customer_name"
-              onChange={input}
+              value={form.customer_name}
+              // onChange={input}
+              error={
+                form.customer_name == "" && inputinfoTrue.customer_name
+                  ? true
+                  : false
+              }
+              helperText={
+                form.customer_name == "" && inputinfoTrue.customer_name
+                  ? "Customer Name is required"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  /^[A-Za-z_ ]*$/.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
             />
             <TextField
               type="text"
@@ -597,8 +653,30 @@ const Leads = () => {
               variant="standard"
               sx={{ width: "100%" }}
               focused
+              onBlur={inputtrueFalse}
               name="customer_mobile"
-              onChange={input}
+              // onChange={input}
+              error={
+                form.customer_mobile == "" && inputinfoTrue.customer_mobile
+                  ? true
+                  : false
+              }
+              helperText={
+                form.customer_mobile == "" && inputinfoTrue.customer_mobile
+                  ? "Customer Mobile is required"
+                  : ""
+              }
+              value={form.customer_mobile}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  /^[0-9]*$/.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
             />
           </div>
           <br />
@@ -609,6 +687,25 @@ const Leads = () => {
               variant="standard"
               sx={{ width: "100%" }}
               focused
+              helperText={
+                form.customer_email == "" && inputinfoTrue.customer_email
+                  ? "Email is required"
+                  : !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                      form.customer_email
+                    ) && inputinfoTrue.customer_email
+                  ? "Enter a valid email"
+                  : ""
+              }
+              error={
+                (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                  form.customer_email
+                ) ||
+                  form.customer_email == "") &&
+                inputinfoTrue.customer_email == true
+                  ? true
+                  : false
+              }
+              onBlur={inputtrueFalse}
               name="customer_email"
               onChange={input}
             />
@@ -617,25 +714,53 @@ const Leads = () => {
               label="Customer Address"
               multiline
               variant="standard"
+              error={
+                form.customer_address == "" && inputinfoTrue.customer_address
+                  ? true
+                  : false
+              }
+              helperText={
+                form.customer_address == "" && inputinfoTrue.customer_address
+                  ? "Customer Address is required"
+                  : ""
+              }
               sx={{ width: "100%" }}
               focused
+              onBlur={inputtrueFalse}
               name="customer_address"
               onChange={input}
             />
           </div>
           <br />
           <div className="element margeTwoField">
-            <FormControl variant="standard" sx={{ width: "100%" }} focused>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              focused
+              error={
+                form.source_id == "" && inputinfoTrue.source_id ? true : false
+              }
+            >
               <InputLabel id="demo-simple-select-standard-label">
                 Source
               </InputLabel>
-              <Select onChange={input} label="Source" name="source_id">
+              <Select
+                onChange={input}
+                label="Source"
+                name="source_id"
+                onBlur={inputtrueFalse}
+              >
                 {soure.map((item) => {
                   return (
                     <MenuItem value={item.source_id}>{item.name}</MenuItem>
                   );
                 })}
               </Select>
+              {form.source_id == "" && inputinfoTrue.source_id ? (
+                <FormHelperText>Source is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
             <TextField
               type="text"
@@ -644,25 +769,58 @@ const Leads = () => {
               variant="standard"
               sx={{ width: "100%" }}
               focused
+              error={
+                form.source_desc == "" && inputinfoTrue.source_desc
+                  ? true
+                  : false
+              }
+              helperText={
+                form.source_desc == "" && inputinfoTrue.source_desc
+                  ? "Source Description is required"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
               name="source_desc"
               onChange={input}
             />
           </div>
           <br />
           <div className="margeTwoField element">
-            <FormControl variant="standard" sx={{ width: "100%" }} focused>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              focused
+              error={
+                form.interest == "" && inputinfoTrue.interest ? true : false
+              }
+            >
               <InputLabel id="demo-simple-select-standard-label">
                 Interest
               </InputLabel>
-              <Select onChange={input} label="Interest" name="interest">
+              <Select
+                onChange={input}
+                label="Interest"
+                name="interest"
+                onBlur={inputtrueFalse}
+              >
                 <MenuItem value="Very Low">Very Low</MenuItem>
                 <MenuItem value="Low">Low</MenuItem>
                 <MenuItem value="Average">Average</MenuItem>
                 <MenuItem value="High">High</MenuItem>
                 <MenuItem value="Very High">Very High</MenuItem>
               </Select>
+              {form.interest == "" && inputinfoTrue.interest ? (
+                <FormHelperText>Interest is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
-            <FormControl variant="standard" sx={{ width: "100%" }} focused>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              focused
+              error={form.assign == "" && inputinfoTrue.assign ? true : false}
+            >
               <InputLabel id="demo-simple-select-standard-label">
                 Assign To Sales-Executive
               </InputLabel>
@@ -670,6 +828,7 @@ const Leads = () => {
                 onChange={input}
                 label="Assign To Sales-Executive"
                 name="assign"
+                onBlur={inputtrueFalse}
               >
                 {listManagers.map((item) => {
                   return (
@@ -679,6 +838,13 @@ const Leads = () => {
                   );
                 })}
               </Select>
+              {form.assign == "" && inputinfoTrue.assign ? (
+                <FormHelperText>
+                  Assign To Sales-Executive is required
+                </FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
@@ -689,6 +855,13 @@ const Leads = () => {
               variant="standard"
               sx={{ width: "100%" }}
               focused
+              onBlur={inputtrueFalse}
+              error={form.date == "" && inputinfoTrue.date ? true : false}
+              helperText={
+                form.date == "" && inputinfoTrue.date
+                  ? "Follow Up Date is required"
+                  : ""
+              }
               name="date"
               onChange={input}
             />
@@ -698,13 +871,29 @@ const Leads = () => {
               variant="standard"
               sx={{ width: "100%" }}
               focused
+              onBlur={inputtrueFalse}
               name="time"
+              error={form.time == "" && inputinfoTrue.time ? true : false}
+              helperText={
+                form.time == "" && inputinfoTrue.time
+                  ? "Follow Up Time is required"
+                  : ""
+              }
               onChange={input}
             />
           </div>
           <br />
           <div className="element">
-            <FormControl variant="standard" sx={{ width: "100%" }} focused>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              focused
+              error={
+                form.customer_country == "" && inputinfoTrue.customer_country
+                  ? true
+                  : false
+              }
+            >
               <InputLabel id="demo-simple-select-standard-label">
                 Country
               </InputLabel>
@@ -713,6 +902,7 @@ const Leads = () => {
                 onChange={input}
                 label="Interest"
                 name="customer_country"
+                onBlur={inputtrueFalse}
                 value={form.customer_country}
               >
                 {countryData.map((item) => {
@@ -721,6 +911,11 @@ const Leads = () => {
                   );
                 })}
               </Select>
+              {form.customer_country == "" && inputinfoTrue.customer_country ? (
+                <FormHelperText>Country is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
             <br />
             <br />
@@ -729,6 +924,7 @@ const Leads = () => {
               multiline
               variant="standard"
               focused
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="remark"
               onChange={input}
@@ -1761,6 +1957,7 @@ const Leads = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("customer_name", form.customer_name);
       param.append("customer_mobile", form.customer_mobile);
@@ -1840,6 +2037,15 @@ const Leads = () => {
     });
   };
 
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const input3 = (event) => {
     const { name, value } = event.target;
     if (name == "demo_mt5" && value == "1") {
@@ -1909,6 +2115,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "change_interest");
     param.append("inquiry_id", data.inquiry_id);
@@ -1965,6 +2172,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "change_assign_to");
     param.append("inquiry_id", data.inquiry_id);
@@ -1989,6 +2197,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "get_default_ib_groups");
     await axios
@@ -2068,6 +2277,7 @@ const Leads = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("status_id", newFollowupForm.interest);
       param.append("lead_assign_user_id", newFollowupForm.lead_assign_user_id);
@@ -2107,7 +2317,6 @@ const Leads = () => {
   };
 
   const actionMenuPopup = (e, data) => {
-
     handleContextClose(data.sr_no);
     if (e.target.classList.contains("not_interested")) {
       confirmAlert({
@@ -2249,6 +2458,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     await axios
       .post(`${Url}/ajaxfiles/update_lead_status.php`, param)
@@ -2276,6 +2486,7 @@ const Leads = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("import_lead_file", doc.file);
     await axios.post(`${Url}/ajaxfiles/import_leads.php`, param).then((res) => {

@@ -372,3 +372,13 @@
         align-items: center;
     }
 }
+.money-manager-profile-section .master .master__wrapper .master__inner .master__section .m__profile__preview .m__ct-start-button1{
+    background-color: #ebd7d7;
+    color: #972f2f;
+    margin-bottom: 0;
+}
+.money-manager-profile-section .master .master__wrapper .master__inner .master__section .m__profile__preview .m__ct-start-button2{
+    background-color: #d7ecd9;
+    color: #3d972f;
+    margin-bottom: 0;
+}

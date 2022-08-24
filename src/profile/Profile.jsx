@@ -20,6 +20,7 @@ import {
   Autocomplete,
   RadioGroup,
   Radio,
+  FormHelperText,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
@@ -180,6 +181,8 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const Profile = () => {
+  const re = /^[A-Za-z_ ]*$/;
+
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -241,13 +244,26 @@ const Profile = () => {
     account_type: "",
     account_option: "",
     mt5_balance: "",
+    confirm_password: "",
+    password: "",
     isLoader: false,
+  });
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    account_type: false,
+    account_option: false,
+    confirm_password: false,
+    password: false,
+    mt5_balance: false,
   });
   const [createLiveType, setCreateLiveType] = useState([]);
   const [Mt5AccessForm, setMt5AccessForm] = useState({
     account_type: "",
     status: "",
     isLoader: false,
+  });
+  const [input1infoTrue, setinput1infoTrue] = useState({
+    account_type: false,
+    status: false,
   });
   const [linkAccountForm, setLinkAccountForm] = useState({
     account_number: "",
@@ -257,6 +273,15 @@ const Profile = () => {
     password: "",
     confirm_password: "",
     isLoader: false,
+  });
+
+  const [input2infoTrue, setinput2infoTrue] = useState({
+    account_number: false,
+    account_type: false,
+    account_name: false,
+    account_option: false,
+    password: false,
+    confirm_password: false,
   });
   const [resetMt5PasswordForm, setResetMt5PasswordForm] = useState({
     mt5_id: "",
@@ -268,12 +293,23 @@ const Profile = () => {
     leverage: "",
     isLoader: false,
   });
+
+  const [input4infoTrue, setinput4infoTrue] = useState({
+    account: false,
+    leverage: false,
+  });
   const [changeAccountPasswordForm, setChangeAccountPasswordForm] = useState({
     mt5_id: "",
     new_password: "",
     confirm_password: "",
     password_type: "",
     isLoader: "",
+  });
+  const [input5infoTrue, setinput5infoTrue] = useState({
+    mt5_id: false,
+    new_password: false,
+    confirm_password: false,
+    password_type: false,
   });
   const [masterStructureForm, setmasterStructureForm] = useState({
     name: "",
@@ -350,6 +386,15 @@ const Profile = () => {
     visLoader: false,
     isLoader: false,
   });
+  const [bankIinfoTrue, setbankIinfoTrue] = useState({
+    name: false,
+    bank_name: false,
+    bank_address: false,
+    iban_number: false,
+    account_number: false,
+    confirm_account_number: false,
+    user_bank_id: false,
+  });
   const [transactionForm, setTransactionForm] = useState({
     type: "",
     from_account_type: "",
@@ -369,7 +414,31 @@ const Profile = () => {
     wallet_code: "",
     mt5_account_id: "",
     isLoder: false,
+    user_bank_id: "",
+    upi_name: "",
+    upi_crypto_ac_number: "",
+    crypto_name: "",
   });
+  const [trinputinfoTrue, settrinputinfoTrue] = useState({
+    type: false,
+    from_account_type: false,
+    mt5_id: false,
+    credit_type: false,
+    deposit_to: false,
+    transfer_to: false,
+    account: false,
+    account_to: false,
+    payment: false,
+    payment_method: false,
+    amount: false,
+    note: false,
+    currency_code: false,
+    isLoader: false,
+    transation_id: false,
+    wallet_code: false,
+    mt5_account_id: false,
+  });
+
   const [linkCampaignForm, setLinkCampaignForm] = useState({
     account: "",
     campaign: "",
@@ -1206,6 +1275,11 @@ const Profile = () => {
     new_password: "",
     isLoader: false,
   });
+  const [chinputinfoTrue, setchinputinfoTrue] = useState({
+    password: false,
+    new_password: false,
+  });
+
   const [pammAccess, setPammAccess] = useState({
     status: "",
     isLoader: false,
@@ -1223,6 +1297,11 @@ const Profile = () => {
     portfolio_name: "",
     mm_mt5_acc_id: "",
     investment_months: "",
+  });
+  const [cpinputinfoTrue, setcpinputinfoTrue] = useState({
+    portfolio_name: false,
+    mm_mt5_acc_id: false,
+    investment_months: false,
   });
   const [investmentForm, setInvestmentForm] = useState({
     isLoader: false,
@@ -2079,7 +2158,16 @@ const Profile = () => {
         account_type: "",
         account_option: "",
         mt5_balance: "",
+        confirm_password: "",
+        password: "",
         isLoader: false,
+      });
+      setinputinfoTrue({
+        account_type: false,
+        account_option: false,
+        confirm_password: false,
+        password: false,
+        mt5_balance: false,
       });
     } else if (e.target.classList.contains("mt5_access")) {
       setDialogTitle("MT5 Access");
@@ -2087,6 +2175,10 @@ const Profile = () => {
         account_type: "",
         status: "",
         isLoader: false,
+      });
+      setinput1infoTrue({
+        account_type: false,
+        status: false,
       });
     } else if (e.target.classList.contains("link_mt5")) {
       setDialogTitle("Link Existing Account");
@@ -2097,6 +2189,14 @@ const Profile = () => {
         password: "",
         confirm_password: "",
         isLoader: false,
+      });
+      setinput2infoTrue({
+        account_number: false,
+        account_type: false,
+        account_name: false,
+        account_option: false,
+        password: false,
+        confirm_password: false,
       });
     } else if (e.target.classList.contains("reset_mt5")) {
       setDialogTitle("Reset MT5 Password");
@@ -2110,6 +2210,10 @@ const Profile = () => {
         account: "",
         leverage: "",
         isLoader: false,
+      });
+      setinput4infoTrue({
+        account: false,
+        leverage: false,
       });
     } else if (e.target.classList.contains("add_master_structure")) {
       setDialogTitle("Add Master Structure");
@@ -2251,6 +2355,14 @@ const Profile = () => {
     } else if (e.target.classList.contains("add_bank")) {
       if (row) {
         setDialogTitle("Edit Account");
+        setbankIinfoTrue({
+          name: false,
+          bank_name: false,
+          bank_address: false,
+          iban_number: false,
+          account_number: false,
+          confirm_account_number: false,
+        });
         setBankAccountForm({
           ...bankAccountForm,
           ibanselect: "IFSC",
@@ -2267,7 +2379,14 @@ const Profile = () => {
         });
       } else {
         setDialogTitle("Add Account");
-
+        setbankIinfoTrue({
+          name: false,
+          bank_name: false,
+          bank_address: false,
+          iban_number: false,
+          account_number: false,
+          confirm_account_number: false,
+        });
         setBankAccountForm({
           name: "",
           bank_name: "",
@@ -2303,6 +2422,33 @@ const Profile = () => {
         transation_id: "",
         wallet_code: "",
         mt5_account_id: "",
+        user_bank_id: "",
+        upi_name: "",
+        upi_crypto_ac_number: "",
+        crypto_name: "",
+      });
+      settrinputinfoTrue({
+        type: false,
+        from_account_type: false,
+        mt5_id: false,
+        credit_type: false,
+        deposit_to: false,
+        transfer_to: false,
+        account: false,
+        account_to: false,
+        payment: false,
+        payment_method: false,
+        amount: false,
+        note: false,
+        currency_code: false,
+        isLoader: false,
+        transation_id: false,
+        wallet_code: false,
+        mt5_account_id: false,
+        user_bank_id: false,
+        upi_name: false,
+        upi_crypto_ac_number: false,
+        crypto_name: false,
       });
     } else if (e.target.classList.contains("link_campaign")) {
       setDialogTitle("Link to Campaign");
@@ -2333,12 +2479,22 @@ const Profile = () => {
         password_type: "",
         isLoader: "",
       });
+      setinput5infoTrue({
+        mt5_id: false,
+        new_password: false,
+        confirm_password: false,
+        password_type: false,
+      });
     } else if (e.target.classList.contains("change_password")) {
       setDialogTitle("Change Password");
       setChangePassword({
         password: "",
         new_password: "",
         isLoader: false,
+      });
+      setchinputinfoTrue({
+        password: false,
+        new_password: false,
       });
     } else if (e.target.classList.contains("pamm_access")) {
       setDialogTitle("Pamm Access");
@@ -2387,28 +2543,54 @@ const Profile = () => {
       return (
         <div>
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                inputinfoTrue.account_type && createMt5Form.account_type == ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Account Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="account_type"
+                value={createMt5Form.account_type}
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 <MenuItem value="1">Live</MenuItem>
                 <MenuItem value="0">Demo</MenuItem>
               </Select>
+              {inputinfoTrue.account_type &&
+              createMt5Form.account_type == "" ? (
+                <FormHelperText>Account Type is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                inputinfoTrue.account_option &&
+                createMt5Form.account_option == ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Account option</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="account_option"
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {createMt5Form.account_type == "1" ? (
                   createLiveType.map((item) => {
@@ -2422,6 +2604,12 @@ const Profile = () => {
                   <MenuItem value="1">DEMO</MenuItem>
                 )}
               </Select>
+              {inputinfoTrue.account_option &&
+              createMt5Form.account_option == "" ? (
+                <FormHelperText>Account option is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           {createMt5Form.account_type == "0" ? (
@@ -2434,6 +2622,17 @@ const Profile = () => {
                 sx={{ width: "100%" }}
                 name="mt5_balance"
                 value={createMt5Form.mt5_balance}
+                onBlur={inputtrueFalse}
+                error={
+                  inputinfoTrue.mt5_balance && createMt5Form.mt5_balance == ""
+                    ? true
+                    : false
+                }
+                helperText={
+                  inputinfoTrue.mt5_balance && createMt5Form.mt5_balance == ""
+                    ? "MT5 Balance is required"
+                    : ""
+                }
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     createMt5Form.mt5_balance = e.target.value;
@@ -2451,6 +2650,18 @@ const Profile = () => {
               <TextField
                 className="input-font-small hint-color-red"
                 type="password"
+                error={
+                  (!createMt5Form.password.match(/[A-Z]/g) ||
+                    !createMt5Form.password.match(/[a-z]/g) ||
+                    !createMt5Form.password.match(/[0-9]/g) ||
+                    createMt5Form.password == "" ||
+                    createMt5Form.password.length < 8 ||
+                    createMt5Form.password.length >= 20 ||
+                    !createMt5Form.password.match(/[!@#$%^&*()_+=]/g)) &&
+                  inputinfoTrue.password
+                    ? true
+                    : false
+                }
                 label={
                   createMt5Form.account_type == "0"
                     ? "Password"
@@ -2458,8 +2669,24 @@ const Profile = () => {
                 }
                 variant="standard"
                 onChange={input}
+                onBlur={inputtrueFalse}
                 sx={{ width: "100%" }}
                 name="password"
+                helperText={
+                  createMt5Form.password == "" && inputinfoTrue.password
+                    ? "Enter your password"
+                    : inputinfoTrue.password &&
+                      (createMt5Form.password.length < 8 ||
+                        createMt5Form.password.length >= 20)
+                    ? "Password must contain atleast 8-20 characters"
+                    : inputinfoTrue.password &&
+                      (!createMt5Form.password.match(/[A-Z]/g) ||
+                        !createMt5Form.password.match(/[a-z]/g) ||
+                        !createMt5Form.password.match(/[0-9]/g) ||
+                        !createMt5Form.password.match(/[!@#$%^&*()_+=]/g))
+                    ? "Atleast one lower case, upper case,special character and number required"
+                    : ""
+                }
                 // helperText="Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
               />
             </div>
@@ -2478,8 +2705,57 @@ const Profile = () => {
                     ? "Confirm Password"
                     : "investor Password"
                 }
+                error={
+                  createMt5Form.account_type == "0"
+                    ? (createMt5Form.password !==
+                        createMt5Form.confirm_password ||
+                        createMt5Form.confirm_password == "") &&
+                      inputinfoTrue.confirm_password
+                      ? true
+                      : false
+                    : (!createMt5Form.confirm_password.match(/[A-Z]/g) ||
+                        !createMt5Form.confirm_password.match(/[a-z]/g) ||
+                        !createMt5Form.confirm_password.match(/[0-9]/g) ||
+                        createMt5Form.confirm_password == "" ||
+                        createMt5Form.confirm_password.length < 8 ||
+                        createMt5Form.confirm_password.length >= 20 ||
+                        !createMt5Form.confirm_password.match(
+                          /[!@#$%^&*()_+=]/g
+                        )) &&
+                      inputinfoTrue.confirm_password
+                    ? true
+                    : false
+                }
                 variant="standard"
                 onChange={input}
+                onBlur={inputtrueFalse}
+                helperText={
+                  createMt5Form.account_type == "0"
+                    ? createMt5Form.confirm_password == "" &&
+                      inputinfoTrue.confirm_password
+                      ? "Enter your Confirm Password"
+                      : createMt5Form.password !==
+                          createMt5Form.confirm_password &&
+                        inputinfoTrue.confirm_password
+                      ? "Passwords must match"
+                      : ""
+                    : createMt5Form.confirm_password == "" &&
+                      inputinfoTrue.confirm_password
+                    ? "Enter your investor Password"
+                    : inputinfoTrue.confirm_password &&
+                      (createMt5Form.confirm_password.length < 8 ||
+                        createMt5Form.confirm_password.length >= 20)
+                    ? "investor Password must contain atleast 8-20 characters"
+                    : inputinfoTrue.confirm_password &&
+                      (!createMt5Form.confirm_password.match(/[A-Z]/g) ||
+                        !createMt5Form.confirm_password.match(/[a-z]/g) ||
+                        !createMt5Form.confirm_password.match(/[0-9]/g) ||
+                        !createMt5Form.confirm_password.match(
+                          /[!@#$%^&*()_+=]/g
+                        ))
+                    ? "Atleast one lower case, upper case,special character and number required"
+                    : ""
+                }
                 sx={{ width: "100%" }}
                 name="confirm_password"
               />
@@ -2493,13 +2769,22 @@ const Profile = () => {
       return (
         <div>
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                Mt5AccessForm.account_type == "" && input1infoTrue.account_type
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Select MT5 Account</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="account_type"
                 onChange={input1}
+                onBlur={input1trueFalse}
               >
                 {mt5AccountList.map((item) => {
                   return (
@@ -2509,22 +2794,42 @@ const Profile = () => {
                   );
                 })}
               </Select>
+              {Mt5AccessForm.account_type == "" &&
+              input1infoTrue.account_type ? (
+                <FormHelperText>MT5 Account is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                Mt5AccessForm.status == "" && input1infoTrue.status
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Status</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="status"
                 onChange={input1}
+                onBlur={input1trueFalse}
                 value={Mt5AccessForm.status}
               >
                 <MenuItem value="1">Activate</MenuItem>
                 <MenuItem value="0">Deactivate</MenuItem>
               </Select>
+              {Mt5AccessForm.status == "" && input1infoTrue.status ? (
+                <FormHelperText>Status is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
         </div>
@@ -2538,33 +2843,78 @@ const Profile = () => {
               label="Account Number"
               variant="standard"
               sx={{ width: "100%" }}
+              type="text"
               name="account_number"
-              onChange={input2}
+              error={
+                linkAccountForm.account_number == "" &&
+                input2infoTrue.account_number
+                  ? true
+                  : false
+              }
+              value={linkAccountForm.account_number}
+              onBlur={input2trueFalse}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  input2(e);
+                }
+              }}
+              helperText={
+                linkAccountForm.account_number == "" &&
+                input2infoTrue.account_number
+                  ? "Account Number is required"
+                  : ""
+              }
             />
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                linkAccountForm.account_type == "" &&
+                input2infoTrue.account_type
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Account Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="account_type"
                 onChange={input2}
+                onBlur={input2trueFalse}
               >
                 <MenuItem value="1">Live</MenuItem>
               </Select>
+              {linkAccountForm.account_type == "" &&
+              input2infoTrue.account_type ? (
+                <FormHelperText>Account Type is required </FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                linkAccountForm.account_option == "" &&
+                input2infoTrue.account_option
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Account Option</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="account_option"
                 onChange={input2}
+                onBlur={input2trueFalse}
               >
                 {createLiveType.map((item) => {
                   return (
@@ -2574,6 +2924,12 @@ const Profile = () => {
                   );
                 })}
               </Select>
+              {linkAccountForm.account_option == "" &&
+              input2infoTrue.account_option ? (
+                <FormHelperText>Account Type is required </FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="padingtopmy5create">
@@ -2581,20 +2937,67 @@ const Profile = () => {
               className="input-font-small"
               type="password"
               label="Password"
+              onBlur={input2trueFalse}
+              error={
+                (!linkAccountForm.password.match(/[A-Z]/g) ||
+                  !linkAccountForm.password.match(/[a-z]/g) ||
+                  !linkAccountForm.password.match(/[0-9]/g) ||
+                  linkAccountForm.password == "" ||
+                  linkAccountForm.password.length < 8 ||
+                  linkAccountForm.password.length >= 20 ||
+                  !linkAccountForm.password.match(/[!@#$%^&*()_+=]/g)) &&
+                input2infoTrue.password
+                  ? true
+                  : false
+              }
               variant="standard"
               onChange={input2}
               sx={{ width: "100%" }}
               name="password"
+              helperText={
+                linkAccountForm.password == "" && input2infoTrue.password
+                  ? "Enter your password"
+                  : input2infoTrue.password &&
+                    (linkAccountForm.password.length < 8 ||
+                      linkAccountForm.password.length >= 20)
+                  ? "Password must contain atleast 8-20 characters"
+                  : input2infoTrue.password &&
+                    (!linkAccountForm.password.match(/[A-Z]/g) ||
+                      !linkAccountForm.password.match(/[a-z]/g) ||
+                      !linkAccountForm.password.match(/[0-9]/g) ||
+                      !linkAccountForm.password.match(/[!@#$%^&*()_+=]/g))
+                  ? "Atleast one lower case, upper case,special character and number required"
+                  : ""
+              }
             />
           </div>
           <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               type="password"
+              error={
+                (linkAccountForm.confirm_password == "" ||
+                  linkAccountForm.password !==
+                    linkAccountForm.confirm_password) &&
+                input2infoTrue.confirm_password
+                  ? true
+                  : false
+              }
               label="Confirm Password"
               variant="standard"
               onChange={input2}
+              onBlur={input2trueFalse}
               sx={{ width: "100%" }}
+              helperText={
+                linkAccountForm.confirm_password == "" &&
+                input2infoTrue.confirm_password
+                  ? "Enter your Confirm password"
+                  : linkAccountForm.password !==
+                      linkAccountForm.confirm_password &&
+                    input2infoTrue.confirm_password
+                  ? "Passwords must match"
+                  : ""
+              }
               name="confirm_password"
             />
           </div>
@@ -2628,13 +3031,22 @@ const Profile = () => {
       return (
         <div>
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                changeLeverageForm.account == "" && input4infoTrue.account
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>MT5 Account</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="account"
                 onChange={input4}
+                onBlur={input4trueFalse}
               >
                 {mt5AccountList.map((item) => {
                   return (
@@ -2644,16 +3056,30 @@ const Profile = () => {
                   );
                 })}
               </Select>
+              {changeLeverageForm.account == "" && input4infoTrue.account ? (
+                <FormHelperText>MT5 Account is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                changeLeverageForm.leverage == "" && input4infoTrue.leverage
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Leverage</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="leverage"
                 onChange={input4}
+                onBlur={input4trueFalse}
               >
                 {leverageForm.map((item) => {
                   return (
@@ -2663,6 +3089,11 @@ const Profile = () => {
                   );
                 })}
               </Select>
+              {changeLeverageForm.leverage == "" && input4infoTrue.leverage ? (
+                <FormHelperText>Leverage is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
         </div>
@@ -3733,10 +4164,28 @@ const Profile = () => {
               value={bankAccountForm.name}
               className="input-font-small"
               label="Beneficiary Name"
+              error={
+                bankAccountForm.name == "" && bankIinfoTrue.name ? true : false
+              }
               variant="standard"
               sx={{ width: "100%" }}
               name="name"
-              onChange={bankInput}
+              onBlur={bankInputtrueFalse}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  // console.log("ok right");
+                  bankInput(e);
+                }
+              }}
+              helperText={
+                bankAccountForm.name == "" && bankIinfoTrue.name
+                  ? "Beneficiary Name is required"
+                  : ""
+              }
             />
           </div>
 
@@ -3748,7 +4197,28 @@ const Profile = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="bank_name"
-              onChange={bankInput}
+              error={
+                bankAccountForm.bank_name == "" && bankIinfoTrue.bank_name
+                  ? true
+                  : false
+              }
+              // onChange={bankInput}
+              onBlur={bankInputtrueFalse}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  // console.log("ok right");
+                  bankInput(e);
+                }
+              }}
+              helperText={
+                bankAccountForm.bank_name == "" && bankIinfoTrue.bank_name
+                  ? "Beneficiary Bank Name is required"
+                  : ""
+              }
             />
           </div>
 
@@ -3761,11 +4231,24 @@ const Profile = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="account_number"
+              onBlur={bankInputtrueFalse}
+              error={
+                bankAccountForm.account_number == "" &&
+                bankIinfoTrue.account_number
+                  ? true
+                  : false
+              }
               onChange={(e) => {
-                if (Number(e.target.value)) {
+                if (Number(e.target.value) || e.target.value == "") {
                   bankInput(e);
                 }
               }}
+              helperText={
+                bankAccountForm.account_number == "" &&
+                bankIinfoTrue.account_number
+                  ? "Account Number is required"
+                  : ""
+              }
             />
           </div>
 
@@ -3775,14 +4258,33 @@ const Profile = () => {
               className="input-font-small"
               label="Confirm Account Number"
               type="text"
+              error={
+                (bankAccountForm.confirm_account_number == "" ||
+                  bankAccountForm.confirm_account_number !==
+                    bankAccountForm.account_number) &&
+                bankIinfoTrue.confirm_account_number
+                  ? true
+                  : false
+              }
               variant="standard"
               sx={{ width: "100%" }}
               name="confirm_account_number"
+              onBlur={bankInputtrueFalse}
               onChange={(e) => {
-                if (Number(e.target.value)) {
+                if (Number(e.target.value) || e.target.value == "") {
                   bankInput(e);
                 }
               }}
+              helperText={
+                bankAccountForm.confirm_account_number == "" &&
+                bankIinfoTrue.confirm_account_number
+                  ? "Confirm Account Number is required"
+                  : bankAccountForm.confirm_account_number !==
+                      bankAccountForm.account_number &&
+                    bankIinfoTrue.confirm_account_number
+                  ? "Account Number must match"
+                  : ""
+              }
             />
           </div>
 
@@ -3821,17 +4323,40 @@ const Profile = () => {
                   label="CODE"
                   variant="standard"
                   sx={{ width: "100%" }}
+                  error={
+                    bankAccountForm.iban_number == "" &&
+                    bankIinfoTrue.iban_number
+                      ? true
+                      : false
+                  }
+                  onBlur={bankInputtrueFalse}
                   name="iban_number"
                   onChange={(e) => {
-                    if (bankAccountForm.show) {
-                      bankInput(e);
-                      bankAccountForm.ifscdata = {};
-                      bankAccountForm.show = false;
-                      setBankAccountForm({ ...bankAccountForm });
-                    } else {
-                      bankInput(e);
+                    if (
+                      e.target.value === "" ||
+                      /^[A-Za-z0-9_ ]*$/.test(e.target.value) ||
+                      e.target.value === " "
+                    ) {
+                      // console.log("ok right");
+                      if (bankAccountForm.show) {
+                        bankInput(e);
+                        bankAccountForm.ifscdata = {};
+                        bankAccountForm.show = false;
+                        setBankAccountForm({ ...bankAccountForm });
+                      } else {
+                        bankInput(e);
+                      }
                     }
                   }}
+                  // onChange={(e) => {
+
+                  // }}
+                  helperText={
+                    bankAccountForm.iban_number == "" &&
+                    bankIinfoTrue.iban_number
+                      ? "Code is required"
+                      : ""
+                  }
                 />
               </Grid>
               {bankAccountForm.ibanselect == "IFSC" ? (
@@ -3894,7 +4419,15 @@ const Profile = () => {
         return (
           <div>
             <div>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.type == "" && trinputinfoTrue.type
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Transaction Type</InputLabel>
                 <Select
                   label
@@ -3902,6 +4435,7 @@ const Profile = () => {
                   name="type"
                   value={transactionForm.type}
                   onChange={transactionInput}
+                  onBlur={trinputtrueFalse}
                 >
                   <MenuItem value="DEPOSIT">Deposit</MenuItem>
                   <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
@@ -3910,6 +4444,11 @@ const Profile = () => {
                   </MenuItem>
                   <MenuItem value="CREDIT">Credit</MenuItem>
                 </Select>
+                {transactionForm.type == "" && trinputinfoTrue.type ? (
+                  <FormHelperText>Transaction Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
           </div>
@@ -3918,13 +4457,22 @@ const Profile = () => {
         return (
           <div>
             <div>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.type == "" && trinputinfoTrue.type
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Transaction Type</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   value={transactionForm.type}
                   name="type"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   <MenuItem value="DEPOSIT">Deposit</MenuItem>
@@ -3934,28 +4482,57 @@ const Profile = () => {
                   </MenuItem>
                   <MenuItem value="CREDIT">Credit</MenuItem>
                 </Select>
+                {transactionForm.type == "" && trinputinfoTrue.type ? (
+                  <FormHelperText>Transaction Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
 
             <div className="margeField padingtopmy5create">
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.deposit_to == "" && trinputinfoTrue.deposit_to
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Deposit To</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="deposit_to"
                   onChange={transactionInput}
+                  onBlur={trinputtrueFalse}
                 >
                   <MenuItem value="Wallet">Wallet</MenuItem>
                   <MenuItem value="mt5">MT5</MenuItem>
                 </Select>
+                {transactionForm.deposit_to == "" &&
+                trinputinfoTrue.deposit_to ? (
+                  <FormHelperText>Deposit To is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.payment == "" && trinputinfoTrue.payment
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Payment Gateway</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="payment"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   <MenuItem value="Bank">Bank</MenuItem>
@@ -3963,16 +4540,29 @@ const Profile = () => {
                   <MenuItem value="USDT">USDT</MenuItem>
                   <MenuItem value="Cash">Cash</MenuItem>
                 </Select>
+                {transactionForm.payment == "" && trinputinfoTrue.payment ? (
+                  <FormHelperText>Payment Gateway is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
             {transactionForm.deposit_to == "mt5" ? (
-              <div className="padingtopmy5create">
+              <div
+                className="padingtopmy5create"
+                error={
+                  transactionForm.mt5_id == "" && trinputinfoTrue.mt5_id
+                    ? true
+                    : false
+                }
+              >
                 <FormControl variant="standard" sx={{ width: "100%" }}>
                   <InputLabel>MT5 Account</InputLabel>
                   <Select
                     label
                     className="select-font-small"
                     name="mt5_id"
+                    onBlur={trinputtrueFalse}
                     onChange={transactionInput}
                   >
                     {mt5AccountList.map((item) => {
@@ -3983,6 +4573,11 @@ const Profile = () => {
                       );
                     })}
                   </Select>
+                  {transactionForm.mt5_id == "" && trinputinfoTrue.mt5_id ? (
+                    <FormHelperText>MT5 Account is required</FormHelperText>
+                  ) : (
+                    ""
+                  )}
                 </FormControl>
               </div>
             ) : (
@@ -3993,10 +4588,23 @@ const Profile = () => {
               <TextField
                 className="input-font-small"
                 label="Transation ID"
+                error={
+                  transactionForm.transation_id == "" &&
+                  trinputinfoTrue.transation_id
+                    ? true
+                    : false
+                }
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="transation_id"
+                helperText={
+                  transactionForm.transation_id == "" &&
+                  trinputinfoTrue.transation_id
+                    ? "Transation ID is required"
+                    : ""
+                }
                 onChange={transactionInput}
+                onBlur={trinputtrueFalse}
               />
             </div>
 
@@ -4005,15 +4613,26 @@ const Profile = () => {
                 className="input-font-small"
                 label="Amount"
                 type="text"
+                error={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? true
+                    : false
+                }
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
                 value={transactionForm.amount}
+                onBlur={trinputtrueFalse}
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     transactionInput(e);
                   }
                 }}
+                helperText={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? "Amount is required"
+                    : ""
+                }
               />
             </div>
 
@@ -4022,9 +4641,20 @@ const Profile = () => {
                 id="standard-textarea"
                 label="Notes"
                 multiline
+                error={
+                  transactionForm.note == "" && trinputinfoTrue.note
+                    ? true
+                    : false
+                }
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="note"
+                onBlur={trinputtrueFalse}
+                helperText={
+                  transactionForm.note == "" && trinputinfoTrue.note
+                    ? "Notes is required"
+                    : ""
+                }
                 onChange={transactionInput}
               />
             </div>
@@ -4034,13 +4664,22 @@ const Profile = () => {
         return (
           <div>
             <div>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.type == "" && trinputinfoTrue.type
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Transaction Type</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   value={transactionForm.type}
                   name="type"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   <MenuItem value="DEPOSIT">Deposit</MenuItem>
@@ -4050,40 +4689,78 @@ const Profile = () => {
                   </MenuItem>
                   <MenuItem value="CREDIT">Credit</MenuItem>
                 </Select>
+                {transactionForm.type == "" && trinputinfoTrue.type ? (
+                  <FormHelperText>Transaction Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
 
             <div className="margeField padingtopmy5create">
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.payment_method == "" &&
+                  trinputinfoTrue.payment_method
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>TRANSACTION GATEWAYS </InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="payment_method"
                   onChange={transactionInput}
+                  onBlur={trinputtrueFalse}
                 >
                   <MenuItem value="Bank">BANK</MenuItem>
                   <MenuItem value="UPI">UPI</MenuItem>
                   <MenuItem value="Cash">Cash</MenuItem>
                   <MenuItem value="Crypto">Crypto</MenuItem>
                 </Select>
+                {transactionForm.payment_method == "" &&
+                trinputinfoTrue.payment_method ? (
+                  <FormHelperText>
+                    TRANSACTION GATEWAYS is required
+                  </FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
             {transactionForm.payment_method == "UPI" ? (
               <>
                 <div className="padingtopmy5create">
-                  <FormControl variant="standard" sx={{ width: "100%" }}>
+                  <FormControl
+                    variant="standard"
+                    sx={{ width: "100%" }}
+                    error={
+                      transactionForm.upi_name == "" && trinputinfoTrue.upi_name
+                        ? true
+                        : false
+                    }
+                  >
                     <InputLabel>Upi type</InputLabel>
                     <Select
                       label
                       className="select-font-small"
                       name="upi_name"
                       onChange={transactionInput}
+                      onBlur={trinputtrueFalse}
                     >
                       <MenuItem value="Google Pay">Google Pay</MenuItem>
                       <MenuItem value="Phone Pay">Phone Pay</MenuItem>
                       <MenuItem value="Paytem">Paytem</MenuItem>
                     </Select>
+                    {transactionForm.upi_name == "" &&
+                    trinputinfoTrue.upi_name ? (
+                      <FormHelperText>Upi type is required</FormHelperText>
+                    ) : (
+                      ""
+                    )}
                   </FormControl>
                 </div>
                 <div className="padingtopmy5create">
@@ -4093,8 +4770,21 @@ const Profile = () => {
                         className="input-font-small"
                         label={transactionForm.upi_name}
                         variant="standard"
+                        onBlur={trinputtrueFalse}
+                        error={
+                          transactionForm.upi_crypto_ac_number == "" &&
+                          trinputinfoTrue.upi_crypto_ac_number
+                            ? true
+                            : false
+                        }
                         sx={{ width: "100%" }}
                         name="upi_crypto_ac_number"
+                        helperText={
+                          transactionForm.upi_crypto_ac_number == "" &&
+                          trinputinfoTrue.upi_crypto_ac_number
+                            ? `${transactionForm.upi_name} is required`
+                            : ""
+                        }
                         onChange={transactionInput}
                       />
                     </>
@@ -4110,19 +4800,35 @@ const Profile = () => {
               <>
                 <br />
                 <div>
-                  <FormControl variant="standard" sx={{ width: "100%" }}>
+                  <FormControl
+                    variant="standard"
+                    sx={{ width: "100%" }}
+                    error={
+                      transactionForm.crypto_name == "" &&
+                      trinputinfoTrue.crypto_name
+                        ? true
+                        : false
+                    }
+                  >
                     <InputLabel> Crypto type</InputLabel>
                     <Select
                       label
                       className="select-font-small"
                       name="crypto_name"
                       onChange={transactionInput}
+                      onBlur={trinputtrueFalse}
                     >
                       <MenuItem value="BTC">Bitcoin</MenuItem>
                       <MenuItem value="ETH">Ethereum</MenuItem>
                       <MenuItem value="USDT">USDT</MenuItem>
                       <MenuItem value="LIT">Litecoin</MenuItem>
                     </Select>
+                    {transactionForm.crypto_name == "" &&
+                    trinputinfoTrue.crypto_name ? (
+                      <FormHelperText>Crypto type is required</FormHelperText>
+                    ) : (
+                      ""
+                    )}
                   </FormControl>
                 </div>
                 <div className="padingtopmy5create">
@@ -4134,6 +4840,18 @@ const Profile = () => {
                         variant="standard"
                         sx={{ width: "100%" }}
                         name="upi_crypto_ac_number"
+                        error={
+                          transactionForm.upi_crypto_ac_number == "" &&
+                          trinputinfoTrue.upi_crypto_ac_number
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          transactionForm.upi_crypto_ac_number == "" &&
+                          trinputinfoTrue.upi_crypto_ac_number
+                            ? `${transactionForm.upi_name} is required`
+                            : ""
+                        }
                         onChange={transactionInput}
                       />
                     </>
@@ -4148,12 +4866,22 @@ const Profile = () => {
             {transactionForm.payment_method == "Bank" ? (
               <>
                 <div className="padingtopmy5create">
-                  <FormControl variant="standard" sx={{ width: "100%" }}>
+                  <FormControl
+                    variant="standard"
+                    sx={{ width: "100%" }}
+                    error={
+                      transactionForm.user_bank_id == "" &&
+                      trinputinfoTrue.user_bank_id
+                        ? true
+                        : false
+                    }
+                  >
                     <InputLabel>BANK ACCOUNT</InputLabel>
                     <Select
                       label
                       className="select-font-small"
                       name="user_bank_id"
+                      onBlur={trinputtrueFalse}
                       onChange={transactionInput}
                     >
                       {allBank.map((item) => {
@@ -4166,6 +4894,12 @@ const Profile = () => {
                         );
                       })}
                     </Select>
+                    {transactionForm.user_bank_id == "" &&
+                    trinputinfoTrue.user_bank_id ? (
+                      <FormHelperText>BANK ACCOUNT is required</FormHelperText>
+                    ) : (
+                      ""
+                    )}
                   </FormControl>
                 </div>
               </>
@@ -4180,8 +4914,19 @@ const Profile = () => {
                 multiline
                 variant="standard"
                 sx={{ width: "100%" }}
+                error={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? true
+                    : false
+                }
+                helperText={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? `Amount is required`
+                    : ""
+                }
                 name="amount"
                 value={transactionForm.amount}
+                onBlur={trinputtrueFalse}
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     transactionInput(e);
@@ -4195,13 +4940,22 @@ const Profile = () => {
         return (
           <div>
             <div>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.type == "" && trinputinfoTrue.type
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Transaction Type</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   value={transactionForm.type}
                   name="type"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   <MenuItem value="DEPOSIT">Deposit</MenuItem>
@@ -4211,6 +4965,11 @@ const Profile = () => {
                   </MenuItem>
                   <MenuItem value="CREDIT">Credit</MenuItem>
                 </Select>
+                {transactionForm.type == "" && trinputinfoTrue.type ? (
+                  <FormHelperText>Transaction Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
 
@@ -4242,42 +5001,88 @@ const Profile = () => {
             {/* </div> */}
 
             <div className="margeField padingtopmy5create">
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.account == "" && trinputinfoTrue.account
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>From Account</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="account"
                   onChange={transactionInput}
+                  onBlur={trinputtrueFalse}
                 >
                   <MenuItem value="Wallet">Wallet</MenuItem>
                   <MenuItem value="MT5">MT5</MenuItem>
                 </Select>
+                {transactionForm.account == "" && trinputinfoTrue.account ? (
+                  <FormHelperText>From Account is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
               {transactionForm.account == "MT5" ? (
-                <FormControl variant="standard" sx={{ width: "100%" }}>
+                <FormControl
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  error={
+                    transactionForm.account_to == "" &&
+                    trinputinfoTrue.account_to
+                      ? true
+                      : false
+                  }
+                >
                   <InputLabel>To Account</InputLabel>
                   <Select
                     label
                     className="select-font-small"
                     name="account_to"
                     onChange={transactionInput}
+                    onBlur={trinputtrueFalse}
                   >
                     <MenuItem value="Wallet">Wallet</MenuItem>
                   </Select>
+                  {transactionForm.account_to == "" &&
+                  trinputinfoTrue.account_to ? (
+                    <FormHelperText>To Account is required</FormHelperText>
+                  ) : (
+                    ""
+                  )}
                 </FormControl>
               ) : (
-                <FormControl variant="standard" sx={{ width: "100%" }}>
+                <FormControl
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  error={
+                    transactionForm.account_to == "" &&
+                    trinputinfoTrue.account_to
+                      ? true
+                      : false
+                  }
+                >
                   <InputLabel>To Account</InputLabel>
                   <Select
                     label
                     className="select-font-small"
                     name="account_to"
                     onChange={transactionInput}
+                    onBlur={trinputtrueFalse}
                   >
                     <MenuItem value="Wallet">Wallet</MenuItem>
                     <MenuItem value="MT5">MT5</MenuItem>
                   </Select>
+                  {transactionForm.account_to == "" &&
+                  trinputinfoTrue.account_to ? (
+                    <FormHelperText>To Account is required</FormHelperText>
+                  ) : (
+                    ""
+                  )}
                 </FormControl>
               )}
             </div>
@@ -4299,13 +5104,23 @@ const Profile = () => {
               ) : transactionForm.account == "MT5" ? (
                 <>
                   {" "}
-                  <FormControl variant="standard" sx={{ width: "100%" }}>
+                  <FormControl
+                    variant="standard"
+                    sx={{ width: "100%" }}
+                    error={
+                      transactionForm.from_mt5_account_id == "" &&
+                      trinputinfoTrue.from_mt5_account_id
+                        ? true
+                        : false
+                    }
+                  >
                     <InputLabel>From MT5 Account ID</InputLabel>
                     <Select
                       label
                       className="select-font-small"
                       name="from_mt5_account_id"
                       onChange={transactionInput}
+                      onBlur={trinputtrueFalse}
                     >
                       {mt5AccountList.map((item) => {
                         return (
@@ -4315,19 +5130,37 @@ const Profile = () => {
                         );
                       })}
                     </Select>
+                    {transactionForm.from_mt5_account_id == "" &&
+                    trinputinfoTrue.from_mt5_account_id ? (
+                      <FormHelperText>
+                        From MT5 Account ID is required
+                      </FormHelperText>
+                    ) : (
+                      ""
+                    )}
                   </FormControl>
                 </>
               ) : (
                 ""
               )}
               {transactionForm.account_to == "MT5" ? (
-                <FormControl variant="standard" sx={{ width: "100%" }}>
+                <FormControl
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  error={
+                    transactionForm.from_mt5_account_id == "" &&
+                    trinputinfoTrue.from_mt5_account_id
+                      ? true
+                      : false
+                  }
+                >
                   <InputLabel>MT5 Account ID</InputLabel>
                   <Select
                     label
                     className="select-font-small"
                     name="mt5_account_id"
                     onChange={transactionInput}
+                    onBlur={trinputtrueFalse}
                   >
                     {mt5AccountList.map((item) => {
                       return (
@@ -4337,6 +5170,12 @@ const Profile = () => {
                       );
                     })}
                   </Select>
+                  {transactionForm.from_mt5_account_id == "" &&
+                  trinputinfoTrue.from_mt5_account_id ? (
+                    <FormHelperText> MT5 Account ID is required</FormHelperText>
+                  ) : (
+                    ""
+                  )}
                 </FormControl>
               ) : transactionForm.account_to != "" ? (
                 transactionForm.account == "MT5" &&
@@ -4356,9 +5195,22 @@ const Profile = () => {
                   <TextField
                     className="input-font-small"
                     label="Wallet Code"
+                    error={
+                      transactionForm.wallet_code == "" &&
+                      trinputinfoTrue.wallet_code
+                        ? true
+                        : false
+                    }
                     variant="standard"
                     sx={{ width: "100%" }}
                     name="wallet_code"
+                    helperText={
+                      transactionForm.wallet_code == "" &&
+                      trinputinfoTrue.wallet_code
+                        ? "Wallet Code is required"
+                        : ""
+                    }
+                    onBlur={trinputtrueFalse}
                     onChange={transactionInput}
                     focused
                   />
@@ -4369,7 +5221,6 @@ const Profile = () => {
               {transactionForm.from_mt5_account_id &&
               transactionForm.account == "MT5" ? (
                 <>
-                  {" "}
                   <TextField
                     className="disabled-input-wallet-code"
                     label="MT5 Balance"
@@ -4396,6 +5247,17 @@ const Profile = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
+                error={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? true
+                    : false
+                }
+                helperText={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? "Amount is required"
+                    : ""
+                }
+                onBlur={trinputtrueFalse}
                 value={transactionForm.amount}
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
@@ -4407,6 +5269,17 @@ const Profile = () => {
                 id="standard-textarea"
                 label="Remark"
                 multiline
+                error={
+                  transactionForm.note == "" && trinputinfoTrue.note
+                    ? true
+                    : false
+                }
+                helperText={
+                  transactionForm.note == "" && trinputinfoTrue.note
+                    ? "Note is required"
+                    : ""
+                }
+                onBlur={trinputtrueFalse}
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="note"
@@ -4419,13 +5292,22 @@ const Profile = () => {
         return (
           <div>
             <div>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.type == "" && trinputinfoTrue.type
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Transaction Type</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   value={transactionForm.type}
                   name="type"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   <MenuItem value="DEPOSIT">Deposit</MenuItem>
@@ -4435,28 +5317,59 @@ const Profile = () => {
                   </MenuItem>
                   <MenuItem value="CREDIT">Credit</MenuItem>
                 </Select>
+                {transactionForm.type == "" && trinputinfoTrue.type ? (
+                  <FormHelperText>Transaction Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
 
             <div className="margeField padingtopmy5create">
-              <FormControl variant="standard" sx={{ width: "100%" }} focused>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                focused
+                error={
+                  transactionForm.credit_type == "" &&
+                  trinputinfoTrue.credit_type
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Credit Type</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="credit_type"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   <MenuItem value="credit">Credit In</MenuItem>
                   <MenuItem value="debit">Credit Out</MenuItem>
                 </Select>
+                {transactionForm.credit_type == "" &&
+                trinputinfoTrue.credit_type ? (
+                  <FormHelperText>Credit Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  transactionForm.account == "" && trinputinfoTrue.account
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>Account</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="account"
+                  onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
                   {mt5AccountList.map((item) => {
@@ -4467,6 +5380,13 @@ const Profile = () => {
                     );
                   })}
                 </Select>
+                {transactionForm.account == "" && trinputinfoTrue.account ? (
+                  <FormHelperText>
+                    From MT5 Account ID is required
+                  </FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
 
@@ -4474,23 +5394,45 @@ const Profile = () => {
               <TextField
                 className="input-font-small"
                 label="Amount"
+                error={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? true
+                    : false
+                }
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="amount"
                 value={transactionForm.amount}
+                onBlur={trinputtrueFalse}
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     transactionInput(e);
                   }
                 }}
+                helperText={
+                  transactionForm.amount == "" && trinputinfoTrue.amount
+                    ? "Amount is required"
+                    : ""
+                }
               />
               <TextField
                 id="standard-textarea"
                 label="Notes"
+                error={
+                  transactionForm.note == "" && trinputinfoTrue.note
+                    ? true
+                    : false
+                }
+                helperText={
+                  transactionForm.note == "" && trinputinfoTrue.note
+                    ? "Note is required"
+                    : ""
+                }
                 multiline
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="note"
+                onBlur={trinputtrueFalse}
                 onChange={transactionInput}
               />
             </div>
@@ -4957,13 +5899,22 @@ const Profile = () => {
       return (
         <div>
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                changeAccountPasswordForm.mt5_id == "" && input5infoTrue.mt5_id
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>MT5 Account</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="mt5_id"
                 onChange={input5}
+                onBlur={input5trueFalse}
               >
                 {mt5AccountList.map((item) => {
                   return (
@@ -4973,20 +5924,42 @@ const Profile = () => {
                   );
                 })}
               </Select>
+              {changeAccountPasswordForm.mt5_id == "" &&
+              input5infoTrue.mt5_id ? (
+                <FormHelperText> MT5 Account is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                changeAccountPasswordForm.password_type == "" &&
+                input5infoTrue.password_type
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Password Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="password_type"
                 onChange={input5}
+                onBlur={input5trueFalse}
               >
                 <MenuItem value="main">Main Password</MenuItem>
                 <MenuItem value="investor">View Password</MenuItem>
               </Select>
+              {changeAccountPasswordForm.password_type == "" &&
+              input5infoTrue.password_type ? (
+                <FormHelperText> MT5 Account is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="padingtopmy5create">
@@ -4994,9 +5967,42 @@ const Profile = () => {
               className="input-font-small"
               label="Password"
               type="password"
+              onBlur={input5trueFalse}
+              error={
+                (!changeAccountPasswordForm.new_password.match(/[A-Z]/g) ||
+                  !changeAccountPasswordForm.new_password.match(/[a-z]/g) ||
+                  !changeAccountPasswordForm.new_password.match(/[0-9]/g) ||
+                  changeAccountPasswordForm.new_password == "" ||
+                  changeAccountPasswordForm.new_password.length < 8 ||
+                  changeAccountPasswordForm.new_password.length >= 20 ||
+                  !changeAccountPasswordForm.new_password.match(
+                    /[!@#$%^&*()_+=]/g
+                  )) &&
+                input5infoTrue.new_password
+                  ? true
+                  : false
+              }
               variant="standard"
               sx={{ width: "100%" }}
               name="new_password"
+              helperText={
+                changeAccountPasswordForm.new_password == "" &&
+                input5infoTrue.new_password
+                  ? "Enter your password"
+                  : input5infoTrue.new_password &&
+                    (changeAccountPasswordForm.new_password.length < 8 ||
+                      changeAccountPasswordForm.new_password.length >= 20)
+                  ? "Password must contain atleast 8-20 characters"
+                  : input5infoTrue.new_password &&
+                    (!changeAccountPasswordForm.new_password.match(/[A-Z]/g) ||
+                      !changeAccountPasswordForm.new_password.match(/[a-z]/g) ||
+                      !changeAccountPasswordForm.new_password.match(/[0-9]/g) ||
+                      !changeAccountPasswordForm.new_password.match(
+                        /[!@#$%^&*()_+=]/g
+                      ))
+                  ? "Atleast one lower case, upper case,special character and number required"
+                  : ""
+              }
               onChange={input5}
             />
           </div>
@@ -5004,10 +6010,29 @@ const Profile = () => {
             <TextField
               className="input-font-small"
               type="password"
+              onBlur={input5trueFalse}
+              error={
+                (changeAccountPasswordForm.confirm_password == "" ||
+                  changeAccountPasswordForm.new_password !==
+                    changeAccountPasswordForm.confirm_password) &&
+                input5infoTrue.confirm_password
+                  ? true
+                  : false
+              }
               label="Confirm Password"
               variant="standard"
               sx={{ width: "100%" }}
               name="confirm_password"
+              helperText={
+                changeAccountPasswordForm.confirm_password == "" &&
+                input5infoTrue.confirm_password
+                  ? "Enter your Confirm password"
+                  : changeAccountPasswordForm.new_password !==
+                      changeAccountPasswordForm.confirm_password &&
+                    input5infoTrue.confirm_password
+                  ? "Passwords must match"
+                  : ""
+              }
               onChange={input5}
             />
           </div>
@@ -5016,25 +6041,70 @@ const Profile = () => {
     } else if (dialogTitle == "Change Password") {
       return (
         <div>
-          <div className="padingtopmy5create">
+          <div>
             <TextField
               className="input-font-small"
               label="Password"
               type="password"
+              error={
+                (!changePassword.password.match(/[A-Z]/g) ||
+                  !changePassword.password.match(/[a-z]/g) ||
+                  !changePassword.password.match(/[0-9]/g) ||
+                  changePassword.password == "" ||
+                  changePassword.password.length < 8 ||
+                  changePassword.password.length >= 20 ||
+                  !changePassword.password.match(/[!@#$%^&*()_+=]/g)) &&
+                chinputinfoTrue.password
+                  ? true
+                  : false
+              }
               variant="standard"
               sx={{ width: "100%" }}
               name="password"
               onChange={changePasswordInput}
+              onBlur={chinputtrueFalse}
+              helperText={
+                changePassword.password == "" && chinputinfoTrue.password
+                  ? "Enter your password"
+                  : chinputinfoTrue.password &&
+                    (changePassword.password.length < 8 ||
+                      changePassword.password.length >= 20)
+                  ? "Password must contain atleast 8-20 characters"
+                  : chinputinfoTrue.password &&
+                    (!changePassword.password.match(/[A-Z]/g) ||
+                      !changePassword.password.match(/[a-z]/g) ||
+                      !changePassword.password.match(/[0-9]/g) ||
+                      !changePassword.password.match(/[!@#$%^&*()_+=]/g))
+                  ? "Atleast one lower case, upper case,special character and number required"
+                  : ""
+              }
             />
           </div>
           <div className="padingtopmy5create">
             <TextField
               className="input-font-small"
               type="password"
+              error={
+                (changePassword.new_password == "" ||
+                  changePassword.password !== changePassword.new_password) &&
+                chinputinfoTrue.new_password
+                  ? true
+                  : false
+              }
               label="Confirm Password"
               variant="standard"
               sx={{ width: "100%" }}
               name="new_password"
+              onBlur={chinputtrueFalse}
+              helperText={
+                changePassword.new_password == "" &&
+                chinputinfoTrue.new_password
+                  ? "Enter your Confirm password"
+                  : changePassword.new_password !== changePassword.password &&
+                    chinputinfoTrue.new_password
+                  ? "Passwords must match"
+                  : ""
+              }
               onChange={changePasswordInput}
             />
           </div>
@@ -5233,16 +6303,38 @@ const Profile = () => {
             <TextField
               className="input-font-small"
               label="Name"
+              error={
+                createPortfolioForm.portfolio_name == "" &&
+                cpinputinfoTrue.portfolio_name
+                  ? true
+                  : false
+              }
               variant="standard"
               value={createPortfolioForm.portfolio_name}
               onChange={createPortfolioInput}
+              onBlur={cpinputtrueFalse}
               sx={{ width: "100%" }}
+              helperText={
+                createPortfolioForm.portfolio_name == "" &&
+                cpinputinfoTrue.portfolio_name
+                  ? "Name is required"
+                  : ""
+              }
               name="portfolio_name"
             />
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                createPortfolioForm.mm_mt5_acc_id == "" &&
+                cpinputinfoTrue.mm_mt5_acc_id
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Money Manager</InputLabel>
               <Select
                 label
@@ -5250,6 +6342,7 @@ const Profile = () => {
                 name="mm_mt5_acc_id"
                 value={createPortfolioForm.mm_mt5_acc_id}
                 onChange={createPortfolioInput}
+                onBlur={cpinputtrueFalse}
               >
                 {moneyManagerListMenu.map((item) => {
                   return (
@@ -5259,6 +6352,12 @@ const Profile = () => {
                   );
                 })}
               </Select>
+              {createPortfolioForm.mm_mt5_acc_id == "" &&
+              cpinputinfoTrue.mm_mt5_acc_id ? (
+                <FormHelperText>Money Manager is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
 
@@ -5267,6 +6366,19 @@ const Profile = () => {
               className="input-font-small"
               label="Investment Months"
               type="text"
+              onBlur={cpinputtrueFalse}
+              error={
+                createPortfolioForm.investment_months == "" &&
+                cpinputinfoTrue.investment_months
+                  ? true
+                  : false
+              }
+              helperText={
+                createPortfolioForm.investment_months == "" &&
+                cpinputinfoTrue.investment_months
+                  ? "Name is required"
+                  : ""
+              }
               value={createPortfolioForm.investment_months}
               name="investment_months"
               variant="standard"
@@ -6173,7 +7285,15 @@ const Profile = () => {
       };
     });
   };
-
+  const cpinputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setcpinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const investmentInput = (e) => {
     const { name, value } = e.target;
 
@@ -6201,7 +7321,15 @@ const Profile = () => {
       };
     });
   };
-
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const input = (event) => {
     const { name, value } = event.target;
     setCreateMt5Form((prevalue) => {
@@ -6289,7 +7417,15 @@ const Profile = () => {
         });
     }
   };
-
+  const input1trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinput1infoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const input1 = (event) => {
     const { name, value } = event.target;
     setMt5AccessForm((prevalue) => {
@@ -6379,7 +7515,15 @@ const Profile = () => {
         });
     }
   };
-
+  const input2trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinput2infoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const input2 = (event) => {
     const { name, value } = event.target;
     setLinkAccountForm((prevalue) => {
@@ -6520,6 +7664,15 @@ const Profile = () => {
       };
     });
   };
+  const input4trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinput4infoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
 
   const changeLeverageSubmit = () => {
     if (changeLeverageForm.account == "") {
@@ -6577,6 +7730,15 @@ const Profile = () => {
       };
     });
   };
+  const input5trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinput5infoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
 
   const changePasswordInput = (event) => {
     const { name, value } = event.target;
@@ -6584,6 +7746,15 @@ const Profile = () => {
       return {
         ...prevalue,
         [name]: value,
+      };
+    });
+  };
+  const chinputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setchinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
       };
     });
   };
@@ -7578,7 +8749,15 @@ const Profile = () => {
       };
     });
   };
-
+  const bankInputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setbankIinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const bankAccountSubmit = async (prop) => {
     if (prop) {
       if (bankAccountForm.name == "") {
@@ -7722,6 +8901,33 @@ const Profile = () => {
         transation_id: "",
         wallet_code: "",
         mt5_account_id: "",
+        user_bank_id: "",
+        upi_name: "",
+        upi_crypto_ac_number: "",
+        crypto_name: "",
+      });
+      settrinputinfoTrue({
+        type: false,
+        from_account_type: false,
+        mt5_id: false,
+        credit_type: false,
+        deposit_to: false,
+        transfer_to: false,
+        account: false,
+        account_to: false,
+        payment: false,
+        payment_method: false,
+        amount: false,
+        note: false,
+        currency_code: false,
+        isLoader: false,
+        transation_id: false,
+        wallet_code: false,
+        mt5_account_id: false,
+        user_bank_id: false,
+        upi_name: false,
+        upi_crypto_ac_number: false,
+        crypto_name: false,
       });
     }
     if (name == "from_mt5_account_id") {
@@ -7741,6 +8947,15 @@ const Profile = () => {
     });
   };
 
+  const trinputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    settrinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const transactionSubmit = async () => {
     if (transactionForm.type == "") {
       toast.error("Please select transaction type");
@@ -10890,14 +12105,20 @@ const Profile = () => {
                                           variant="contained"
                                           onClick={(e) => {
                                             setMaxWidth("sm");
-                                            setDialogTitle("Create Portfolio");
-                                            getMoneyManagerList();
+
                                             setCreatePortfolioForm({
                                               isLoader: false,
                                               portfolio_name: "",
                                               mm_mt5_acc_id: "",
                                               investment_months: "",
                                             });
+                                            setcpinputinfoTrue({
+                                              portfolio_name: false,
+                                              mm_mt5_acc_id: false,
+                                              investment_months: false,
+                                            });
+                                            setDialogTitle("Create Portfolio");
+                                            getMoneyManagerList();
                                             setOpen(true);
                                           }}
                                         >
@@ -11017,7 +12238,7 @@ const Profile = () => {
                                                     </div>
                                                   ) : item.is_closed == "2" ? (
                                                     <div className="money-manager-footer-action-section">
-                                                      <button className="skyblue1">
+                                                      <button className="skyblue1 padingbutton">
                                                         Pending
                                                       </button>
                                                       <NavLink
@@ -12309,14 +13530,20 @@ const Profile = () => {
                                         variant="contained"
                                         onClick={(e) => {
                                           setMaxWidth("sm");
-                                          setDialogTitle("Create Portfolio");
-                                          getMoneyManagerList();
+
                                           setCreatePortfolioForm({
                                             isLoader: false,
                                             portfolio_name: "",
                                             mm_mt5_acc_id: "",
                                             investment_months: "",
                                           });
+                                          setcpinputinfoTrue({
+                                            portfolio_name: false,
+                                            mm_mt5_acc_id: false,
+                                            investment_months: false,
+                                          });
+                                          setDialogTitle("Create Portfolio");
+                                          getMoneyManagerList();
                                           setOpen(true);
                                         }}
                                       >
@@ -12427,7 +13654,7 @@ const Profile = () => {
                                                 </div>
                                               ) : item.is_closed == "2" ? (
                                                 <div className="money-manager-footer-action-section">
-                                                  <button className="skyblue1">
+                                                  <button className="skyblue1 padingbutton">
                                                     Pending
                                                   </button>
                                                   <NavLink
@@ -12445,8 +13672,17 @@ const Profile = () => {
                                                       setMaxWidth("sm");
                                                       createPortfolioForm.mm_mt5_acc_id =
                                                         item.mm_mt5_acc_id;
+                                                      createPortfolioForm.investment_months =
+                                                        "";
+                                                      createPortfolioForm.portfolio_name =
+                                                        "";
                                                       setCreatePortfolioForm({
                                                         ...createPortfolioForm,
+                                                      });
+                                                      setcpinputinfoTrue({
+                                                        portfolio_name: false,
+                                                        mm_mt5_acc_id: false,
+                                                        investment_months: false,
                                                       });
                                                       setDialogTitle(
                                                         "Create Portfolio"

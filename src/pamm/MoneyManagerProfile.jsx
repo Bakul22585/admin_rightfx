@@ -3,11 +3,15 @@ import {
   Button,
   ButtonGroup,
   CardContent,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -104,6 +108,8 @@ const MoneyManagerProfile = () => {
   const [positionParam, setPositionParam] = useState({
     user_id: moneyManagerUserId,
   });
+  const [walletbalance, setwalletbalance] = useState("");
+
   const [treadShow, setTreadShow] = useState(true);
   const [datatableLoder, setDatatableLoder] = useState(false);
   const [isLoderButton, setIsLoaderButton] = useState(false);
@@ -151,14 +157,37 @@ const MoneyManagerProfile = () => {
   const [createPortfolioForm, setCreatePortfolioForm] = useState({
     isLoader: false,
     portfolio_name: "",
-    mm_mt5_acc_id: "",
+    mm_mt5_acc_id: moneyManagerUserId,
     investment_months: "",
   });
 
+  const [crinputinfoTrue, setcrinputinfoTrue] = useState({
+    portfolio_name: false,
+    mm_mt5_acc_id: false,
+    investment_months: false,
+  });
   const handleClose = () => {
     setOpen(false);
   };
-
+  const walletbalancefun = () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("user_id", moneyManagerUserId);
+    param.append("action", "get_wallet_balance");
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        setwalletbalance(res.data.balance);
+      });
+  };
   const createPortfolioFormSubmit = () => {
     if (createPortfolioForm.portfolio_name == "") {
       toast.error("Please enter portfolio name");
@@ -198,7 +227,50 @@ const MoneyManagerProfile = () => {
         });
     }
   };
-
+  const withdrawFormSubmit = () => {
+    if (withdrawForm.amount == "" && !withdrawForm.allWithdraw) {
+      toast.error("Please enter amount");
+    } else {
+      withdrawForm.isLoader = true;
+      setWithdrawForm({ ...withdrawForm });
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("user_id", moneyManagerUserId);
+      param.append("pid", info.pid);
+      param.append(
+        "amount",
+        withdrawForm.allWithdraw ? 0 : withdrawForm.amount
+      );
+      param.append("withdraw_all", withdrawForm.allWithdraw ? 1 : 0);
+      param.append("action", "withdraw_request");
+      axios
+        .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          withdrawForm.isLoader = false;
+          setWithdrawForm({ ...withdrawForm });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setWithdrawForm({
+              user_id: "",
+              isLoader: false,
+              amount: "",
+            });
+            getalldetail();
+            setOpen(false);
+          }
+        });
+    }
+  };
   const getMoneyManagerList = () => {
     const param = new FormData();
     if (IsApprove !== "") {
@@ -236,6 +308,109 @@ const MoneyManagerProfile = () => {
     });
   };
 
+  const crinputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setcrinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
+  const trueFalse = () => {
+    console.log("sadsadsaDSADDS", investmentForm.amount);
+    if (investmentForm.amount > walletbalance) {
+      invebutton.button = true;
+      setinvebutton({ ...invebutton });
+      toast.error(
+        "Your wallet balance is low, if you want to invest same amount then please make a deposit"
+      );
+    } else {
+      invebutton.button = false;
+      setinvebutton({ ...invebutton });
+    }
+  };
+  const [invebutton, setinvebutton] = useState({
+    button: false,
+  });
+  const [withdrawForm, setWithdrawForm] = useState({
+    isLoader: false,
+    allWithdraw: true,
+    amount: "",
+    pid: info.pid,
+  });
+  const withdrawInput = (e) => {
+    var { name, value } = e.target;
+
+    if (e.target.getAttribute) {
+      if (e.target.getAttribute("type") == "checkbox") {
+        value = e.target.checked;
+      }
+    }
+
+    setWithdrawForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+  const investmentInput = (e) => {
+    const { name, value } = e.target;
+
+    setInvestmentForm((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: value,
+      };
+    });
+  };
+  const [investmentForm, setInvestmentForm] = useState({
+    isLoader: false,
+    pid: info.pid,
+    amount: "",
+  });
+  const investmentFormSubmit = () => {
+    if (id == "") {
+      toast.error("Please enter pid");
+    } else if (investmentForm.amount == "") {
+      toast.error("Please enter amount");
+    } else {
+      investmentForm.isLoader = true;
+      setInvestmentForm({ ...investmentForm });
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("user_id", moneyManagerUserId);
+      param.append("pid", info.pid);
+      param.append("amount", investmentForm.amount);
+      param.append("action", "add_investment");
+      axios
+        .post(Url + "/ajaxfiles/pamm/portfolio_manage.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+            navigate("/");
+          }
+          investmentForm.isLoader = false;
+          setInvestmentForm({ ...investmentForm });
+          if (res.data.status == "error") {
+            toast.error(res.data.message);
+          } else {
+            toast.success(res.data.message);
+            setOpen(false);
+            setInvestmentForm({
+              user_id: "",
+              isLoader: false,
+              amount: "",
+            });
+          }
+        });
+    }
+  };
   const manageContent = () => {
     if (dialogTitle == "Create Portfolio") {
       return (
@@ -247,13 +422,35 @@ const MoneyManagerProfile = () => {
               variant="standard"
               value={createPortfolioForm.portfolio_name}
               onChange={createPortfolioInput}
+              onBlur={crinputtrueFalse}
+              error={
+                createPortfolioForm.portfolio_name == "" &&
+                crinputinfoTrue.portfolio_name
+                  ? true
+                  : false
+              }
               sx={{ width: "100%" }}
               name="portfolio_name"
+              helperText={
+                createPortfolioForm.portfolio_name == "" &&
+                crinputinfoTrue.portfolio_name
+                  ? "Name is required"
+                  : ""
+              }
             />
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                createPortfolioForm.mm_mt5_acc_id == "" &&
+                crinputinfoTrue.mm_mt5_acc_id
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Money Manager</InputLabel>
               <Select
                 label
@@ -270,6 +467,12 @@ const MoneyManagerProfile = () => {
                   );
                 })}
               </Select>
+              {createPortfolioForm.mm_mt5_acc_id == "" &&
+              crinputinfoTrue.mm_mt5_acc_id ? (
+                <FormHelperText>Money Manager is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
 
@@ -277,10 +480,23 @@ const MoneyManagerProfile = () => {
             <TextField
               className="input-font-small"
               label="Investment Months"
+              error={
+                createPortfolioForm.investment_months == "" &&
+                crinputinfoTrue.investment_months
+                  ? true
+                  : false
+              }
+              helperText={
+                createPortfolioForm.investment_months == "" &&
+                crinputinfoTrue.investment_months
+                  ? "Investment Months is required"
+                  : ""
+              }
               type="text"
               name="investment_months"
               value={createPortfolioForm.investment_months}
               variant="standard"
+              onBlur={crinputtrueFalse}
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
                   createPortfolioInput(e);
@@ -291,9 +507,100 @@ const MoneyManagerProfile = () => {
           </div>
         </div>
       );
+    } else if (dialogTitle == "Withdraw") {
+      return (
+        <div>
+          <div>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="allWithdraw"
+                    checked={withdrawForm.allWithdraw}
+                    onChange={withdrawInput}
+                  />
+                }
+                label="All Withdraw"
+              />
+            </FormGroup>
+          </div>
+          <div>
+            <TextField
+              className="input-font-small"
+              label="Amount"
+              type="text"
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  withdrawInput(e);
+                }
+              }}
+              variant="standard"
+              sx={{ width: "100%" }}
+              name="amount"
+              disabled={withdrawForm.allWithdraw}
+              value={withdrawForm.allWithdraw ? 0 : withdrawForm.amount}
+            />
+          </div>
+        </div>
+      );
+    } else if (dialogTitle == "Investment") {
+      return (
+        <div>
+          <div>
+            <Grid container spacing={3}>
+              <Grid item md={7.5}>
+                <TextField
+                  className="input-font-small"
+                  label="Wallet Balance"
+                  variant="standard"
+                  value={`$${walletbalance}`}
+                  sx={{ width: "100%" }}
+                  name="amount"
+                  disabled
+                />
+              </Grid>
+              <Grid item md={4.5}>
+                {/* <ColorButton>Add Deposit</ColorButton> */}
+                <Button
+                  variant="contained"
+                  disabled={!invebutton.button}
+                  className="btn-gradient"
+                  onClick={() => {
+                    navigate("/deposit");
+                  }}
+                >
+                  Add More Deposit
+                </Button>
+              </Grid>
+            </Grid>
+          </div>
+          <br />
+          <div>
+            <TextField
+              className="input-font-small"
+              label="Amount"
+              type="text"
+              variant="standard"
+              value={investmentForm.amount}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  investmentInput(e);
+                }
+              }}
+              sx={{ width: "100%" }}
+              onBlur={trueFalse}
+              name="amount"
+            />
+          </div>
+        </div>
+      );
     }
   };
-
+  const [infoTrue, setinfoTrue] = useState({
+    portfolio_name: false,
+    mm_mt5_acc_id: false,
+    investment_months: false,
+  });
   const manageDialogActionButton = () => {
     if (dialogTitle == "Create Portfolio") {
       return (
@@ -330,6 +637,87 @@ const MoneyManagerProfile = () => {
               onClick={createPortfolioFormSubmit}
             >
               Create
+            </Button>
+          )}
+        </div>
+      );
+    } else if (dialogTitle == "Withdraw") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {withdrawForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={withdrawFormSubmit}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
+      );
+    } else if (dialogTitle == "Investment") {
+      return (
+        <div className="dialogMultipleActionButton">
+          <Button
+            variant="contained"
+            className="cancelButton"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+
+          {investmentForm.isLoader ? (
+            <Button
+              tabindex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              disabled={invebutton.button}
+              className="btn-gradient "
+              onClick={investmentFormSubmit}
+            >
+              Invest
             </Button>
           )}
         </div>
@@ -572,8 +960,7 @@ const MoneyManagerProfile = () => {
         setIsLoaderButton(false);
       });
   };
-
-  useEffect(() => {
+  const getalldetail = () => {
     filterData.mm_mt5_acc_id = id;
     setFilterData({ ...filterData });
 
@@ -612,6 +999,9 @@ const MoneyManagerProfile = () => {
 
         setIsLoader(false);
       });
+  };
+  useEffect(() => {
+    getalldetail();
   }, []);
 
   toast.configure();
@@ -677,6 +1067,93 @@ const MoneyManagerProfile = () => {
                                   </div>
                                   <div className="profile__preview-nav">
                                     <div className="m__profile__ct-start-button">
+                                      {info.is_closed == "2" ? (
+                                        <GreenButton
+                                          className="m__ct-start-button"
+                                          style={{
+                                            background: "#ebe5c1",
+                                            color: "#af843a",
+                                          }}
+                                        >
+                                          <div className="m__ct-start-button__main-text">
+                                            Pending
+                                          </div>
+                                        </GreenButton>
+                                      ) : info.is_closed == "0" ? (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            gap: "6px",
+                                          }}
+                                        >
+                                          <GreenButton
+                                            className="m__ct-start-button1"
+                                            onClick={(e) => {
+                                              setMaxWidth("sm");
+                                              setDialogTitle("Withdraw");
+                                              setOpen(true);
+                                            }}
+                                            sx={{ background: "#ebd7d7" }}
+                                          >
+                                            <div
+                                              className="m__ct-start-button__main-text"
+                                              style={{ fontWeight: "700" }}
+                                            >
+                                              Withdraw
+                                            </div>
+                                          </GreenButton>
+                                          <GreenButton
+                                            className="m__ct-start-button2"
+                                            onClick={(e) => {
+                                              walletbalancefun();
+
+                                              setMaxWidth("sm");
+                                              setDialogTitle("Investment");
+                                              setOpen(true);
+                                            }}
+                                          >
+                                            <div
+                                              className="m__ct-start-button__main-text"
+                                              style={{ fontWeight: "700" }}
+                                            >
+                                              Invest
+                                            </div>
+                                          </GreenButton>
+                                        </div>
+                                      ) : (
+                                        <GreenButton
+                                          className="m__ct-start-button"
+                                          onClick={(e) => {
+                                            setMaxWidth("sm");
+                                            setinfoTrue({
+                                              portfolio_name: false,
+                                              mm_mt5_acc_id: false,
+                                              investment_months: false,
+                                            });
+                                            setcrinputinfoTrue({
+                                              portfolio_name: false,
+                                              mm_mt5_acc_id: false,
+                                              investment_months: false,
+                                            });
+                                            setCreatePortfolioForm({
+                                              isLoader: false,
+                                              portfolio_name: "",
+                                              mm_mt5_acc_id: id,
+                                              investment_months: "",
+                                            });
+                                            setDialogTitle("Create Portfolio");
+                                            getMoneyManagerList();
+                                            setOpen(true);
+                                          }}
+                                        >
+                                          <div className="m__ct-start-button__main-text">
+                                            Create Portfolio
+                                          </div>
+                                        </GreenButton>
+                                      )}
+                                    </div>
+                                    {/* <div className="m__profile__ct-start-button">
                                       <GreenButton
                                         className="m__ct-start-button"
                                         onClick={(e) => {
@@ -696,7 +1173,7 @@ const MoneyManagerProfile = () => {
                                           Create Portfolio
                                         </div>
                                       </GreenButton>
-                                    </div>
+                                    </div> */}
                                     <div className="m__profile__min-invest">
                                       Minimum Investment
                                       <span>

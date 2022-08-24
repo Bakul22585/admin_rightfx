@@ -749,21 +749,21 @@ const PendingKYC = () => {
               </div>
             </div>
             <br />
+            <div className="element">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={form.maincheck}
+                    onChange={(e) => {
+                      form.maincheck = !form.maincheck;
+                      setForm({ ...form });
+                    }}
+                  />
+                }
+                label="ID Double side"
+              />
+            </div>
             <div className="view-image-section" style={{ gap: "34px" }}>
-              <div className="element">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={form.maincheck}
-                      onChange={(e) => {
-                        form.maincheck = !form.maincheck;
-                        setForm({ ...form });
-                      }}
-                    />
-                  }
-                  label="Double side"
-                />
-              </div>
               <div className="element">
                 <label>ID Front Img :</label>
                 <label
@@ -828,21 +828,21 @@ const PendingKYC = () => {
               )}
             </div>
             <br />
+            <div className="element">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={form.sencons}
+                    onChange={(e) => {
+                      form.sencons = !form.sencons;
+                      setForm({ ...form });
+                    }}
+                  />
+                }
+                label="Additional ID Double side"
+              />
+            </div>
             <div className="view-image-section">
-              <div className="element">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={form.sencons}
-                      onChange={(e) => {
-                        form.sencons = !form.sencons;
-                        setForm({ ...form });
-                      }}
-                    />
-                  }
-                  label="Double side"
-                />
-              </div>
               <div className="element">
                 <label>Additional ID Front Img :</label>
                 <label

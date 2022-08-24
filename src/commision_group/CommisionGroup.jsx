@@ -16,6 +16,7 @@ import {
   InputLabel,
   Select,
   TextField,
+  FormHelperText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -79,6 +80,38 @@ const CommisionGroup = () => {
     ib_company_energy: "",
     ib_company_crypto: "",
     isLoader: false,
+  });
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    ib_group_level_id: false,
+    ib_group_main_id: false,
+    group_name: false,
+    ib_mt5group_name: false,
+    ib_comapny_get: false,
+    ib_company_passon: false,
+    plan_title: false,
+    minimum_deposit: false,
+    spread: false,
+    commission: false,
+    leverage: false,
+    swap_free: false,
+    trading_plaform: false,
+    execution: false,
+    trading_instrument: false,
+    account_currency: false,
+    minimum_trade_size: false,
+    stop_out_level: false,
+    is_default: false,
+    is_private: false,
+    commission_type: false,
+    level: false,
+    will_get: false,
+    will_passon: false,
+    partnership: false,
+    ib_company_forex: false,
+    ib_company_bullion: false,
+    ib_company_indices: false,
+    ib_company_energy: false,
+    ib_company_crypto: false,
   });
   const [scroll, setScroll] = useState("paper");
   const handleClickOpen = (scrollType) => () => {
@@ -283,6 +316,38 @@ const CommisionGroup = () => {
                 onClick={(event) => {
                   getMt5GroupName();
                   setDialogTitle("Edit");
+                  setinputinfoTrue({
+                    ib_group_level_id: false,
+                    ib_group_main_id: false,
+                    group_name: false,
+                    ib_mt5group_name: false,
+                    ib_comapny_get: false,
+                    ib_company_passon: false,
+                    plan_title: false,
+                    minimum_deposit: false,
+                    spread: false,
+                    commission: false,
+                    leverage: false,
+                    swap_free: false,
+                    trading_plaform: false,
+                    execution: false,
+                    trading_instrument: false,
+                    account_currency: false,
+                    minimum_trade_size: false,
+                    stop_out_level: false,
+                    is_default: false,
+                    is_private: false,
+                    commission_type: false,
+                    level: false,
+                    will_get: false,
+                    will_passon: false,
+                    partnership: false,
+                    ib_company_forex: false,
+                    ib_company_bullion: false,
+                    ib_company_indices: false,
+                    ib_company_energy: false,
+                    ib_company_crypto: false,
+                  });
                   setForm({
                     ib_group_main_id: row.ib_group_main_id,
                     ib_group_level_id: row.ib_group_level_id,
@@ -650,8 +715,28 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="group_name"
+                error={
+                  form.group_name == "" && inputinfoTrue.group_name
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.group_name == "" && inputinfoTrue.group_name
+                    ? "Group Name is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.group_name}
-                onChange={input}
+                onChange={(e) => {
+                  if (
+                    e.target.value === "" ||
+                    /^[A-Za-z0-9_ ]*$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
+                  }
+                }}
               />
             </div>
             <div className="view-content-element">
@@ -663,6 +748,7 @@ const CommisionGroup = () => {
                   // className="select-font-small"
                   name="ib_group_main_id"
                   onChange={input}
+                  onBlur={inputtrueFalse}
                 >
                   {mt5GroupName.map((item) => {
                     return (
@@ -680,6 +766,17 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_mt5group_name"
+                onBlur={inputtrueFalse}
+                error={
+                  form.ib_mt5group_name == "" && inputinfoTrue.ib_mt5group_name
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_mt5group_name == "" && inputinfoTrue.ib_mt5group_name
+                    ? "MT5 Group Name  is required"
+                    : ""
+                }
                 value={form.ib_mt5group_name}
                 onChange={input}
               />
@@ -705,6 +802,15 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="execution"
+                onBlur={inputtrueFalse}
+                error={
+                  form.execution == "" && inputinfoTrue.execution ? true : false
+                }
+                helperText={
+                  form.execution == "" && inputinfoTrue.execution
+                    ? "Execution  is required"
+                    : ""
+                }
                 value={form.execution}
                 onChange={input}
               />
@@ -715,6 +821,17 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="commission"
+                onBlur={inputtrueFalse}
+                error={
+                  form.commission == "" && inputinfoTrue.commission
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.commission == "" && inputinfoTrue.commission
+                    ? "Commission  is required"
+                    : ""
+                }
                 value={form.commission}
                 onChange={input}
               />
@@ -726,6 +843,17 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_comapny_get"
                 value={form.ib_comapny_get}
+                onBlur={inputtrueFalse}
+                error={
+                  form.ib_comapny_get == "" && inputinfoTrue.ib_comapny_get
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_comapny_get == "" && inputinfoTrue.ib_comapny_get
+                    ? "Company Will Get  is required"
+                    : ""
+                }
                 onChange={(e) => {
                   if (!isNaN(Number(e.target.value))) {
                     input(e);
@@ -740,8 +868,26 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_passon"
                 value={form.ib_company_passon}
+                onBlur={inputtrueFalse}
+                error={
+                  form.ib_company_passon == "" &&
+                  inputinfoTrue.ib_company_passon
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_passon == "" &&
+                  inputinfoTrue.ib_company_passon
+                    ? "Company Will Passon is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
                     input(e);
                   }
                 }}
@@ -754,6 +900,15 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="leverage"
                 value={form.leverage}
+                error={
+                  form.leverage == "" && inputinfoTrue.leverage ? true : false
+                }
+                helperText={
+                  form.leverage == "" && inputinfoTrue.leverage
+                    ? "Leverage is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 onChange={input}
               />
             </div>
@@ -762,10 +917,26 @@ const CommisionGroup = () => {
                 label="Minimum Deposit"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="minimum_deposit"
                 value={form.minimum_deposit}
+                error={
+                  form.minimum_deposit == "" && inputinfoTrue.minimum_deposit
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.minimum_deposit == "" && inputinfoTrue.minimum_deposit
+                    ? "Minimum Deposit is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
                     input(e);
                   }
                 }}
@@ -777,6 +948,17 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="plan_title"
+                onBlur={inputtrueFalse}
+                error={
+                  form.plan_title == "" && inputinfoTrue.plan_title
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.plan_title == "" && inputinfoTrue.plan_title
+                    ? "Plan Title is required"
+                    : ""
+                }
                 value={form.plan_title}
                 onChange={input}
               />
@@ -787,6 +969,19 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="minimum_trade_size"
+                onBlur={inputtrueFalse}
+                error={
+                  form.minimum_trade_size == "" &&
+                  inputinfoTrue.minimum_trade_size
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.minimum_trade_size == "" &&
+                  inputinfoTrue.minimum_trade_size
+                    ? "Minimun Trade Size is required"
+                    : ""
+                }
                 value={form.minimum_trade_size}
                 onChange={input}
               />
@@ -798,6 +993,13 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="spread"
                 value={form.spread}
+                onBlur={inputtrueFalse}
+                error={form.spread == "" && inputinfoTrue.spread ? true : false}
+                helperText={
+                  form.spread == "" && inputinfoTrue.spread
+                    ? "Spread is required"
+                    : ""
+                }
                 onChange={input}
               />
             </div>
@@ -806,6 +1008,17 @@ const CommisionGroup = () => {
                 label="Stop out Level"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
+                error={
+                  form.stop_out_level == "" && inputinfoTrue.stop_out_level
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.stop_out_level == "" && inputinfoTrue.stop_out_level
+                    ? "Stop out Level is required"
+                    : ""
+                }
                 name="stop_out_level"
                 value={form.stop_out_level}
                 onChange={input}
@@ -816,7 +1029,16 @@ const CommisionGroup = () => {
                 label="Swap Free"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="swap_free"
+                error={
+                  form.swap_free == "" && inputinfoTrue.swap_free ? true : false
+                }
+                helperText={
+                  form.swap_free == "" && inputinfoTrue.swap_free
+                    ? "Swap Free is required"
+                    : ""
+                }
                 value={form.swap_free}
                 onChange={input}
               />
@@ -826,7 +1048,20 @@ const CommisionGroup = () => {
                 label="Trading Instrument"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="trading_instrument"
+                error={
+                  form.trading_instrument == "" &&
+                  inputinfoTrue.trading_instrument
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.trading_instrument == "" &&
+                  inputinfoTrue.trading_instrument
+                    ? "Trading Instrument is required"
+                    : ""
+                }
                 value={form.trading_instrument}
                 onChange={input}
               />
@@ -836,8 +1071,19 @@ const CommisionGroup = () => {
                 label="Trading Platform"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="trading_plaform"
                 value={form.trading_plaform}
+                error={
+                  form.trading_plaform == "" && inputinfoTrue.trading_plaform
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.trading_plaform == "" && inputinfoTrue.trading_plaform
+                    ? "Trading Platform is required"
+                    : ""
+                }
                 onChange={input}
                 disabled
               />
@@ -853,17 +1099,25 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_forex"
                 value={form.ib_company_forex}
+                onBlur={inputtrueFalse}
+                error={
+                  form.ib_company_forex == "" && inputinfoTrue.ib_company_forex
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_forex == "" && inputinfoTrue.ib_company_forex
+                    ? "Forex is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_forex = Number(e.target.value);
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_forex = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -875,18 +1129,28 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_bullion"
+                onBlur={inputtrueFalse}
                 value={form.ib_company_bullion}
+                error={
+                  form.ib_company_bullion == "" &&
+                  inputinfoTrue.ib_company_bullion
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_bullion == "" &&
+                  inputinfoTrue.ib_company_bullion
+                    ? "Bullion is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_bullion = Number(e.target.value);
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_bullion = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -897,19 +1161,29 @@ const CommisionGroup = () => {
                 label="Indices"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="ib_company_indices"
                 value={form.ib_company_indices}
+                error={
+                  form.ib_company_indices == "" &&
+                  inputinfoTrue.ib_company_indices
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_indices == "" &&
+                  inputinfoTrue.ib_company_indices
+                    ? "Indices is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_indices = Number(e.target.value);
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_indices = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -920,19 +1194,29 @@ const CommisionGroup = () => {
                 label="Energy"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="ib_company_energy"
                 value={form.ib_company_energy}
+                error={
+                  form.ib_company_indices == "" &&
+                  inputinfoTrue.ib_company_indices
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_indices == "" &&
+                  inputinfoTrue.ib_company_indices
+                    ? "Energy is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_energy = Number(e.target.value);
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_energy = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -942,20 +1226,30 @@ const CommisionGroup = () => {
                 type="text"
                 label="Crypto"
                 variant="standard"
+                onBlur={inputtrueFalse}
                 sx={{ width: "100%" }}
                 name="ib_company_crypto"
                 value={form.ib_company_crypto}
+                error={
+                  form.ib_company_crypto == "" &&
+                  inputinfoTrue.ib_company_crypto
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_crypto == "" &&
+                  inputinfoTrue.ib_company_crypto
+                    ? "Crypto is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (Number(e.target.value) > 0) {
-                    form.ib_company_crypto = Number(e.target.value);
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_crypto = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -1005,16 +1299,46 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="group_name"
                 value={form.group_name}
-                onChange={input}
+                error={
+                  form.group_name == "" && inputinfoTrue.group_name
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.group_name == "" && inputinfoTrue.group_name
+                    ? "Group Name is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
+                onChange={(e) => {
+                  if (
+                    e.target.value === "" ||
+                    /^[A-Za-z0-9_ ]*$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
+                  }
+                }}
+                // onChange={input}
               />
             </div>
             <div className="view-content-element">
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={
+                  form.ib_group_main_id == "" && inputinfoTrue.ib_group_main_id
+                    ? true
+                    : false
+                }
+              >
                 <InputLabel>IB Group Type</InputLabel>
                 <Select
                   label
                   value={form.ib_group_main_id}
                   // className="select-font-small"
+                  onBlur={inputtrueFalse}
                   name="ib_group_main_id"
                   onChange={input}
                 >
@@ -1026,6 +1350,12 @@ const CommisionGroup = () => {
                     );
                   })}
                 </Select>
+                {form.ib_group_main_id == "" &&
+                inputinfoTrue.ib_group_main_id ? (
+                  <FormHelperText>IB Group Type is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
             <div className="view-content-element">
@@ -1034,6 +1364,17 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_mt5group_name"
+                error={
+                  form.ib_mt5group_name == "" && inputinfoTrue.ib_mt5group_name
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_mt5group_name == "" && inputinfoTrue.ib_mt5group_name
+                    ? "MT5 Group Name is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.ib_mt5group_name}
                 onChange={input}
               />
@@ -1044,6 +1385,15 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="execution"
+                error={
+                  form.execution == "" && inputinfoTrue.execution ? true : false
+                }
+                helperText={
+                  form.execution == "" && inputinfoTrue.execution
+                    ? "Execution is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.execution}
                 onChange={input}
               />
@@ -1054,6 +1404,16 @@ const CommisionGroup = () => {
                 variant="standard"
                 type="text"
                 sx={{ width: "100%" }}
+                error={
+                  form.commission == "" && inputinfoTrue.commission
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.commission == "" && inputinfoTrue.commission
+                    ? "Commission is required"
+                    : ""
+                }
                 name="commission"
                 value={form.commission}
                 onChange={input}
@@ -1065,12 +1425,33 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_comapny_get"
+                error={
+                  form.ib_comapny_get == "" && inputinfoTrue.ib_comapny_get
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_comapny_get == "" && inputinfoTrue.ib_comapny_get
+                    ? "Company Will Get is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.ib_comapny_get}
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
                     input(e);
                   }
                 }}
+                // onChange={(e) => {
+                //   if (!isNaN(Number(e.target.value))) {
+                //     input(e);
+                //   }
+                // }}
               />
             </div>
             <div className="view-content-element">
@@ -1078,10 +1459,28 @@ const CommisionGroup = () => {
                 label="Company Will Passon"
                 variant="standard"
                 sx={{ width: "100%" }}
+                onBlur={inputtrueFalse}
                 name="ib_company_passon"
+                error={
+                  form.ib_company_passon == "" &&
+                  inputinfoTrue.ib_company_passon
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_passon == "" &&
+                  inputinfoTrue.ib_company_passon
+                    ? "Company Will Get is required"
+                    : ""
+                }
                 value={form.ib_company_passon}
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
                     input(e);
                   }
                 }}
@@ -1093,6 +1492,15 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="leverage"
+                error={
+                  form.leverage == "" && inputinfoTrue.leverage ? true : false
+                }
+                helperText={
+                  form.leverage == "" && inputinfoTrue.leverage
+                    ? "Leverage is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.leverage}
                 onChange={input}
               />
@@ -1103,9 +1511,25 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="minimum_deposit"
+                error={
+                  form.minimum_deposit == "" && inputinfoTrue.minimum_deposit
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.minimum_deposit == "" && inputinfoTrue.minimum_deposit
+                    ? "Minimum Deposit is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.minimum_deposit}
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
                     input(e);
                   }
                 }}
@@ -1117,6 +1541,17 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="plan_title"
+                error={
+                  form.plan_title == "" && inputinfoTrue.plan_title
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.plan_title == "" && inputinfoTrue.plan_title
+                    ? "Plan Title is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.plan_title}
                 onChange={input}
               />
@@ -1127,6 +1562,19 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="minimum_trade_size"
+                error={
+                  form.minimum_trade_size == "" &&
+                  inputinfoTrue.minimum_trade_size
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.minimum_trade_size == "" &&
+                  inputinfoTrue.minimum_trade_size
+                    ? "Minimun Trade Size is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.minimum_trade_size}
                 onChange={input}
               />
@@ -1137,6 +1585,13 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="spread"
+                error={form.spread == "" && inputinfoTrue.spread ? true : false}
+                helperText={
+                  form.spread == "" && inputinfoTrue.spread
+                    ? "Spread is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 value={form.spread}
                 onChange={input}
               />
@@ -1147,7 +1602,18 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="stop_out_level"
+                error={
+                  form.stop_out_level == "" && inputinfoTrue.stop_out_level
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.stop_out_level == "" && inputinfoTrue.stop_out_level
+                    ? "Stop out Level is required"
+                    : ""
+                }
                 value={form.stop_out_level}
+                onBlur={inputtrueFalse}
                 onChange={input}
               />
             </div>
@@ -1157,7 +1623,16 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="swap_free"
+                error={
+                  form.swap_free == "" && inputinfoTrue.swap_free ? true : false
+                }
+                helperText={
+                  form.swap_free == "" && inputinfoTrue.swap_free
+                    ? "Swap Free is required"
+                    : ""
+                }
                 value={form.swap_free}
+                onBlur={inputtrueFalse}
                 onChange={input}
               />
             </div>
@@ -1167,7 +1642,20 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="trading_instrument"
+                error={
+                  form.trading_instrument == "" &&
+                  inputinfoTrue.trading_instrument
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.trading_instrument == "" &&
+                  inputinfoTrue.trading_instrument
+                    ? "Trading Instrument is required"
+                    : ""
+                }
                 value={form.trading_instrument}
+                onBlur={inputtrueFalse}
                 onChange={input}
               />
             </div>
@@ -1177,7 +1665,18 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="trading_plaform"
+                error={
+                  form.trading_plaform == "" && inputinfoTrue.trading_plaform
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.trading_plaform == "" && inputinfoTrue.trading_plaform
+                    ? "Trading Platform is required"
+                    : ""
+                }
                 value={form.trading_plaform}
+                onBlur={inputtrueFalse}
                 onChange={input}
               />
             </div>
@@ -1192,17 +1691,25 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_forex"
                 value={form.ib_company_forex}
+                error={
+                  form.ib_company_forex == "" && inputinfoTrue.ib_company_forex
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_forex == "" && inputinfoTrue.ib_company_forex
+                    ? "Forex is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    form.ib_company_forex = e.target.value;
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_forex = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -1214,18 +1721,28 @@ const CommisionGroup = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="ib_company_bullion"
+                error={
+                  form.ib_company_bullion == "" &&
+                  inputinfoTrue.ib_company_bullion
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_bullion == "" &&
+                  inputinfoTrue.ib_company_bullion
+                    ? "Bullion is required"
+                    : ""
+                }
                 value={form.ib_company_bullion}
+                onBlur={inputtrueFalse}
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    form.ib_company_bullion = e.target.value;
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_bullion = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -1238,17 +1755,27 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_indices"
                 value={form.ib_company_indices}
+                onBlur={inputtrueFalse}
+                error={
+                  form.ib_company_indices == "" &&
+                  inputinfoTrue.ib_company_indices
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_indices == "" &&
+                  inputinfoTrue.ib_company_indices
+                    ? "Indices is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    form.ib_company_indices = e.target.value;
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_indices = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -1261,17 +1788,27 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_energy"
                 value={form.ib_company_energy}
+                error={
+                  form.ib_company_energy == "" &&
+                  inputinfoTrue.ib_company_energy
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_energy == "" &&
+                  inputinfoTrue.ib_company_energy
+                    ? "Energy is required"
+                    : ""
+                }
+                onBlur={inputtrueFalse}
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    form.ib_company_energy = e.target.value;
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_energy = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -1284,17 +1821,27 @@ const CommisionGroup = () => {
                 sx={{ width: "100%" }}
                 name="ib_company_crypto"
                 value={form.ib_company_crypto}
+                onBlur={inputtrueFalse}
+                error={
+                  form.ib_company_crypto == "" &&
+                  inputinfoTrue.ib_company_crypto
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.ib_company_crypto == "" &&
+                  inputinfoTrue.ib_company_crypto
+                    ? "Crypto is required"
+                    : ""
+                }
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    form.ib_company_crypto = e.target.value;
-                    setForm({
-                      ...form,
-                    });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.ib_company_crypto = 0;
-                    setForm({
-                      ...form,
-                    });
+                  if (
+                    e.target.value === "" ||
+                    /^[\d]*\.?[\d]{0,2}$/.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
                   }
                 }}
               />
@@ -1343,10 +1890,20 @@ const CommisionGroup = () => {
         value = event.target.checked;
       }
     }
+
     setForm((prevalue) => {
       return {
         ...prevalue,
         [name]: value,
+      };
+    });
+  };
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
       };
     });
   };
@@ -1667,6 +2224,38 @@ const CommisionGroup = () => {
   const AddCommissionGroup = () => {
     setDialogTitle("Add");
     getMt5GroupName("add");
+    setinputinfoTrue({
+      ib_group_level_id: false,
+      ib_group_main_id: false,
+      group_name: false,
+      ib_mt5group_name: false,
+      ib_comapny_get: false,
+      ib_company_passon: false,
+      plan_title: false,
+      minimum_deposit: false,
+      spread: false,
+      commission: false,
+      leverage: false,
+      swap_free: false,
+      trading_plaform: false,
+      execution: false,
+      trading_instrument: false,
+      account_currency: false,
+      minimum_trade_size: false,
+      stop_out_level: false,
+      is_default: false,
+      is_private: false,
+      commission_type: false,
+      level: false,
+      will_get: false,
+      will_passon: false,
+      partnership: false,
+      ib_company_forex: false,
+      ib_company_bullion: false,
+      ib_company_indices: false,
+      ib_company_energy: false,
+      ib_company_crypto: false,
+    });
     setOpenModel(true);
     // setForm({
     //   ib_group_level_id: "",

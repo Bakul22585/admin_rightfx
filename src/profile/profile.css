@@ -117,14 +117,17 @@
     font-size: .8rem;
 }
 
-.element label.Mui-focused {
+/* .element label.Mui-focused {
     color: #666666;
-}
+} */
 
 .element .MuiInput-underline.Mui-focused::after {
     border-bottom: 1px solid #949494;
 }
-
+.element .MuiInput-underline.Mui-error.Mui-focused::after
+{
+    border-bottom:1px solid #d32f2f;
+}
 .paper-main-section {
     height: 100%;
 }
@@ -936,7 +939,7 @@ text.highcharts-credits {
         grid-template-columns: 70px auto !important;
     }
 }
-@media screen and (min-width: 320px) and (max-width: 542px) {
+@media screen and (min-width: 320px) and (max-width: 1225px) {
     .partnership-main-section .master-structure-section {
         width: 100% !important;
         min-width: unset !important;
@@ -955,7 +958,7 @@ text.highcharts-credits {
         padding: 10px 0;
     }
     .ib-structure.view-commission-content-section .main-section input {
-        width: 63px !important;
+        width: 100% !important;
     }
     .ib-structure.view-commission-content-section .pair-data input {
         width: 55px !important;
@@ -966,6 +969,12 @@ text.highcharts-credits {
     }
     .ib-structure.view-commission-content-section .pair-section .pair-data {
         align-items: flex-start;
+    }
+    .ib-structure.view-commission-content-section .group-structure-section .main-section .main-section-input-element div:last-child {
+        /* width: 146px; */
+    }
+    .ib-structure.view-commission-content-section .group-structure-section .main-section .action-section span{
+        margin-top: 12px;
     }
 }
 @media screen and (min-width: 320px) and (max-width: 600px) {
@@ -992,4 +1001,13 @@ text.highcharts-credits {
     .referrals_structure_dropdown {
         width: 100% !important;
     }
+}
+.padingbutton{
+    background-color: #ebe5c1;
+    border: 0;
+    border-radius: 0 0 0 10px;
+    color: #af843a;
+    font-weight: 700;
+    height: 35px;
+    outline: 0;
 }

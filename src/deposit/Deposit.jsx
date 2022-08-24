@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   Autocomplete,
   FormControl,
+  FormHelperText,
   Grid,
   Input,
   InputLabel,
@@ -201,6 +202,11 @@ const Deposit = () => {
     deposit_id: "",
     isLoader: false,
   });
+  const [input1infoTrue, setinput1infoTrue] = useState({
+    amount: false,
+    status: false,
+  });
+
   const [storeDepositData, setStoreDepositData] = useState({
     date: "",
     name: "",
@@ -564,6 +570,7 @@ const Deposit = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("user_id", depositForm.account);
       param.append("deposit_to", depositForm.deposit_to);
@@ -605,6 +612,7 @@ const Deposit = () => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("deposit_id", viewDepositForm.deposit_id);
       param.append("amount", viewDepositForm.amount);
@@ -876,6 +884,17 @@ const Deposit = () => {
             <TextField
               label="Amount"
               type="text"
+              error={
+                viewDepositForm.amount == "" && input1infoTrue.amount
+                  ? true
+                  : false
+              }
+              helperText={
+                viewDepositForm.amount == "" && input1infoTrue.amount
+                  ? "Amount is required"
+                  : ""
+              }
+              onBlur={input1trueFalse}
               variant="standard"
               sx={{ width: "100%" }}
               name="amount"
@@ -903,18 +922,33 @@ const Deposit = () => {
               disabled={storeDepositData.status == "0" ? false : true}
             />
             {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
-            <FormControl variant="standard" sx={{ width: "100%" }} focused>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              focused
+              error={
+                viewDepositForm.status == "" && input1infoTrue.status
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Status</InputLabel>
               <Select
                 value={viewDepositForm.status}
                 name="status"
                 onChange={input1}
+                onBlur={input1trueFalse}
                 disabled={storeDepositData.status == "0" ? false : true}
               >
                 <MenuItem value="0">Pending</MenuItem>
                 <MenuItem value="1">Approve</MenuItem>
                 <MenuItem value="2">Reject</MenuItem>
               </Select>
+              {viewDepositForm.status == "" && input1infoTrue.status ? (
+                <FormHelperText>Status is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
         </div>
@@ -1024,6 +1058,7 @@ const Deposit = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("deposit_id", id);
     await axios
@@ -1048,6 +1083,7 @@ const Deposit = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("deposit_id", id);
     await axios
@@ -1132,6 +1168,7 @@ const Deposit = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("search", search);
     param.append("type", depositForm.live_account);
@@ -1156,6 +1193,15 @@ const Deposit = () => {
       return {
         ...prevalue,
         [name]: value,
+      };
+    });
+  };
+  const input1trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinput1infoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
       };
     });
   };

@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormHelperText,
   Grid,
   IconButton,
   InputLabel,
@@ -154,6 +155,8 @@ const Employees = () => {
       name: "master_manager_name",
     },
   ]);
+  const re = /^[A-Za-z_ ]*$/;
+
   const [list, setList] = useState({
     roleList: [],
     mangerList: [],
@@ -174,8 +177,42 @@ const Employees = () => {
   });
   toast.configure();
   const handleClose = () => {
+    setinfoTrue({
+      user_first_name: false,
+      user_last_name: false,
+      user_email: false,
+      user_password: false,
+      role_id: false,
+      manger_master_id: false,
+      ac_target: false,
+      money_in_target: false,
+      user_status: false,
+      user_phone: false,
+    });
     setOpen(false);
   };
+  const trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
+  const [infoTrue, setinfoTrue] = useState({
+    user_first_name: false,
+    user_last_name: false,
+    user_email: false,
+    user_password: false,
+    role_id: false,
+    manger_master_id: false,
+    ac_target: false,
+    money_in_target: false,
+    user_status: false,
+    user_phone: false,
+  });
+
   const input = (e) => {
     const { name, value } = e.target;
     setForm((prevalue) => {
@@ -248,7 +285,7 @@ const Employees = () => {
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
         param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
-      if(form.role_id == "3"){
+      if (form.role_id == "3") {
         param.append("manger_master_id", form.manger_master_id);
         param.append("ac_target", form.ac_target);
         param.append("money_in_target", form.money_in_target);
@@ -259,7 +296,7 @@ const Employees = () => {
       param.append("user_email", form.user_email);
       param.append("user_password", form.user_password);
       param.append("employee_role_id", form.role_id);
-     
+
       param.append("user_status", form.user_status);
       param.append("user_phone", form.user_phone);
 
@@ -277,6 +314,18 @@ const Employees = () => {
           setForm({ ...form });
         } else {
           toast.success(res.data.message);
+          setinfoTrue({
+            user_first_name: false,
+            user_last_name: false,
+            user_email: false,
+            user_password: false,
+            role_id: false,
+            manger_master_id: false,
+            ac_target: false,
+            money_in_target: false,
+            user_status: false,
+            user_phone: false,
+          });
           setOpen(false);
           setRefresh(!refresh);
           form.isLoader = false;
@@ -308,6 +357,18 @@ const Employees = () => {
         setForm({ ...form });
       } else {
         toast.success(res.data.message);
+        setinfoTrue({
+          user_first_name: false,
+          user_last_name: false,
+          user_email: false,
+          user_password: false,
+          role_id: false,
+          manger_master_id: false,
+          ac_target: false,
+          money_in_target: false,
+          user_status: false,
+          user_phone: false,
+        });
         setOpen(false);
         setRefresh(!refresh);
         form.isLoader = false;
@@ -342,8 +403,7 @@ const Employees = () => {
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
         param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
-      if(form.role_id == "3")
-      {
+      if (form.role_id == "3") {
         param.append("manger_master_id", form.manger_master_id);
         param.append("ac_target", form.ac_target);
         param.append("money_in_target", form.money_in_target);
@@ -354,7 +414,7 @@ const Employees = () => {
       param.append("user_email", form.user_email);
       param.append("user_password", form.user_password);
       param.append("employee_role_id", form.role_id);
-     
+
       param.append("user_status", form.user_status);
       param.append("user_phone", form.user_phone);
       form.isLoader = true;
@@ -370,6 +430,18 @@ const Employees = () => {
           setForm({ ...form });
         } else {
           toast.success(res.data.message);
+          setinfoTrue({
+            user_first_name: false,
+            user_last_name: false,
+            user_email: false,
+            user_password: false,
+            role_id: false,
+            manger_master_id: false,
+            ac_target: false,
+            money_in_target: false,
+            user_status: false,
+            user_phone: false,
+          });
           setOpen(false);
           setRefresh(!refresh);
           form.isLoader = false;
@@ -382,39 +454,99 @@ const Employees = () => {
     if (dialogTitle == "Update Employees" || dialogTitle == "Add Employees") {
       return (
         <div>
-          <div className="d-flex">
+          <div className="d-flex flexWrapm">
             <div className="element twofild">
               <TextField
                 label="First Name"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="user_first_name"
-                onChange={input}
+                // onChange={input}
                 value={form.user_first_name}
+                error={
+                  form.user_first_name == "" && infoTrue.user_first_name
+                    ? true
+                    : false
+                }
+                onChange={(e) => {
+                  if (
+                    e.target.value === "" ||
+                    re.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    input(e);
+                  }
+                }}
+                onBlur={trueFalse}
+                helperText={
+                  form.user_first_name == "" && infoTrue.user_first_name
+                    ? "First name is required"
+                    : ""
+                }
               />
             </div>
             <div className="element w-100">
               <TextField
                 label="Last Name"
+                id="standard-error-helper-text"
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="user_last_name"
-                onChange={input}
                 value={form.user_last_name}
+                error={
+                  form.user_last_name == "" && infoTrue.user_last_name
+                    ? true
+                    : false
+                }
+                // onChange={input}
+                onChange={(e) => {
+                  if (
+                    e.target.value === "" ||
+                    re.test(e.target.value) ||
+                    e.target.value === " "
+                  ) {
+                    console.log("ok right");
+                    input(e);
+                  }
+                }}
+                onBlur={trueFalse}
+                helperText={
+                  form.user_last_name == "" && infoTrue.user_last_name
+                    ? "Last name is required"
+                    : ""
+                }
               />
             </div>
           </div>
-          <br />
-          <div className="d-flex">
+          <div className="d-flex flexWrapm padingtopmy5create">
             <div className="element twofild">
               <TextField
                 label="Email"
                 variant="standard"
+                error={
+                  (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                    form.user_email
+                  ) ||
+                    form.user_email == "") &&
+                  infoTrue.user_email == true
+                    ? true
+                    : false
+                }
                 disabled={dialogTitle == "Add Employees" ? false : true}
                 sx={{ width: "100%" }}
                 name="user_email"
                 onChange={input}
                 value={form.user_email}
+                onBlur={trueFalse}
+                helperText={
+                  form.user_email == "" && infoTrue.user_email
+                    ? "Email is required"
+                    : !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                        form.user_email
+                      ) && infoTrue.user_email
+                    ? "Enter a valid email"
+                    : ""
+                }
               />
             </div>{" "}
             <div className="element w-100">
@@ -423,27 +555,46 @@ const Employees = () => {
                 variant="standard"
                 sx={{ width: "100%" }}
                 type="text"
+                error={
+                  (form.user_phone.toString().length <= 5 ||
+                    form.user_phone == "") &&
+                  infoTrue.user_phone
+                    ? true
+                    : false
+                }
                 name="user_phone"
+                onBlur={trueFalse}
                 onChange={(e) => {
                   if (Number(e.target.value) > 0) {
                     form.user_phone = Number(e.target.value);
                     setForm({
-                      ...form
+                      ...form,
                     });
                   } else if (e.target.value == "" || e.target.value == 0) {
                     form.user_phone = 0;
                     setForm({
-                      ...form
+                      ...form,
                     });
                   }
                 }}
                 value={form.user_phone}
+                helperText={
+                  form.user_phone == "" && infoTrue.user_phone
+                    ? "Phone is required"
+                    : form.user_phone.toString().length <= 5 &&
+                      infoTrue.user_phone
+                    ? "Phone number is not valid"
+                    : ""
+                }
               />
             </div>{" "}
           </div>
-          <br />
-          <div className="element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+          <div className="element padingtopmy5create">
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={infoTrue.role_id && form.role_id == "" ? true : false}
+            >
               <InputLabel>Role</InputLabel>
               <Select
                 label
@@ -451,6 +602,7 @@ const Employees = () => {
                 // className="select-font-small"
                 name="role_id"
                 onChange={input}
+                onBlur={trueFalse}
               >
                 {list.roleList.map((item) => {
                   return (
@@ -458,13 +610,25 @@ const Employees = () => {
                   );
                 })}
               </Select>
+              {infoTrue.role_id && form.role_id == "" ? (
+                <FormHelperText>Role is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>{" "}
-          <br />
           {form.role_id == "3" ? (
             <>
-              <div className="element">
-                <FormControl variant="standard" sx={{ width: "100%" }}>
+              <div className="element padingtopmy5create ">
+                <FormControl
+                  variant="standard"
+                  sx={{ width: "100%" }}
+                  error={
+                    infoTrue.manger_master_id && form.manger_master_id == ""
+                      ? true
+                      : false
+                  }
+                >
                   <InputLabel>Manger</InputLabel>
                   <Select
                     label
@@ -472,6 +636,7 @@ const Employees = () => {
                     // className="select-font-small"
                     name="manger_master_id"
                     onChange={input}
+                    onBlur={trueFalse}
                   >
                     {list.mangerList.map((item) => {
                       return (
@@ -481,6 +646,11 @@ const Employees = () => {
                       );
                     })}
                   </Select>
+                  {infoTrue.manger_master_id && form.manger_master_id == "" ? (
+                    <FormHelperText>Manger is required</FormHelperText>
+                  ) : (
+                    ""
+                  )}
                 </FormControl>
               </div>
               <br />
@@ -490,28 +660,37 @@ const Employees = () => {
           )}
           {form.role_id == "3" ? (
             <>
-              <div className="d-flex">
+              <div className="d-flex padingtopmy5create flexWrapm">
                 <div className="element twofild">
                   <TextField
                     label="Account Target"
                     variant="standard"
                     type="text"
+                    value={form.ac_target}
                     sx={{ width: "100%" }}
+                    error={
+                      infoTrue.ac_target && form.ac_target == "" ? true : false
+                    }
                     name="ac_target"
                     onChange={(e) => {
                       if (!isNaN(Number(e.target.value))) {
                         form.ac_target = e.target.value;
                         setForm({
-                          ...form
+                          ...form,
                         });
                       } else if (e.target.value == "" || e.target.value == 0) {
                         form.ac_target = 0;
                         setForm({
-                          ...form
+                          ...form,
                         });
                       }
                     }}
-                    value={form.ac_target}
+                    onBlur={trueFalse}
+                    helperText={
+                      infoTrue.ac_target && form.ac_target == ""
+                        ? "Account Target is required"
+                        : ""
+                    }
                   />
                 </div>{" "}
                 <div className="element w-100">
@@ -519,22 +698,33 @@ const Employees = () => {
                     label="Money In Target"
                     type="text"
                     variant="standard"
+                    error={
+                      infoTrue.money_in_target && form.money_in_target == ""
+                        ? true
+                        : false
+                    }
                     sx={{ width: "100%" }}
                     name="money_in_target"
+                    value={form.money_in_target}
                     onChange={(e) => {
                       if (!isNaN(Number(e.target.value))) {
                         form.money_in_target = e.target.value;
                         setForm({
-                          ...form
+                          ...form,
                         });
                       } else if (e.target.value == "" || e.target.value == 0) {
                         form.money_in_target = 0;
                         setForm({
-                          ...form
+                          ...form,
                         });
                       }
                     }}
-                    value={form.money_in_target}
+                    onBlur={trueFalse}
+                    helperText={
+                      infoTrue.money_in_target && form.money_in_target == ""
+                        ? "Money In Target is required"
+                        : ""
+                    }
                   />
                 </div>{" "}
               </div>
@@ -543,31 +733,67 @@ const Employees = () => {
           ) : (
             ""
           )}
-          <div className="d-flex">
+          <div className="d-flex padingtopmy5create flexWrapm">
             <div className="element twofild">
               <TextField
                 label="Password"
                 type="password"
+                error={
+                  (!form.user_password.match(/[A-Z]/g) ||
+                    !form.user_password.match(/[a-z]/g) ||
+                    !form.user_password.match(/[0-9]/g) ||
+                    form.user_password == "" ||
+                    form.user_password.length < 8 ||
+                    form.user_password.length >= 20 ||
+                    !form.user_password.match(/[!@#$%^&*()_+=]/g)) &&
+                  infoTrue.user_password
+                    ? true
+                    : false
+                }
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="user_password"
                 onChange={input}
+                onBlur={trueFalse}
                 value={form.user_password}
+                helperText={
+                  form.user_password == "" && infoTrue.user_password
+                    ? "Enter your password"
+                    : infoTrue.user_password &&
+                      (form.user_password.length < 8 ||
+                        form.user_password.length >= 20)
+                    ? "Password must contain atleast 8-20 characters"
+                    : infoTrue.user_password &&
+                      (!form.user_password.match(/[A-Z]/g) ||
+                        !form.user_password.match(/[a-z]/g) ||
+                        !form.user_password.match(/[0-9]/g))
+                    ? "Atleast one lower case, upper case and number required"
+                    : ""
+                }
               />
             </div>{" "}
             <div className="element  w-100">
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={infoTrue.user_status && form.user_status == ""}
+              >
                 <InputLabel>Status</InputLabel>
                 <Select
                   label
                   value={form.user_status}
                   name="user_status"
                   onChange={input}
+                  onBlur={trueFalse}
                 >
                   <MenuItem value="0">Pending</MenuItem>
-
                   <MenuItem value="1">Approve</MenuItem>
                 </Select>
+                {infoTrue.user_status && form.user_status == "" ? (
+                  <FormHelperText>Status is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>{" "}
           </div>

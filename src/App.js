@@ -65,6 +65,7 @@ import PammPortfolioProfile from "./pamm/PammPortfolioProfile";
 import MoneyManagerProfile from "./pamm/MoneyManagerProfile";
 import MT5BonusRequests from "./MT5BonusManage/MT5BonusRequests";
 import Mt5BonusOffer from "./MT5BonusManage/Mt5BonusOffer";
+import RefreshData from "./refresha/RefreshData";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -150,6 +151,8 @@ const App = () => {
                 <Route exact path="/faq_editor" element={<FAQEditor />} />
                 <Route exact path="/ib_withdraw" element={<IBWithdraw />} />
                 <Route exact path="/sales_report" element={<SalesReport />} />
+                <Route exact path="/refresh_data" element={<RefreshData />} />
+
                 <Route
                   exact
                   path="/ib_withdraw"
@@ -223,7 +226,11 @@ const App = () => {
                 <Route exact path="/ib_structure" element={<IBStructure />} />
                 <Route exact path="/link" element={<Link />} />
                 <Route exact path="/Salesman" element={<Target />} />
-                <Route exact path="/change_menu_order" element={<MenuSetting />} />
+                <Route
+                  exact
+                  path="/change_menu_order"
+                  element={<MenuSetting />}
+                />
                 <Route exact path="/menu_item" element={<MenuItems />} />
                 <Route
                   exact
@@ -255,11 +262,7 @@ const App = () => {
                   path="/sales_incentive"
                   element={<SalesIncentive />}
                 />
-                <Route
-                  exact
-                  path="/user_groups"
-                  element={<UsersGroups />}
-                />
+                <Route exact path="/user_groups" element={<UsersGroups />} />
                 <Route
                   path="/portfolio_profile/:id/:portfolioUserId"
                   element={<PammPortfolioProfile />}
@@ -272,12 +275,9 @@ const App = () => {
                   path="/mt5_bonus_request"
                   element={<MT5BonusRequests />}
                 />
-                 <Route
-                  path="/mt5_bonus_offer"
-                  element={<Mt5BonusOffer />}
-                />
+                <Route path="/mt5_bonus_offer" element={<Mt5BonusOffer />} />
               </Routes>
-              
+
               {/* <Footer /> */}
             </div>
           </div>

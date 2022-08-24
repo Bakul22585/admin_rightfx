@@ -162,6 +162,9 @@ const Withdraw = () => {
     withdrawal_id: "",
     isLoader: false,
   });
+  const [input1infoTrue, setinput1infoTrue] = useState({
+    amount: false,
+  });
   const [searchBy, setSearchBy] = useState([
     {
       label: "NAME",
@@ -681,7 +684,18 @@ const Withdraw = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="amount"
+              error={
+                viewWithdrawForm.amount == "" && input1infoTrue.amount
+                  ? true
+                  : false
+              }
+              helperText={
+                viewWithdrawForm.amount == "" && input1infoTrue.amount
+                  ? "Amount is required"
+                  : ""
+              }
               value={viewWithdrawForm.amount}
+              onBlur={input1trueFalse}
               // onChange={input1}
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
@@ -858,6 +872,15 @@ const Withdraw = () => {
       return {
         ...prevalue,
         [name]: value,
+      };
+    });
+  };
+  const input1trueFalse = (event) => {
+    var { name, value } = event.target;
+    setinput1infoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
       };
     });
   };

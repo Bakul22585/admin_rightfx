@@ -74,7 +74,7 @@
     border-radius: 10px;
 }
 .ib-structure.view-commission-content-section .group-structure-section .main-section .main-section-title {
-    min-width: 100px;
+    width: 100%;
 }
 .ib-structure.view-commission-content-section .group-structure-section .main-section .action-section span {
     cursor: pointer;
@@ -84,6 +84,8 @@
 .ib-structure.view-commission-content-section .group-structure-section .main-section .action-section {
     padding: 0;
     margin-right: 15px;
+    justify-content: space-between;
+    width: 100%;
 }
 .commission-content-pair-section {
     margin: 15px 0px;

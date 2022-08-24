@@ -15,6 +15,7 @@ import {
   Box,
   Menu,
   Input,
+  FormHelperText,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CommonFilter from "../common/CommonFilter";
@@ -148,6 +149,23 @@ const MmManagement = () => {
     confirm_password: "",
     additional_email: "",
     additional_contact_number: "",
+  });
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    first_name: false,
+    last_name: false,
+    email: false,
+    mobile: false,
+    gender: false,
+    dob: false,
+    address: false,
+    country: false,
+    state: false,
+    city: false,
+    status: false,
+    password: false,
+    confirm_password: false,
+    additional_email: false,
+    additional_contact_number: false,
   });
   const [kycForm, setKycForm] = useState({
     isLoader: false,
@@ -693,6 +711,16 @@ const MmManagement = () => {
               className="input-font-small"
               label="First Name"
               variant="standard"
+              onBlur={inputtrueFalse}
+              value={form.first_name}
+              error={
+                form.first_name == "" && inputinfoTrue.first_name ? true : false
+              }
+              helperText={
+                form.first_name == "" && inputinfoTrue.first_name
+                  ? "First Name is required"
+                  : ""
+              }
               onChange={input}
               sx={{ width: "100%" }}
               name="first_name"
@@ -704,6 +732,16 @@ const MmManagement = () => {
               label="Last Name"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
+              value={form.last_name}
+              error={
+                form.last_name == "" && inputinfoTrue.last_name ? true : false
+              }
+              helperText={
+                form.last_name == "" && inputinfoTrue.last_name
+                  ? "Last Name is required"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="last_name"
             />
@@ -714,6 +752,26 @@ const MmManagement = () => {
               label="Email"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
+              value={form.email}
+              helperText={
+                form.email == "" && inputinfoTrue.email
+                  ? "Email is required"
+                  : !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                      form.email
+                    ) && inputinfoTrue.email
+                  ? "Enter a valid email"
+                  : ""
+              }
+              error={
+                (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                  form.email
+                ) ||
+                  form.email == "") &&
+                inputinfoTrue.email == true
+                  ? true
+                  : false
+              }
               sx={{ width: "100%" }}
               name="email"
             />
@@ -725,6 +783,13 @@ const MmManagement = () => {
               variant="standard"
               // onChange={input}
               name="mobile"
+              onBlur={inputtrueFalse}
+              error={form.mobile == "" && inputinfoTrue.mobile ? true : false}
+              helperText={
+                form.mobile == "" && inputinfoTrue.mobile
+                  ? "Mobile is required"
+                  : ""
+              }
               value={form.mobile}
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
@@ -735,17 +800,27 @@ const MmManagement = () => {
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.gender == "" && inputinfoTrue.gender ? true : false}
+            >
               <InputLabel>Gender</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="gender"
+                onBlur={inputtrueFalse}
                 onChange={input}
               >
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </Select>
+              {form.gender == "" && inputinfoTrue.gender ? (
+                <FormHelperText>Gender is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -755,6 +830,13 @@ const MmManagement = () => {
               type="date"
               variant="standard"
               onChange={input}
+              error={form.dob == "" && inputinfoTrue.dob ? true : false}
+              helperText={
+                form.dob == "" && inputinfoTrue.dob
+                  ? "Date Of Birth is required"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="dob"
               focused
@@ -766,19 +848,31 @@ const MmManagement = () => {
               label="Address"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
+              error={form.address == "" && inputinfoTrue.address ? true : false}
+              helperText={
+                form.address == "" && inputinfoTrue.address
+                  ? "Address is required"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="address"
               multiline
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.country == "" && inputinfoTrue.country ? true : false}
+            >
               <InputLabel>Country</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="country"
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {countryData.data.map((item) => {
                   return <MenuItem value={item.id}>{item.nicename}</MenuItem>;
@@ -786,6 +880,11 @@ const MmManagement = () => {
                 {/* <MenuItem value="male">Male</MenuItem>
                                 <MenuItem value="female">Female</MenuItem> */}
               </Select>
+              {form.country == "" && inputinfoTrue.country ? (
+                <FormHelperText>Country is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -794,6 +893,13 @@ const MmManagement = () => {
               label="State"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
+              error={form.state == "" && inputinfoTrue.state ? true : false}
+              helperText={
+                form.state == "" && inputinfoTrue.state
+                  ? "State is required"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="state"
             />
@@ -804,6 +910,11 @@ const MmManagement = () => {
               label="City"
               variant="standard"
               onChange={input}
+              error={form.city == "" && inputinfoTrue.city ? true : false}
+              helperText={
+                form.city == "" && inputinfoTrue.city ? "City is required" : ""
+              }
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="city"
             />
@@ -815,6 +926,7 @@ const MmManagement = () => {
                 label
                 className="select-font-small"
                 name="status"
+                onBlur={inputtrueFalse}
                 onChange={input}
               >
                 <MenuItem value="0">Pending</MenuItem>
@@ -827,7 +939,34 @@ const MmManagement = () => {
               className="input-font-small"
               label="Password"
               type="password"
+              error={
+                (!form.password.match(/[A-Z]/g) ||
+                  !form.password.match(/[a-z]/g) ||
+                  !form.password.match(/[0-9]/g) ||
+                  form.password == "" ||
+                  form.password.length < 8 ||
+                  form.password.length >= 20 ||
+                  !form.password.match(/[!@#$%^&*()_+=]/g)) &&
+                inputinfoTrue.password
+                  ? true
+                  : false
+              }
+              helperText={
+                form.password == "" && inputinfoTrue.password
+                  ? "Enter your password"
+                  : inputinfoTrue.password &&
+                    (form.password.length < 8 || form.password.length >= 20)
+                  ? "Password must contain atleast 8-20 characters"
+                  : inputinfoTrue.password &&
+                    (!form.password.match(/[A-Z]/g) ||
+                      !form.password.match(/[a-z]/g) ||
+                      !form.password.match(/[0-9]/g) ||
+                      !form.password.match(/[!@#$%^&*()_+=]/g))
+                  ? "Atleast one lower case, upper case,special character and number required"
+                  : ""
+              }
               variant="standard"
+              onBlur={inputtrueFalse}
               onChange={input}
               sx={{ width: "100%" }}
               name="password"
@@ -838,7 +977,23 @@ const MmManagement = () => {
               className="input-font-small"
               label="Confirm Password"
               type="password"
+              error={
+                (form.confirm_password == "" ||
+                  form.password !== form.confirm_password) &&
+                inputinfoTrue.confirm_password
+                  ? true
+                  : false
+              }
+              helperText={
+                form.confirm_password == "" && inputinfoTrue.confirm_password
+                  ? "Enter your Confirm password"
+                  : form.password !== form.confirm_password &&
+                    inputinfoTrue.confirm_password
+                  ? "Passwords must match"
+                  : ""
+              }
               variant="standard"
+              onBlur={inputtrueFalse}
               onChange={input}
               sx={{ width: "100%" }}
               name="confirm_password"
@@ -1365,7 +1520,15 @@ const MmManagement = () => {
       };
     });
   };
-
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const kycInput = (e) => {
     const { name, value } = e.target;
 
