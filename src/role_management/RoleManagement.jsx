@@ -11,7 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { IsApprove, Url } from "../global";
 import axios from "axios";
 
-const RoleManagement = () => {
+const RoleManagement = (prop) => {
   const column = [
     {
       name: "SR.NO",
@@ -56,22 +56,30 @@ const RoleManagement = () => {
       cell: (row) => {
         return (
           <div className="actionButtonGroup">
-            <Button
-              className="btn-edit"
-              onClick={(event) => gotoCreateRole(event, row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </Button>
-            <Button
-              className="btn-close"
-              onClick={(event) => actionMenuPopup(event, row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </Button>
+            {prop.permission.edit_role == 1 ? (
+              <Button
+                className="btn-edit"
+                onClick={(event) => gotoCreateRole(event, row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
+            {prop.permission.delete_role == 1 ? (
+              <Button
+                className="btn-close"
+                onClick={(event) => actionMenuPopup(event, row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -172,7 +180,7 @@ const RoleManagement = () => {
         setRefresh(!refresh);
       }
     });
-  }
+  };
   return (
     <div>
       <div className="app-content--inner">
@@ -194,9 +202,13 @@ const RoleManagement = () => {
                   className="pending-all-15px"
                 >
                   <div className="actionGroupButton">
-                    <Button variant="contained" onClick={gotoRoleCreate}>
-                      Add Role
-                    </Button>
+                    {prop.permission.add_role == 1 ? (
+                      <Button variant="contained" onClick={gotoRoleCreate}>
+                        Add Role
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <br />
                   <CommonTable

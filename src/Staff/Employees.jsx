@@ -99,7 +99,8 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
     </DialogTitle>
   );
 };
-const Employees = () => {
+const Employees = (prop) => {
+  console.log(prop);
   const [param, setParam] = useState({
     start_date: "",
     end_date: "",
@@ -1077,50 +1078,58 @@ const Employees = () => {
         return (
           <span style={{ display: "flex" }}>
             {" "}
-            <Button>
-              <span
-                className="material-icons  icon_Mar"
-                style={{ color: "green" }}
+            {prop.permission.edit_employee == 1 ? (
+              <Button>
+                <span
+                  className="material-icons  icon_Mar"
+                  style={{ color: "green" }}
+                  onClick={() => {
+                    getRoleList();
+                    getManagerList();
+                    setDialogTitle("Update Employees");
+                    setOpen(true);
+                    setForm({
+                      user_first_name: row.user_first_name,
+                      user_last_name: row.user_last_name,
+                      user_email: row.user_email,
+                      user_password: row.user_password,
+                      role_id: row.role_id,
+                      user_phone: row.user_phone,
+                      manger_master_id: row.manger_master_id,
+                      ac_target: row.ac_target,
+                      money_in_target: row.money_in_target,
+                      user_status: row.user_status,
+                      user_id: row.user_id,
+                      isLoader: false,
+                    });
+                  }}
+                >
+                  edit
+                </span>
+              </Button>
+            ) : (
+              ""
+            )}
+            {prop.permission.delete_employee == 1 ? (
+              <Button
                 onClick={() => {
-                  getRoleList();
-                  getManagerList();
-                  setDialogTitle("Update Employees");
+                  setDialogTitle("Delete Employees");
                   setOpen(true);
-                  setForm({
-                    user_first_name: row.user_first_name,
-                    user_last_name: row.user_last_name,
-                    user_email: row.user_email,
-                    user_password: row.user_password,
-                    role_id: row.role_id,
-                    user_phone: row.user_phone,
-                    manger_master_id: row.manger_master_id,
-                    ac_target: row.ac_target,
-                    money_in_target: row.money_in_target,
-                    user_status: row.user_status,
-                    user_id: row.user_id,
-                    isLoader: false,
-                  });
+                  form.user_id = row.user_id;
+                  form.isLoader = false;
+                  setForm({ ...form });
                 }}
               >
-                edit
-              </span>
-            </Button>
-            <Button
-              onClick={() => {
-                setDialogTitle("Delete Employees");
-                setOpen(true);
-                form.user_id = row.user_id;
-                form.isLoader = false;
-                setForm({ ...form });
-              }}
-            >
-              <span
-                className="material-icons  icon_Mar"
-                style={{ color: "red" }}
-              >
-                delete
-              </span>
-            </Button>
+                <span
+                  className="material-icons  icon_Mar"
+                  style={{ color: "red" }}
+                >
+                  delete
+                </span>
+              </Button>
+            ) : (
+              ""
+            )}
           </span>
         );
       },
@@ -1156,30 +1165,35 @@ const Employees = () => {
                   <CardContent className="py-3">
                     <Grid container spacing={2}>
                       <Grid item sm={12} md={12} lg={12}>
-                        <ColorButton
-                          onClick={() => {
-                            getRoleList();
-                            getManagerList();
-                            setDialogTitle("Add Employees");
-                            setOpen(true);
-                            setForm({
-                              user_first_name: "",
-                              user_last_name: "",
-                              user_email: "",
-                              user_password: "",
-                              role_id: "",
-                              manger_master_id: "",
-                              ac_target: "",
-                              money_in_target: "",
-                              user_status: "",
-                              user_phone: "",
-                              user_id: "",
-                              isLoader: false,
-                            });
-                          }}
-                        >
-                          Add Employees
-                        </ColorButton>
+                        {prop.permission.add_employee == 1 ? (
+                          <ColorButton
+                            onClick={() => {
+                              getRoleList();
+                              getManagerList();
+                              setDialogTitle("Add Employees");
+                              setOpen(true);
+                              setForm({
+                                user_first_name: "",
+                                user_last_name: "",
+                                user_email: "",
+                                user_password: "",
+                                role_id: "",
+                                manger_master_id: "",
+                                ac_target: "",
+                                money_in_target: "",
+                                user_status: "",
+                                user_phone: "",
+                                user_id: "",
+                                isLoader: false,
+                              });
+                            }}
+                          >
+                            Add Employees
+                          </ColorButton>
+                        ) : (
+                          ""
+                        )}
+
                         <CommonTable
                           url={`${Url}/datatable/employees_list.php`}
                           column={columns}

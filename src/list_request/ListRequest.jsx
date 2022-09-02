@@ -702,7 +702,14 @@ const ListRequest = () => {
               <DialogContent className="view-ib-content-section">
                 <Grid container spacing={1}>
                   <div>
-                    <div className="main-content-display">
+                    <div
+                      className="main-content-display"
+                      style={{
+                        borderBottom: "1px solid gray",
+                        paddingBottom: "18px",
+                        marginBottom: "11px",
+                      }}
+                    >
                       <div className="display-element">
                         <h6>User Name</h6>
                         <div>{ibdata.requested_user_name}</div>
@@ -808,13 +815,29 @@ const ListRequest = () => {
                     <div className="ib-structure view-commission-content-section">
                       {ibdata.sponsor_id == "0" ? (
                         <div style={{ width: "100%" }}>
-                          <TextField
+                          {/* <TextField
                             label="Structure Name"
-                            variant="standard"
+                            id="outlined-basic"
+                            variant="outlined"
                             sx={{ width: "100%" }}
                             name="structure_name"
                             value={updateDate.structure_name}
                             onChange={input01}
+                          /> */}
+                          <label
+                            htmlFor="remarks"
+                            className="text-info font-weight-bold form-label-head w-100 mt-4 required"
+                          >
+                            Structure Name
+                          </label>
+                          <BootstrapInput
+                            name="structure_name"
+                            value={updateDate.structure_name}
+                            onChange={input01}
+                            displayEmpty
+                            inputProps={{
+                              "aria-label": "Without label",
+                            }}
                           />
                         </div>
                       ) : (
@@ -1170,7 +1193,8 @@ const ListRequest = () => {
                         <ColorButton
                           tabindex="0"
                           size="large"
-                          className="createMt5Formloder "
+                          style={{ padding: "20px 65px" }}
+                          // className="createMt5Formloder "
                           disabled
                         >
                           <svg class="spinner" viewBox="0 0 50 50">

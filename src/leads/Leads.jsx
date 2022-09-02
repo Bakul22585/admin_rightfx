@@ -164,7 +164,7 @@ const nbaTeams = [
   { id: 30, name: "Washington Wizards" },
 ];
 
-const Leads = () => {
+const Leads = (prop) => {
   const { id } = useParams();
   const theme = useTheme();
   const LeadRef = useRef();
@@ -1323,22 +1323,26 @@ const Leads = () => {
       selector: (row) => {
         return (
           <div>
-            <Select
-              displayEmpty
-              inputProps={{
-                "aria-label": "Without label",
-              }}
-              input={<BootstrapInput />}
-              name="interest"
-              value={row.interest}
-              onChange={(e) => changeInterestStatus(e, row)}
-            >
-              <MenuItem value="Very Low">Very Low</MenuItem>
-              <MenuItem value="Low">Low</MenuItem>
-              <MenuItem value="Average">Average</MenuItem>
-              <MenuItem value="High">High</MenuItem>
-              <MenuItem value="Very High">Very High</MenuItem>
-            </Select>
+            {prop.permission.change_interest == 1 ? (
+              <Select
+                displayEmpty
+                inputProps={{
+                  "aria-label": "Without label",
+                }}
+                input={<BootstrapInput />}
+                name="interest"
+                value={row.interest}
+                onChange={(e) => changeInterestStatus(e, row)}
+              >
+                <MenuItem value="Very Low">Very Low</MenuItem>
+                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Average">Average</MenuItem>
+                <MenuItem value="High">High</MenuItem>
+                <MenuItem value="Very High">Very High</MenuItem>
+              </Select>
+            ) : (
+              <span title={row.interest}>{row.interest}</span>
+            )}
           </div>
         );
       },
@@ -1382,24 +1386,30 @@ const Leads = () => {
       selector: (row) => {
         return (
           <div>
-            <Select
-              value={row.lead_assign_user_id}
-              displayEmpty
-              inputProps={{
-                "aria-label": "Without label",
-              }}
-              input={<BootstrapInput />}
-              name="assign_to"
-              onChange={(e) => changeAssign(e, row)}
-            >
-              {listManagers.map((item) => {
-                return (
-                  <MenuItem value={item.lead_assign_user_id}>
-                    {item.manager_name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+            {prop.permission.change_assign_to == 1 ? (
+              <Select
+                value={row.lead_assign_user_id}
+                displayEmpty
+                inputProps={{
+                  "aria-label": "Without label",
+                }}
+                input={<BootstrapInput />}
+                name="assign_to"
+                onChange={(e) => changeAssign(e, row)}
+              >
+                {listManagers.map((item) => {
+                  return (
+                    <MenuItem value={item.lead_assign_user_id}>
+                      {item.manager_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            ) : (
+              <span title={row.lead_assign_user_name}>
+                {row.lead_assign_user_name}
+              </span>
+            )}
           </div>
         );
       },
@@ -1569,9 +1579,13 @@ const Leads = () => {
       selector: (row) => {
         return (
           <div>
-            <i className="material-icons" onClick={(e) => viewFollowup(row)}>
-              visibility
-            </i>
+            {prop.permission.add_followup == 1 ? (
+              <i className="material-icons" onClick={(e) => viewFollowup(row)}>
+                visibility
+              </i>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -1658,7 +1672,8 @@ const Leads = () => {
         return (
           <>
             {" "}
-            {row.leads_status == "Pending" ? (
+            {row.leads_status == "Pending" &&
+            prop.permission.update_lead == 1 ? (
               <div>
                 <Button
                   id={`actionButton_${row.sr_no}`}
@@ -2588,18 +2603,27 @@ const Leads = () => {
                             });
                           }}
                         />
-                        <Button variant="contained" component="span">
-                          <i className="material-icons">backup</i>&nbsp;Import
-                        </Button>
+                        {prop.permission.import_lead == 1 ? (
+                          <Button variant="contained" component="span">
+                            <i className="material-icons">backup</i>&nbsp;Import
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </label>
                     </div>
-                    <Button
-                      variant="contained"
-                      onClick={handleClickOpen}
-                      className="addLead"
-                    >
-                      Add
-                    </Button>
+                    {prop.permission.add_lead == 1 ? (
+                      <Button
+                        variant="contained"
+                        onClick={handleClickOpen}
+                        className="addLead"
+                      >
+                        Add
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+
                     {/* <Button variant="contained">Add IB</Button>
                     <Button variant="contained">All</Button> */}
                   </div>

@@ -74,7 +74,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
-const PendingKYC = () => {
+const PendingKYC = (prop) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -258,80 +258,107 @@ const PendingKYC = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              id={`actionButton_${row.sr_no}`}
-              aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.sr_no)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.sr_no}`}
-              anchorEl={openTableMenus[row.sr_no]}
-              open={Boolean(openTableMenus[row.sr_no])}
-              onClose={(event) => handleContextClose(row.sr_no)}
-            >
-              <MenuItem
-                className="view"
-                {...row}
-                onClick={(event) => actionMenuPopup(event, row)}
-              >
-                <i
-                  className="material-icons view"
-                  onClick={(event) => actionMenuPopup(event, row)}
-                >
-                  receipt
-                </i>
-                &nbsp;&nbsp;View
-              </MenuItem>
-              <MenuItem
-                className="edit"
-                {...row}
-                onClick={(event) => actionMenuPopup(event, row)}
-              >
-                <i
-                  className="material-icons edit"
-                  onClick={(event) => actionMenuPopup(event, row)}
-                >
-                  visibility
-                </i>
-                &nbsp;&nbsp;Edit
-              </MenuItem>
-              {row.status != "1" ? (
-                <MenuItem
-                  className="approve"
+            {prop.permission.view_kycs == 1 ||
+            prop.permission.update_kyc == 1 ||
+            prop.permission.approve_kyc == 1 ||
+            prop.permission.reject_kyc == 1 ? (
+              <>
+                <Button
+                  id={`actionButton_${row.sr_no}`}
+                  aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) => handleContextClick(event, row.sr_no)}
                   {...row}
-                  onClick={(event) => actionMenuPopup(event, row)}
+                  style={{ color: "rgb(144 145 139)" }}
                 >
-                  <i
-                    className="material-icons font-color-approved approve"
-                    onClick={(event) => actionMenuPopup(event, row)}
-                  >
-                    thumb_up
-                  </i>
-                  &nbsp;&nbsp;Approved
-                </MenuItem>
-              ) : (
-                ""
-              )}
-              <MenuItem
-                className="reject"
-                {...row}
-                onClick={(event) => actionMenuPopup(event, row)}
-              >
-                <i
-                  className="material-icons font-color-rejected reject"
-                  onClick={(event) => actionMenuPopup(event, row)}
+                  <i className="material-icons">more_horiz</i>
+                </Button>
+                <Menu
+                  id={`basic-menu-${row.sr_no}`}
+                  anchorEl={openTableMenus[row.sr_no]}
+                  open={Boolean(openTableMenus[row.sr_no])}
+                  onClose={(event) => handleContextClose(row.sr_no)}
                 >
-                  thumb_down
-                </i>
-                &nbsp;&nbsp;Rejected
-              </MenuItem>
-            </Menu>
+                  {prop.permission.view_kycs == 1 ? (
+                    <MenuItem
+                      className="view"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i
+                        className="material-icons view"
+                        onClick={(event) => actionMenuPopup(event, row)}
+                      >
+                        receipt
+                      </i>
+                      &nbsp;&nbsp;View
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+
+                  {prop.permission.update_kyc == 1 ? (
+                    <MenuItem
+                      className="edit"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i
+                        className="material-icons edit"
+                        onClick={(event) => actionMenuPopup(event, row)}
+                      >
+                        visibility
+                      </i>
+                      &nbsp;&nbsp;Edit
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+
+                  {row.status != "1" ? (
+                    prop.permission.approve_kyc == 1 ? (
+                      <MenuItem
+                        className="approve"
+                        {...row}
+                        onClick={(event) => actionMenuPopup(event, row)}
+                      >
+                        <i
+                          className="material-icons font-color-approved approve"
+                          onClick={(event) => actionMenuPopup(event, row)}
+                        >
+                          thumb_up
+                        </i>
+                        &nbsp;&nbsp;Approved
+                      </MenuItem>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )}
+                  {prop.permission.reject_kyc == 1 ? (
+                    <MenuItem
+                      className="reject"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i
+                        className="material-icons font-color-rejected reject"
+                        onClick={(event) => actionMenuPopup(event, row)}
+                      >
+                        thumb_down
+                      </i>
+                      &nbsp;&nbsp;Rejected
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                </Menu>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },

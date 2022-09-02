@@ -66,6 +66,8 @@ import MoneyManagerProfile from "./pamm/MoneyManagerProfile";
 import MT5BonusRequests from "./MT5BonusManage/MT5BonusRequests";
 import Mt5BonusOffer from "./MT5BonusManage/Mt5BonusOffer";
 import RefreshData from "./refresha/RefreshData";
+import { IsApprove, Url } from "./global";
+import axios from "axios";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -74,11 +76,40 @@ function useScrollToTop() {
     window.scrollTo(0, 0);
   }, [pathname]);
 }
+// const Permission = async () => {
+
+// };
+
 const App = () => {
   useScrollToTop();
   const ref = useRef();
   const [login, setLogin] = useState(localStorage.getItem("login"));
   const [sidebar, setSidebar] = useState(false);
+  const [firstCall, setFirstCall] = useState(true);
+  const [permission, setPermission] = useState({});
+
+  const permissionfuc = async () => {
+    if (firstCall) {
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+      }
+      param.append("action", "get_admin_permissions");
+      axios
+        .post(Url + "/ajaxfiles/update_user_profile.php", param)
+        .then((res) => {
+          if (res.data.message == "Session has been expired") {
+            localStorage.setItem("login", true);
+          }
+          if (res.data.status == "ok") {
+            setFirstCall(false);
+            setPermission(res.data.admin_button_permissions);
+          }
+        });
+    }
+  };
 
   if (login == "true") {
     return (
@@ -87,6 +118,7 @@ const App = () => {
       </div>
     );
   } else {
+    permissionfuc();
     return (
       <div>
         <div
@@ -108,48 +140,105 @@ const App = () => {
                 <Route
                   exact
                   path="/"
-                  element={<Dashboard setLogin={setLogin} />}
+                  element={
+                    <Dashboard setLogin={setLogin} permission={permission} />
+                  }
                 />
                 <Route
                   path="*"
                   element={
-                    <Navigate to="dashboard" replace setLogin={setLogin} />
+                    <Navigate
+                      to="dashboard"
+                      replace
+                      setLogin={setLogin}
+                      permission={permission}
+                    />
                   }
                 />
                 <Route
                   exact
                   path="/dashboard"
-                  element={<Dashboard setLogin={setLogin} />}
+                  element={
+                    <Dashboard setLogin={setLogin} permission={permission} />
+                  }
                 />
-                <Route exact path="/employees" element={<Employees />} />
+                <Route
+                  exact
+                  path="/employees"
+                  element={<Employees permission={permission} />}
+                />
                 <Route
                   exact
                   path="/role_management"
-                  element={<RoleManagement />}
+                  element={<RoleManagement permission={permission} />}
                 />
-                <Route exact path="/client_list" element={<ClientList />} />
-                <Route exact path="/client_list" element={<ClientList />} />
-                <Route exact path="/client_list/:id" element={<ClientList />} />
+                <Route
+                  exact
+                  path="/client_list"
+                  element={<ClientList permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/client_list"
+                  element={<ClientList permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/client_list/:id"
+                  element={<ClientList permission={permission} />}
+                />
                 <Route exact path="/list_request" element={<ListRequest />} />
-                <Route exact path="/pending_kyc" element={<PendingKYC />} />
-                <Route exact path="/pending_kyc/:id" element={<PendingKYC />} />
+                <Route
+                  exact
+                  path="/pending_kyc"
+                  element={<PendingKYC permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/pending_kyc/:id"
+                  element={<PendingKYC permission={permission} />}
+                />
                 <Route exact path="/history_kyc" element={<HistoryKYC />} />
                 <Route exact path="/history_kyc/:id" element={<HistoryKYC />} />
                 <Route
                   exact
                   path="/commision_group"
-                  element={<CommisionGroup />}
+                  element={<CommisionGroup permission={permission} />}
                 />
                 {/* <Route exact path="/generate_income" element={<GenerateIncome />} /> */}
                 <Route exact path="/mt5_group" element={<Mt5Group />} />
-                <Route exact path="/setting" element={<Setting />} />
-                <Route exact path="/popup_image" element={<PopupImage />} />
-                <Route exact path="/currency_rate" element={<CurrencyRate />} />
-                <Route exact path="/ticket" element={<Ticket />} />
+                <Route
+                  exact
+                  path="/setting"
+                  element={<Setting permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/popup_image"
+                  element={<PopupImage permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/currency_rate"
+                  element={<CurrencyRate permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/ticket"
+                  element={<Ticket permission={permission} />}
+                />
                 <Route exact path="/notification" element={<Notification />} />
                 <Route exact path="/activity_log" element={<ActivityLog />} />
-                <Route exact path="/faq_editor" element={<FAQEditor />} />
-                <Route exact path="/ib_withdraw" element={<IBWithdraw />} />
+                <Route
+                  exact
+                  path="/faq_editor"
+                  element={<FAQEditor permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/ib_withdraw"
+                  element={<IBWithdraw permission={permission} />}
+                />
                 <Route exact path="/sales_report" element={<SalesReport />} />
                 <Route exact path="/refresh_data" element={<RefreshData />} />
 
@@ -158,8 +247,16 @@ const App = () => {
                   path="/ib_withdraw"
                   element={<PartnershipWithdraw />}
                 />
-                <Route exact path="/deposit" element={<Deposit />} />
-                <Route exact path="/withdrawal" element={<Withdraw />} />
+                <Route
+                  exact
+                  path="/deposit"
+                  element={<Deposit permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/withdrawal"
+                  element={<Withdraw permission={permission} />}
+                />
                 <Route exact path="/master/:id" element={<Master />} />
                 <Route exact path="/profile/:id" element={<Profile />} />
                 {/* <Route exact path="/deposit_history" element={<DepositHistory />} /> */}
@@ -171,14 +268,22 @@ const App = () => {
                 <Route exact path="/myAccount" element={<Myaccount />} />
                 <Route exact path="/createRole/:id" element={<CreateRole />} />
                 <Route exact path="/createRole" element={<CreateRole />} />
-                <Route exact path="/leads_list" element={<Leads />} />
+                <Route
+                  exact
+                  path="/leads_list"
+                  element={<Leads permission={permission} />}
+                />
                 <Route exact path="/leads_list/:id" element={<Leads />} />
                 <Route exact path="/reminder" element={<Remainder />} />
                 <Route exact path="/ib_commisions" element={<IBCommisions />} />
                 <Route exact path="/copy_trading" element={<CopyTrading />} />
                 <Route exact path="/Comingsoon" element={<Dashboard />} />
                 <Route exact path="/plans" element={<Plans />} />
-                <Route exact path="/view_ticket/:id" element={<ViewTicket />} />
+                <Route
+                  exact
+                  path="/view_ticket/:id"
+                  element={<ViewTicket permission={permission} />}
+                />
                 <Route
                   exact
                   path="/deposit_report"
@@ -224,14 +329,26 @@ const App = () => {
                   element={<BasicIbReport />}
                 />
                 <Route exact path="/ib_structure" element={<IBStructure />} />
-                <Route exact path="/link" element={<Link />} />
-                <Route exact path="/Salesman" element={<Target />} />
+                <Route
+                  exact
+                  path="/link"
+                  element={<Link permission={permission} />}
+                />
+                <Route
+                  exact
+                  path="/Salesman"
+                  element={<Target permission={permission} />}
+                />
                 <Route
                   exact
                   path="/change_menu_order"
                   element={<MenuSetting />}
                 />
-                <Route exact path="/menu_item" element={<MenuItems />} />
+                <Route
+                  exact
+                  path="/menu_item"
+                  element={<MenuItems permission={permission} />}
+                />
                 <Route
                   exact
                   path="/pamm_dashboard"
@@ -245,7 +362,7 @@ const App = () => {
                 <Route
                   exact
                   path="/pamm_mm_management"
-                  element={<MmManagement />}
+                  element={<MmManagement permission={permission} />}
                 />
                 <Route
                   exact
@@ -255,14 +372,18 @@ const App = () => {
                 <Route
                   exact
                   path="/pamm_user_management"
-                  element={<PammUser />}
+                  element={<PammUser permission={permission} />}
                 />
                 <Route
                   exact
                   path="/sales_incentive"
                   element={<SalesIncentive />}
                 />
-                <Route exact path="/user_groups" element={<UsersGroups />} />
+                <Route
+                  exact
+                  path="/user_groups"
+                  element={<UsersGroups permission={permission} />}
+                />
                 <Route
                   path="/portfolio_profile/:id/:portfolioUserId"
                   element={<PammPortfolioProfile />}
@@ -273,9 +394,12 @@ const App = () => {
                 />
                 <Route
                   path="/mt5_bonus_request"
-                  element={<MT5BonusRequests />}
+                  element={<MT5BonusRequests permission={permission} />}
                 />
-                <Route path="/mt5_bonus_offer" element={<Mt5BonusOffer />} />
+                <Route
+                  path="/mt5_bonus_offer"
+                  element={<Mt5BonusOffer permission={permission} />}
+                />
               </Routes>
 
               {/* <Footer /> */}
@@ -287,4 +411,4 @@ const App = () => {
   }
 };
 
-export default App;
+export { App };

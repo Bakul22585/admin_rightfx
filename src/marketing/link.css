@@ -31,3 +31,9 @@
     border-radius: 6px;
     padding: 0px 5px;
 }
+.linkwrep{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 170px;
+}

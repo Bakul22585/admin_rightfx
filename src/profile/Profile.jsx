@@ -937,26 +937,47 @@ const Profile = () => {
       selector: (row) => {
         return (
           <div>
-            <Button
-              className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
-              // onClick={() => bankAccountSubmit("paper", row.user_bank_id)}
-            >
-              <DeleteIcon sx={{ color: "red" }} />
-            </Button>
-            <Button
-              className="add_bank cursor-pointer mx-3 p-0 p-md-2 rounded-circle text-muted "
-              onClick={(e) => openDialogbox(e, row)}
-            >
-              <i
-                className="material-icons add_bank"
+            {permission.delete_user_bank == 1 ? (
+              <Button
+                className="deleteBank cursor-pointer p-0 p-md-2 rounded-circle text-muted"
                 onClick={(e) => openDialogbox(e, row)}
-                style={{ color: "green" }}
               >
-                edit
-              </i>
-              {/* <CreateIcon sx={{ color: "green" }} className="add_bank" onClick={(e) => openDialogbox(e, row)}/> */}
-              {/* edit */}
-            </Button>
+                {/* <DeleteIcon
+                className="deleteBank"
+                sx={{ color: "red" }}
+                onClick={(e) => openDialogbox(e, row)}
+              />
+              delete */}
+                <i
+                  className="material-icons deleteBank"
+                  onClick={(e) => openDialogbox(e, row)}
+                  style={{ color: "red" }}
+                >
+                  delete
+                </i>
+              </Button>
+            ) : (
+              ""
+            )}
+
+            {permission.update_user_bank == 1 ? (
+              <Button
+                className="add_bank cursor-pointer mx-3 p-0 p-md-2 rounded-circle text-muted "
+                onClick={(e) => openDialogbox(e, row)}
+              >
+                <i
+                  className="material-icons add_bank"
+                  onClick={(e) => openDialogbox(e, row)}
+                  style={{ color: "green" }}
+                >
+                  edit
+                </i>
+                {/* <CreateIcon sx={{ color: "green" }} className="add_bank" onClick={(e) => openDialogbox(e, row)}/> */}
+                {/* edit */}
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -1325,6 +1346,192 @@ const Profile = () => {
       };
     });
   };
+  const [permission, setPermission] = useState({
+    update_user_bank: 0,
+    delete_user_bank: 0,
+    update_kyc: 0,
+    view_portfolio_details: 0,
+    view_money_manager_profile: 0,
+    create_portfolio: 0,
+    add_investment: 0,
+    withdraw_request: 0,
+    update_basic_information: 0,
+    update_employement_status: 0,
+    link_client: 0,
+    unlink_ib: 0,
+    send_mail: 0,
+    update_cp_access: 0,
+    view_cp_password: 0,
+    change_password: 0,
+    update_is_pamm: 0,
+    add_new_notes: 0,
+    add_deposit: 0,
+    add_withdraw: 0,
+    internal_transfer: 0,
+    mt5_credit_debit: 0,
+    add_user_bank: 0,
+    create_mt5_account: 0,
+    check_mt5_status: 0,
+    change_mt5_leverage: 0,
+    change_mt5_password: 0,
+    mt5_link: 0,
+    mt5_reset: 0,
+    link_ib: 0,
+    mt5_access: 0,
+    insert_strcuture_master: 0,
+    update_strcuture_master: 0,
+    change_user_group: 0,
+    transaction_access: 0,
+    my_portfolios: 0,
+    money_manager_accounts: 0,
+    my_money_managers: 0,
+    pamm_trade_history: 0,
+    pamm_withdraw_request: 0,
+    get_bank_list: 0,
+    get_general_information: 0,
+    get_general_informationShow: 0,
+    get_kyc_status: 0,
+    get_my_assigned_structure: 0,
+    list_my_structures: 0,
+    log_list: 0,
+    mt5_account_list: 0,
+    my_traders: 0,
+    notes_list: 0,
+    view_login_activities: 0,
+    view_pamm_dashboard: 0,
+    wallet_history: 0,
+    delete_master_structure: 0,
+  });
+  const getpermissions = async () => {
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("user_id", id);
+    param.append("action", "get_client_permissions");
+    await axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "ok") {
+          permission.delete_master_structure =
+            res.data.button_permissions.delete_master_structure;
+          permission.update_user_bank =
+            res.data.button_permissions.update_user_bank;
+          permission.delete_user_bank =
+            res.data.button_permissions.delete_user_bank;
+          permission.update_kyc = res.data.button_permissions.update_kyc;
+          permission.view_portfolio_details =
+            res.data.button_permissions.view_portfolio_details;
+          permission.create_portfolio =
+            res.data.button_permissions.create_portfolio;
+          permission.add_investment =
+            res.data.button_permissions.add_investment;
+          permission.withdraw_request =
+            res.data.button_permissions.withdraw_request;
+          permission.update_basic_information =
+            res.data.button_permissions.update_basic_information;
+          permission.update_employement_status =
+            res.data.button_permissions.link_client;
+          permission.view_money_manager_profile =
+            res.data.button_permissions.view_money_manager_profile;
+          permission.link_client = res.data.button_permissions.link_client;
+          permission.unlink_ib = res.data.button_permissions.unlink_ib;
+          permission.send_mail = res.data.button_permissions.send_mail;
+          permission.update_cp_access =
+            res.data.button_permissions.update_cp_access;
+          permission.view_cp_password =
+            res.data.button_permissions.view_cp_password;
+          permission.change_password =
+            res.data.button_permissions.change_password;
+          permission.update_is_pamm =
+            res.data.button_permissions.update_is_pamm;
+          permission.add_new_notes = res.data.button_permissions.add_new_notes;
+          permission.add_deposit = res.data.button_permissions.add_deposit;
+          permission.add_withdraw = res.data.button_permissions.add_withdraw;
+          permission.internal_transfer =
+            res.data.button_permissions.internal_transfer;
+          permission.mt5_credit_debit =
+            res.data.button_permissions.mt5_credit_debit;
+          permission.add_user_bank = res.data.button_permissions.add_user_bank;
+          permission.create_mt5_account =
+            res.data.button_permissions.create_mt5_account;
+          permission.check_mt5_status =
+            res.data.button_permissions.check_mt5_status;
+          permission.change_mt5_leverage =
+            res.data.button_permissions.change_mt5_leverage;
+          permission.change_mt5_password =
+            res.data.button_permissions.change_mt5_password;
+          permission.mt5_link = res.data.button_permissions.mt5_link;
+          permission.mt5_reset = res.data.button_permissions.mt5_reset;
+          permission.insert_strcuture_master =
+            res.data.button_permissions.insert_strcuture_master;
+          permission.update_strcuture_master =
+            res.data.button_permissions.update_strcuture_master;
+          permission.change_user_group =
+            res.data.button_permissions.change_user_group;
+          permission.block_unblock_user =
+            res.data.button_permissions.block_unblock_user;
+          permission.transaction_access =
+            res.data.button_permissions.transaction_access;
+          permission.link_ib = res.data.button_permissions.link_ib;
+          permission.mt5_access = res.data.button_permissions.mt5_access;
+          permission.money_manager_accounts =
+            res.data.pamm_tab_permissions.money_manager_accounts;
+          permission.my_money_managers =
+            res.data.pamm_tab_permissions.my_money_managers;
+          permission.pamm_trade_history =
+            res.data.pamm_tab_permissions.pamm_trade_history;
+          permission.pamm_withdraw_request =
+            res.data.pamm_tab_permissions.pamm_withdraw_request;
+          // permission.view_pamm_dashboard =
+          //   res.data.pamm_tab_permissions.view_pamm_dashboard;
+          permission.get_bank_list = res.data.tab_permissions.get_bank_list;
+
+          permission.get_general_information =
+            res.data.tab_permissions.get_general_information;
+          permission.get_general_informationShow =
+            res.data.button_permissions.get_general_information;
+          permission.get_kyc_status = res.data.tab_permissions.get_kyc_status;
+          permission.get_my_assigned_structure =
+            res.data.tab_permissions.get_my_assigned_structure;
+          permission.list_my_structures =
+            res.data.tab_permissions.list_my_structures;
+          permission.log_list = res.data.tab_permissions.log_list;
+          permission.mt5_account_list =
+            res.data.tab_permissions.mt5_account_list;
+          permission.my_traders = res.data.tab_permissions.my_traders;
+          permission.notes_list = res.data.tab_permissions.notes_list;
+          permission.view_login_activities =
+            res.data.tab_permissions.view_login_activities;
+          permission.view_pamm_dashboard =
+            res.data.tab_permissions.view_pamm_dashboard;
+          permission.wallet_history = res.data.tab_permissions.wallet_history;
+          permission.my_portfolios =
+            res.data.pamm_tab_permissions.my_portfolios;
+          setPermission({ ...permission });
+
+          if (res.data.tab_permissions.get_general_information == 1) {
+            getProfilePageData();
+          }
+        }
+        console.log("res.data", res.data);
+      });
+  };
+  console.log("console.log", permission);
+  console.log(
+    "permission.my_portfolios",
+    permission.my_portfolios,
+    permission.pamm_withdraw_request,
+    permission.pamm_trade_history,
+    permission.my_money_managers
+  );
+
   const checkIfscCode = () => {
     if (bankAccountForm.iban_number == "") {
       toast.error("iban/IFSC code is requied");
@@ -1802,8 +2009,11 @@ const Profile = () => {
       wrap: true,
     },
   ];
-
-  const getAccountList = () => {
+  const [deleteBankDetail, setdeleteBankDetail] = useState({
+    bank_id: "",
+    isLoader: "",
+  });
+  const getAccountList = async () => {
     const param = new FormData();
     param.append("user_id", id);
     if (IsApprove !== "") {
@@ -1813,7 +2023,7 @@ const Profile = () => {
     }
     param.append("action", "get_mt5_account_list_live");
 
-    axios
+    await axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
@@ -2076,7 +2286,7 @@ const Profile = () => {
     });
   };
 
-  const getMt5LivePackages = () => {
+  const getMt5LivePackages = async () => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -2084,7 +2294,7 @@ const Profile = () => {
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", id);
-    axios
+    await axios
       .post(Url + "/ajaxfiles/get_mt5_live_packages.php", param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
@@ -2096,6 +2306,7 @@ const Profile = () => {
   };
 
   const handleChange = (event, newValue) => {
+    console.log("newValue", newValue);
     setValue(newValue);
     if (newValue == 7 && userData.data.is_ib_account != "0") {
       setReferralData({
@@ -2131,20 +2342,45 @@ const Profile = () => {
     }
 
     if (newValue == 12 && userData.data.is_pamm == "1") {
-      getPammDashboard();
-      setPammGroupButton("dashboard");
-      getMoneyManagerList();
+      if (permission.view_pamm_dashboard == 1) {
+        getPammDashboard();
+        setPammGroupButton("dashboard");
+      } else if (
+        permission.view_pamm_dashboard == 0 &&
+        (permission.money_manager_accounts == 1 ||
+          permission.my_portfolios == 1)
+      ) {
+        getMoneyManager();
+        setPammPortfolioGroupButton("money_manager");
+        setPammGroupButton("portfolio_manage");
+      } else if (
+        permission.pamm_trade_history == 1 &&
+        permission.view_pamm_dashboard == 0 &&
+        (permission.money_manager_accounts == 0 ||
+          permission.my_portfolios == 1)
+      ) {
+        setPammGroupButton("trade_history");
+      } else if (
+        permission.pamm_withdraw_request == 1 &&
+        permission.view_pamm_dashboard == 0 &&
+        (permission.money_manager_accounts == 0 ||
+          permission.my_portfolios == 0) &&
+        permission.pamm_trade_history == 0
+      ) {
+        setPammGroupButton("withdraw_history");
+      }
+      // getMoneyManagerList();
     }
 
-    if (
-      newValue == 8 &&
-      userData.data.is_pamm == "1" &&
-      userData.data.is_ib_account == "0"
-    ) {
-      getPammDashboard();
-      setPammGroupButton("dashboard");
-      getMoneyManagerList();
-    }
+    // if (
+    //   newValue == 8 &&
+    //   userData.data.is_pamm == "1" &&
+    //   userData.data.is_ib_account == "0"
+    // ) {
+    //   getPammDashboard();
+    //   setPammGroupButton("dashboard");
+    //   // getMoneyManagerList();
+    // }
   };
 
   const handleChangeIndex = (index) => {
@@ -2153,6 +2389,7 @@ const Profile = () => {
 
   const openDialogbox = (e, row) => {
     if (e.target.classList.contains("createMt5")) {
+      getMt5LivePackages();
       setDialogTitle("Create MT5 Account");
       setCreateMt5Form({
         account_type: "",
@@ -2169,7 +2406,14 @@ const Profile = () => {
         password: false,
         mt5_balance: false,
       });
+    } else if (e.target.classList.contains("deleteBank")) {
+      setDialogTitle("Delete Bank");
+      setdeleteBankDetail({
+        bank_id: row.user_bank_id,
+        isLoader: false,
+      });
     } else if (e.target.classList.contains("mt5_access")) {
+      getAccountList();
       setDialogTitle("MT5 Access");
       setMt5AccessForm({
         account_type: "",
@@ -2181,6 +2425,7 @@ const Profile = () => {
         status: false,
       });
     } else if (e.target.classList.contains("link_mt5")) {
+      getMt5LivePackages();
       setDialogTitle("Link Existing Account");
       setLinkAccountForm({
         account_number: "",
@@ -2199,12 +2444,15 @@ const Profile = () => {
         confirm_password: false,
       });
     } else if (e.target.classList.contains("reset_mt5")) {
+      getAccountList();
       setDialogTitle("Reset MT5 Password");
       setResetMt5PasswordForm({
         mt5_id: "",
         isLoader: false,
       });
     } else if (e.target.classList.contains("change_leverage")) {
+      getAccountList();
+      getLeverages();
       setDialogTitle("Change Account leverage");
       setChangeLeverageForm({
         account: "",
@@ -2273,6 +2521,7 @@ const Profile = () => {
         ],
       });
     } else if (e.target.classList.contains("link_client")) {
+      getSalesList();
       setDialogTitle("Link Client");
       setLinkClientForm({
         client: "",
@@ -2401,6 +2650,7 @@ const Profile = () => {
         });
       }
     } else if (e.target.classList.contains("add_transaction")) {
+      getAccountList();
       setDialogTitle("Add New Transaction");
       getwalletBalance();
       getBankList();
@@ -2471,6 +2721,7 @@ const Profile = () => {
         ],
       });
     } else if (e.target.classList.contains("change_mt5_password")) {
+      getAccountList();
       setDialogTitle("Change MT5 Password");
       setChangeAccountPasswordForm({
         mt5_id: "",
@@ -2765,6 +3016,8 @@ const Profile = () => {
           )}
         </div>
       );
+    } else if (dialogTitle == "Delete Bank") {
+      return <div>Are you sure want to delete bank?</div>;
     } else if (dialogTitle == "MT5 Access") {
       return (
         <div>
@@ -4437,12 +4690,28 @@ const Profile = () => {
                   onChange={transactionInput}
                   onBlur={trinputtrueFalse}
                 >
-                  <MenuItem value="DEPOSIT">Deposit</MenuItem>
-                  <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
-                  <MenuItem value="INTERNAL_TRANSFER">
-                    Internal Transfer
-                  </MenuItem>
-                  <MenuItem value="CREDIT">Credit</MenuItem>
+                  {permission.add_deposit == 1 ? (
+                    <MenuItem value="DEPOSIT">Deposit</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.add_withdraw == 1 ? (
+                    <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.internal_transfer == 1 ? (
+                    <MenuItem value="INTERNAL_TRANSFER">
+                      Internal Transfer
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.mt5_credit_debit == 1 ? (
+                    <MenuItem value="CREDIT">Credit</MenuItem>
+                  ) : (
+                    ""
+                  )}
                 </Select>
                 {transactionForm.type == "" && trinputinfoTrue.type ? (
                   <FormHelperText>Transaction Type is required</FormHelperText>
@@ -4475,12 +4744,28 @@ const Profile = () => {
                   onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
-                  <MenuItem value="DEPOSIT">Deposit</MenuItem>
-                  <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
-                  <MenuItem value="INTERNAL_TRANSFER">
-                    Internal Transfer
-                  </MenuItem>
-                  <MenuItem value="CREDIT">Credit</MenuItem>
+                  {permission.add_deposit == 1 ? (
+                    <MenuItem value="DEPOSIT">Deposit</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.add_withdraw == 1 ? (
+                    <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.internal_transfer == 1 ? (
+                    <MenuItem value="INTERNAL_TRANSFER">
+                      Internal Transfer
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.mt5_credit_debit == 1 ? (
+                    <MenuItem value="CREDIT">Credit</MenuItem>
+                  ) : (
+                    ""
+                  )}
                 </Select>
                 {transactionForm.type == "" && trinputinfoTrue.type ? (
                   <FormHelperText>Transaction Type is required</FormHelperText>
@@ -4682,12 +4967,28 @@ const Profile = () => {
                   onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
-                  <MenuItem value="DEPOSIT">Deposit</MenuItem>
-                  <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
-                  <MenuItem value="INTERNAL_TRANSFER">
-                    Internal Transfer
-                  </MenuItem>
-                  <MenuItem value="CREDIT">Credit</MenuItem>
+                  {permission.add_deposit == 1 ? (
+                    <MenuItem value="DEPOSIT">Deposit</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.add_withdraw == 1 ? (
+                    <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.internal_transfer == 1 ? (
+                    <MenuItem value="INTERNAL_TRANSFER">
+                      Internal Transfer
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.mt5_credit_debit == 1 ? (
+                    <MenuItem value="CREDIT">Credit</MenuItem>
+                  ) : (
+                    ""
+                  )}
                 </Select>
                 {transactionForm.type == "" && trinputinfoTrue.type ? (
                   <FormHelperText>Transaction Type is required</FormHelperText>
@@ -4958,12 +5259,28 @@ const Profile = () => {
                   onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
-                  <MenuItem value="DEPOSIT">Deposit</MenuItem>
-                  <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
-                  <MenuItem value="INTERNAL_TRANSFER">
-                    Internal Transfer
-                  </MenuItem>
-                  <MenuItem value="CREDIT">Credit</MenuItem>
+                  {permission.add_deposit == 1 ? (
+                    <MenuItem value="DEPOSIT">Deposit</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.add_withdraw == 1 ? (
+                    <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.internal_transfer == 1 ? (
+                    <MenuItem value="INTERNAL_TRANSFER">
+                      Internal Transfer
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.mt5_credit_debit == 1 ? (
+                    <MenuItem value="CREDIT">Credit</MenuItem>
+                  ) : (
+                    ""
+                  )}
                 </Select>
                 {transactionForm.type == "" && trinputinfoTrue.type ? (
                   <FormHelperText>Transaction Type is required</FormHelperText>
@@ -5310,12 +5627,28 @@ const Profile = () => {
                   onBlur={trinputtrueFalse}
                   onChange={transactionInput}
                 >
-                  <MenuItem value="DEPOSIT">Deposit</MenuItem>
-                  <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
-                  <MenuItem value="INTERNAL_TRANSFER">
-                    Internal Transfer
-                  </MenuItem>
-                  <MenuItem value="CREDIT">Credit</MenuItem>
+                  {permission.add_deposit == 1 ? (
+                    <MenuItem value="DEPOSIT">Deposit</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.add_withdraw == 1 ? (
+                    <MenuItem value="WITHDRAWAL">Withdraw</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.internal_transfer == 1 ? (
+                    <MenuItem value="INTERNAL_TRANSFER">
+                      Internal Transfer
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {permission.mt5_credit_debit == 1 ? (
+                    <MenuItem value="CREDIT">Credit</MenuItem>
+                  ) : (
+                    ""
+                  )}
                 </Select>
                 {transactionForm.type == "" && trinputinfoTrue.type ? (
                   <FormHelperText>Transaction Type is required</FormHelperText>
@@ -6193,7 +6526,7 @@ const Profile = () => {
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="4">
+                <td colSpan="5">
                   <b>
                     {myChildTraderData.data.footer_count != undefined
                       ? myChildTraderData.data["footer_count"]["total"]
@@ -6513,7 +6846,7 @@ const Profile = () => {
           )}
         </div>
       );
-    } else if (dialogTitle == "MT5 Access") {
+    } else if (dialogTitle == "Delete Bank") {
       return (
         <div className="dialogMultipleActionButton">
           <Button
@@ -6524,11 +6857,11 @@ const Profile = () => {
             Cancel
           </Button>
 
-          {Mt5AccessForm.isLoader ? (
+          {deleteBankDetail.isLoader ? (
             <Button
               tabIndex="0"
               size="large"
-              className=" btn-gradient  btn-success createMt5Formloder"
+              className=" btn-danger font-color-white createMt5Formloder"
               disabled
             >
               <svg class="spinner" viewBox="0 0 50 50">
@@ -6545,13 +6878,59 @@ const Profile = () => {
           ) : (
             <Button
               variant="contained"
-              className="btn-gradient btn-success"
-              onClick={Mt5AccountAccessSubmit}
+              className="btn-danger font-color-white"
+              onClick={deleteBankDetailfunc}
             >
-              Update
+              Delete
             </Button>
           )}
         </div>
+      );
+    } else if (dialogTitle == "MT5 Access") {
+      return (
+        <>
+          {permission.check_mt5_status == 1 ? (
+            <div className="dialogMultipleActionButton">
+              <Button
+                variant="contained"
+                className="cancelButton"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+
+              {Mt5AccessForm.isLoader ? (
+                <Button
+                  tabIndex="0"
+                  size="large"
+                  className=" btn-gradient  btn-success createMt5Formloder"
+                  disabled
+                >
+                  <svg class="spinner" viewBox="0 0 50 50">
+                    <circle
+                      class="path"
+                      cx="25"
+                      cy="25"
+                      r="20"
+                      fill="none"
+                      stroke-width="5"
+                    ></circle>
+                  </svg>
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  className="btn-gradient btn-success"
+                  onClick={Mt5AccountAccessSubmit}
+                >
+                  Update
+                </Button>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+        </>
       );
     } else if (dialogTitle == "Link Existing Account") {
       return (
@@ -7416,6 +7795,36 @@ const Profile = () => {
           }
         });
     }
+  };
+  const deleteBankDetailfunc = () => {
+    deleteBankDetail.isLoader = true;
+    setdeleteBankDetail({ ...deleteBankDetail });
+    const param = new FormData();
+    if (IsApprove !== "") {
+      param.append("is_app", IsApprove.is_app);
+      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
+    }
+    param.append("user_id", id);
+
+    param.append("action", "delete_user_bank");
+    param.append("bank_id", deleteBankDetail.bank_id);
+    axios
+      .post(Url + "/ajaxfiles/update_user_profile.php", param)
+      .then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          navigate("/");
+        }
+        if (res.data.status == "error") {
+          toast.error(res.data.message);
+        } else {
+          deleteBankDetail.isLoader = false;
+          setdeleteBankDetail({ ...deleteBankDetail });
+          bankAccountForm.refresh = !bankAccountForm.refresh;
+          setBankAccountForm({ ...bankAccountForm });
+        }
+      });
   };
   const input1trueFalse = (event) => {
     var { name, value } = event.target;
@@ -8772,9 +9181,9 @@ const Profile = () => {
       ) {
         toast.error("Account number must match");
       } else if (bankAccountForm.iban_number == "") {
-        toast.error("Please enter IBAN Number");
+        toast.error(`Please enter ${bankAccountForm.ibanselect} Number`);
       } else if (
-        bankAccountForm.ifscdata == "" &&
+        bankAccountForm.show == false &&
         bankAccountForm.ibanselect == "IFSC"
       ) {
         toast.error("Please first verify IFSC your code");
@@ -8841,10 +9250,20 @@ const Profile = () => {
         toast.error("Please enter beneficiary name");
       } else if (bankAccountForm.bank_name == "") {
         toast.error("Please enter beneficiary bank name");
-      } else if (bankAccountForm.iban_number == "") {
-        toast.error("Please enter IBAN Number");
       } else if (bankAccountForm.account_number == "") {
         toast.error("Please enter account number");
+      } else if (
+        bankAccountForm.account_number !==
+        bankAccountForm.confirm_account_number
+      ) {
+        toast.error("Account number must match");
+      } else if (bankAccountForm.iban_number == "") {
+        toast.error(`Please enter ${bankAccountForm.ibanselect} Number`);
+      } else if (
+        bankAccountForm.show == false &&
+        bankAccountForm.ibanselect == "IFSC"
+      ) {
+        toast.error("Please first verify IFSC your code");
       } else {
         const param = new FormData();
         if (IsApprove !== "") {
@@ -9433,7 +9852,7 @@ const Profile = () => {
       });
   };
 
-  const getSalesList = () => {
+  const getSalesList = async () => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -9442,7 +9861,7 @@ const Profile = () => {
     }
     param.append("action", "list_salesman");
 
-    axios
+    await axios
       .post(Url + "/ajaxfiles/update_user_profile.php", param)
       .then((res) => {
         if (res.data.message == "Session has been expired") {
@@ -10016,13 +10435,7 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    getProfilePageData();
-    getUserDetails();
-    getMt5LivePackages();
-    getAccountList();
-    getSalesList();
-
+  const getLeverages = async () => {
     const param = new FormData();
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
@@ -10040,6 +10453,21 @@ const Profile = () => {
         }
         setLeverageForm(res.data.leverages);
       });
+  };
+  useEffect(() => {
+    getpermissions();
+    // getProfilePageData();
+    console.log(
+      "permission.get_general_information",
+      permission.get_general_information
+    );
+    getUserDetails();
+    // if (permission.get_general_information == 1) {
+    //   getProfilePageData();
+    // }
+    // getMt5LivePackages();
+    // getAccountList();
+    // getSalesList();
   }, [id]);
 
   return (
@@ -10132,640 +10560,1027 @@ const Profile = () => {
                     aria-label="scrollable auto tabs example"
                     className="tabsBar"
                   >
-                    <Tab label="PROFILE PAGE" />
-                    <Tab label="BANK DETAILS" />
-                    <Tab label="DOCUMENTS" />
-                    <Tab label="ACCOUNTS" />
-                    <Tab label="ACTIVITIES" />
-                    <Tab label="LOGS" />
-                    <Tab label="TRANSACTIONS" />
-                    {userData.data.is_ib_account == "0" ? (
+                    {permission.get_general_information == 1 ? (
+                      <Tab label="PROFILE PAGE" value={0} />
+                    ) : (
+                      ""
+                    )}
+                    {permission.get_bank_list == 1 ? (
+                      <Tab label="BANK DETAILS" value={1} />
+                    ) : (
+                      ""
+                    )}
+                    {permission.get_kyc_status == 1 ? (
+                      <Tab label="DOCUMENTS" value={2} />
+                    ) : (
+                      ""
+                    )}
+                    {permission.mt5_account_list == 1 ? (
+                      <Tab label="ACCOUNTS" value={3} />
+                    ) : (
+                      ""
+                    )}
+                    {permission.view_login_activities == 1 ? (
+                      <Tab label="ACTIVITIES" value={4} />
+                    ) : (
+                      ""
+                    )}
+                    {permission.log_list == 1 ? (
+                      <Tab label="LOGS" value={5} />
+                    ) : (
+                      ""
+                    )}
+                    {permission.wallet_history == 1 ? (
+                      <Tab label="TRANSACTIONS" value={6} />
+                    ) : (
+                      ""
+                    )}
+
+                    {/* {userData.data.is_ib_account == "0" ? (
                       ""
                     ) : (
-                      <Tab label="REFERRALS" />
-                    )}
-                    {userData.data.is_ib_account == "0" ? (
-                      ""
+                      <Tab label="REFERRALS" value={7} />
+                    )} */}
+                    {permission.list_my_structures == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <Tab label="REFERRALS" value={7} />
+                      )
                     ) : (
-                      <Tab label="PARTNERSHIP" />
-                    )}
-                    {userData.data.is_ib_account == "0" ? (
                       ""
-                    ) : (
-                      <Tab label="MY STRUCTURE" />
                     )}
-                    <Tab label="NOTES" />
-                    {userData.data.is_ib_account == "0" ? (
+                    {permission.list_my_structures == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <Tab label="PARTNERSHIP" value={8} />
+                      )
+                    ) : (
                       ""
-                    ) : (
-                      <Tab label="DOWNLINE" />
                     )}
-                    {userData.data.is_pamm == "1" ? <Tab label="PAMM" /> : ""}
+
+                    {permission.get_my_assigned_structure == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <Tab label="MY STRUCTURE" value={9} />
+                      )
+                    ) : (
+                      ""
+                    )}
+
+                    {permission.notes_list == 1 ? (
+                      <Tab label="NOTES" value={10} />
+                    ) : (
+                      ""
+                    )}
+
+                    {permission.my_traders == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <Tab label="DOWNLINE" value={11} />
+                      )
+                    ) : (
+                      ""
+                    )}
+
+                    {permission.view_pamm_dashboard == 1 ||
+                    permission.money_manager_accounts == 1 ||
+                    permission.my_money_managers == 1 ||
+                    permission.my_portfolios == 1 ||
+                    permission.pamm_trade_history == 1 ||
+                    permission.pamm_withdraw_request == 1 ? (
+                      userData.data.is_pamm == "1" ? (
+                        <Tab label="PAMM" value={12} />
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      ""
+                    )}
                   </Tabs>
                   <SwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                     index={value}
                     onChangeIndex={handleChangeIndex}
                   >
-                    <TabPanel value={value} index={0} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={9} lg={9} xl={9}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <p className="header-title">General Information</p>
-                            <div className="contentSection formSection">
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Title</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.title}
-                                    onChange={profileInput}
-                                    name="title"
-                                  >
-                                    <MenuItem value="Mr.">Mr.</MenuItem>
-                                    <MenuItem value="Mrs">Mrs</MenuItem>
-                                    <MenuItem value="Miss">Miss</MenuItem>
-                                    <MenuItem value="Ms">Ms</MenuItem>
-                                    <MenuItem value="Dr">Dr</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="First Name"
-                                  variant="standard"
-                                  //   value={userData.data["user_first_name"]}
-                                  value={profileForm.first_name}
-                                  focused
-                                  name="first_name"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Last Name"
-                                  variant="standard"
-                                  value={profileForm.last_name}
-                                  //   value={userData.data["user_last_name"]}
-                                  focused
-                                  name="last_name"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Phone"
-                                  value={profileForm.phone}
-                                  variant="standard"
-                                  focused
-                                  name="phone"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Email"
-                                  variant="standard"
-                                  value={profileForm.email}
-                                  //   value={userData.data["user_email"]}
-                                  focused
-                                  name="email"
-                                  disabled
-                                  // onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  type="date"
-                                  className="input-font-small"
-                                  label="Date of Birth"
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                  value={profileForm.dob}
-                                  name="dob"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Nationality</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    value={profileForm.nationality}
-                                    // value={age}
-                                    onChange={profileInput}
-                                    name="nationality"
-                                  >
-                                    {countryData.data.map((item) => {
-                                      return (
-                                        <MenuItem value={item.nicename}>
-                                          {item.nicename}
+                    {permission.get_general_information == 1 ? (
+                      <TabPanel value={0} index={0} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={9} lg={9} xl={9}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <p className="header-title">
+                                General Information
+                              </p>
+                              {permission.get_general_informationShow == 1 ? (
+                                <div className="contentSection formSection">
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>Title</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.title}
+                                        onChange={profileInput}
+                                        name="title"
+                                      >
+                                        <MenuItem value="Mr.">Mr.</MenuItem>
+                                        <MenuItem value="Mrs">Mrs</MenuItem>
+                                        <MenuItem value="Miss">Miss</MenuItem>
+                                        <MenuItem value="Ms">Ms</MenuItem>
+                                        <MenuItem value="Dr">Dr</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="First Name"
+                                      variant="standard"
+                                      //   value={userData.data["user_first_name"]}
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      value={profileForm.first_name}
+                                      focused
+                                      name="first_name"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Last Name"
+                                      variant="standard"
+                                      value={profileForm.last_name}
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      //   value={userData.data["user_last_name"]}
+                                      focused
+                                      name="last_name"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Phone"
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      value={profileForm.phone}
+                                      variant="standard"
+                                      focused
+                                      name="phone"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Email"
+                                      variant="standard"
+                                      value={profileForm.email}
+                                      // disabled={permission.update_basic_information==1 ?false :true}
+                                      //   value={userData.data["user_email"]}
+                                      focused
+                                      name="email"
+                                      disabled
+                                      // onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      type="date"
+                                      className="input-font-small"
+                                      label="Date of Birth"
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      focused
+                                      value={profileForm.dob}
+                                      name="dob"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>Nationality</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        value={profileForm.nationality}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        // value={age}
+                                        onChange={profileInput}
+                                        name="nationality"
+                                      >
+                                        {countryData.data.map((item) => {
+                                          return (
+                                            <MenuItem value={item.nicename}>
+                                              {item.nicename}
+                                            </MenuItem>
+                                          );
+                                        })}
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>
+                                        Country of Residence
+                                      </InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.country_of_residence}
+                                        onChange={profileInput}
+                                        name="country_of_residence"
+                                      >
+                                        {countryData.data.map((item) => {
+                                          return (
+                                            <MenuItem value={item.nicename}>
+                                              {item.nicename}
+                                            </MenuItem>
+                                          );
+                                        })}
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="City"
+                                      variant="standard"
+                                      focused
+                                      value={profileForm.city}
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      name="city"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Address"
+                                      variant="standard"
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      focused
+                                      value={profileForm.address}
+                                      name="address"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Address Line 2"
+                                      variant="standard"
+                                      focused
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      value={profileForm.address_2}
+                                      name="address_2"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>Gender</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        value={profileForm.gender}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        onChange={profileInput}
+                                        name="gender"
+                                      >
+                                        <MenuItem value="male">Male</MenuItem>
+                                        <MenuItem value="female">
+                                          Female
                                         </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Country of Residence</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.country_of_residence}
-                                    onChange={profileInput}
-                                    name="country_of_residence"
-                                  >
-                                    {countryData.data.map((item) => {
-                                      return (
-                                        <MenuItem value={item.nicename}>
-                                          {item.nicename}
+                                        <MenuItem value="other">Other</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Postal Code"
+                                      variant="standard"
+                                      value={profileForm.postal_code}
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      focused
+                                      name="postal_code"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>Language</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        value={profileForm.language}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        onChange={profileInput}
+                                        name="language"
+                                      >
+                                        <MenuItem value="en-gb">
+                                          English
                                         </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="City"
-                                  variant="standard"
-                                  focused
-                                  value={profileForm.city}
-                                  name="city"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Address"
-                                  variant="standard"
-                                  focused
-                                  value={profileForm.address}
-                                  name="address"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Address Line 2"
-                                  variant="standard"
-                                  focused
-                                  value={profileForm.address_2}
-                                  name="address_2"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
+                                        <MenuItem value="ar-ae">عربي</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Source"
+                                      variant="standard"
+                                      focused
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      value={profileForm.source}
+                                      name="source"
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>US citizen ?</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        // value={age}
+                                        value={profileForm.us_citizen}
+                                        onChange={profileInput}
+                                        name="us_citizen"
+                                      >
+                                        <MenuItem value="1">Yes</MenuItem>
+                                        <MenuItem value="0">No</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>
+                                        Worked in Financial?
+                                      </InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.finacial_work}
+                                        onChange={profileInput}
+                                        name="finacial_work"
+                                      >
+                                        <MenuItem value="1">Yes</MenuItem>
+                                        <MenuItem value="0">No</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <TextField
+                                      className="input-font-small"
+                                      label="Tax Identification Number"
+                                      variant="standard"
+                                      focused
+                                      disabled={
+                                        permission.update_basic_information == 1
+                                          ? false
+                                          : true
+                                      }
+                                      name="tax_number"
+                                      value={profileForm.tax_number}
+                                      onChange={profileInput}
+                                    />
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>
+                                        Politically exposed ?
+                                      </InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.politically_exposed}
+                                        onChange={profileInput}
+                                        name="politically_exposed"
+                                      >
+                                        <MenuItem value="1">Yes</MenuItem>
+                                        <MenuItem value="0">No</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>Sales Agent</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.sales_agent}
+                                        onChange={profileInput}
+                                        name="sales_agent"
+                                      >
+                                        {salesList.map((item) => {
+                                          return (
+                                            <MenuItem value={item.manager_id}>
+                                              {item.manager_name}
+                                            </MenuItem>
+                                          );
+                                        })}
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>Login Block</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.login_block}
+                                        onChange={profileInput}
+                                        name="login_block"
+                                      >
+                                        <MenuItem value="0">No</MenuItem>
+                                        <MenuItem value="1">Yes</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>{" "}
+                                  <div className="element">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
+                                      focused
+                                    >
+                                      <InputLabel>User Status </InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        // value={age}
+                                        disabled={
+                                          permission.update_basic_information ==
+                                          1
+                                            ? false
+                                            : true
+                                        }
+                                        value={profileForm.user_status}
+                                        onChange={profileInput}
+                                        name="user_status"
+                                      >
+                                        <MenuItem value="0">No</MenuItem>
+                                        <MenuItem value="1">Yes</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                    padding: "4em",
+                                  }}
                                 >
-                                  <InputLabel>Gendere</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.gender}
-                                    onChange={profileInput}
-                                    name="gender"
-                                  >
-                                    <MenuItem value="male">Male</MenuItem>
-                                    <MenuItem value="female">Female</MenuItem>
-                                    <MenuItem value="other">Other</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Postal Code"
-                                  variant="standard"
-                                  value={profileForm.postal_code}
-                                  focused
-                                  name="postal_code"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Language</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    value={profileForm.language}
-                                    onChange={profileInput}
-                                    name="language"
-                                  >
-                                    <MenuItem value="en-gb">English</MenuItem>
-                                    <MenuItem value="ar-ae">عربي</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Source"
-                                  variant="standard"
-                                  focused
-                                  value={profileForm.source}
-                                  name="source"
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>US citizen ?</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.us_citizen}
-                                    onChange={profileInput}
-                                    name="us_citizen"
-                                  >
-                                    <MenuItem value="1">Yes</MenuItem>
-                                    <MenuItem value="0">No</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Worked in Financial?</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.finacial_work}
-                                    onChange={profileInput}
-                                    name="finacial_work"
-                                  >
-                                    <MenuItem value="1">Yes</MenuItem>
-                                    <MenuItem value="0">No</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <TextField
-                                  className="input-font-small"
-                                  label="Tax Identification Number"
-                                  variant="standard"
-                                  focused
-                                  name="tax_number"
-                                  value={profileForm.tax_number}
-                                  onChange={profileInput}
-                                />
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Politically exposed ?</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.politically_exposed}
-                                    onChange={profileInput}
-                                    name="politically_exposed"
-                                  >
-                                    <MenuItem value="1">Yes</MenuItem>
-                                    <MenuItem value="0">No</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Sales Agent</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.sales_agent}
-                                    onChange={profileInput}
-                                    name="sales_agent"
-                                  >
-                                    {salesList.map((item) => {
-                                      return (
-                                        <MenuItem value={item.manager_id}>
-                                          {item.manager_name}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                </FormControl>
-                              </div>
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>Login Block</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.login_block}
-                                    onChange={profileInput}
-                                    name="login_block"
-                                  >
-                                    <MenuItem value="0">No</MenuItem>
-                                    <MenuItem value="1">Yes</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>{" "}
-                              <div className="element">
-                                <FormControl
-                                  variant="standard"
-                                  sx={{ width: "100%" }}
-                                  focused
-                                >
-                                  <InputLabel>User Status </InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    // value={age}
-                                    value={profileForm.user_status}
-                                    onChange={profileInput}
-                                    name="user_status"
-                                  >
-                                    <MenuItem value="0">No</MenuItem>
-                                    <MenuItem value="1">Yes</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                            </div>
+                                  You don't have access to view user profile
+                                  data
+                                </div>
+                              )}
 
-                            <div className="btnActionSection">
-                              <Button
-                                variant="contained"
-                                className="btn-success"
-                                onClick={profileSubmit}
-                              >
-                                Update Profile
-                              </Button>
-                            </div>
-                          </Paper>
-                        </Grid>
-                        <Grid item md={3} lg={3} xl={3}>
-                          <Paper elevation={2} style={{ borderRadius: "10px" }}>
-                            <p className="header-title">Quick Actions</p>
-                            <div className="contentSection">
-                              <p className="group-header">Trading Account</p>
-                              <div className="mt5btngroup">
-                                <Button
-                                  variant="contained"
-                                  className="createMt5 btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Create MT5
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="mt5_access btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  MT5 Access
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="link_mt5 btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Link MT5
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="reset_mt5 btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Reset MT5
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="change_leverage btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Change Leverage
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="change_mt5_password btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Change MT5 Password
-                                </Button>
-                              </div>
-                              <br />
-                              <p className="group-header">IB</p>
-                              <div className="mt5btngroup">
-                                {userData.data.is_ib_account == "1" ? (
+                              {permission.update_basic_information == 1 ? (
+                                <div className="btnActionSection">
+                                  <Button
+                                    variant="contained"
+                                    className="btn-success"
+                                    onClick={profileSubmit}
+                                  >
+                                    Update Profile
+                                  </Button>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                            </Paper>
+                          </Grid>
+                          <Grid item md={3} lg={3} xl={3}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                            >
+                              <p className="header-title">Quick Actions</p>
+                              <div className="contentSection">
+                                {permission.create_mt5_account == 1 ||
+                                permission.mt5_access == 1 ||
+                                permission.mt5_link ||
+                                permission.mt5_reset ||
+                                permission.change_mt5_leverage ||
+                                permission.change_mt5_password ? (
+                                  <p className="group-header">
+                                    Trading Account
+                                  </p>
+                                ) : (
+                                  ""
+                                )}
+                                {/* <p className="group-header">Trading Account</p> */}
+                                <div className="mt5btngroup">
+                                  {permission.create_mt5_account == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="createMt5 btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Create MT5
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {permission.mt5_access == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="mt5_access btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      MT5 Access
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+
+                                  {permission.mt5_link == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="link_mt5 btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Link MT5
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {permission.mt5_reset == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="reset_mt5 btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Reset MT5
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {permission.change_mt5_leverage == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="change_leverage btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Change Leverage
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {permission.change_mt5_password == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="change_mt5_password btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Change MT5 Password
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+
+                                {permission.insert_strcuture_master == 1 ||
+                                permission.insert_strcuture_maste == 1 ||
+                                permission.link_client == 1 ||
+                                permission.link_ib == 1 ||
+                                permission.unlink_ib == 1 ? (
                                   <>
-                                    <Button
-                                      variant="contained"
-                                      className="add_master_structure btn-hover-css"
-                                      onClick={openDialogbox}
-                                    >
-                                      Add Master Structure
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      className="edit_master_structure btn-hover-css"
-                                      onClick={openDialogbox}
-                                    >
-                                      Edit Master Structure
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      className="link_client btn-hover-css"
-                                      onClick={openDialogbox}
-                                    >
-                                      Link Client
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      className="unlink_ib btn-hover-css"
-                                      onClick={openDialogbox}
-                                    >
-                                      Unlink IB
-                                    </Button>
+                                    {" "}
+                                    <br /> <p className="group-header">IB</p>
                                   </>
                                 ) : (
                                   ""
                                 )}
-                                {userData.data.is_ib_account == "0" ? (
-                                  <>
-                                    <Button
-                                      variant="contained"
-                                      className="link_ib btn-hover-css"
-                                      onClick={openDialogbox}
-                                    >
-                                      Link To IB
-                                    </Button>
-                                  </>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              {/* {
+
+                                <div className="mt5btngroup">
+                                  {userData.data.is_ib_account == "1" ? (
+                                    <>
+                                      {permission.insert_strcuture_master ==
+                                      1 ? (
+                                        <Button
+                                          variant="contained"
+                                          className="add_master_structure btn-hover-css"
+                                          onClick={openDialogbox}
+                                        >
+                                          Add Master Structure
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {permission.update_strcuture_master ==
+                                      1 ? (
+                                        <Button
+                                          variant="contained"
+                                          className="edit_master_structure btn-hover-css"
+                                          onClick={openDialogbox}
+                                        >
+                                          Edit Master Structure
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {permission.link_client == 1 ? (
+                                        <Button
+                                          variant="contained"
+                                          className="link_client btn-hover-css"
+                                          onClick={openDialogbox}
+                                        >
+                                          Link Client
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+
+                                      {permission.unlink_ib == 1 ? (
+                                        <Button
+                                          variant="contained"
+                                          className="unlink_ib btn-hover-css"
+                                          onClick={openDialogbox}
+                                        >
+                                          Unlink IB
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {userData.data.is_ib_account == "0" ? (
+                                    <>
+                                      {permission.link_ib == 1 ? (
+                                        <Button
+                                          variant="contained"
+                                          className="link_ib btn-hover-css"
+                                          onClick={openDialogbox}
+                                        >
+                                          Link To IB
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                {/* {
                                 userData.data.is_ib_account == "0" ? "" :
                                   <>
                                     <div className="mt5btngroup">
                                     </div>
                                   </>
                               } */}
-                              <br />
-                              <p className="group-header">Communication</p>
-                              <div className="mt5btngroup">
-                                <Button
-                                  variant="contained"
-                                  className="send_email btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Send Email
-                                </Button>
-                              </div>
-                              <br />
-                              <p className="group-header">Client Portal</p>
-                              <div className="mt5btngroup">
-                                <Button
-                                  variant="contained"
-                                  className="cp_access btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  CP Access
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="view_cp_password btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  View CP Password
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="change_password btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Change Password
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="block_unblock btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Block/ Unblock
-                                </Button>
-                              </div>
-                              <br />
-                              <p className="group-header">Pamm</p>
-                              <div className="mt5btngroup">
-                                <Button
-                                  variant="contained"
-                                  className="pamm_access btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Pamm Access
-                                </Button>
-                              </div>
-                              <br />
-                              <p className="group-header">Misc.</p>
-                              <div className="mt5btngroup">
-                                {/* <Button
+
+                                {permission.send_mail == 1 ||
+                                permission.update_cp_access == 1 ||
+                                permission.view_cp_password == 1 ||
+                                permission.change_password == 1 ||
+                                permission.block_unblock_user == 1 ? (
+                                  <>
+                                    <br />{" "}
+                                    <p className="group-header">
+                                      Communication
+                                    </p>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
+                                <div className="mt5btngroup">
+                                  {permission.send_mail == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="send_email btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Send Email
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+
+                                {permission.update_cp_access == 1 ||
+                                permission.view_cp_password == 1 ||
+                                permission.change_password == 1 ||
+                                permission.block_unblock_user == 1 ? (
+                                  <>
+                                    <br />
+                                    <p className="group-header">
+                                      Client Portal
+                                    </p>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
+                                <div className="mt5btngroup">
+                                  {permission.update_cp_access == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="cp_access btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      CP Access
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {permission.view_cp_password == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="view_cp_password btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      View CP Password
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {permission.change_password == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="change_password btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Change Password
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+
+                                  {permission.block_unblock_user == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="block_unblock btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Block/ Unblock
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+
+                                {permission.update_is_pamm == 1 ? (
+                                  <>
+                                    <br /> <p className="group-header">Pamm</p>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
+                                <div className="mt5btngroup">
+                                  {permission.update_is_pamm == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="pamm_access btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Pamm Access
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+
+                                {permission.add_new_notes == 1 ||
+                                permission.add_user_bank == 1 ||
+                                permission.transaction_access == 1 ? (
+                                  <>
+                                    <br />
+                                    <p className="group-header">Misc.</p>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
+                                <div className="mt5btngroup">
+                                  {/* <Button
                                   variant="contained"
                                   className="download_application btn-hover-css"
                                   onClick={openDialogbox}
                                 >
                                   Download Application
                                 </Button> */}
-                                <Button
-                                  variant="contained"
-                                  className="add_note btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Note
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="add_bank btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Bank
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="add_transaction btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Transaction
-                                </Button>
+                                  {permission.add_new_notes == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="add_note btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Add Note
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+
+                                  {permission.add_user_bank == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="add_bank btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Add Bank
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+
+                                  {permission.transaction_access == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="add_transaction btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Add Transaction
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+
+                                {permission.change_user_group == 1 ? (
+                                  <>
+                                    <br />{" "}
+                                    <p className="group-header">Groups</p>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
+                                <div className="mt5btngroup">
+                                  {permission.change_user_group == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="user-group btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Group
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
                               </div>
-                              <br />
-                              <p className="group-header">Groups</p>
-                              <div className="mt5btngroup">
-                                <Button
-                                  variant="contained"
-                                  className="user-group btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Group
-                                </Button>
-                              </div>
-                            </div>
-                          </Paper>
+                            </Paper>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                      <br />
-                      <Grid container spacing={3} className="grid-handle">
-                        {/* <Grid item md={6} lg={6} xl={6}>
+                        <br />
+                        <Grid container spacing={3} className="grid-handle">
+                          {/* <Grid item md={6} lg={6} xl={6}>
                           <Paper
                             elevation={2}
                             style={{ borderRadius: "10px" }}
@@ -10790,809 +11605,246 @@ const Profile = () => {
                             </div>
                           </Paper>
                         </Grid> */}
-                        {userData.data.is_ib_account == "0" ? (
-                          ""
-                        ) : (
-                          <Grid item md={12} lg={12} xl={12}>
+                          {userData.data.is_ib_account == "0" ? (
+                            ""
+                          ) : (
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section"
+                              >
+                                <p className="header-title">
+                                  IB Dedicated Links
+                                </p>
+                                <div className="contentSection IB-Dedicated-Links">
+                                  <div className="master-structure-section">
+                                    <div className="user-links">
+                                      <div className="user-link-header">
+                                        <label>Link Type</label>
+                                        <label>Link</label>
+                                      </div>
+                                      <div className="user-link-body">
+                                        <label>Register</label>
+                                        <div className="link-section">
+                                          <a
+                                            href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
+                                            target="_blank"
+                                          >
+                                            {ClientUrl +
+                                              `/register/sponsor/${profileForm.wallet_code}`}
+                                          </a>
+                                          <button
+                                            className="copy_link"
+                                            onClick={(e) => {
+                                              navigator.clipboard
+                                                .writeText(
+                                                  ClientUrl +
+                                                    `/register/sponsor/${profileForm.wallet_code}`
+                                                )
+                                                .then(
+                                                  function () {
+                                                    toast.success(
+                                                      "The sponsor link has been successfully copying"
+                                                    );
+                                                  },
+                                                  function (err) {
+                                                    toast.error(
+                                                      "The sponsor link Could not copy, Please try again"
+                                                    );
+                                                  }
+                                                );
+                                            }}
+                                          >
+                                            <span className="blinking">
+                                              <i className="material-icons">
+                                                content_copy
+                                              </i>
+                                            </span>
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Paper>
+                            </Grid>
+                          )}
+
+                          <Grid item md={6} lg={6} xl={6}>
                             <Paper
                               elevation={2}
                               style={{ borderRadius: "10px" }}
                               className="paper-main-section"
                             >
-                              <p className="header-title">IB Dedicated Links</p>
-                              <div className="contentSection IB-Dedicated-Links">
-                                <div className="master-structure-section">
-                                  <div className="user-links">
-                                    <div className="user-link-header">
-                                      <label>Link Type</label>
-                                      <label>Link</label>
-                                    </div>
-                                    <div className="user-link-body">
-                                      <label>Register</label>
-                                      <div className="link-section">
-                                        <a
-                                          href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
-                                          target="_blank"
-                                        >
-                                          {ClientUrl +
-                                            `/register/sponsor/${profileForm.wallet_code}`}
-                                        </a>
-                                        <button
-                                          className="copy_link"
-                                          onClick={(e) => {
-                                            navigator.clipboard
-                                              .writeText(
-                                                ClientUrl +
-                                                  `/register/sponsor/${profileForm.wallet_code}`
-                                              )
-                                              .then(
-                                                function () {
-                                                  toast.success(
-                                                    "The sponsor link has been successfully copying"
-                                                  );
-                                                },
-                                                function (err) {
-                                                  toast.error(
-                                                    "The sponsor link Could not copy, Please try again"
-                                                  );
-                                                }
-                                              );
-                                          }}
-                                        >
-                                          <span className="blinking">
-                                            <i className="material-icons">
-                                              content_copy
-                                            </i>
-                                          </span>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </Paper>
-                          </Grid>
-                        )}
-
-                        <Grid item md={6} lg={6} xl={6}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <p className="header-title">Employment Details</p>
-                            <div className="contentSection">
-                              <Grid
-                                container
-                                spacing={3}
-                                className="grid-handle"
-                              >
-                                <Grid item md={6} lg={6} xl={6}>
-                                  <div
-                                    className="element"
-                                    style={{ width: "100%" }}
-                                  >
-                                    <FormControl
-                                      variant="standard"
-                                      sx={{ width: "100%" }}
-                                      focused
+                              <p className="header-title">Employment Details</p>
+                              <div className="contentSection">
+                                <Grid
+                                  container
+                                  spacing={3}
+                                  className="grid-handle"
+                                >
+                                  <Grid item md={6} lg={6} xl={6}>
+                                    <div
+                                      className="element"
+                                      style={{ width: "100%" }}
                                     >
-                                      <InputLabel>Employment Status</InputLabel>
-                                      <Select
-                                        label
-                                        className="select-font-small"
-                                        value={employmentDetailsForm.status}
-                                        onChange={employementInput}
-                                        name="status"
+                                      <FormControl
+                                        variant="standard"
+                                        sx={{ width: "100%" }}
+                                        focused
                                       >
-                                        <MenuItem value="Employed (full time)">
-                                          Employed (full time)
-                                        </MenuItem>
-                                        <MenuItem value="Self Employed">
-                                          Self Employed
-                                        </MenuItem>
-                                        <MenuItem value="Employed (part time )">
-                                          Employed (part time )
-                                        </MenuItem>
-                                        <MenuItem value="unemployed">
-                                          unemployed
-                                        </MenuItem>
-                                        <MenuItem value="Student">
-                                          Student
-                                        </MenuItem>
-                                        <MenuItem value="Retired">
-                                          Retired
-                                        </MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  </div>
-                                </Grid>
-                                <Grid item md={6} lg={6} xl={6}>
-                                  <div
-                                    className="element"
-                                    style={{ width: "100%" }}
-                                  >
-                                    <FormControl
-                                      variant="standard"
-                                      sx={{ width: "100%" }}
-                                      focused
-                                    >
-                                      <InputLabel>Inudstry</InputLabel>
-                                      <Select
-                                        label
-                                        className="select-font-small"
-                                        value={employmentDetailsForm.industry}
-                                        onChange={employementInput}
-                                        name="industry"
-                                      >
-                                        <MenuItem value="Aviation">
-                                          Aviation
-                                        </MenuItem>
-                                        <MenuItem value="Agricultural">
-                                          Agricultural
-                                        </MenuItem>
-                                        <MenuItem value="Financial industry">
-                                          Financial industry
-                                        </MenuItem>
-                                        <MenuItem value="Marketing">
-                                          Marketing
-                                        </MenuItem>
-                                        <MenuItem value="Retail industry">
-                                          Retail industry
-                                        </MenuItem>
-                                        <MenuItem value="HR">HR</MenuItem>
-                                        <MenuItem value="Management">
-                                          Management
-                                        </MenuItem>
-                                        <MenuItem value="Healthcare">
-                                          Healthcare
-                                        </MenuItem>
-                                        <MenuItem value="Administration">
-                                          Administration
-                                        </MenuItem>
-                                        <MenuItem value="Academic">
-                                          Academic
-                                        </MenuItem>
-                                        <MenuItem value="Engineering">
-                                          Engineering
-                                        </MenuItem>
-                                        <MenuItem value="Civil Engineering">
-                                          Civil Engineering
-                                        </MenuItem>
-                                        <MenuItem value="Architecture">
-                                          Architecture
-                                        </MenuItem>
-                                        <MenuItem value="Media">Media</MenuItem>
-                                        <MenuItem value="Chemical engineering">
-                                          Chemical engineering
-                                        </MenuItem>
-                                        <MenuItem value="Power engineering">
-                                          Power engineering
-                                        </MenuItem>
-                                        <MenuItem value="Other">Other</MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  </div>
-                                  <div className="btnActionSection employment-details">
-                                    <Button
-                                      variant="contained"
-                                      className="btn-success"
-                                      onClick={employmentDetailsSubmit}
-                                    >
-                                      Update Information
-                                    </Button>
-                                  </div>
-                                </Grid>
-                              </Grid>
-                            </div>
-                          </Paper>
-                        </Grid>
-                        <Grid item md={6} lg={6} xl={6}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <p className="header-title">Declarations</p>
-                            <div className="contentSection">
-                              <FormControlLabel
-                                className="declarationCheckbox"
-                                control={
-                                  <Checkbox defaultChecked name="declaration" />
-                                }
-                                label="By clicking here I give my consent for RightFx to contact me for marketing purposes. You can opt out at any time. For further details please see ourMarketing and Communication Policy Statement."
-                              />
-                              {/* <div className='element'>
-                                                        </div> */}
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={1} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Bank Accounts</p>
-                              <Button
-                                variant="contained"
-                                className="add_bank"
-                                onClick={openDialogbox}
-                              >
-                                Add New Bank Account
-                              </Button>
-                            </div>
-                            {/* <br/> */}
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/get_bank_list.php`}
-                                column={bankColumn}
-                                sort="0"
-                                refresh={bankAccountForm.refresh}
-                                userId={id}
-                                filter={filterData}
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={2} dir={theme.direction}>
-                      <Grid
-                        container
-                        spacing={3}
-                        className="grid-handle panding-left-right-3px"
-                      >
-                        <Grid item md={12} lg={12} xl={12}>
-                          <KycDocument id={id} />
-                          {/* <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Upload New Document</p>
-                            </div>
-                            <div className="documentDetailsTabSection">
-                              <div className="">
-                                <Grid container spacing={1} className="ml-n1">
-                                  <Grid item sm={9} className="p-1">
-                                    <FormControl className="w-100">
-                                      <Select
-                                        value={doc.proof}
-                                        name="proof"
-                                        label="Proof of ID"
-                                        onChange={handleChange}
-                                        displayEmpty
-                                        inputProps={{
-                                          "aria-label": "Without label",
-                                        }}
-                                        input={<BootstrapInput />}
-                                        className="mt-0 ml-0"
-                                      >
-                                        <MenuItem
-                                          value=""
-                                          onClick={() => {
-                                            setOption(true);
-                                            setChange(false);
-                                          }}
-                                        >
-                                          Proof of ID
-                                        </MenuItem>
-                                        <MenuItem
-                                          value="Proof of Address"
-                                          onClick={() => {
-                                            setOption(false);
-                                            setChange(true);
-                                          }}
-                                        >
-                                          Proof of Address
-                                        </MenuItem>
-
-                                        <MenuItem
-                                          value="Addition Documents"
-                                          onClick={() => {
-                                            setOption(false);
-                                            setChange(true);
-                                          }}
-                                        >
-                                          Addition Documents
-                                        </MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  </Grid>
-                                  <Grid item sm={3} className="p-1">
-                                    {option && (
-                                      <FormControl className="w-100">
+                                        <InputLabel>
+                                          Employment Status
+                                        </InputLabel>
                                         <Select
-                                          value={doc.id}
-                                          name="id"
-                                          label="ID"
-                                          onChange={handleChange}
-                                          inputProps={{
-                                            "aria-label": "Without label",
-                                          }}
-                                          input={<BootstrapInput />}
-                                          className="mt-0 ml-0"
+                                          label
+                                          className="select-font-small"
+                                          value={employmentDetailsForm.status}
+                                          onChange={employementInput}
+                                          name="status"
                                         >
-                                          <MenuItem value="ID">ID</MenuItem>
-                                          <MenuItem value="Password">
-                                            PASSWORD
+                                          <MenuItem value="Employed (full time)">
+                                            Employed (full time)
+                                          </MenuItem>
+                                          <MenuItem value="Self Employed">
+                                            Self Employed
+                                          </MenuItem>
+                                          <MenuItem value="Employed (part time )">
+                                            Employed (part time )
+                                          </MenuItem>
+                                          <MenuItem value="unemployed">
+                                            unemployed
+                                          </MenuItem>
+                                          <MenuItem value="Student">
+                                            Student
+                                          </MenuItem>
+                                          <MenuItem value="Retired">
+                                            Retired
                                           </MenuItem>
                                         </Select>
                                       </FormControl>
-                                    )}
-                                    {change && (
-                                      <Button
-                                        type="submit"
-                                        variant="contained"
-                                        size="medium"
-                                        className="w-100 p-0 h-100 !important d-flex align-items-stretch text-capitalize d-none"
+                                    </div>
+                                  </Grid>
+                                  <Grid item md={6} lg={6} xl={6}>
+                                    <div
+                                      className="element"
+                                      style={{ width: "100%" }}
+                                    >
+                                      <FormControl
+                                        variant="standard"
+                                        sx={{ width: "100%" }}
+                                        focused
                                       >
-                                        {proofAdd.length < 3 ? (
-                                          <Input
-                                            accept="image/*"
-                                            id="uploadDoc"
-                                            type="file"
-                                            name="fontimg"
-                                            onChange={(e) => {
-                                              setProofAdd([
-                                                ...proofAdd,
-                                                e.target.files[0],
-                                              ]);
-                                            
-                                            }}
-                                            style={{ display: "none" }}
-                                          />
-                                        ) : (
-                                          ""
-                                        )}{" "}
-                                        <label
-                                          htmlFor="uploadDoc"
-                                          className="w-100 h-100 d-flex align-items-center justify-content-center"
+                                        <InputLabel>Inudstry</InputLabel>
+                                        <Select
+                                          label
+                                          className="select-font-small"
+                                          value={employmentDetailsForm.industry}
+                                          onChange={employementInput}
+                                          name="industry"
                                         >
-                                          <CloudUploadIcon className="m-2" />
-                                          Browse
-                                        </label>
-                                      </Button>
+                                          <MenuItem value="Aviation">
+                                            Aviation
+                                          </MenuItem>
+                                          <MenuItem value="Agricultural">
+                                            Agricultural
+                                          </MenuItem>
+                                          <MenuItem value="Financial industry">
+                                            Financial industry
+                                          </MenuItem>
+                                          <MenuItem value="Marketing">
+                                            Marketing
+                                          </MenuItem>
+                                          <MenuItem value="Retail industry">
+                                            Retail industry
+                                          </MenuItem>
+                                          <MenuItem value="HR">HR</MenuItem>
+                                          <MenuItem value="Management">
+                                            Management
+                                          </MenuItem>
+                                          <MenuItem value="Healthcare">
+                                            Healthcare
+                                          </MenuItem>
+                                          <MenuItem value="Administration">
+                                            Administration
+                                          </MenuItem>
+                                          <MenuItem value="Academic">
+                                            Academic
+                                          </MenuItem>
+                                          <MenuItem value="Engineering">
+                                            Engineering
+                                          </MenuItem>
+                                          <MenuItem value="Civil Engineering">
+                                            Civil Engineering
+                                          </MenuItem>
+                                          <MenuItem value="Architecture">
+                                            Architecture
+                                          </MenuItem>
+                                          <MenuItem value="Media">
+                                            Media
+                                          </MenuItem>
+                                          <MenuItem value="Chemical engineering">
+                                            Chemical engineering
+                                          </MenuItem>
+                                          <MenuItem value="Power engineering">
+                                            Power engineering
+                                          </MenuItem>
+                                          <MenuItem value="Other">
+                                            Other
+                                          </MenuItem>
+                                        </Select>
+                                      </FormControl>
+                                    </div>
+                                    {permission.update_employement_status ==
+                                    1 ? (
+                                      <div className="btnActionSection employment-details">
+                                        <Button
+                                          variant="contained"
+                                          className="btn-success"
+                                          onClick={employmentDetailsSubmit}
+                                        >
+                                          Update Information
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      ""
                                     )}
                                   </Grid>
                                 </Grid>
-                                {change && (
-                                  <Grid container className="text-center my-4">
-                                    <Grid item sm={12}>
-                                      {proofAdd.map((proof, index) => {
-                                        return (
-                                          <Paper
-                                            elevation={1}
-                                            className="d-flex p-3 justify-content-between align-items-center mb-2"
-                                            style={{ borderRadius: "10px" }}
-                                            key={index}
-                                          >
-                                            <span className="text-dark font-size-sm font-weight-bold">
-                                              {proof.name}
-                                            </span>
-                                            <CloseOutlinedIcon
-                                              className="fontimgclose"
-                                              onClick={() => {
-                                                // proofAdd.splice(index, 1);
-                                                setProofAdd(
-                                                  proofAdd.filter(
-                                                    (v, i) => i !== index
-                                                  )
-                                                );
-                                              }}
-                                            />
-                                          </Paper>
-                                        );
-                                      })}
-                                    </Grid>
-                                  </Grid>
-                                )}
-                                {option && (
-                                  <Grid
-                                    container
-                                    spacing={7}
-                                    className="mt-4 mb-2 justify-content-center"
-                                    style={{ marginLeft: "-28px" }}
-                                  >
-                                    <Grid
-                                      item
-                                      sm={6}
-                                      lg={4}
-                                      className="d-flex flex-column align-items-center upload-zone p-4"
-                                    >
-                                      <h6 className="mb-3 font-size-xs font-weight-bold">
-                                        FRONT SIDE*
-                                      </h6>
-                                      <div className="uploaderDropZone">
-                                        <Input
-                                          accept="image/*"
-                                          id="FILE_FRONT_SIDE"
-                                          type="file"
-                                          name="fontimg"
-                                          // value={doc.fontimg}
-                                          onChange={(e) =>
-                                            setDoc((prevalue) => {
-                                              return {
-                                                ...prevalue,
-                                                fontimg: e.target.files[0],
-                                              };
-                                            })
-                                          }
-                                          style={{ display: "none" }}
-                                        />{" "}
-                                        {!doc.fontimg ? (
-                                          <label
-                                            htmlFor="FILE_FRONT_SIDE"
-                                            className="text-dark font-weight-bold font-size-xs"
-                                          >
-                                            UPLOAD
-                                          </label>
-                                        ) : (
-                                          <div className="received-file">
-                                            <div className="w-100 h-100">
-                                              {doc.fontimg.name}
-                                            </div>
-                                            <button
-                                              className="bg-transparent p-0 border-0"
-                                              onClick={() =>
-                                                setDoc((prevalue) => {
-                                                  return {
-                                                    ...prevalue,
-                                                    fontimg: "",
-                                                  };
-                                                })
-                                              }
-                                            >
-                                              <CloseOutlinedIcon className="fontimgclose" />
-                                            </button>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </Grid>
-                                    <Grid
-                                      item
-                                      sm={6}
-                                      lg={4}
-                                      className="d-flex flex-column align-items-center upload-zone p-4"
-                                    >
-                                      <h6 className="mb-3 font-size-xs font-weight-bold">
-                                        BACK SIDE*
-                                      </h6>
-                                      <div className="uploaderDropZone">
-                                        <input
-                                          accept="image/*"
-                                          id="FILE_BACK_SIDE"
-                                          type="file"
-                                          name="backimg"
-                                          // value={doc.backimg}
-                                          onChange={(e) =>
-                                            setDoc((prevalue) => {
-                                              return {
-                                                ...prevalue,
-                                                backimg: e.target.files[0],
-                                              };
-                                            })
-                                          }
-                                          style={{ display: "none" }}
-                                        />
-
-                                        {!doc.backimg ? (
-                                          <label
-                                            htmlFor="FILE_BACK_SIDE"
-                                            className="text-dark font-weight-bold font-size-xs"
-                                          >
-                                            UPLOAD
-                                          </label>
-                                        ) : (
-                                          <div className="received-file">
-                                            <div className="w-100 h-100">
-                                              {doc.backimg.name}
-                                            </div>
-                                            <button
-                                              className="bg-transparent p-0 border-0"
-                                              onClick={() =>
-                                                setDoc((prevalue) => {
-                                                  return {
-                                                    ...prevalue,
-                                                    backimg: "",
-                                                  };
-                                                })
-                                              }
-                                            >
-                                              <CloseOutlinedIcon className="fontimgclose" />
-                                            </button>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </Grid>
-                                    <hr className="ml-2 mr-2"></hr>
-                                    <Grid
-                                      item
-                                      xs={12}
-                                      className="py-0 pr-4 pl-4 pb-1"
-                                    >
-                                      <form
-                                        noValidate
-                                        className="autocomplete-off"
-                                      >
-                                        <h6 className="font-weight-bold mb-4 pb-1 d-flex">
-                                          Fill in your Details for a seamless
-                                          experience{" "}
-                                          <small className="d-baseline">
-                                            {" "}
-                                            (Optional)
-                                          </small>
-                                        </h6>
-                                        <Grid
-                                          container
-                                          spacing={1}
-                                          className="ml-n1"
-                                        >
-                                          <Grid item sm={6} className="p-1">
-                                            <FormControl className="w-100">
-                                              <label className="font-weight-bold font-size-sm d-flex justify-content-start">
-                                                Document No
-                                              </label>
-                                              <BootstrapInput
-                                                value={doc.documentNo}
-                                                name="documentNo"
-                                                onChange={handleChange}
-                                                inputProps={{
-                                                  "aria-label": "Without label",
-                                                }}
-                                              />
-                                            </FormControl>
-                                          </Grid>
-                                          <Grid item sm={6} className="p-1">
-                                            <FormControl className="w-100 mb-2">
-                                              <label className="font-weight-bold font-size-sm d-flex justify-content-start">
-                                                Country Of Issue
-                                              </label>
-                                              <Select
-                                                value={doc.id}
-                                                name="id"
-                                                label="ID"
-                                                onChange={handleChange}
-                                                displayEmpty
-                                                inputProps={{
-                                                  "aria-label": "Without label",
-                                                }}
-                                                input={<BootstrapInput />}
-                                                className="mt-0 ml-0"
-                                              >
-                                                <MenuItem value=""></MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          </Grid>
-                                          <Grid item sm={6} className="p-1">
-                                            <FormControl className="w-100 mb-2">
-                                              <label className="font-weight-bold font-size-sm d-flex justify-content-start">
-                                                Date Of Issue
-                                              </label>
-
-                                              <BootstrapInput
-                                                id="date"
-                                                type="date"
-                                                defaultValue=""
-                                                sx={{ width: "100%" }}
-                                                inputlabelprops={{
-                                                  shrink: true,
-                                                }}
-                                                inputProps={{
-                                                  max: "2022-04-13",
-                                                }}
-                                                onChange={(e) =>
-                                                  setFilterData({
-                                                    ...filterData,
-                                                    deposit_from:
-                                                      e.target.value,
-                                                  })
-                                                }
-                                              />
-                                            </FormControl>
-                                          </Grid>
-                                          <Grid item sm={6} className="p-1">
-                                            <FormControl className="w-100 mb-2">
-                                              <label className="font-weight-bold font-size-sm d-flex justify-content-start">
-                                                Date Of Expiry
-                                              </label>
-
-                                              <BootstrapInput
-                                                id="date"
-                                                type="date"
-                                                defaultValue=""
-                                                sx={{ width: "100%" }}
-                                                inputlabelprops={{
-                                                  shrink: true,
-                                                }}
-                                                onChange={(e) =>
-                                                  setFilterData({
-                                                    ...filterData,
-                                                    deposit_from:
-                                                      e.target.value,
-                                                  })
-                                                }
-                                              />
-                                            </FormControl>
-                                          </Grid>
-                                        </Grid>
-                                      </form>
-                                    </Grid>
-                                  </Grid>
-                                )}
-
-                                <div className="text-dark font-size-xs d-flex justify-content-between align-items-center">
-                                  <i>
-                                    (Maximum size of document 5MB) Allow File
-                                    Formats *jpg, *png, *pdf
-                                  </i>
-                                  <Button
-                                    type="submit"
-                                    disabled={true}
-                                    variant="contained"
-                                    size="medium"
-                                    className="p-3 pr-4 pl-4 text-center text-capitalize"
-                                  >
-                                    Save
-                                  </Button>
-                                </div>
                               </div>
-                            </div>
-                          </Paper> */}
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={3} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Accounts</p>
-                              <div className="groun-button">
-                                {/* <Button
-                                  variant="contained"
-                                  className="link_campaign"
-                                  onClick={openDialogbox}
-                                >
-                                  Link to Campaign
-                                </Button> */}
-                                <Button
-                                  variant="contained"
-                                  className="change_leverage btn-hover-css"
-                                  onClick={openDialogbox}
-                                >
-                                  Change Leverage
-                                </Button>
-
-                                <Button
-                                  variant="contained"
-                                  className="link_mt5"
-                                  onClick={openDialogbox}
-                                >
-                                  Link Account
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  className="createMt5"
-                                  onClick={openDialogbox}
-                                >
-                                  Create Account
-                                </Button>
+                            </Paper>
+                          </Grid>
+                          <Grid item md={6} lg={6} xl={6}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <p className="header-title">Declarations</p>
+                              <div className="contentSection">
+                                <FormControlLabel
+                                  className="declarationCheckbox"
+                                  control={
+                                    <Checkbox
+                                      defaultChecked
+                                      name="declaration"
+                                    />
+                                  }
+                                  label="By clicking here I give my consent for RightFx to contact me for marketing purposes. You can opt out at any time. For further details please see ourMarketing and Communication Policy Statement."
+                                />
+                                {/* <div className='element'>
+                                                        </div> */}
                               </div>
-                            </div>
-                            {/* <br/> */}
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/mt5_account_list.php`}
-                                column={mt5AccountListColumn}
-                                userId={id}
-                                sort="0"
-                                filter={filterData}
-                                refresh={refresh}
-                              />
-                            </div>
-                          </Paper>
+                            </Paper>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={4} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Activities</p>
-                            </div>
-                            {/* <br/> */}
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/login_activities.php`}
-                                column={activityColumn}
-                                userId={id}
-                                sort="2"
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={5} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Logs</p>
-                              {/* <Button
-                                variant="contained"
-                                className="add_note"
-                                onClick={openDialogbox}
-                              >
-                                Add Note
-                              </Button> */}
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/log_list.php`}
-                                column={logColumn}
-                                userId={id}
-                                sort="2"
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={6} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Transactions</p>
-                              <Button
-                                variant="contained"
-                                className="add_transaction"
-                                onClick={openDialogbox}
-                              >
-                                Add New Transaction
-                              </Button>
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/wallet_history.php`}
-                                column={walletHistoryColumn}
-                                userId={id}
-                                refresh={refresh}
-                                sort="1"
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    {userData.data.is_ib_account == "0" ? (
-                      <TabPanel value={value} index={7} dir={theme.direction}>
+                      </TabPanel>
+                    ) : (
+                      ""
+                    )}
+                    {permission.get_bank_list == 1 ? (
+                      <TabPanel value={1} index={1} dir={theme.direction}>
                         <Grid container spacing={3} className="grid-handle">
                           <Grid item md={12} lg={12} xl={12}>
                             <Paper
@@ -11601,21 +11853,114 @@ const Profile = () => {
                               className="paper-main-section"
                             >
                               <div className="headerSection header-title">
-                                <p className="margin-0">Notes</p>
-                                <Button
-                                  variant="contained"
-                                  className="add_note"
-                                  onClick={openDialogbox}
-                                >
-                                  Add Note
-                                </Button>
+                                <p className="margin-0">Bank Accounts</p>
+                                {permission.add_user_bank == 1 ? (
+                                  <Button
+                                    variant="contained"
+                                    className="add_bank"
+                                    onClick={openDialogbox}
+                                  >
+                                    Add New Bank Account
+                                  </Button>
+                                ) : (
+                                  ""
+                                )}
                               </div>
+                              {/* <br/> */}
                               <div className="bankDetailsTabSection">
                                 <CommonTable
-                                  url={`${Url}/datatable/notes_list.php`}
-                                  column={noteColumn}
+                                  url={`${Url}/datatable/get_bank_list.php`}
+                                  column={bankColumn}
+                                  sort="0"
+                                  refresh={bankAccountForm.refresh}
                                   userId={id}
-                                  sort="2"
+                                  filter={filterData}
+                                />
+                              </div>
+                            </Paper>
+                          </Grid>
+                        </Grid>
+                      </TabPanel>
+                    ) : (
+                      ""
+                    )}
+                    {permission.get_kyc_status == 1 ? (
+                      <TabPanel value={2} index={2} dir={theme.direction}>
+                        <Grid
+                          container
+                          spacing={3}
+                          className="grid-handle panding-left-right-3px"
+                        >
+                          <Grid item md={12} lg={12} xl={12}>
+                            <KycDocument
+                              id={id}
+                              permission={permission.update_kyc}
+                            />
+                          </Grid>
+                        </Grid>
+                      </TabPanel>
+                    ) : (
+                      ""
+                    )}
+                    {permission.mt5_account_list == 1 ? (
+                      <TabPanel value={3} index={3} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <p className="margin-0">Accounts</p>
+                                <div className="groun-button">
+                                  {/* <Button
+                                  variant="contained"
+                                  className="link_campaign"
+                                  onClick={openDialogbox}
+                                >
+                                  Link to Campaign
+                                </Button> */}
+                                  {permission.change_mt5_leverage == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="change_leverage btn-hover-css"
+                                      onClick={openDialogbox}
+                                    >
+                                      Change Leverage
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                  <Button
+                                    variant="contained"
+                                    className="link_mt5"
+                                    onClick={openDialogbox}
+                                  >
+                                    Link Account
+                                  </Button>
+
+                                  {permission.create_mt5_account == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="createMt5"
+                                      onClick={openDialogbox}
+                                    >
+                                      Create Account
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              </div>
+                              {/* <br/> */}
+                              <div className="bankDetailsTabSection">
+                                <CommonTable
+                                  url={`${Url}/datatable/mt5_account_list.php`}
+                                  column={mt5AccountListColumn}
+                                  userId={id}
+                                  sort="0"
+                                  filter={filterData}
                                   refresh={refresh}
                                 />
                               </div>
@@ -11624,7 +11969,152 @@ const Profile = () => {
                         </Grid>
                       </TabPanel>
                     ) : (
-                      <TabPanel value={value} index={7} dir={theme.direction}>
+                      ""
+                    )}
+                    {permission.view_login_activities == 1 ? (
+                      <TabPanel value={4} index={4} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <p className="margin-0">Activities</p>
+                              </div>
+                              {/* <br/> */}
+                              <div className="bankDetailsTabSection">
+                                <CommonTable
+                                  url={`${Url}/datatable/login_activities.php`}
+                                  column={activityColumn}
+                                  userId={id}
+                                  sort="2"
+                                />
+                              </div>
+                            </Paper>
+                          </Grid>
+                        </Grid>
+                      </TabPanel>
+                    ) : (
+                      ""
+                    )}
+                    {permission.log_list == 1 ? (
+                      <TabPanel value={5} index={5} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <p className="margin-0">Logs</p>
+                                {/* <Button
+                                variant="contained"
+                                className="add_note"
+                                onClick={openDialogbox}
+                              >
+                                Add Note
+                              </Button> */}
+                              </div>
+                              <div className="bankDetailsTabSection">
+                                <CommonTable
+                                  url={`${Url}/datatable/log_list.php`}
+                                  column={logColumn}
+                                  userId={id}
+                                  sort="2"
+                                />
+                              </div>
+                            </Paper>
+                          </Grid>
+                        </Grid>
+                      </TabPanel>
+                    ) : (
+                      ""
+                    )}
+                    {permission.wallet_history == 1 ? (
+                      <TabPanel value={6} index={6} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <p className="margin-0">Transactions</p>
+                                {permission.transaction_access == 1 ? (
+                                  <Button
+                                    variant="contained"
+                                    className="add_transaction"
+                                    onClick={openDialogbox}
+                                  >
+                                    Add New Transaction
+                                  </Button>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="bankDetailsTabSection">
+                                <CommonTable
+                                  url={`${Url}/datatable/wallet_history.php`}
+                                  column={walletHistoryColumn}
+                                  userId={id}
+                                  refresh={refresh}
+                                  sort="1"
+                                />
+                              </div>
+                            </Paper>
+                          </Grid>
+                        </Grid>
+                      </TabPanel>
+                    ) : (
+                      ""
+                    )}
+
+                    {userData.data.is_ib_account == "0" ? (
+                      permission.notes_list == 1 ? (
+                        <TabPanel value={10} index={7} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section"
+                              >
+                                <div className="headerSection header-title">
+                                  <p className="margin-0">Notes</p>
+                                  {permission.add_new_notes == 1 ? (
+                                    <Button
+                                      variant="contained"
+                                      className="add_note"
+                                      onClick={openDialogbox}
+                                    >
+                                      Add Note
+                                    </Button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <div className="bankDetailsTabSection">
+                                  <CommonTable
+                                    url={`${Url}/datatable/notes_list.php`}
+                                    column={noteColumn}
+                                    userId={id}
+                                    sort="2"
+                                    refresh={refresh}
+                                  />
+                                </div>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel>
+                      ) : (
+                        ""
+                      )
+                    ) : permission.list_my_structures == 1 ? (
+                      <TabPanel value={7} index={7} dir={theme.direction}>
                         <Grid container spacing={3} className="grid-handle">
                           <Grid item md={12} lg={12} xl={12}>
                             <Paper
@@ -11766,1084 +12256,157 @@ const Profile = () => {
                           </Grid>
                         </Grid>
                       </TabPanel>
+                    ) : (
+                      ""
                     )}
-                    {/* <TabPanel value={value} index={7} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Referrals</p>
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <br />
-                              <FormControl
-                                variant="standard"
-                                sx={{ width: "20%" }}
+
+                    {userData.data.is_ib_account == "1" ? (
+                      permission.list_my_structures == 1 ? (
+                        <TabPanel value={8} index={8} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section partnership-main-section"
                               >
-                                <InputLabel>Structure</InputLabel>
-                                <Select
-                                  label
-                                  className="select-font-small"
-                                  name="structure"
-                                  onChange={(e) => {
-                                    getReferralData(e.target.value);
-                                    // setStructureList((prevalue) => {
-                                    //   return {
-                                    //     ...prevalue,
-                                    //     structure_name: structureList.data.filter(
-                                    //       (x) => x.structure_id == e.target.value
-                                    //     )[0].structure_name,
-                                    //     structure_id: e.target.value,
-                                    //   };
-                                    // });
-                                  }}
-                                >
-                                  {structureList.data.map((item) => {
-                                    return (
-                                      <MenuItem value={item.structure_id}>
-                                        {item.structure_name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
-                              <br />
-                              <div className="referrals-section">
-                                <table>
-                                  <thead>
-                                    <tr>
-                                      <th>Name</th>
-                                      <th>Client Type</th>
-                                      <th>MT5 Account</th>
-                                      <th>Commission</th>
-                                      <th>Rebate</th>
-                                      <th>Sponsor Name</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {referralData.data.map((item, index) => {
-                                      return (
-                                        <>
-                                          <tr>
-                                            <td>
-                                              <div className="collaps-content">
-                                                <i
-                                                  class={`fa fa-angle-${item.is_collapse
-                                                    ? "up"
-                                                    : "down"
-                                                    }`}
-                                                  onClick={(e) => {
-                                                    referralData.data[
-                                                      index
-                                                    ].is_collapse =
-                                                      !item.is_collapse;
-                                                    setReferralData({
-                                                      ...referralData,
-                                                    });
-                                                  }}
-                                                ></i>
-                                                {item.ib_group_name}
-                                              </div>
-                                            </td>
-                                            <td>{item.client_type}</td>
-                                            <td>{item.mt5_acc_no}</td>
-                                            <td>
-                                              <div
-                                                className="referral-commission_rebate-content"
-                                                style={{
-                                                  backgroundColor: `${item.group_color}`,
-                                                }}
-                                              >
-                                                {item.group_commission}
-                                              </div>
-                                            </td>
-                                            <td>
-                                              <div
-                                                className="referral-commission_rebate-content"
-                                                style={{
-                                                  backgroundColor: `${item.group_color}`,
-                                                }}
-                                              >
-                                                {item.group_rebate}
-                                              </div>
-                                            </td>
-                                            <td>{item.sponsor_name}</td>
-                                          </tr>
-                                          {item.is_collapse
-                                            ? item.structure_users.map(
-                                              (item1) => {
-                                                return (
-                                                  <tr className="referral-child-structure-users">
-                                                    <td>
-                                                      {item1.client_name}
-                                                    </td>
-                                                    <td>{item1.client}</td>
-                                                    <td>
-                                                      {item1.mt5_acc_no}
-                                                    </td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>
-                                                      {item1.sponsor_name}
-                                                    </td>
-                                                  </tr>
-                                                );
-                                              }
-                                            )
-                                            : ""}
-                                        </>
-                                      );
-                                    })}
-                                    <tr></tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel> */}
-                    {userData.data.is_pamm == "1" &&
-                    userData.data.is_ib_account == "0" ? (
-                      <TabPanel value={value} index={8} dir={theme.direction}>
-                        <Grid container spacing={3} className="grid-handle">
-                          <Grid item md={12} lg={12} xl={12}>
-                            <Paper
-                              elevation={2}
-                              style={{ borderRadius: "10px" }}
-                              className="paper-main-section"
-                            >
-                              <div className="headerSection header-title">
-                                <p className="margin-0">PAMM</p>
-                              </div>
-                              <div className="bankDetailsTabSection pamm-section">
-                                <div className="groupButtonSection">
-                                  <ButtonGroup variant="outlined">
-                                    <Button
-                                      variant={`${
-                                        pammGroupButton == "dashboard"
-                                          ? "contained"
-                                          : "outlined"
-                                      }`}
-                                      onClick={(e) => {
-                                        setPammGroupButton("dashboard");
-                                      }}
+                                <div className="headerSection header-title">
+                                  <div className="header-search-section">
+                                    <FormControl
+                                      variant="standard"
+                                      sx={{ width: "100%" }}
                                     >
-                                      Dashboard
-                                    </Button>
-                                    <Button
-                                      variant={`${
-                                        pammGroupButton == "portfolio_manage"
-                                          ? "contained"
-                                          : "outlined"
-                                      }`}
-                                      onClick={(e) => {
-                                        getMoneyManager();
-                                        setPammPortfolioGroupButton(
-                                          "money_manager"
-                                        );
-                                        setPammGroupButton("portfolio_manage");
-                                      }}
-                                    >
-                                      Portfolio Manage
-                                    </Button>
-                                    <Button
-                                      variant={`${
-                                        pammGroupButton == "my_manage"
-                                          ? "contained"
-                                          : "outlined"
-                                      }`}
-                                      onClick={(e) => {
-                                        setPammGroupButton("my_manage");
-                                      }}
-                                    >
-                                      My Managers
-                                    </Button>
-                                    <Button
-                                      variant={`${
-                                        pammGroupButton == "trade_history"
-                                          ? "contained"
-                                          : "outlined"
-                                      }`}
-                                      onClick={(e) => {
-                                        setPammGroupButton("trade_history");
-                                      }}
-                                    >
-                                      Trade History
-                                    </Button>
-                                    <Button
-                                      variant={`${
-                                        pammGroupButton == "withdraw_history"
-                                          ? "contained"
-                                          : "outlined"
-                                      }`}
-                                      onClick={(e) => {
-                                        setPammGroupButton("withdraw_history");
-                                      }}
-                                    >
-                                      Withdrawal History
-                                    </Button>
-                                  </ButtonGroup>
-                                </div>
-                                <br />
-                                {pammGroupButton == "dashboard" ? (
-                                  <div>
-                                    <div className="setBoxs">
-                                      <div className="row1 boxSection">
-                                        <div className="card padding-9 animate fadeLeft boxsize">
-                                          <div className="row">
-                                            <NavLink to="/pamm_user_management">
-                                              <div className="col s12 m12 text-align-center">
-                                                <h5 className="mb-0">
-                                                  {pammDashboardData.my_balance ==
-                                                  null
-                                                    ? "$0"
-                                                    : "$" +
-                                                      pammDashboardData.my_balance}
-                                                </h5>
-                                                <p className="no-margin">
-                                                  Wallet Balance
-                                                </p>
-                                              </div>
-                                            </NavLink>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="row1 boxSection">
-                                        <div className="card padding-9 animate fadeLeft boxsize">
-                                          <div className="row">
-                                            <NavLink to="/pamm_mm_management">
-                                              <div className="col s12 m12 text-align-center">
-                                                <h5 className="mb-0">
-                                                  {pammDashboardData.total_investment ==
-                                                  null
-                                                    ? "$0"
-                                                    : "$" +
-                                                      pammDashboardData.total_investment}
-                                                </h5>
-                                                <p className="no-margin">
-                                                  Total Investment
-                                                </p>
-                                              </div>
-                                            </NavLink>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="row1 boxSection">
-                                        <div className="card padding-9 animate fadeLeft boxsize">
-                                          <div className="row">
-                                            <NavLink to="/pamm_mm_management">
-                                              <div className="col s12 m12 text-align-center">
-                                                <h5 className="mb-0">
-                                                  {pammDashboardData.total_withdrawal ==
-                                                  null
-                                                    ? "$0"
-                                                    : "$" +
-                                                      pammDashboardData.total_withdrawal}
-                                                </h5>
-                                                <p className="no-margin">
-                                                  Total Withdrawal
-                                                </p>
-                                              </div>
-                                            </NavLink>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-
-                                {pammGroupButton == "portfolio_manage" ? (
-                                  <div>
-                                    <div className="portfolio-manager-group-button">
-                                      <ButtonGroup variant="outlined">
-                                        <Button
-                                          variant={`${
-                                            pammPortfolioGroupButton ==
-                                            "money_manager"
-                                              ? "contained"
-                                              : "outlined"
-                                          }`}
-                                          onClick={(e) => {
-                                            getMoneyManager();
-                                            setPammPortfolioGroupButton(
-                                              "money_manager"
-                                            );
-                                          }}
-                                        >
-                                          MONEY MANAGER
-                                        </Button>
-                                        <Button
-                                          variant={`${
-                                            pammPortfolioGroupButton ==
-                                            "my_portfolio"
-                                              ? "contained"
-                                              : "outlined"
-                                          }`}
-                                          onClick={(e) => {
-                                            getMyPortfolio();
-                                            setPammPortfolioGroupButton(
-                                              "my_portfolio"
-                                            );
-                                          }}
-                                        >
-                                          MY PORTFOLIO
-                                        </Button>
-                                      </ButtonGroup>
-                                    </div>
-                                    <br />
-                                    {pammPortfolioGroupButton ==
-                                    "my_portfolio" ? (
-                                      <div className="pamm-create-my-portfolio-button">
-                                        <Button
-                                          variant="contained"
-                                          onClick={(e) => {
-                                            setMaxWidth("sm");
-
-                                            setCreatePortfolioForm({
-                                              isLoader: false,
-                                              portfolio_name: "",
-                                              mm_mt5_acc_id: "",
-                                              investment_months: "",
-                                            });
-                                            setcpinputinfoTrue({
-                                              portfolio_name: false,
-                                              mm_mt5_acc_id: false,
-                                              investment_months: false,
-                                            });
-                                            setDialogTitle("Create Portfolio");
-                                            getMoneyManagerList();
-                                            setOpen(true);
-                                          }}
-                                        >
-                                          Create Portfolio
-                                        </Button>
-                                      </div>
+                                      <InputLabel>Structure</InputLabel>
+                                      <Select
+                                        label
+                                        className="select-font-small"
+                                        name="structure"
+                                        onChange={(e) => {
+                                          getPartnershipMasterStructure(
+                                            e.target.value
+                                          );
+                                          partnershipMasterStructureData.structure_id =
+                                            e.target.value;
+                                          partnershipMasterStructureData.structure_name =
+                                            structureList.data.filter(
+                                              (x) =>
+                                                x.structure_id == e.target.value
+                                            )[0].structure_name;
+                                          setStructureList((prevalue) => {
+                                            return {
+                                              ...prevalue,
+                                              structure_name:
+                                                structureList.data.filter(
+                                                  (x) =>
+                                                    x.structure_id ==
+                                                    e.target.value
+                                                )[0].structure_name,
+                                              structure_id: e.target.value,
+                                            };
+                                          });
+                                        }}
+                                      >
+                                        {structureList.data.map((item) => {
+                                          return (
+                                            <MenuItem value={item.structure_id}>
+                                              {item.structure_name}
+                                            </MenuItem>
+                                          );
+                                        })}
+                                      </Select>
+                                    </FormControl>
+                                    {permission.delete_master_structure == 1 ? (
+                                      <Button
+                                        variant="contained"
+                                        className="add_master_structure btn-danger"
+                                        onClick={deleteStructureSubmit}
+                                      >
+                                        Structure Delete
+                                      </Button>
                                     ) : (
                                       ""
                                     )}
-                                    {pammPortfolioGroupButton ==
-                                    "money_manager" ? (
-                                      <div>
-                                        <div className="money-manager-card-list-section">
-                                          {moneyManagerList.map(
-                                            (item, index) => {
-                                              return (
-                                                <div className="money-manager-content">
-                                                  <div className="money-manager-header-section">
-                                                    <NavLink
-                                                      className="navlink-color-white"
-                                                      to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                    >
-                                                      <label>
-                                                        {item.mt5_name}
-                                                      </label>
-                                                    </NavLink>
-                                                  </div>
-                                                  <div className="money-manager-body-section">
-                                                    <div className="money-manager-body-content-element marge-element">
-                                                      <div className="right-side-border">
-                                                        <label>
-                                                          Minimum deposit
-                                                        </label>
-                                                        <p>
-                                                          $
-                                                          {
-                                                            item.minimum_deposit_amount
-                                                          }
-                                                        </p>
-                                                      </div>
-                                                      <div>
-                                                        <label>
-                                                          Fees Percentage
-                                                        </label>
-                                                        <p>
-                                                          {item.fees_percentage}
-                                                          %
-                                                        </p>
-                                                      </div>
-                                                    </div>
-                                                    <div className="money-manager-body-content-element marge-element">
-                                                      <div className="right-side-border">
-                                                        <label>
-                                                          Approx Return
-                                                        </label>
-                                                        <p className="text-color-green">
-                                                          {item.fees_percentage}
-                                                          %
-                                                        </p>
-                                                      </div>
-                                                      <div>
-                                                        <label>
-                                                          Risk Score
-                                                        </label>
-                                                        <img src="./assets/img/rishScoreLow.jpg" />
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  {item.is_closed == "0" ? (
-                                                    <div className="money-manager-footer-action-section">
-                                                      <button
-                                                        className="danger"
-                                                        onClick={(e) => {
-                                                          setWithdrawForm({
-                                                            isLoader: false,
-                                                            allWithdraw: true,
-                                                            amount: "",
-                                                            pid: item.pid,
-                                                          });
-                                                          setDialogTitle(
-                                                            "Withdraw"
-                                                          );
-                                                          SetRefreshCreatePortfolio1(
-                                                            true
-                                                          );
-                                                          setOpen(true);
-                                                        }}
-                                                      >
-                                                        Withdraw
-                                                      </button>
-                                                      <button
-                                                        className="success"
-                                                        onClick={(e) => {
-                                                          investmentForm.user_id =
-                                                            item.mm_user_id;
-                                                          investmentForm.pid =
-                                                            item.pid;
-                                                          investmentForm.amount =
-                                                            "";
-                                                          setInvestmentForm({
-                                                            ...investmentForm,
-                                                          });
-                                                          setDialogTitle(
-                                                            "Investment"
-                                                          );
-                                                          setOpen(true);
-                                                        }}
-                                                      >
-                                                        Invest
-                                                      </button>
-                                                      <NavLink
-                                                        className="third-view-button"
-                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                      >
-                                                        View
-                                                      </NavLink>
-                                                    </div>
-                                                  ) : item.is_closed == "2" ? (
-                                                    <div className="money-manager-footer-action-section">
-                                                      <button className="skyblue1 padingbutton">
-                                                        Pending
-                                                      </button>
-                                                      <NavLink
-                                                        className="third-view-button"
-                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                      >
-                                                        View
-                                                      </NavLink>
-                                                    </div>
-                                                  ) : (
-                                                    <div className="money-manager-footer-action-section">
-                                                      <button
-                                                        className="skyblue"
-                                                        onClick={(e) => {
-                                                          setMaxWidth("sm");
-                                                          createPortfolioForm.mm_mt5_acc_id =
-                                                            item.mm_mt5_acc_id;
-                                                          setCreatePortfolioForm(
-                                                            {
-                                                              ...createPortfolioForm,
-                                                            }
-                                                          );
-                                                          setDialogTitle(
-                                                            "Create Portfolio"
-                                                          );
-                                                          getMoneyManagerList();
-                                                          setOpen(true);
-                                                        }}
-                                                      >
-                                                        Create Portfolio
-                                                      </button>
-                                                      <NavLink
-                                                        className="third-view-button"
-                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                      >
-                                                        View
-                                                      </NavLink>
-                                                    </div>
-                                                  )}
-                                                </div>
-                                              );
+                                  </div>
+                                  <div className="groun-button">
+                                    {permission.insert_strcuture_master == 1 ? (
+                                      <Button
+                                        variant="contained"
+                                        className="add_master_structure"
+                                        onClick={openDialogbox}
+                                      >
+                                        Add Master Structure
+                                      </Button>
+                                    ) : (
+                                      ""
+                                    )}
+                                    {permission.update_strcuture_master == 1 ? (
+                                      <Button
+                                        variant="contained"
+                                        className="edit_structure"
+                                        onClick={openDialogbox}
+                                        disabled={
+                                          partnershipMasterStructureData.structure_name !=
+                                          ""
+                                            ? false
+                                            : true
+                                        }
+                                      >
+                                        Edit Structure
+                                      </Button>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="bankDetailsTabSection">
+                                  {partnershipMasterStructureData.structure_data
+                                    .length > 0 ? (
+                                    <div className="partnership-section">
+                                      <div className="master-structure-section">
+                                        <div className="structureNameSection view-ib-content-section">
+                                          <label>STRUCTURE NAME</label>
+                                          <span>
+                                            {
+                                              partnershipMasterStructureData.structure_name
                                             }
-                                          )}
+                                          </span>
                                         </div>
-                                      </div>
-                                    ) : (
-                                      ""
-                                    )}
-                                    {pammPortfolioGroupButton ==
-                                    "my_portfolio" ? (
-                                      <div className="myportfolio-card-section">
-                                        {portfolioLoader ? (
-                                          <div className="loader-section">
-                                            <svg
-                                              class="spinner"
-                                              viewBox="0 0 50 50"
-                                            >
-                                              <circle
-                                                class="path"
-                                                cx="25"
-                                                cy="25"
-                                                r="20"
-                                                fill="none"
-                                                stroke-width="5"
-                                              ></circle>
-                                            </svg>
-                                          </div>
-                                        ) : (
-                                          myPortfolio.map((item) => {
-                                            return (
-                                              <div className="myportfolio-card-content">
-                                                <div className="width-100-with-border header-sction">
-                                                  <div>
-                                                    <NavLink
-                                                      to={`/portfolio_profile/${item.pid}/${id}`}
-                                                      className="portfolio-link-color"
-                                                    >
-                                                      {item.portfolio_name}
-                                                    </NavLink>
-                                                    <span className="text-bold-700">
-                                                      {item.portfolio_id}
-                                                    </span>
-                                                  </div>
-                                                  <div>
-                                                    <span>Money Manager</span>
-                                                    <NavLink
-                                                      className="navlink-color-white"
-                                                      to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                    >
-                                                      <span className="text-bold-700">
-                                                        {item.account_name}
-                                                      </span>
-                                                    </NavLink>
-                                                  </div>
-                                                </div>
-                                                <div
-                                                  className="width-100-with-border"
-                                                  style={{
-                                                    backgroundColor:
-                                                      item.is_closed == "0"
-                                                        ? "white"
-                                                        : "#ebd7d7",
-                                                  }}
-                                                >
-                                                  <div>
-                                                    <span>Investment</span>
-                                                    <span className="text-bold-700">
-                                                      ${item.my_investment}
-                                                    </span>
-                                                  </div>
-                                                  <div>
-                                                    <span>Current Value</span>
-                                                    <span
-                                                      className="text-bold-700"
-                                                      style={{
-                                                        color:
-                                                          item.my_investment <=
-                                                          item.current_value
-                                                            ? "green"
-                                                            : "red",
-                                                      }}
-                                                    >
-                                                      ${item.current_value}
-                                                    </span>
-                                                  </div>
-
-                                                  <div>
-                                                    <span>PNL</span>
-                                                    <span
-                                                      className="text-bold-700"
-                                                      style={{
-                                                        color:
-                                                          item.pnl >= 0
-                                                            ? "green"
-                                                            : "red",
-                                                      }}
-                                                    >
-                                                      ${item.pnl}
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                <div
-                                                  className="width-100-with-border"
-                                                  style={{
-                                                    backgroundColor:
-                                                      item.is_closed == "0"
-                                                        ? "white"
-                                                        : "#ebd7d7",
-                                                  }}
-                                                >
-                                                  <div>
-                                                    <span>Return %</span>
-                                                    <span
-                                                      className="text-bold-700"
-                                                      style={{
-                                                        color:
-                                                          item.return_percentage >=
-                                                          0
-                                                            ? "green"
-                                                            : "red",
-                                                      }}
-                                                    >
-                                                      {item.return_percentage}%
-                                                    </span>
-                                                  </div>
-
-                                                  <div>
-                                                    <span>Date Time</span>
-                                                    <span className="text-bold-700">
-                                                      {item.added_datetime}
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                <div
-                                                  className="width-100-with-border"
-                                                  style={{
-                                                    backgroundColor:
-                                                      item.is_closed == "0"
-                                                        ? "white"
-                                                        : "#ebd7d7",
-                                                  }}
-                                                >
-                                                  <div>
-                                                    <span>Floating</span>
-                                                    <span
-                                                      className="text-bold-700"
-                                                      style={{
-                                                        color:
-                                                          item.current_floating >=
-                                                          0
-                                                            ? "green"
-                                                            : "red",
-                                                      }}
-                                                    >
-                                                      {item.current_floating}
-                                                    </span>
-                                                  </div>
-
-                                                  <div>
-                                                    <span>Trade</span>
-                                                    <span className="cursor">
-                                                      <span
-                                                        class="material-icons"
-                                                        onClick={() => {
-                                                          navigate(
-                                                            `/pamm_trade_history/${item.pid}`
-                                                          );
-                                                        }}
-                                                      >
-                                                        insert_chart
-                                                      </span>
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                {item.is_closed == "0" ? (
-                                                  <div className="footer-action-button">
-                                                    <button
-                                                      onClick={(e) => {
-                                                        setMaxWidth("sm");
-                                                        setWithdrawForm({
-                                                          isLoader: false,
-                                                          allWithdraw: true,
-                                                          amount: "",
-                                                          pid: item.pid,
-                                                        });
-                                                        SetRefreshCreatePortfolio1(
-                                                          false
-                                                        );
-                                                        setDialogTitle(
-                                                          "Withdraw"
-                                                        );
-                                                        setOpen(true);
-                                                      }}
-                                                    >
-                                                      Withdraw
-                                                    </button>
-                                                    <button
-                                                      onClick={(e) => {
-                                                        investmentForm.user_id =
-                                                          "";
-                                                        investmentForm.pid =
-                                                          item.pid;
-                                                        investmentForm.amount =
-                                                          "";
-                                                        setMaxWidth("sm");
-                                                        setInvestmentForm({
-                                                          ...investmentForm,
-                                                        });
-                                                        setDialogTitle(
-                                                          "Investment"
-                                                        );
-                                                        setOpen(true);
-                                                      }}
-                                                    >
-                                                      Invest
-                                                    </button>
-                                                    <NavLink
-                                                      className="third-view-button"
-                                                      to={`/portfolio_profile/${item.pid}/${id}`}
-                                                    >
-                                                      View
-                                                    </NavLink>
-                                                  </div>
-                                                ) : item.is_closed == "1" ? (
-                                                  <div className="footer-action-button">
-                                                    <div
-                                                      className="footer-action-button spanportFolio1"
-                                                      style={{
-                                                        backgroundColor:
-                                                          item.is_closed == "0"
-                                                            ? "white"
-                                                            : "#ebd7d7",
-                                                      }}
-                                                    >
-                                                      <span className="spanportFolio">
-                                                        Closed
-                                                      </span>
-                                                    </div>
-                                                    <NavLink
-                                                      className="third-view-button"
-                                                      to={`/portfolio_profile/${item.pid}/${id}`}
-                                                    >
-                                                      View
-                                                    </NavLink>
-                                                  </div>
-                                                ) : (
-                                                  <div className="footer-action-button">
-                                                    <div
-                                                      className="footer-action-button spanportFolio1"
-                                                      style={{
-                                                        backgroundColor:
-                                                          item.is_closed == "0"
-                                                            ? "white"
-                                                            : "#ebe5c1",
-                                                      }}
-                                                    >
-                                                      <span className="spanportFoliopading">
-                                                        Pending
-                                                      </span>
-                                                    </div>
-                                                    <NavLink
-                                                      className="third-view-button"
-                                                      to={`/portfolio_profile/${item.pid}/${id}`}
-                                                    >
-                                                      View
-                                                    </NavLink>
-                                                  </div>
-                                                )}
-                                              </div>
-                                            );
-                                          })
-                                        )}
-                                      </div>
-                                    ) : (
-                                      ""
-                                    )}
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-
-                                {pammGroupButton == "my_manage" ? (
-                                  <div>
-                                    <CommonTable
-                                      url={`${Url}/datatable/pamm/my_money_managers.php`}
-                                      column={pammMyManagerColumn}
-                                      sort="5"
-                                      param={pammMyManagerParam}
-                                    />
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-
-                                {pammGroupButton == "trade_history" ? (
-                                  <div>
-                                    <div className="pamm-withdraw-history-filter-section">
-                                      <div className="filter-element">
-                                        <TextField
-                                          className="input-font-small"
-                                          label="From"
-                                          type="date"
-                                          variant="standard"
-                                          sx={{ width: "100%" }}
-                                          name="from"
-                                          focused
-                                          onChange={(e) => {
-                                            pammTradeParam.start_date =
-                                              e.target.value;
-                                            setPammTardeParam({
-                                              ...pammTradeParam,
-                                            });
-                                          }}
-                                        />
-                                      </div>
-                                      <div className="filter-element">
-                                        <TextField
-                                          className="input-font-small"
-                                          label="To"
-                                          type="date"
-                                          variant="standard"
-                                          sx={{ width: "100%" }}
-                                          name="to"
-                                          focused
-                                          onChange={(e) => {
-                                            pammTradeParam.end_date =
-                                              e.target.value;
-                                            setPammTardeParam({
-                                              ...pammTradeParam,
-                                            });
-                                          }}
-                                        />
-                                      </div>
-                                    </div>
-                                    <CommonTable
-                                      url={`${Url}/datatable/pamm/pamm_trade_history.php`}
-                                      column={pammTradeHistoryColumn}
-                                      sort="2"
-                                      param={pammTradeParam}
-                                    />
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-
-                                {pammGroupButton == "withdraw_history" ? (
-                                  <div>
-                                    <div className="pamm-withdraw-history-filter-section">
-                                      <div className="filter-element">
-                                        <TextField
-                                          className="input-font-small"
-                                          label="From"
-                                          type="date"
-                                          variant="standard"
-                                          sx={{ width: "100%" }}
-                                          name="from"
-                                          focused
-                                          onChange={(e) => {
-                                            pammWithdrawParam.start_date =
-                                              e.target.value;
-                                            setPammWithdrawParam({
-                                              ...pammWithdrawParam,
-                                            });
-                                          }}
-                                        />
-                                      </div>
-                                      <div className="filter-element">
-                                        <TextField
-                                          className="input-font-small"
-                                          label="To"
-                                          type="date"
-                                          variant="standard"
-                                          sx={{ width: "100%" }}
-                                          name="to"
-                                          focused
-                                          onChange={(e) => {
-                                            pammWithdrawParam.end_date =
-                                              e.target.value;
-                                            setPammWithdrawParam({
-                                              ...pammWithdrawParam,
-                                            });
-                                          }}
-                                        />
-                                      </div>
-                                      <div className="filter-element">
-                                        <FormControl
-                                          variant="standard"
-                                          sx={{ width: "100%" }}
-                                        >
-                                          <InputLabel>Status</InputLabel>
-                                          <Select
-                                            label
-                                            className="select-font-small"
-                                            name="account_type"
-                                            onChange={(e) => {
-                                              pammWithdrawParam.status =
-                                                e.target.value;
-                                              setPammWithdrawParam({
-                                                ...pammWithdrawParam,
-                                              });
-                                            }}
-                                            focused
-                                          >
-                                            <MenuItem value="0">
-                                              Pending
-                                            </MenuItem>
-                                            <MenuItem value="1">
-                                              Approved
-                                            </MenuItem>
-                                            <MenuItem value="2">
-                                              Rejected
-                                            </MenuItem>
-                                          </Select>
-                                        </FormControl>
-                                      </div>
-                                    </div>
-                                    <CommonTable
-                                      url={`${Url}/datatable/pamm/pamm_withdraw_request.php`}
-                                      column={pammWithdrawHistoryColumn}
-                                      sort="1"
-                                      param={pammWithdrawParam}
-                                    />
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            </Paper>
-                          </Grid>
-                        </Grid>
-                      </TabPanel>
-                    ) : userData.data.is_ib_account == "1" ? (
-                      <TabPanel value={value} index={8} dir={theme.direction}>
-                        <Grid container spacing={3} className="grid-handle">
-                          <Grid item md={12} lg={12} xl={12}>
-                            <Paper
-                              elevation={2}
-                              style={{ borderRadius: "10px" }}
-                              className="paper-main-section partnership-main-section"
-                            >
-                              <div className="headerSection header-title">
-                                <div className="header-search-section">
-                                  <FormControl
-                                    variant="standard"
-                                    sx={{ width: "100%" }}
-                                  >
-                                    <InputLabel>Structure</InputLabel>
-                                    <Select
-                                      label
-                                      className="select-font-small"
-                                      name="structure"
-                                      onChange={(e) => {
-                                        getPartnershipMasterStructure(
-                                          e.target.value
-                                        );
-                                        partnershipMasterStructureData.structure_id =
-                                          e.target.value;
-                                        partnershipMasterStructureData.structure_name =
-                                          structureList.data.filter(
-                                            (x) =>
-                                              x.structure_id == e.target.value
-                                          )[0].structure_name;
-                                        setStructureList((prevalue) => {
-                                          return {
-                                            ...prevalue,
-                                            structure_name:
-                                              structureList.data.filter(
-                                                (x) =>
-                                                  x.structure_id ==
-                                                  e.target.value
-                                              )[0].structure_name,
-                                            structure_id: e.target.value,
-                                          };
-                                        });
-                                      }}
-                                    >
-                                      {structureList.data.map((item) => {
-                                        return (
-                                          <MenuItem value={item.structure_id}>
-                                            {item.structure_name}
-                                          </MenuItem>
-                                        );
-                                      })}
-                                    </Select>
-                                  </FormControl>
-                                  <Button
-                                    variant="contained"
-                                    className="add_master_structure btn-danger"
-                                    onClick={deleteStructureSubmit}
-                                  >
-                                    Structure Delete
-                                  </Button>
-                                </div>
-                                <div className="groun-button">
-                                  <Button
-                                    variant="contained"
-                                    className="add_master_structure"
-                                    onClick={openDialogbox}
-                                  >
-                                    Add Master Structure
-                                  </Button>
-                                  <Button
-                                    variant="contained"
-                                    className="edit_structure"
-                                    onClick={openDialogbox}
-                                    disabled={
-                                      partnershipMasterStructureData.structure_name !=
-                                      ""
-                                        ? false
-                                        : true
-                                    }
-                                  >
-                                    Edit Structure
-                                  </Button>
-                                </div>
-                              </div>
-                              <div className="bankDetailsTabSection">
-                                {partnershipMasterStructureData.structure_data
-                                  .length > 0 ? (
-                                  <div className="partnership-section">
-                                    <div className="master-structure-section">
-                                      <div className="structureNameSection view-ib-content-section">
-                                        <label>STRUCTURE NAME</label>
-                                        <span>
-                                          {
-                                            partnershipMasterStructureData.structure_name
-                                          }
-                                        </span>
-                                      </div>
-                                      <div className="main-content-input">
-                                        <div className="ib-structure view-commission-content-section">
-                                          {partnershipMasterStructureData.structure_data.map(
-                                            (item, index) => {
-                                              return (
-                                                <div className="group-structure-section">
-                                                  <div className="main-section">
-                                                    <div className="main-section-title">
-                                                      {item.ib_group_name}
-                                                    </div>
-                                                    <div className="main-section-input-element">
-                                                      <div>
-                                                        {/* <span>Rebate</span> */}
-                                                        <input
-                                                          type="number"
-                                                          className="Rebate_amount"
-                                                          placeholder="Rebate"
-                                                          disabled
-                                                          value={
-                                                            item.group_rebate
-                                                          }
-                                                        />
+                                        <div className="main-content-input">
+                                          <div className="ib-structure view-commission-content-section">
+                                            {partnershipMasterStructureData.structure_data.map(
+                                              (item, index) => {
+                                                return (
+                                                  <div className="group-structure-section">
+                                                    <div className="main-section">
+                                                      <div className="main-section-title">
+                                                        {item.ib_group_name}
                                                       </div>
-                                                      <div>
-                                                        {/* <span>Commission</span> */}
-                                                        <input
-                                                          type="number"
-                                                          className="commission_amount"
-                                                          placeholder="Commission"
-                                                          disabled
-                                                          value={
-                                                            item.group_commission
-                                                          }
-                                                        />
-                                                      </div>
-                                                      {/* <div>
+                                                      <div className="main-section-input-element">
+                                                        <div>
+                                                          {/* <span>Rebate</span> */}
+                                                          <input
+                                                            type="number"
+                                                            className="Rebate_amount"
+                                                            placeholder="Rebate"
+                                                            disabled
+                                                            value={
+                                                              item.group_rebate
+                                                            }
+                                                          />
+                                                        </div>
+                                                        <div>
+                                                          {/* <span>Commission</span> */}
+                                                          <input
+                                                            type="number"
+                                                            className="commission_amount"
+                                                            placeholder="Commission"
+                                                            disabled
+                                                            value={
+                                                              item.group_commission
+                                                            }
+                                                          />
+                                                        </div>
+                                                        {/* <div>
                                                       {
                                                         (item.ibGroup != undefined) ?
                                                           <FormControl variant="standard">
@@ -12866,137 +12429,330 @@ const Profile = () => {
                                                           </FormControl> : ''
                                                       }
                                                     </div> */}
+                                                      </div>
+                                                      <div className="action-section">
+                                                        <span
+                                                          onClick={(e) => {
+                                                            partnershipMasterStructureData.structure_data[
+                                                              index
+                                                            ]["is_visible"] =
+                                                              !item.is_visible;
+                                                            setUpdateDate({
+                                                              ...newMasterStructureData,
+                                                            });
+                                                          }}
+                                                        >
+                                                          <i
+                                                            class={`fa ${
+                                                              item.is_visible
+                                                                ? "fa-angle-up"
+                                                                : "fa-angle-down"
+                                                            }`}
+                                                            aria-hidden="true"
+                                                          ></i>
+                                                        </span>
+                                                      </div>
                                                     </div>
-                                                    <div className="action-section">
-                                                      <span
-                                                        onClick={(e) => {
-                                                          partnershipMasterStructureData.structure_data[
-                                                            index
-                                                          ]["is_visible"] =
-                                                            !item.is_visible;
-                                                          setUpdateDate({
-                                                            ...newMasterStructureData,
-                                                          });
-                                                        }}
-                                                      >
-                                                        <i
-                                                          class={`fa ${
-                                                            item.is_visible
-                                                              ? "fa-angle-up"
-                                                              : "fa-angle-down"
-                                                          }`}
-                                                          aria-hidden="true"
-                                                        ></i>
-                                                      </span>
+                                                    <div
+                                                      className={`pair-section ${
+                                                        item.is_visible
+                                                          ? "child-section-visible"
+                                                          : ""
+                                                      }`}
+                                                    >
+                                                      {item.pair_data.map(
+                                                        (item1, index1) => {
+                                                          return (
+                                                            <div className="pair-data">
+                                                              <div className="pair-data-title">
+                                                                {
+                                                                  item1.pair_name
+                                                                }
+                                                              </div>
+                                                              <div>
+                                                                <input
+                                                                  type="number"
+                                                                  className="rebert_amount"
+                                                                  placeholder="Rebert"
+                                                                  value={
+                                                                    item1.rebate
+                                                                  }
+                                                                  disabled
+                                                                />
+                                                              </div>
+                                                              <div>
+                                                                <input
+                                                                  type="number"
+                                                                  className="commission_amount"
+                                                                  placeholder="Commission"
+                                                                  value={
+                                                                    item1.commission
+                                                                  }
+                                                                  disabled
+                                                                />
+                                                              </div>
+                                                            </div>
+                                                          );
+                                                        }
+                                                      )}
                                                     </div>
                                                   </div>
-                                                  <div
-                                                    className={`pair-section ${
-                                                      item.is_visible
-                                                        ? "child-section-visible"
-                                                        : ""
-                                                    }`}
-                                                  >
-                                                    {item.pair_data.map(
-                                                      (item1, index1) => {
-                                                        return (
-                                                          <div className="pair-data">
-                                                            <div className="pair-data-title">
-                                                              {item1.pair_name}
-                                                            </div>
-                                                            <div>
-                                                              <input
-                                                                type="number"
-                                                                className="rebert_amount"
-                                                                placeholder="Rebert"
-                                                                value={
-                                                                  item1.rebate
-                                                                }
-                                                                disabled
-                                                              />
-                                                            </div>
-                                                            <div>
-                                                              <input
-                                                                type="number"
-                                                                className="commission_amount"
-                                                                placeholder="Commission"
-                                                                value={
-                                                                  item1.commission
-                                                                }
-                                                                disabled
-                                                              />
-                                                            </div>
-                                                          </div>
+                                                );
+                                              }
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="master-structure-section">
+                                        <div className="structureNameSection view-ib-content-section">
+                                          <h4 style={{ fontWeight: 600 }}>
+                                            IB Dedicated Links
+                                          </h4>
+                                          {/* <label>STRUCTURE NAME</label>
+                                        <span>{partnershipMasterStructureData.structure_name}</span> */}
+                                        </div>
+                                        <div className="user-links">
+                                          <div className="user-link-header">
+                                            <label>Link Type</label>
+                                            <label>Link</label>
+                                          </div>
+                                          <div className="user-link-body">
+                                            <label>Register</label>
+                                            <div className="link-section">
+                                              <a
+                                                href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
+                                                target="_blank"
+                                              >
+                                                {ClientUrl +
+                                                  `/register/sponsor/${profileForm.wallet_code}`}
+                                              </a>
+                                              <button
+                                                className="copy_link"
+                                                onClick={(e) => {
+                                                  navigator.clipboard
+                                                    .writeText(
+                                                      ClientUrl +
+                                                        `/register/sponsor/${profileForm.wallet_code}`
+                                                    )
+                                                    .then(
+                                                      function () {
+                                                        toast.success(
+                                                          "The sponsor link has been successfully copying"
+                                                        );
+                                                      },
+                                                      function (err) {
+                                                        toast.error(
+                                                          "The sponsor link Could not copy, Please try again"
                                                         );
                                                       }
-                                                    )}
-                                                  </div>
-                                                </div>
-                                              );
-                                            }
-                                          )}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="master-structure-section">
-                                      <div className="structureNameSection view-ib-content-section">
-                                        <h4 style={{ fontWeight: 600 }}>
-                                          IB Dedicated Links
-                                        </h4>
-                                        {/* <label>STRUCTURE NAME</label>
-                                        <span>{partnershipMasterStructureData.structure_name}</span> */}
-                                      </div>
-                                      <div className="user-links">
-                                        <div className="user-link-header">
-                                          <label>Link Type</label>
-                                          <label>Link</label>
-                                        </div>
-                                        <div className="user-link-body">
-                                          <label>Register</label>
-                                          <div className="link-section">
-                                            <a
-                                              href={`${ClientUrl}/register/sponsor/${profileForm.wallet_code}`}
-                                              target="_blank"
-                                            >
-                                              {ClientUrl +
-                                                `/register/sponsor/${profileForm.wallet_code}`}
-                                            </a>
-                                            <button
-                                              className="copy_link"
-                                              onClick={(e) => {
-                                                navigator.clipboard
-                                                  .writeText(
-                                                    ClientUrl +
-                                                      `/register/sponsor/${profileForm.wallet_code}`
-                                                  )
-                                                  .then(
-                                                    function () {
-                                                      toast.success(
-                                                        "The sponsor link has been successfully copying"
-                                                      );
-                                                    },
-                                                    function (err) {
-                                                      toast.error(
-                                                        "The sponsor link Could not copy, Please try again"
-                                                      );
-                                                    }
-                                                  );
-                                              }}
-                                            >
-                                              <span className="blinking">
-                                                <i className="material-icons">
-                                                  content_copy
-                                                </i>
-                                              </span>
-                                            </button>
+                                                    );
+                                                }}
+                                              >
+                                                <span className="blinking">
+                                                  <i className="material-icons">
+                                                    content_copy
+                                                  </i>
+                                                </span>
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel>
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      ""
+                    )}
+                    {permission.get_my_assigned_structure == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <TabPanel value={9} index={9} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section partnership-main-section"
+                              >
+                                <div className="headerSection header-title">
+                                  <div className="header-search-section">
+                                    <p class="margin-0">My Structure</p>
                                   </div>
-                                ) : (
-                                  ""
-                                )}
+                                </div>
+                                <div className="bankDetailsTabSection getMyStructure">
+                                  {myStructureData.structure_data.length > 0 ? (
+                                    <div className="partnership-section">
+                                      <div className="master-structure-section">
+                                        <div className="structureNameSection view-ib-content-section">
+                                          <label>
+                                            {myStructureData.structure_name}
+                                          </label>
+                                          {/* <span>{myStructureData.structure_name}</span> */}
+                                        </div>
+                                        <div className="main-content-input">
+                                          <div className="ib-structure view-commission-content-section">
+                                            {myStructureData.structure_data.map(
+                                              (item, index) => {
+                                                return (
+                                                  <div className="group-structure-section">
+                                                    <div className="main-section">
+                                                      <div className="main-section-title">
+                                                        {item.ib_group_name}
+                                                      </div>
+                                                      <div className="main-section-input-element">
+                                                        <div>
+                                                          <input
+                                                            type="number"
+                                                            className="Rebate_amount"
+                                                            placeholder="Rebate"
+                                                            disabled
+                                                            value={
+                                                              item.group_rebate
+                                                            }
+                                                          />
+                                                        </div>
+                                                        <div>
+                                                          <input
+                                                            type="number"
+                                                            className="commission_amount"
+                                                            placeholder="Commission"
+                                                            disabled
+                                                            value={
+                                                              item.group_commission
+                                                            }
+                                                          />
+                                                        </div>
+                                                      </div>
+                                                      <div className="action-section">
+                                                        <span
+                                                          onClick={(e) => {
+                                                            myStructureData.structure_data[
+                                                              index
+                                                            ]["is_visible"] =
+                                                              !item.is_visible;
+                                                            setMyStructureData({
+                                                              ...myStructureData,
+                                                            });
+                                                          }}
+                                                        >
+                                                          <i
+                                                            class={`fa ${
+                                                              item.is_visible
+                                                                ? "fa-angle-up"
+                                                                : "fa-angle-down"
+                                                            }`}
+                                                            aria-hidden="true"
+                                                          ></i>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div
+                                                      className={`pair-section ${
+                                                        item.is_visible
+                                                          ? "child-section-visible"
+                                                          : ""
+                                                      }`}
+                                                    >
+                                                      {item.pair_data.map(
+                                                        (item1, index1) => {
+                                                          return (
+                                                            <div className="pair-data">
+                                                              <div className="pair-data-title">
+                                                                {
+                                                                  item1.pair_name
+                                                                }
+                                                              </div>
+                                                              <div>
+                                                                <input
+                                                                  type="number"
+                                                                  className="rebert_amount"
+                                                                  placeholder="Rebert"
+                                                                  value={
+                                                                    item1.rebate
+                                                                  }
+                                                                  disabled
+                                                                />
+                                                              </div>
+                                                              <div>
+                                                                <input
+                                                                  type="number"
+                                                                  className="commission_amount"
+                                                                  placeholder="Commission"
+                                                                  value={
+                                                                    item1.commission
+                                                                  }
+                                                                  disabled
+                                                                />
+                                                              </div>
+                                                            </div>
+                                                          );
+                                                        }
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                );
+                                              }
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <label
+                                      className="text-center"
+                                      style={{ width: "100%" }}
+                                    >
+                                      STRUCTURE Has Been Not Assigned
+                                    </label>
+                                  )}
+                                </div>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel>
+                      )
+                    ) : (
+                      ""
+                    )}
+
+                    {permission.notes_list == 1 ? (
+                      <TabPanel value={10} index={10} dir={theme.direction}>
+                        <Grid container spacing={3} className="grid-handle">
+                          <Grid item md={12} lg={12} xl={12}>
+                            <Paper
+                              elevation={2}
+                              style={{ borderRadius: "10px" }}
+                              className="paper-main-section"
+                            >
+                              <div className="headerSection header-title">
+                                <p className="margin-0">Notes</p>
+                                <Button
+                                  variant="contained"
+                                  className="add_note"
+                                  onClick={openDialogbox}
+                                >
+                                  Add Note
+                                </Button>
+                              </div>
+                              <div className="bankDetailsTabSection">
+                                <CommonTable
+                                  url={`${Url}/datatable/notes_list.php`}
+                                  column={noteColumn}
+                                  userId={id}
+                                  sort="2"
+                                  refresh={refresh}
+                                />
                               </div>
                             </Paper>
                           </Grid>
@@ -13005,929 +12761,699 @@ const Profile = () => {
                     ) : (
                       ""
                     )}
-
-                    <TabPanel value={value} index={9} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section partnership-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <div className="header-search-section">
-                                <p class="margin-0">My Structure</p>
-                              </div>
-                            </div>
-                            <div className="bankDetailsTabSection getMyStructure">
-                              {myStructureData.structure_data.length > 0 ? (
-                                <div className="partnership-section">
-                                  <div className="master-structure-section">
-                                    <div className="structureNameSection view-ib-content-section">
-                                      <label>
-                                        {myStructureData.structure_name}
-                                      </label>
-                                      {/* <span>{myStructureData.structure_name}</span> */}
-                                    </div>
-                                    <div className="main-content-input">
-                                      <div className="ib-structure view-commission-content-section">
-                                        {myStructureData.structure_data.map(
-                                          (item, index) => {
-                                            return (
-                                              <div className="group-structure-section">
-                                                <div className="main-section">
-                                                  <div className="main-section-title">
-                                                    {item.ib_group_name}
-                                                  </div>
-                                                  <div className="main-section-input-element">
-                                                    <div>
-                                                      <input
-                                                        type="number"
-                                                        className="Rebate_amount"
-                                                        placeholder="Rebate"
-                                                        disabled
-                                                        value={
-                                                          item.group_rebate
-                                                        }
-                                                      />
-                                                    </div>
-                                                    <div>
-                                                      <input
-                                                        type="number"
-                                                        className="commission_amount"
-                                                        placeholder="Commission"
-                                                        disabled
-                                                        value={
-                                                          item.group_commission
-                                                        }
-                                                      />
-                                                    </div>
-                                                  </div>
-                                                  <div className="action-section">
-                                                    <span
-                                                      onClick={(e) => {
-                                                        myStructureData.structure_data[
-                                                          index
-                                                        ]["is_visible"] =
-                                                          !item.is_visible;
-                                                        setMyStructureData({
-                                                          ...myStructureData,
-                                                        });
-                                                      }}
-                                                    >
-                                                      <i
-                                                        class={`fa ${
-                                                          item.is_visible
-                                                            ? "fa-angle-up"
-                                                            : "fa-angle-down"
-                                                        }`}
-                                                        aria-hidden="true"
-                                                      ></i>
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                <div
-                                                  className={`pair-section ${
-                                                    item.is_visible
-                                                      ? "child-section-visible"
-                                                      : ""
-                                                  }`}
-                                                >
-                                                  {item.pair_data.map(
-                                                    (item1, index1) => {
-                                                      return (
-                                                        <div className="pair-data">
-                                                          <div className="pair-data-title">
-                                                            {item1.pair_name}
-                                                          </div>
-                                                          <div>
-                                                            <input
-                                                              type="number"
-                                                              className="rebert_amount"
-                                                              placeholder="Rebert"
-                                                              value={
-                                                                item1.rebate
-                                                              }
-                                                              disabled
-                                                            />
-                                                          </div>
-                                                          <div>
-                                                            <input
-                                                              type="number"
-                                                              className="commission_amount"
-                                                              placeholder="Commission"
-                                                              value={
-                                                                item1.commission
-                                                              }
-                                                              disabled
-                                                            />
-                                                          </div>
-                                                        </div>
-                                                      );
-                                                    }
-                                                  )}
-                                                </div>
-                                              </div>
-                                            );
-                                          }
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                <label
-                                  className="text-center"
-                                  style={{ width: "100%" }}
-                                >
-                                  STRUCTURE Has Been Not Assigned
-                                </label>
-                              )}
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={10} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Notes</p>
-                              <Button
-                                variant="contained"
-                                className="add_note"
-                                onClick={openDialogbox}
+                    {permission.my_traders == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <TabPanel value={11} index={11} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section"
                               >
-                                Add Note
-                              </Button>
-                            </div>
-                            <div className="bankDetailsTabSection">
-                              <CommonTable
-                                url={`${Url}/datatable/notes_list.php`}
-                                column={noteColumn}
-                                userId={id}
-                                sort="2"
-                                refresh={refresh}
-                              />
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={11} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">Downline</p>
-                            </div>
-                            <div className="bankDetailsTabSection downline-table">
-                              <table>
-                                <thead>
-                                  <tr>
-                                    <th>SR.NO</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>IB Account</th>
-                                    <th>MT Code</th>
-                                    <th>Deposit</th>
-                                    <th>Withdraw</th>
-                                    <th>Team Deposit</th>
-                                    <th>Team Withdraw</th>
-                                    <th>Balance</th>
-                                    <th>Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {myTraderData.data.data != undefined ? (
-                                    myTraderData.data.data.map((item) => {
-                                      return (
+                                <div className="headerSection header-title">
+                                  <p className="margin-0">Downline</p>
+                                </div>
+                                <div className="bankDetailsTabSection downline-table">
+                                  <table>
+                                    <thead>
+                                      <tr>
+                                        <th>SR.NO</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>IB Account</th>
+                                        <th>MT Code</th>
+                                        <th>Deposit</th>
+                                        <th>Withdraw</th>
+                                        <th>Team Deposit</th>
+                                        <th>Team Withdraw</th>
+                                        <th>Balance</th>
+                                        <th>Action</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {myTraderData.data.data != undefined ? (
+                                        myTraderData.data.data.map((item) => {
+                                          return (
+                                            <tr>
+                                              <td>{item.sr_no}</td>
+                                              <td>{item.name}</td>
+                                              <td>{item.user_email}</td>
+                                              <td>
+                                                {item.is_ib_account == "1"
+                                                  ? "Yes"
+                                                  : "No"}
+                                              </td>
+                                              <td>{item.mt5_acc_ids}</td>
+                                              <td>{item.deposit_amount}</td>
+                                              <td>{item.withdrawal_amount}</td>
+                                              <td>{item.total_deposit}</td>
+                                              <td>{item.total_withdraw}</td>
+                                              <td>{item.wallet_balance}</td>
+                                              <td>
+                                                {item.is_ib_account == "1" &&
+                                                item.has_downline == true ? (
+                                                  <Button
+                                                    variant="contained"
+                                                    className="add_note"
+                                                    onClick={(e) => {
+                                                      myTraderData.user_name =
+                                                        item.name;
+                                                      myTraderData.main_user_name =
+                                                        item.name;
+                                                      myTraderData.user_id =
+                                                        item.client_id;
+                                                      setMyTraderData({
+                                                        ...myTraderData,
+                                                      });
+                                                      getMyChildTrader(
+                                                        item.client_id
+                                                      );
+                                                    }}
+                                                  >
+                                                    View
+                                                  </Button>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </td>
+                                            </tr>
+                                          );
+                                        })
+                                      ) : (
                                         <tr>
-                                          <td>{item.sr_no}</td>
-                                          <td>{item.name}</td>
-                                          <td>{item.user_email}</td>
-                                          <td>
-                                            {item.is_ib_account == "1"
-                                              ? "Yes"
-                                              : "No"}
-                                          </td>
-                                          <td>{item.mt5_acc_ids}</td>
-                                          <td>{item.deposit_amount}</td>
-                                          <td>{item.withdrawal_amount}</td>
-                                          <td>{item.total_deposit}</td>
-                                          <td>{item.total_withdraw}</td>
-                                          <td>{item.wallet_balance}</td>
-                                          <td>
-                                            {item.is_ib_account == "1" &&
-                                            item.has_downline == true ? (
-                                              <Button
-                                                variant="contained"
-                                                className="add_note"
-                                                onClick={(e) => {
-                                                  myTraderData.user_name =
-                                                    item.name;
-                                                  myTraderData.main_user_name =
-                                                    item.name;
-                                                  myTraderData.user_id =
-                                                    item.client_id;
-                                                  setMyTraderData({
-                                                    ...myTraderData,
-                                                  });
-                                                  getMyChildTrader(
-                                                    item.client_id
-                                                  );
-                                                }}
-                                              >
-                                                View
-                                              </Button>
-                                            ) : (
-                                              ""
-                                            )}
+                                          <td
+                                            className="text-center"
+                                            colSpan={10}
+                                          >
+                                            Recored not found
                                           </td>
                                         </tr>
-                                      );
-                                    })
-                                  ) : (
-                                    <tr>
-                                      <td className="text-center" colSpan={10}>
-                                        Recored not found
-                                      </td>
-                                    </tr>
-                                  )}
-                                </tbody>
-                                <tfoot>
-                                  <tr>
-                                    <td colSpan="5">
-                                      <b>
-                                        {myTraderData.data.footer_count !=
-                                        undefined
-                                          ? myTraderData.data["footer_count"][
-                                              "total"
-                                            ]
-                                          : ""}
-                                      </b>
-                                    </td>
-                                    <td>
-                                      <b>
-                                        {myTraderData.data.footer_count !=
-                                        undefined
-                                          ? myTraderData.data["footer_count"][
-                                              "total_user_deposit"
-                                            ]
-                                          : ""}
-                                      </b>
-                                    </td>
-                                    <td>
-                                      <b>
-                                        {myTraderData.data.footer_count !=
-                                        undefined
-                                          ? myTraderData.data["footer_count"][
-                                              "total_user_withdraw"
-                                            ]
-                                          : ""}
-                                      </b>
-                                    </td>
-                                    <td>
-                                      <b>
-                                        {myTraderData.data.footer_count !=
-                                        undefined
-                                          ? myTraderData.data["footer_count"][
-                                              "total_total_user_deposit"
-                                            ]
-                                          : ""}
-                                      </b>
-                                    </td>
-                                    <td>
-                                      <b>
-                                        {myTraderData.data.footer_count !=
-                                        undefined
-                                          ? myTraderData.data["footer_count"][
-                                              "total_total_user_withdraw"
-                                            ]
-                                          : ""}
-                                      </b>
-                                    </td>
-                                    <td>
-                                      <b>
-                                        {myTraderData.data.footer_count !=
-                                        undefined
-                                          ? myTraderData.data["footer_count"][
-                                              "total_user_wallet"
-                                            ]
-                                          : ""}
-                                      </b>
-                                    </td>
-                                  </tr>
-                                </tfoot>
-                              </table>
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={12} dir={theme.direction}>
-                      <Grid container spacing={3} className="grid-handle">
-                        <Grid item md={12} lg={12} xl={12}>
-                          <Paper
-                            elevation={2}
-                            style={{ borderRadius: "10px" }}
-                            className="paper-main-section"
-                          >
-                            <div className="headerSection header-title">
-                              <p className="margin-0">PAMM</p>
-                            </div>
-                            <div className="bankDetailsTabSection pamm-section">
-                              <div className="groupButtonSection">
-                                <ButtonGroup variant="outlined">
-                                  <Button
-                                    variant={`${
-                                      pammGroupButton == "dashboard"
-                                        ? "contained"
-                                        : "outlined"
-                                    }`}
-                                    onClick={(e) => {
-                                      setPammGroupButton("dashboard");
-                                    }}
-                                  >
-                                    Dashboard
-                                  </Button>
-                                  <Button
-                                    variant={`${
-                                      pammGroupButton == "portfolio_manage"
-                                        ? "contained"
-                                        : "outlined"
-                                    }`}
-                                    onClick={(e) => {
-                                      getMoneyManager();
-                                      setPammPortfolioGroupButton(
-                                        "money_manager"
-                                      );
-                                      setPammGroupButton("portfolio_manage");
-                                    }}
-                                  >
-                                    Portfolio Manage
-                                  </Button>
-                                  <Button
-                                    variant={`${
-                                      pammGroupButton == "my_manage"
-                                        ? "contained"
-                                        : "outlined"
-                                    }`}
-                                    onClick={(e) => {
-                                      setPammGroupButton("my_manage");
-                                    }}
-                                  >
-                                    My Managers
-                                  </Button>
-                                  <Button
-                                    variant={`${
-                                      pammGroupButton == "trade_history"
-                                        ? "contained"
-                                        : "outlined"
-                                    }`}
-                                    onClick={(e) => {
-                                      setPammGroupButton("trade_history");
-                                    }}
-                                  >
-                                    Trade History
-                                  </Button>
-                                  <Button
-                                    variant={`${
-                                      pammGroupButton == "withdraw_history"
-                                        ? "contained"
-                                        : "outlined"
-                                    }`}
-                                    onClick={(e) => {
-                                      setPammGroupButton("withdraw_history");
-                                    }}
-                                  >
-                                    Withdrawal History
-                                  </Button>
-                                </ButtonGroup>
-                              </div>
-                              <br />
-                              {pammGroupButton == "dashboard" ? (
-                                <div>
-                                  <div className="setBoxs">
-                                    <div className="row1 boxSection">
-                                      <div className="card padding-9 animate fadeLeft boxsize">
-                                        <div className="row">
-                                          <NavLink to="/pamm_user_management">
-                                            <div className="col s12 m12 text-align-center">
-                                              <h5 className="mb-0">
-                                                {pammDashboardData.my_balance ==
-                                                null
-                                                  ? "$0"
-                                                  : "$" +
-                                                    pammDashboardData.my_balance}
-                                              </h5>
-                                              <p className="no-margin">
-                                                Wallet Balance
-                                              </p>
-                                            </div>
-                                          </NavLink>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="row1 boxSection">
-                                      <div className="card padding-9 animate fadeLeft boxsize">
-                                        <div className="row">
-                                          <NavLink to="/pamm_mm_management">
-                                            <div className="col s12 m12 text-align-center">
-                                              <h5 className="mb-0">
-                                                {pammDashboardData.total_investment ==
-                                                null
-                                                  ? "$0"
-                                                  : "$" +
-                                                    pammDashboardData.total_investment}
-                                              </h5>
-                                              <p className="no-margin">
-                                                Total Investment
-                                              </p>
-                                            </div>
-                                          </NavLink>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="row1 boxSection">
-                                      <div className="card padding-9 animate fadeLeft boxsize">
-                                        <div className="row">
-                                          <NavLink to="/pamm_mm_management">
-                                            <div className="col s12 m12 text-align-center">
-                                              <h5 className="mb-0">
-                                                {pammDashboardData.total_withdrawal ==
-                                                null
-                                                  ? "$0"
-                                                  : "$" +
-                                                    pammDashboardData.total_withdrawal}
-                                              </h5>
-                                              <p className="no-margin">
-                                                Total Withdrawal
-                                              </p>
-                                            </div>
-                                          </NavLink>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                      )}
+                                    </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <td colSpan="5">
+                                          <b>
+                                            {myTraderData.data.footer_count !=
+                                            undefined
+                                              ? myTraderData.data[
+                                                  "footer_count"
+                                                ]["total"]
+                                              : ""}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <b>
+                                            {myTraderData.data.footer_count !=
+                                            undefined
+                                              ? myTraderData.data[
+                                                  "footer_count"
+                                                ]["total_user_deposit"]
+                                              : ""}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <b>
+                                            {myTraderData.data.footer_count !=
+                                            undefined
+                                              ? myTraderData.data[
+                                                  "footer_count"
+                                                ]["total_user_withdraw"]
+                                              : ""}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <b>
+                                            {myTraderData.data.footer_count !=
+                                            undefined
+                                              ? myTraderData.data[
+                                                  "footer_count"
+                                                ]["total_total_user_deposit"]
+                                              : ""}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <b>
+                                            {myTraderData.data.footer_count !=
+                                            undefined
+                                              ? myTraderData.data[
+                                                  "footer_count"
+                                                ]["total_total_user_withdraw"]
+                                              : ""}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <b>
+                                            {myTraderData.data.footer_count !=
+                                            undefined
+                                              ? myTraderData.data[
+                                                  "footer_count"
+                                                ]["total_user_wallet"]
+                                              : ""}
+                                          </b>
+                                        </td>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
-                              ) : (
-                                ""
-                              )}
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel>
+                      )
+                    ) : (
+                      ""
+                    )}
 
-                              {pammGroupButton == "portfolio_manage" ? (
-                                <div>
-                                  <div className="portfolio-manager-group-button">
+                    {permission.view_pamm_dashboard == 1 ||
+                    permission.money_manager_accounts == 1 ||
+                    permission.my_money_managers == 1 ||
+                    permission.my_portfolios == 1 ||
+                    permission.pamm_trade_history == 1 ||
+                    permission.pamm_withdraw_request == 1 ? (
+                      userData.data.is_pamm == "1" ? (
+                        <TabPanel value={12} index={12} dir={theme.direction}>
+                          <Grid container spacing={3} className="grid-handle">
+                            <Grid item md={12} lg={12} xl={12}>
+                              <Paper
+                                elevation={2}
+                                style={{ borderRadius: "10px" }}
+                                className="paper-main-section"
+                              >
+                                <div className="headerSection header-title">
+                                  <p className="margin-0">PAMM</p>
+                                </div>
+                                <div className="bankDetailsTabSection pamm-section">
+                                  <div className="groupButtonSection">
                                     <ButtonGroup variant="outlined">
-                                      <Button
-                                        variant={`${
-                                          pammPortfolioGroupButton ==
-                                          "money_manager"
-                                            ? "contained"
-                                            : "outlined"
-                                        }`}
-                                        onClick={(e) => {
-                                          getMoneyManager();
-                                          setPammPortfolioGroupButton(
-                                            "money_manager"
-                                          );
-                                        }}
-                                      >
-                                        MONEY MANAGER
-                                      </Button>
-                                      <Button
-                                        variant={`${
-                                          pammPortfolioGroupButton ==
-                                          "my_portfolio"
-                                            ? "contained"
-                                            : "outlined"
-                                        }`}
-                                        onClick={(e) => {
-                                          getMyPortfolio();
-                                          setPammPortfolioGroupButton(
-                                            "my_portfolio"
-                                          );
-                                        }}
-                                      >
-                                        MY PORTFOLIO
-                                      </Button>
+                                      {permission.view_pamm_dashboard == 1 ? (
+                                        <Button
+                                          variant={`${
+                                            pammGroupButton == "dashboard"
+                                              ? "contained"
+                                              : "outlined"
+                                          }`}
+                                          onClick={(e) => {
+                                            setPammGroupButton("dashboard");
+                                          }}
+                                        >
+                                          Dashboard
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {permission.money_manager_accounts == 1 ||
+                                      permission.my_portfolios == 1 ? (
+                                        <Button
+                                          variant={`${
+                                            pammGroupButton ==
+                                            "portfolio_manage"
+                                              ? "contained"
+                                              : "outlined"
+                                          }`}
+                                          onClick={(e) => {
+                                            getMoneyManager();
+                                            setPammPortfolioGroupButton(
+                                              "money_manager"
+                                            );
+                                            setPammGroupButton(
+                                              "portfolio_manage"
+                                            );
+                                          }}
+                                        >
+                                          Portfolio Manage
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {permission.my_money_managers == 1 ? (
+                                        <Button
+                                          variant={`${
+                                            pammGroupButton == "my_manage"
+                                              ? "contained"
+                                              : "outlined"
+                                          }`}
+                                          onClick={(e) => {
+                                            setPammGroupButton("my_manage");
+                                          }}
+                                        >
+                                          My Managers
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+
+                                      {permission.pamm_trade_history == 1 ? (
+                                        <Button
+                                          variant={`${
+                                            pammGroupButton == "trade_history"
+                                              ? "contained"
+                                              : "outlined"
+                                          }`}
+                                          onClick={(e) => {
+                                            setPammGroupButton("trade_history");
+                                          }}
+                                        >
+                                          Trade History
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {permission.pamm_withdraw_request == 1 ? (
+                                        <Button
+                                          variant={`${
+                                            pammGroupButton ==
+                                            "withdraw_history"
+                                              ? "contained"
+                                              : "outlined"
+                                          }`}
+                                          onClick={(e) => {
+                                            setPammGroupButton(
+                                              "withdraw_history"
+                                            );
+                                          }}
+                                        >
+                                          Withdrawal History
+                                        </Button>
+                                      ) : (
+                                        ""
+                                      )}
                                     </ButtonGroup>
                                   </div>
                                   <br />
-                                  {pammPortfolioGroupButton ==
-                                  "my_portfolio" ? (
-                                    <div className="pamm-create-my-portfolio-button">
-                                      <Button
-                                        variant="contained"
-                                        onClick={(e) => {
-                                          setMaxWidth("sm");
-
-                                          setCreatePortfolioForm({
-                                            isLoader: false,
-                                            portfolio_name: "",
-                                            mm_mt5_acc_id: "",
-                                            investment_months: "",
-                                          });
-                                          setcpinputinfoTrue({
-                                            portfolio_name: false,
-                                            mm_mt5_acc_id: false,
-                                            investment_months: false,
-                                          });
-                                          setDialogTitle("Create Portfolio");
-                                          getMoneyManagerList();
-                                          setOpen(true);
-                                        }}
-                                      >
-                                        Create Portfolio
-                                      </Button>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                  {pammPortfolioGroupButton ==
-                                  "money_manager" ? (
+                                  {pammGroupButton == "dashboard" ? (
                                     <div>
-                                      <div className="money-manager-card-list-section">
-                                        {moneyManagerList.map((item, index) => {
-                                          return (
-                                            <div className="money-manager-content">
-                                              <div className="money-manager-header-section">
-                                                <NavLink
-                                                  className="navlink-color-white"
-                                                  to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                >
-                                                  <label>{item.mt5_name}</label>
-                                                </NavLink>
-                                              </div>
-                                              <div className="money-manager-body-section">
-                                                <div className="money-manager-body-content-element marge-element">
-                                                  <div className="right-side-border">
-                                                    <label>
-                                                      Minimum deposit
-                                                    </label>
-                                                    <p>
-                                                      $
-                                                      {
-                                                        item.minimum_deposit_amount
-                                                      }
-                                                    </p>
-                                                  </div>
-                                                  <div>
-                                                    <label>
-                                                      Fees Percentage
-                                                    </label>
-                                                    <p>
-                                                      {item.fees_percentage}%
-                                                    </p>
-                                                  </div>
+                                      <div className="setBoxs">
+                                        <div className="row1 boxSection">
+                                          <div className="card padding-9 animate fadeLeft boxsize">
+                                            <div className="row">
+                                              <NavLink to="/pamm_user_management">
+                                                <div className="col s12 m12 text-align-center">
+                                                  <h5 className="mb-0">
+                                                    {pammDashboardData.my_balance ==
+                                                    null
+                                                      ? "$0"
+                                                      : "$" +
+                                                        pammDashboardData.my_balance}
+                                                  </h5>
+                                                  <p className="no-margin">
+                                                    Wallet Balance
+                                                  </p>
                                                 </div>
-                                                <div className="money-manager-body-content-element marge-element">
-                                                  <div className="right-side-border">
-                                                    <label>Approx Return</label>
-                                                    <p className="text-color-green">
-                                                      {item.fees_percentage}%
-                                                    </p>
-                                                  </div>
-                                                  <div>
-                                                    <label>Risk Score</label>
-                                                    <img src="./assets/img/rishScoreLow.jpg" />
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              {item.is_closed == "0" ? (
-                                                <div className="money-manager-footer-action-section">
-                                                  <button
-                                                    className="danger"
-                                                    onClick={(e) => {
-                                                      setWithdrawForm({
-                                                        isLoader: false,
-                                                        allWithdraw: true,
-                                                        amount: "",
-                                                        pid: item.pid,
-                                                      });
-                                                      setDialogTitle(
-                                                        "Withdraw"
-                                                      );
-                                                      SetRefreshCreatePortfolio1(
-                                                        true
-                                                      );
-                                                      setOpen(true);
-                                                    }}
-                                                  >
-                                                    Withdraw
-                                                  </button>
-                                                  <button
-                                                    className="success"
-                                                    onClick={(e) => {
-                                                      investmentForm.user_id =
-                                                        item.mm_user_id;
-                                                      investmentForm.pid =
-                                                        item.pid;
-                                                      investmentForm.amount =
-                                                        "";
-                                                      setInvestmentForm({
-                                                        ...investmentForm,
-                                                      });
-                                                      setDialogTitle(
-                                                        "Investment"
-                                                      );
-                                                      setOpen(true);
-                                                    }}
-                                                  >
-                                                    Invest
-                                                  </button>
-                                                  <NavLink
-                                                    className="third-view-button"
-                                                    to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                  >
-                                                    View
-                                                  </NavLink>
-                                                </div>
-                                              ) : item.is_closed == "2" ? (
-                                                <div className="money-manager-footer-action-section">
-                                                  <button className="skyblue1 padingbutton">
-                                                    Pending
-                                                  </button>
-                                                  <NavLink
-                                                    className="third-view-button"
-                                                    to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                  >
-                                                    View
-                                                  </NavLink>
-                                                </div>
-                                              ) : (
-                                                <div className="money-manager-footer-action-section">
-                                                  <button
-                                                    className="skyblue"
-                                                    onClick={(e) => {
-                                                      setMaxWidth("sm");
-                                                      createPortfolioForm.mm_mt5_acc_id =
-                                                        item.mm_mt5_acc_id;
-                                                      createPortfolioForm.investment_months =
-                                                        "";
-                                                      createPortfolioForm.portfolio_name =
-                                                        "";
-                                                      setCreatePortfolioForm({
-                                                        ...createPortfolioForm,
-                                                      });
-                                                      setcpinputinfoTrue({
-                                                        portfolio_name: false,
-                                                        mm_mt5_acc_id: false,
-                                                        investment_months: false,
-                                                      });
-                                                      setDialogTitle(
-                                                        "Create Portfolio"
-                                                      );
-                                                      getMoneyManagerList();
-                                                      setOpen(true);
-                                                    }}
-                                                  >
-                                                    Create Portfolio
-                                                  </button>
-                                                  <NavLink
-                                                    className="third-view-button"
-                                                    to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                  >
-                                                    View
-                                                  </NavLink>
-                                                </div>
-                                              )}
+                                              </NavLink>
                                             </div>
-                                          );
-                                        })}
+                                          </div>
+                                        </div>
+                                        <div className="row1 boxSection">
+                                          <div className="card padding-9 animate fadeLeft boxsize">
+                                            <div className="row">
+                                              <NavLink to="/pamm_mm_management">
+                                                <div className="col s12 m12 text-align-center">
+                                                  <h5 className="mb-0">
+                                                    {pammDashboardData.total_investment ==
+                                                    null
+                                                      ? "$0"
+                                                      : "$" +
+                                                        pammDashboardData.total_investment}
+                                                  </h5>
+                                                  <p className="no-margin">
+                                                    Total Investment
+                                                  </p>
+                                                </div>
+                                              </NavLink>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="row1 boxSection">
+                                          <div className="card padding-9 animate fadeLeft boxsize">
+                                            <div className="row">
+                                              <NavLink to="/pamm_mm_management">
+                                                <div className="col s12 m12 text-align-center">
+                                                  <h5 className="mb-0">
+                                                    {pammDashboardData.total_withdrawal ==
+                                                    null
+                                                      ? "$0"
+                                                      : "$" +
+                                                        pammDashboardData.total_withdrawal}
+                                                  </h5>
+                                                  <p className="no-margin">
+                                                    Total Withdrawal
+                                                  </p>
+                                                </div>
+                                              </NavLink>
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   ) : (
                                     ""
                                   )}
-                                  {pammPortfolioGroupButton ==
-                                  "my_portfolio" ? (
-                                    <div className="myportfolio-card-section">
-                                      {portfolioLoader ? (
-                                        <div className="loader-section">
-                                          <svg
-                                            class="spinner"
-                                            viewBox="0 0 50 50"
-                                          >
-                                            <circle
-                                              class="path"
-                                              cx="25"
-                                              cy="25"
-                                              r="20"
-                                              fill="none"
-                                              stroke-width="5"
-                                            ></circle>
-                                          </svg>
+
+                                  {pammGroupButton == "portfolio_manage" ? (
+                                    <div>
+                                      <div className="portfolio-manager-group-button">
+                                        <ButtonGroup variant="outlined">
+                                          {permission.money_manager_accounts ==
+                                          1 ? (
+                                            <Button
+                                              variant={`${
+                                                pammPortfolioGroupButton ==
+                                                "money_manager"
+                                                  ? "contained"
+                                                  : "outlined"
+                                              }`}
+                                              onClick={(e) => {
+                                                getMoneyManager();
+                                                setPammPortfolioGroupButton(
+                                                  "money_manager"
+                                                );
+                                              }}
+                                            >
+                                              MONEY MANAGER
+                                            </Button>
+                                          ) : (
+                                            ""
+                                          )}
+                                          {permission.my_portfolios == 1 ? (
+                                            <Button
+                                              variant={`${
+                                                pammPortfolioGroupButton ==
+                                                "my_portfolio"
+                                                  ? "contained"
+                                                  : "outlined"
+                                              }`}
+                                              onClick={(e) => {
+                                                getMyPortfolio();
+                                                setPammPortfolioGroupButton(
+                                                  "my_portfolio"
+                                                );
+                                              }}
+                                            >
+                                              MY PORTFOLIO
+                                            </Button>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </ButtonGroup>
+                                      </div>
+                                      <br />
+                                      {pammPortfolioGroupButton ==
+                                      "my_portfolio" ? (
+                                        <div className="pamm-create-my-portfolio-button">
+                                          {permission.create_portfolio == 1 ? (
+                                            <Button
+                                              variant="contained"
+                                              onClick={(e) => {
+                                                setMaxWidth("sm");
+
+                                                setCreatePortfolioForm({
+                                                  isLoader: false,
+                                                  portfolio_name: "",
+                                                  mm_mt5_acc_id: "",
+                                                  investment_months: "",
+                                                });
+                                                setcpinputinfoTrue({
+                                                  portfolio_name: false,
+                                                  mm_mt5_acc_id: false,
+                                                  investment_months: false,
+                                                });
+                                                setDialogTitle(
+                                                  "Create Portfolio"
+                                                );
+                                                getMoneyManagerList();
+                                                setOpen(true);
+                                              }}
+                                            >
+                                              Create Portfolio
+                                            </Button>
+                                          ) : (
+                                            ""
+                                          )}
                                         </div>
                                       ) : (
-                                        myPortfolio.map((item) => {
-                                          return (
-                                            <div className="myportfolio-card-content">
-                                              <div className="width-100-with-border header-sction">
-                                                <div>
-                                                  <NavLink
-                                                    to={`/portfolio_profile/${item.pid}/${id}`}
-                                                    className="portfolio-link-color"
-                                                  >
-                                                    {item.portfolio_name}
-                                                  </NavLink>
-                                                  <span className="text-bold-700">
-                                                    {item.portfolio_id}
-                                                  </span>
-                                                </div>
-                                                <div>
-                                                  <span>Money Manager</span>
-                                                  <NavLink
-                                                    className="navlink-color-white"
-                                                    to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
-                                                  >
-                                                    <span className="text-bold-700">
-                                                      {item.account_name}
-                                                    </span>
-                                                  </NavLink>
-                                                </div>
-                                              </div>
-                                              <div
-                                                className="width-100-with-border"
-                                                style={{
-                                                  backgroundColor:
-                                                    item.is_closed == "0"
-                                                      ? "white"
-                                                      : "#ebd7d7",
-                                                }}
-                                              >
-                                                <div>
-                                                  <span>Investment</span>
-                                                  <span className="text-bold-700">
-                                                    ${item.my_investment}
-                                                  </span>
-                                                </div>
-                                                <div>
-                                                  <span>Current Value</span>
-                                                  <span
-                                                    className="text-bold-700"
-                                                    style={{
-                                                      color:
-                                                        item.my_investment <=
-                                                        item.current_value
-                                                          ? "green"
-                                                          : "red",
-                                                    }}
-                                                  >
-                                                    ${item.current_value}
-                                                  </span>
-                                                </div>
+                                        ""
+                                      )}
+                                      {pammPortfolioGroupButton ==
+                                      "money_manager" ? (
+                                        <div>
+                                          <div className="money-manager-card-list-section">
+                                            {moneyManagerList.map(
+                                              (item, index) => {
+                                                return (
+                                                  <div className="money-manager-content">
+                                                    <div className="money-manager-header-section">
+                                                      <NavLink
+                                                        className="navlink-color-white"
+                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                      >
+                                                        <label>
+                                                          {item.mt5_name}
+                                                        </label>
+                                                      </NavLink>
+                                                    </div>
+                                                    <div className="money-manager-body-section">
+                                                      <div className="money-manager-body-content-element marge-element">
+                                                        <div className="right-side-border">
+                                                          <label>
+                                                            Minimum deposit
+                                                          </label>
+                                                          <p>
+                                                            $
+                                                            {
+                                                              item.minimum_deposit_amount
+                                                            }
+                                                          </p>
+                                                        </div>
+                                                        <div>
+                                                          <label>
+                                                            Fees Percentage
+                                                          </label>
+                                                          <p>
+                                                            {
+                                                              item.fees_percentage
+                                                            }
+                                                            %
+                                                          </p>
+                                                        </div>
+                                                      </div>
+                                                      <div className="money-manager-body-content-element marge-element">
+                                                        <div className="right-side-border">
+                                                          <label>
+                                                            Approx Return
+                                                          </label>
+                                                          <p className="text-color-green">
+                                                            {
+                                                              item.fees_percentage
+                                                            }
+                                                            %
+                                                          </p>
+                                                        </div>
+                                                        <div>
+                                                          <label>
+                                                            Risk Score
+                                                          </label>
+                                                          <img src="./assets/img/rishScoreLow.jpg" />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    {item.is_closed == "0" ? (
+                                                      <div className="money-manager-footer-action-section">
+                                                        {permission.withdraw_request ==
+                                                        1 ? (
+                                                          <button
+                                                            className="danger"
+                                                            onClick={(e) => {
+                                                              setWithdrawForm({
+                                                                isLoader: false,
+                                                                allWithdraw: true,
+                                                                amount: "",
+                                                                pid: item.pid,
+                                                              });
+                                                              setDialogTitle(
+                                                                "Withdraw"
+                                                              );
+                                                              SetRefreshCreatePortfolio1(
+                                                                true
+                                                              );
+                                                              setOpen(true);
+                                                            }}
+                                                          >
+                                                            Withdraw
+                                                          </button>
+                                                        ) : (
+                                                          ""
+                                                        )}
+                                                        {permission.add_investment ==
+                                                        1 ? (
+                                                          <button
+                                                            className="success"
+                                                            onClick={(e) => {
+                                                              investmentForm.user_id =
+                                                                item.mm_user_id;
+                                                              investmentForm.pid =
+                                                                item.pid;
+                                                              investmentForm.amount =
+                                                                "";
+                                                              setInvestmentForm(
+                                                                {
+                                                                  ...investmentForm,
+                                                                }
+                                                              );
+                                                              setDialogTitle(
+                                                                "Investment"
+                                                              );
+                                                              setOpen(true);
+                                                            }}
+                                                          >
+                                                            Invest
+                                                          </button>
+                                                        ) : (
+                                                          ""
+                                                        )}
+                                                        {permission.view_money_manager_profile ==
+                                                        1 ? (
+                                                          <NavLink
+                                                            className="third-view-button"
+                                                            to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                          >
+                                                            View
+                                                          </NavLink>
+                                                        ) : (
+                                                          ""
+                                                        )}
+                                                      </div>
+                                                    ) : item.is_closed ==
+                                                      "2" ? (
+                                                      <div className="money-manager-footer-action-section">
+                                                        <button className="skyblue1 padingbutton">
+                                                          Pending
+                                                        </button>
+                                                        {permission.view_money_manager_profile ==
+                                                        1 ? (
+                                                          <NavLink
+                                                            className="third-view-button"
+                                                            to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                          >
+                                                            View
+                                                          </NavLink>
+                                                        ) : (
+                                                          ""
+                                                        )}
+                                                      </div>
+                                                    ) : (
+                                                      <div className="money-manager-footer-action-section">
+                                                        {permission.create_portfolio ==
+                                                        1 ? (
+                                                          <button
+                                                            className="skyblue"
+                                                            onClick={(e) => {
+                                                              setMaxWidth("sm");
+                                                              createPortfolioForm.mm_mt5_acc_id =
+                                                                item.mm_mt5_acc_id;
+                                                              createPortfolioForm.investment_months =
+                                                                "";
+                                                              createPortfolioForm.portfolio_name =
+                                                                "";
+                                                              setCreatePortfolioForm(
+                                                                {
+                                                                  ...createPortfolioForm,
+                                                                }
+                                                              );
+                                                              setcpinputinfoTrue(
+                                                                {
+                                                                  portfolio_name: false,
+                                                                  mm_mt5_acc_id: false,
+                                                                  investment_months: false,
+                                                                }
+                                                              );
+                                                              setDialogTitle(
+                                                                "Create Portfolio"
+                                                              );
+                                                              getMoneyManagerList();
+                                                              setOpen(true);
+                                                            }}
+                                                          >
+                                                            Create Portfolio
+                                                          </button>
+                                                        ) : (
+                                                          ""
+                                                        )}
 
-                                                <div>
-                                                  <span>PNL</span>
-                                                  <span
-                                                    className="text-bold-700"
-                                                    style={{
-                                                      color:
-                                                        item.pnl >= 0
-                                                          ? "green"
-                                                          : "red",
-                                                    }}
-                                                  >
-                                                    ${item.pnl}
-                                                  </span>
-                                                </div>
-                                              </div>
-                                              <div
-                                                className="width-100-with-border"
-                                                style={{
-                                                  backgroundColor:
-                                                    item.is_closed == "0"
-                                                      ? "white"
-                                                      : "#ebd7d7",
-                                                }}
+                                                        {permission.view_money_manager_profile ==
+                                                        1 ? (
+                                                          <NavLink
+                                                            className="third-view-button"
+                                                            to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                          >
+                                                            View
+                                                          </NavLink>
+                                                        ) : (
+                                                          ""
+                                                        )}
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                );
+                                              }
+                                            )}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        ""
+                                      )}
+                                      {pammPortfolioGroupButton ==
+                                      "my_portfolio" ? (
+                                        <div className="myportfolio-card-section">
+                                          {portfolioLoader ? (
+                                            <div className="loader-section">
+                                              <svg
+                                                class="spinner"
+                                                viewBox="0 0 50 50"
                                               >
-                                                <div>
-                                                  <span>Return %</span>
-                                                  <span
-                                                    className="text-bold-700"
-                                                    style={{
-                                                      color:
-                                                        item.return_percentage >=
-                                                        0
-                                                          ? "green"
-                                                          : "red",
-                                                    }}
-                                                  >
-                                                    {item.return_percentage}%
-                                                  </span>
-                                                </div>
-
-                                                <div>
-                                                  <span>Date Time</span>
-                                                  <span className="text-bold-700">
-                                                    {item.added_datetime}
-                                                  </span>
-                                                </div>
-                                              </div>
-                                              <div
-                                                className="width-100-with-border"
-                                                style={{
-                                                  backgroundColor:
-                                                    item.is_closed == "0"
-                                                      ? "white"
-                                                      : "#ebd7d7",
-                                                }}
-                                              >
-                                                <div>
-                                                  <span>Floating</span>
-                                                  <span
-                                                    className="text-bold-700"
-                                                    style={{
-                                                      color:
-                                                        item.current_floating >=
-                                                        0
-                                                          ? "green"
-                                                          : "red",
-                                                    }}
-                                                  >
-                                                    {item.current_floating}
-                                                  </span>
-                                                </div>
-
-                                                <div>
-                                                  <span>Trade</span>
-                                                  <span className="cursor">
-                                                    <span
-                                                      class="material-icons"
-                                                      onClick={() => {
-                                                        navigate(
-                                                          `/pamm_trade_history/${item.pid}`
-                                                        );
-                                                      }}
-                                                    >
-                                                      insert_chart
-                                                    </span>
-                                                  </span>
-                                                </div>
-                                              </div>
-                                              {item.is_closed == "0" ? (
-                                                <div className="footer-action-button">
-                                                  <button
-                                                    onClick={(e) => {
-                                                      setMaxWidth("sm");
-                                                      setWithdrawForm({
-                                                        isLoader: false,
-                                                        allWithdraw: true,
-                                                        amount: "",
-                                                        pid: item.pid,
-                                                      });
-                                                      SetRefreshCreatePortfolio1(
-                                                        false
-                                                      );
-                                                      setDialogTitle(
-                                                        "Withdraw"
-                                                      );
-                                                      setOpen(true);
-                                                    }}
-                                                  >
-                                                    Withdraw
-                                                  </button>
-                                                  <button
-                                                    onClick={(e) => {
-                                                      investmentForm.user_id =
-                                                        "";
-                                                      investmentForm.pid =
-                                                        item.pid;
-                                                      investmentForm.amount =
-                                                        "";
-                                                      setMaxWidth("sm");
-                                                      setInvestmentForm({
-                                                        ...investmentForm,
-                                                      });
-                                                      setDialogTitle(
-                                                        "Investment"
-                                                      );
-                                                      setOpen(true);
-                                                    }}
-                                                  >
-                                                    Invest
-                                                  </button>
-                                                  <NavLink
-                                                    className="third-view-button"
-                                                    to={`/portfolio_profile/${item.pid}/${id}`}
-                                                  >
-                                                    View
-                                                  </NavLink>
-                                                </div>
-                                              ) : item.is_closed == "1" ? (
-                                                <div className="footer-action-button">
+                                                <circle
+                                                  class="path"
+                                                  cx="25"
+                                                  cy="25"
+                                                  r="20"
+                                                  fill="none"
+                                                  stroke-width="5"
+                                                ></circle>
+                                              </svg>
+                                            </div>
+                                          ) : (
+                                            myPortfolio.map((item) => {
+                                              return (
+                                                <div className="myportfolio-card-content">
+                                                  <div className="width-100-with-border header-sction">
+                                                    <div>
+                                                      <NavLink
+                                                        to={`/portfolio_profile/${item.pid}/${id}`}
+                                                        className="portfolio-link-color"
+                                                      >
+                                                        {item.portfolio_name}
+                                                      </NavLink>
+                                                      <span className="text-bold-700">
+                                                        {item.portfolio_id}
+                                                      </span>
+                                                    </div>
+                                                    <div>
+                                                      <span>Money Manager</span>
+                                                      <NavLink
+                                                        className="navlink-color-white"
+                                                        to={`/money_manager_profile/${item.mm_mt5_acc_id}/${id}`}
+                                                      >
+                                                        <span className="text-bold-700">
+                                                          {item.account_name}
+                                                        </span>
+                                                      </NavLink>
+                                                    </div>
+                                                  </div>
                                                   <div
-                                                    className="footer-action-button spanportFolio1"
+                                                    className="width-100-with-border"
                                                     style={{
                                                       backgroundColor:
                                                         item.is_closed == "0"
@@ -13935,201 +13461,382 @@ const Profile = () => {
                                                           : "#ebd7d7",
                                                     }}
                                                   >
-                                                    <span className="spanportFolio">
-                                                      Closed
-                                                    </span>
+                                                    <div>
+                                                      <span>Investment</span>
+                                                      <span className="text-bold-700">
+                                                        ${item.my_investment}
+                                                      </span>
+                                                    </div>
+                                                    <div>
+                                                      <span>Current Value</span>
+                                                      <span
+                                                        className="text-bold-700"
+                                                        style={{
+                                                          color:
+                                                            item.my_investment <=
+                                                            item.current_value
+                                                              ? "green"
+                                                              : "red",
+                                                        }}
+                                                      >
+                                                        ${item.current_value}
+                                                      </span>
+                                                    </div>
+
+                                                    <div>
+                                                      <span>PNL</span>
+                                                      <span
+                                                        className="text-bold-700"
+                                                        style={{
+                                                          color:
+                                                            item.pnl >= 0
+                                                              ? "green"
+                                                              : "red",
+                                                        }}
+                                                      >
+                                                        ${item.pnl}
+                                                      </span>
+                                                    </div>
                                                   </div>
-                                                  <NavLink
-                                                    className="third-view-button"
-                                                    to={`/portfolio_profile/${item.pid}/${id}`}
-                                                  >
-                                                    View
-                                                  </NavLink>
-                                                </div>
-                                              ) : (
-                                                <div className="footer-action-button">
                                                   <div
-                                                    className="footer-action-button spanportFolio1"
+                                                    className="width-100-with-border"
                                                     style={{
                                                       backgroundColor:
                                                         item.is_closed == "0"
                                                           ? "white"
-                                                          : "#ebe5c1",
+                                                          : "#ebd7d7",
                                                     }}
                                                   >
-                                                    <span className="spanportFoliopading">
-                                                      Pending
-                                                    </span>
+                                                    <div>
+                                                      <span>Return %</span>
+                                                      <span
+                                                        className="text-bold-700"
+                                                        style={{
+                                                          color:
+                                                            item.return_percentage >=
+                                                            0
+                                                              ? "green"
+                                                              : "red",
+                                                        }}
+                                                      >
+                                                        {item.return_percentage}
+                                                        %
+                                                      </span>
+                                                    </div>
+
+                                                    <div>
+                                                      <span>Date Time</span>
+                                                      <span className="text-bold-700">
+                                                        {item.added_datetime}
+                                                      </span>
+                                                    </div>
                                                   </div>
-                                                  <NavLink
-                                                    className="third-view-button"
-                                                    to={`/portfolio_profile/${item.pid}/${id}`}
+                                                  <div
+                                                    className="width-100-with-border"
+                                                    style={{
+                                                      backgroundColor:
+                                                        item.is_closed == "0"
+                                                          ? "white"
+                                                          : "#ebd7d7",
+                                                    }}
                                                   >
-                                                    View
-                                                  </NavLink>
+                                                    <div>
+                                                      <span>Floating</span>
+                                                      <span
+                                                        className="text-bold-700"
+                                                        style={{
+                                                          color:
+                                                            item.current_floating >=
+                                                            0
+                                                              ? "green"
+                                                              : "red",
+                                                        }}
+                                                      >
+                                                        {item.current_floating}
+                                                      </span>
+                                                    </div>
+
+                                                    <div>
+                                                      <span>Trade</span>
+                                                      <span className="cursor">
+                                                        <span
+                                                          class="material-icons"
+                                                          onClick={() => {
+                                                            navigate(
+                                                              `/pamm_trade_history/${item.pid}`
+                                                            );
+                                                          }}
+                                                        >
+                                                          insert_chart
+                                                        </span>
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  {item.is_closed == "0" ? (
+                                                    <div className="footer-action-button">
+                                                      <button
+                                                        onClick={(e) => {
+                                                          setMaxWidth("sm");
+                                                          setWithdrawForm({
+                                                            isLoader: false,
+                                                            allWithdraw: true,
+                                                            amount: "",
+                                                            pid: item.pid,
+                                                          });
+                                                          SetRefreshCreatePortfolio1(
+                                                            false
+                                                          );
+                                                          setDialogTitle(
+                                                            "Withdraw"
+                                                          );
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Withdraw
+                                                      </button>
+                                                      <button
+                                                        onClick={(e) => {
+                                                          investmentForm.user_id =
+                                                            "";
+                                                          investmentForm.pid =
+                                                            item.pid;
+                                                          investmentForm.amount =
+                                                            "";
+                                                          setMaxWidth("sm");
+                                                          setInvestmentForm({
+                                                            ...investmentForm,
+                                                          });
+                                                          setDialogTitle(
+                                                            "Investment"
+                                                          );
+                                                          setOpen(true);
+                                                        }}
+                                                      >
+                                                        Invest
+                                                      </button>
+                                                      <NavLink
+                                                        className="third-view-button"
+                                                        to={`/portfolio_profile/${item.pid}/${id}`}
+                                                      >
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  ) : item.is_closed == "1" ? (
+                                                    <div className="footer-action-button">
+                                                      <div
+                                                        className="footer-action-button spanportFolio1"
+                                                        style={{
+                                                          backgroundColor:
+                                                            item.is_closed ==
+                                                            "0"
+                                                              ? "white"
+                                                              : "#ebd7d7",
+                                                        }}
+                                                      >
+                                                        <span className="spanportFolio">
+                                                          Closed
+                                                        </span>
+                                                      </div>
+                                                      <NavLink
+                                                        className="third-view-button"
+                                                        to={`/portfolio_profile/${item.pid}/${id}`}
+                                                      >
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  ) : (
+                                                    <div className="footer-action-button">
+                                                      <div
+                                                        className="footer-action-button spanportFolio1"
+                                                        style={{
+                                                          backgroundColor:
+                                                            item.is_closed ==
+                                                            "0"
+                                                              ? "white"
+                                                              : "#ebe5c1",
+                                                        }}
+                                                      >
+                                                        <span className="spanportFoliopading">
+                                                          Pending
+                                                        </span>
+                                                      </div>
+                                                      <NavLink
+                                                        className="third-view-button"
+                                                        to={`/portfolio_profile/${item.pid}/${id}`}
+                                                      >
+                                                        View
+                                                      </NavLink>
+                                                    </div>
+                                                  )}
                                                 </div>
-                                              )}
-                                            </div>
-                                          );
-                                        })
+                                              );
+                                            })
+                                          )}
+                                        </div>
+                                      ) : (
+                                        ""
                                       )}
                                     </div>
                                   ) : (
                                     ""
                                   )}
-                                </div>
-                              ) : (
-                                ""
-                              )}
 
-                              {pammGroupButton == "my_manage" ? (
-                                <div>
-                                  <CommonTable
-                                    url={`${Url}/datatable/pamm/my_money_managers.php`}
-                                    column={pammMyManagerColumn}
-                                    sort="5"
-                                    param={pammMyManagerParam}
-                                  />
-                                </div>
-                              ) : (
-                                ""
-                              )}
+                                  {pammGroupButton == "my_manage" ? (
+                                    <div>
+                                      <CommonTable
+                                        url={`${Url}/datatable/pamm/my_money_managers.php`}
+                                        column={pammMyManagerColumn}
+                                        sort="5"
+                                        param={pammMyManagerParam}
+                                      />
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
 
-                              {pammGroupButton == "trade_history" ? (
-                                <div>
-                                  <div className="pamm-withdraw-history-filter-section">
-                                    <div className="filter-element">
-                                      <TextField
-                                        className="input-font-small"
-                                        label="From"
-                                        type="date"
-                                        variant="standard"
-                                        sx={{ width: "100%" }}
-                                        name="from"
-                                        focused
-                                        onChange={(e) => {
-                                          pammTradeParam.start_date =
-                                            e.target.value;
-                                          setPammTardeParam({
-                                            ...pammTradeParam,
-                                          });
-                                        }}
+                                  {pammGroupButton == "trade_history" ? (
+                                    <div>
+                                      <div className="pamm-withdraw-history-filter-section">
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="From"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="from"
+                                            focused
+                                            onChange={(e) => {
+                                              pammTradeParam.start_date =
+                                                e.target.value;
+                                              setPammTardeParam({
+                                                ...pammTradeParam,
+                                              });
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="To"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="to"
+                                            focused
+                                            onChange={(e) => {
+                                              pammTradeParam.end_date =
+                                                e.target.value;
+                                              setPammTardeParam({
+                                                ...pammTradeParam,
+                                              });
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                      <CommonTable
+                                        url={`${Url}/datatable/pamm/pamm_trade_history.php`}
+                                        column={pammTradeHistoryColumn}
+                                        sort="2"
+                                        param={pammTradeParam}
                                       />
                                     </div>
-                                    <div className="filter-element">
-                                      <TextField
-                                        className="input-font-small"
-                                        label="To"
-                                        type="date"
-                                        variant="standard"
-                                        sx={{ width: "100%" }}
-                                        name="to"
-                                        focused
-                                        onChange={(e) => {
-                                          pammTradeParam.end_date =
-                                            e.target.value;
-                                          setPammTardeParam({
-                                            ...pammTradeParam,
-                                          });
-                                        }}
-                                      />
-                                    </div>
-                                  </div>
-                                  <CommonTable
-                                    url={`${Url}/datatable/pamm/pamm_trade_history.php`}
-                                    column={pammTradeHistoryColumn}
-                                    sort="2"
-                                    param={pammTradeParam}
-                                  />
-                                </div>
-                              ) : (
-                                ""
-                              )}
+                                  ) : (
+                                    ""
+                                  )}
 
-                              {pammGroupButton == "withdraw_history" ? (
-                                <div>
-                                  <div className="pamm-withdraw-history-filter-section">
-                                    <div className="filter-element">
-                                      <TextField
-                                        className="input-font-small"
-                                        label="From"
-                                        type="date"
-                                        variant="standard"
-                                        sx={{ width: "100%" }}
-                                        name="from"
-                                        focused
-                                        onChange={(e) => {
-                                          pammWithdrawParam.start_date =
-                                            e.target.value;
-                                          setPammWithdrawParam({
-                                            ...pammWithdrawParam,
-                                          });
-                                        }}
+                                  {pammGroupButton == "withdraw_history" ? (
+                                    <div>
+                                      <div className="pamm-withdraw-history-filter-section">
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="From"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="from"
+                                            focused
+                                            onChange={(e) => {
+                                              pammWithdrawParam.start_date =
+                                                e.target.value;
+                                              setPammWithdrawParam({
+                                                ...pammWithdrawParam,
+                                              });
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="filter-element">
+                                          <TextField
+                                            className="input-font-small"
+                                            label="To"
+                                            type="date"
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                            name="to"
+                                            focused
+                                            onChange={(e) => {
+                                              pammWithdrawParam.end_date =
+                                                e.target.value;
+                                              setPammWithdrawParam({
+                                                ...pammWithdrawParam,
+                                              });
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="filter-element">
+                                          <FormControl
+                                            variant="standard"
+                                            sx={{ width: "100%" }}
+                                          >
+                                            <InputLabel>Status</InputLabel>
+                                            <Select
+                                              label
+                                              className="select-font-small"
+                                              name="account_type"
+                                              onChange={(e) => {
+                                                pammWithdrawParam.status =
+                                                  e.target.value;
+                                                setPammWithdrawParam({
+                                                  ...pammWithdrawParam,
+                                                });
+                                              }}
+                                              focused
+                                            >
+                                              <MenuItem value="0">
+                                                Pending
+                                              </MenuItem>
+                                              <MenuItem value="1">
+                                                Approved
+                                              </MenuItem>
+                                              <MenuItem value="2">
+                                                Rejected
+                                              </MenuItem>
+                                            </Select>
+                                          </FormControl>
+                                        </div>
+                                      </div>
+                                      <CommonTable
+                                        url={`${Url}/datatable/pamm/pamm_withdraw_request.php`}
+                                        column={pammWithdrawHistoryColumn}
+                                        sort="1"
+                                        param={pammWithdrawParam}
                                       />
                                     </div>
-                                    <div className="filter-element">
-                                      <TextField
-                                        className="input-font-small"
-                                        label="To"
-                                        type="date"
-                                        variant="standard"
-                                        sx={{ width: "100%" }}
-                                        name="to"
-                                        focused
-                                        onChange={(e) => {
-                                          pammWithdrawParam.end_date =
-                                            e.target.value;
-                                          setPammWithdrawParam({
-                                            ...pammWithdrawParam,
-                                          });
-                                        }}
-                                      />
-                                    </div>
-                                    <div className="filter-element">
-                                      <FormControl
-                                        variant="standard"
-                                        sx={{ width: "100%" }}
-                                      >
-                                        <InputLabel>Status</InputLabel>
-                                        <Select
-                                          label
-                                          className="select-font-small"
-                                          name="account_type"
-                                          onChange={(e) => {
-                                            pammWithdrawParam.status =
-                                              e.target.value;
-                                            setPammWithdrawParam({
-                                              ...pammWithdrawParam,
-                                            });
-                                          }}
-                                          focused
-                                        >
-                                          <MenuItem value="0">Pending</MenuItem>
-                                          <MenuItem value="1">
-                                            Approved
-                                          </MenuItem>
-                                          <MenuItem value="2">
-                                            Rejected
-                                          </MenuItem>
-                                        </Select>
-                                      </FormControl>
-                                    </div>
-                                  </div>
-                                  <CommonTable
-                                    url={`${Url}/datatable/pamm/pamm_withdraw_request.php`}
-                                    column={pammWithdrawHistoryColumn}
-                                    sort="1"
-                                    param={pammWithdrawParam}
-                                  />
+                                  ) : (
+                                    ""
+                                  )}
                                 </div>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </Paper>
-                        </Grid>
-                      </Grid>
-                    </TabPanel>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </TabPanel>
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      ""
+                    )}
                   </SwipeableViews>
                   {/* </Box> */}
                 </Grid>

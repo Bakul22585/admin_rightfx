@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import { Paper } from "@mui/material";
+
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { ColorButton } from "../common/CustomElement";
@@ -125,7 +126,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Deposit = () => {
+const Deposit = (prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -368,61 +369,100 @@ const Deposit = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              id={`actionButton_${row.deposit_id}`}
-              aria-controls={open ? `basic-menu-${row.deposit_id}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.deposit_id)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.deposit_id}`}
-              anchorEl={openTableMenus[row.deposit_id]}
-              open={Boolean(openTableMenus[row.deposit_id])}
-              onClose={(event) => handleContextClose(row.deposit_id)}
-            >
-              {row.status != "0" ? (
-                <MenuItem
-                  className="view"
+            {prop.permission.view_update_deposit == 1 ||
+            prop.permission.view_deposit == 1 ||
+            prop.permission.approve_deposite == 1 ||
+            prop.permission.reject_deposite == 1 ? (
+              <>
+                <Button
+                  id={`actionButton_${row.deposit_id}`}
+                  aria-controls={
+                    open ? `basic-menu-${row.deposit_id}` : undefined
+                  }
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) => handleContextClick(event, row.deposit_id)}
                   {...row}
-                  onClick={(event) => viewDeposit(row.deposit_id)}
+                  style={{ color: "rgb(144 145 139)" }}
                 >
-                  <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                </MenuItem>
-              ) : (
-                <div>
-                  <MenuItem
-                    className="view"
-                    {...row}
-                    onClick={(event) => viewDeposit(row.deposit_id)}
-                  >
-                    <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                  </MenuItem>
-                  <MenuItem
-                    className="approve"
-                    {...row}
-                    onClick={(event) => actionMenuPopup(event, row.deposit_id)}
-                  >
-                    <i className="material-icons font-color-approved">
-                      task_alt
-                    </i>
-                    &nbsp;&nbsp;Approved
-                  </MenuItem>
-                  <MenuItem
-                    className="reject"
-                    {...row}
-                    onClick={(event) => actionMenuPopup(event, row.deposit_id)}
-                  >
-                    <i className="material-icons font-color-rejected">cancel</i>
-                    &nbsp;&nbsp;Rejected
-                  </MenuItem>
-                </div>
-              )}
-            </Menu>
+                  <i className="material-icons">more_horiz</i>
+                </Button>
+                <Menu
+                  id={`basic-menu-${row.deposit_id}`}
+                  anchorEl={openTableMenus[row.deposit_id]}
+                  open={Boolean(openTableMenus[row.deposit_id])}
+                  onClose={(event) => handleContextClose(row.deposit_id)}
+                >
+                  {row.status != "0" ? (
+                    <>
+                      {prop.permission.view_update_deposit == 1 ||
+                      prop.permission.view_deposit == 1 ? (
+                        <MenuItem
+                          className="view"
+                          {...row}
+                          onClick={(event) => viewDeposit(row.deposit_id)}
+                        >
+                          <i className="material-icons">receipt</i>
+                          &nbsp;&nbsp;View
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      {prop.permission.view_update_deposit == 1 ||
+                      prop.permission.view_deposit == 1 ? (
+                        <MenuItem
+                          className="view"
+                          {...row}
+                          onClick={(event) => viewDeposit(row.deposit_id)}
+                        >
+                          <i className="material-icons">receipt</i>
+                          &nbsp;&nbsp;View
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                      {prop.permission.approve_deposite == 1 ? (
+                        <MenuItem
+                          className="approve"
+                          {...row}
+                          onClick={(event) =>
+                            actionMenuPopup(event, row.deposit_id)
+                          }
+                        >
+                          <i className="material-icons font-color-approved">
+                            task_alt
+                          </i>
+                          &nbsp;&nbsp;Approved
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                      {prop.permission.reject_deposite == 1 ? (
+                        <MenuItem
+                          className="reject"
+                          {...row}
+                          onClick={(event) =>
+                            actionMenuPopup(event, row.deposit_id)
+                          }
+                        >
+                          <i className="material-icons font-color-rejected">
+                            cancel
+                          </i>
+                          &nbsp;&nbsp;Rejected
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  )}
+                </Menu>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -516,7 +556,8 @@ const Deposit = () => {
           >
             Cancel
           </Button>
-          {storeDepositData.status == "0" ? (
+          {storeDepositData.status == "0" &&
+          prop.permission.view_update_deposit == 1 ? (
             viewDepositForm.isLoader == true ? (
               <Button
                 variant="contained"
@@ -906,7 +947,14 @@ const Deposit = () => {
                 }
               }}
               focused
-              disabled={viewDepositForm.status == "0" ? false : true}
+              disabled={
+                storeDepositData.status == "0" &&
+                prop.permission.view_update_deposit == 1
+                  ? false
+                  : true
+              }
+
+              // disabled={viewDepositForm.status == "0"   ? false : true}
             />
           </div>
           <br />
@@ -919,7 +967,12 @@ const Deposit = () => {
               value={viewDepositForm.remark}
               onChange={input1}
               focused
-              disabled={storeDepositData.status == "0" ? false : true}
+              disabled={
+                storeDepositData.status == "0" &&
+                prop.permission.view_update_deposit == 1
+                  ? false
+                  : true
+              }
             />
             {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
             <FormControl
@@ -938,7 +991,12 @@ const Deposit = () => {
                 name="status"
                 onChange={input1}
                 onBlur={input1trueFalse}
-                disabled={storeDepositData.status == "0" ? false : true}
+                disabled={
+                  storeDepositData.status == "0" &&
+                  prop.permission.view_update_deposit == 1
+                    ? false
+                    : true
+                }
               >
                 <MenuItem value="0">Pending</MenuItem>
                 <MenuItem value="1">Approve</MenuItem>

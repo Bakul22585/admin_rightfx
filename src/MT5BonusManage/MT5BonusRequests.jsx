@@ -123,7 +123,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const MT5BonusRequests = () => {
+const MT5BonusRequests = (prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -194,7 +194,7 @@ const MT5BonusRequests = () => {
     email: "",
     modified_by_name: "",
     mt5_acc_no: "",
-    mt5_bonus_percentage:"",
+    mt5_bonus_percentage: "",
     transfer_amount: "",
     transfer_bonus_amount: "",
     remark: "",
@@ -255,7 +255,11 @@ const MT5BonusRequests = () => {
     {
       name: "bonus percentage",
       selector: (row) => {
-        return <span title={row.mt5_bonus_percentage}>{row.mt5_bonus_percentage}%</span>;
+        return (
+          <span title={row.mt5_bonus_percentage}>
+            {row.mt5_bonus_percentage}%
+          </span>
+        );
       },
       sortable: true,
       reorder: true,
@@ -263,13 +267,13 @@ const MT5BonusRequests = () => {
       wrap: true,
     },
     {
-        name: "Account",
-        selector: "mt5_acc_no",
-        sortable: true,
-        reorder: true,
-        grow: 0.5,
-        wrap: true,
-      },
+      name: "Account",
+      selector: "mt5_acc_no",
+      sortable: true,
+      reorder: true,
+      grow: 0.5,
+      wrap: true,
+    },
     {
       name: "transfer amount",
       selector: "transfer_amount",
@@ -289,15 +293,15 @@ const MT5BonusRequests = () => {
       wrap: true,
     },
     {
-        name: "remarks",
-        selector: (row) => {
-          return <span title={row.remarks}>{row.remarks}</span>;
-        },
-        sortable: true,
-        reorder: true,
-        grow: 0.5,
-        wrap: true,
+      name: "remarks",
+      selector: (row) => {
+        return <span title={row.remarks}>{row.remarks}</span>;
       },
+      sortable: true,
+      reorder: true,
+      grow: 0.5,
+      wrap: true,
+    },
     {
       name: "STATUS",
       selector: (row) => {
@@ -346,61 +350,102 @@ const MT5BonusRequests = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              id={`actionButton_${row.mt5_bonus_id}`}
-              aria-controls={open ? `basic-menu-${row.mt5_bonus_id}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.mt5_bonus_id)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.mt5_bonus_id}`}
-              anchorEl={openTableMenus[row.mt5_bonus_id]}
-              open={Boolean(openTableMenus[row.mt5_bonus_id])}
-              onClose={(event) => handleContextClose(row.mt5_bonus_id)}
-            >
-              {row.claim_status != "0" ? (
-                <MenuItem
-                  className="view"
+            {prop.permission.view_mt5_bonus_request == 1 ||
+            prop.permission.approve_mt5_bonus_request == 1 ||
+            prop.permission.reject_mt5_bonus_request == 1 ||
+            prop.permission.update_mt5_bonus_offer == 1 ? (
+              <>
+                <Button
+                  id={`actionButton_${row.mt5_bonus_id}`}
+                  aria-controls={
+                    open ? `basic-menu-${row.mt5_bonus_id}` : undefined
+                  }
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) =>
+                    handleContextClick(event, row.mt5_bonus_id)
+                  }
                   {...row}
-                  onClick={(event) => viewDeposit(row)}
+                  style={{ color: "rgb(144 145 139)" }}
                 >
-                  <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                </MenuItem>
-              ) : (
-                <div>
-                  <MenuItem
-                    className="view"
-                    {...row}
-                    onClick={(event) => viewDeposit(row)}
-                  >
-                    <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                  </MenuItem>
-                  <MenuItem
-                    className="approve"
-                    {...row}
-                    onClick={(event) => actionMenuPopup(event, row.mt5_bonus_id)}
-                  >
-                    <i className="material-icons font-color-approved">
-                      task_alt
-                    </i>
-                    &nbsp;&nbsp;Approved
-                  </MenuItem>
-                  <MenuItem
-                    className="reject"
-                    {...row}
-                    onClick={(event) => actionMenuPopup(event, row.mt5_bonus_id)}
-                  >
-                    <i className="material-icons font-color-rejected">cancel</i>
-                    &nbsp;&nbsp;Rejected
-                  </MenuItem>
-                </div>
-              )}
-            </Menu>
+                  <i className="material-icons">more_horiz</i>
+                </Button>
+                <Menu
+                  id={`basic-menu-${row.mt5_bonus_id}`}
+                  anchorEl={openTableMenus[row.mt5_bonus_id]}
+                  open={Boolean(openTableMenus[row.mt5_bonus_id])}
+                  onClose={(event) => handleContextClose(row.mt5_bonus_id)}
+                >
+                  {row.claim_status != "0" ? (
+                    <>
+                      {prop.permission.view_mt5_bonus_request == 1 ||
+                      prop.permission.update_mt5_bonus_offer == 1 ? (
+                        <MenuItem
+                          className="view"
+                          {...row}
+                          onClick={(event) => viewDeposit(row)}
+                        >
+                          <i className="material-icons">receipt</i>
+                          &nbsp;&nbsp;View
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      {prop.permission.view_mt5_bonus_request == 1 ||
+                      prop.permission.update_mt5_bonus_offer == 1 ? (
+                        <MenuItem
+                          className="view"
+                          {...row}
+                          onClick={(event) => viewDeposit(row)}
+                        >
+                          <i className="material-icons">receipt</i>
+                          &nbsp;&nbsp;View
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                      {prop.permission.approve_mt5_bonus_request == 1 ? (
+                        <MenuItem
+                          className="approve"
+                          {...row}
+                          onClick={(event) =>
+                            actionMenuPopup(event, row.mt5_bonus_id)
+                          }
+                        >
+                          <i className="material-icons font-color-approved">
+                            task_alt
+                          </i>
+                          &nbsp;&nbsp;Approved
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                      {prop.permission.reject_mt5_bonus_request == 1 ? (
+                        <MenuItem
+                          className="reject"
+                          {...row}
+                          onClick={(event) =>
+                            actionMenuPopup(event, row.mt5_bonus_id)
+                          }
+                        >
+                          <i className="material-icons font-color-rejected">
+                            cancel
+                          </i>
+                          &nbsp;&nbsp;Rejected
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  )}
+                </Menu>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -494,7 +539,8 @@ const MT5BonusRequests = () => {
           >
             Cancel
           </Button>
-          {storeDepositData.status == "0" ? (
+          {storeDepositData.status == "0" &&
+          prop.permission.update_mt5_bonus_offer == 1 ? (
             viewDepositForm.isLoader == true ? (
               <Button
                 variant="contained"
@@ -549,7 +595,6 @@ const MT5BonusRequests = () => {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
         param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-
       }
       param.append("user_id", depositForm.account);
       param.append("deposit_to", depositForm.deposit_to);
@@ -594,7 +639,10 @@ const MT5BonusRequests = () => {
         param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("mt5_bonus_id", viewDepositForm.mt5_bonus_id);
-      param.append("transfer_bonus_amount", viewDepositForm.transfer_bonus_amount);
+      param.append(
+        "transfer_bonus_amount",
+        viewDepositForm.transfer_bonus_amount
+      );
       param.append("remarks", viewDepositForm.remark);
       param.append("claim_status", viewDepositForm.status);
       await axios
@@ -804,124 +852,138 @@ const MT5BonusRequests = () => {
         </div>
       );
     } else if (dialogTitle == "Update Mt5 Bonus Request") {
-      if(storeDepositData.isLoader)
-      {
-        return(
+      if (storeDepositData.isLoader) {
+        return (
           <div className="popup-loader">
-          <svg class="spinner" viewBox="0 0 50 50">
-            <circle
-              class="path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              stroke-width="5"
-            ></circle>
-          </svg>
-        </div>
-        )
-      }else{
-      return (
-        <div>
-          <div className="update-withdraw-request-section">
-            <TextField
-              label="Date"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="date"
-              value={viewDepositForm.date}
-              onChange={input1}
-              focused
-              disabled
-            />
-            <TextField
-              label="Name"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="name"
-              value={viewDepositForm.name}
-              onChange={input1}
-              focused
-              disabled
-            />
-            <TextField
-              label="Email"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="email"
-              value={viewDepositForm.email}
-              onChange={input1}
-              focused
-              disabled
-            />
+            <svg class="spinner" viewBox="0 0 50 50">
+              <circle
+                class="path"
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                stroke-width="5"
+              ></circle>
+            </svg>
           </div>
-          <br />
-          <div className="update-withdraw-request-section">
-            <TextField
-              label="Update BY"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="modified_by_name"
-              value={viewDepositForm.modified_by_name}
-              onChange={input1}
-              focused
-              disabled
-            />
-            <TextField
-              label="Bonus Percentage"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="mt5_bonus_percentage"
-              value={`${viewDepositForm.mt5_bonus_percentage}%`}
-              onChange={input1}
-              focused
-              disabled
-            />
-             <TextField
-              label="Bonus Amount"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="transfer_bonus_amount"
-              value={viewDepositForm.transfer_bonus_amount}
-              onChange={(e) => {
-                                if (!isNaN(Number(e.target.value))) {
-                                    input1(e)
-                                }
-                            }}
-              focused
-              disabled={storeDepositData.status == "0" ? false : true}
-            />     
-        </div>
-        <br />
-          <div className="update-withdraw-request-section">
-            <TextField
-              label="Remark"
-              variant="standard"
-              sx={{ width: "100%" }}
-              name="remark"
-              value={viewDepositForm.remark}
-              onChange={input1}
-              focused
-              disabled={storeDepositData.status == "0" ? false : true}
-            />
-            {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
-            <FormControl variant="standard" sx={{ width: "100%" }} focused>
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={viewDepositForm.status}
-                name="status"
+        );
+      } else {
+        return (
+          <div>
+            <div className="update-withdraw-request-section">
+              <TextField
+                label="Date"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="date"
+                value={viewDepositForm.date}
                 onChange={input1}
-                disabled={storeDepositData.status == "0" ? false : true}
-              >
-                <MenuItem value="0">Pending</MenuItem>
-                <MenuItem value="1">Approve</MenuItem>
-                <MenuItem value="2">Reject</MenuItem>
-              </Select>
-            </FormControl>
+                focused
+                disabled
+              />
+              <TextField
+                label="Name"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="name"
+                value={viewDepositForm.name}
+                onChange={input1}
+                focused
+                disabled
+              />
+              <TextField
+                label="Email"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="email"
+                value={viewDepositForm.email}
+                onChange={input1}
+                focused
+                disabled
+              />
+            </div>
+            <br />
+            <div className="update-withdraw-request-section">
+              <TextField
+                label="Update BY"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="modified_by_name"
+                value={viewDepositForm.modified_by_name}
+                onChange={input1}
+                focused
+                disabled
+              />
+              <TextField
+                label="Bonus Percentage"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="mt5_bonus_percentage"
+                value={`${viewDepositForm.mt5_bonus_percentage}%`}
+                onChange={input1}
+                focused
+                disabled
+              />
+              <TextField
+                label="Bonus Amount"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="transfer_bonus_amount"
+                value={viewDepositForm.transfer_bonus_amount}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    input1(e);
+                  }
+                }}
+                focused
+                disabled={
+                  storeDepositData.status == "0" &&
+                  prop.permission.update_mt5_bonus_offer == 1
+                    ? false
+                    : true
+                }
+              />
+            </div>
+            <br />
+            <div className="update-withdraw-request-section">
+              <TextField
+                label="Remark"
+                variant="standard"
+                sx={{ width: "100%" }}
+                name="remark"
+                value={viewDepositForm.remark}
+                onChange={input1}
+                focused
+                disabled={
+                  storeDepositData.status == "0" &&
+                  prop.permission.update_mt5_bonus_offer == 1
+                    ? false
+                    : true
+                }
+              />
+              {/* <TextField label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewDepositForm.status} onChange={input1} focused/> */}
+              <FormControl variant="standard" sx={{ width: "100%" }} focused>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={viewDepositForm.status}
+                  name="status"
+                  onChange={input1}
+                  disabled={
+                    storeDepositData.status == "0" &&
+                    prop.permission.update_mt5_bonus_offer == 1
+                      ? false
+                      : true
+                  }
+                >
+                  <MenuItem value="0">Pending</MenuItem>
+                  <MenuItem value="1">Approve</MenuItem>
+                  <MenuItem value="2">Reject</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
           </div>
-        </div>
-      );
-    }
+        );
+      }
     }
   };
 
@@ -949,7 +1011,6 @@ const MT5BonusRequests = () => {
   };
 
   const actionMenuPopup = (e, index) => {
- ;
     handleContextClose(index);
     if (e.target.classList.contains("reject")) {
       setDialogTitle("Reject");
@@ -1056,8 +1117,8 @@ const MT5BonusRequests = () => {
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("mt5_bonus_id", row.mt5_bonus_id);
-    storeDepositData.isLoader=true
-    setStoreDepositData({...storeDepositData})
+    storeDepositData.isLoader = true;
+    setStoreDepositData({ ...storeDepositData });
     await axios
       .post(`${Url}/ajaxfiles/mt5_bonus_request_manage.php`, param)
       .then((res) => {
@@ -1065,10 +1126,9 @@ const MT5BonusRequests = () => {
           localStorage.setItem("login", true);
           navigate("/");
         }
-        handleContextClose( row.mt5_bonus_id);
+        handleContextClose(row.mt5_bonus_id);
         if (res.data.status == "error") {
           toast.error(res.data.message);
- 
         } else {
           setviewDepositForm({
             date: res.data.data.date,
@@ -1076,11 +1136,11 @@ const MT5BonusRequests = () => {
             email: res.data.data.email,
             modified_by_name: res.data.data.modified_by_name,
             mt5_acc_no: res.data.data.mt5_acc_no,
-            mt5_bonus_percentage:res.data.data.mt5_bonus_percentage,
+            mt5_bonus_percentage: res.data.data.mt5_bonus_percentage,
             transfer_amount: res.data.data.transfer_amount,
             transfer_bonus_amount: res.data.data.transfer_bonus_amount,
             remark: res.data.data.remark,
-          status: res.data.data.claim_status,
+            status: res.data.data.claim_status,
             mt5_bonus_id: res.data.data.mt5_bonus_id,
             isLoader: false,
           });
@@ -1136,7 +1196,6 @@ const MT5BonusRequests = () => {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
-
     }
     param.append("search", search);
     param.append("type", depositForm.live_account);
@@ -1209,9 +1268,8 @@ const MT5BonusRequests = () => {
                       </Grid>
                     </Grid>
                   </CardContent>
-               
                 </Paper>
-               
+
                 <BootstrapDialog
                   onClose={handleClose}
                   aria-labelledby="customized-dialog-title"

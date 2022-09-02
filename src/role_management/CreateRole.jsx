@@ -24,7 +24,7 @@ const CreateRole = () => {
     name: "",
     description: "",
     accessId: "",
-    isLoader: false
+    isLoader: false,
   });
   const [data, setData] = useState([]);
   toast.configure();
@@ -39,23 +39,26 @@ const CreateRole = () => {
       data.forEach((element) => {
         if (element.active == true) {
           activeMenuIds.push(element.menu_id);
-          var subMenuactiveIds = element.sub_menu_list.filter((x) => x.active == true).map((sub) => {
-            return sub.menu_id;
-          });
+          var subMenuactiveIds = element.sub_menu_list
+            .filter((x) => x.active == true)
+            .map((sub) => {
+              return sub.menu_id;
+            });
           activeMenuIds.push(...subMenuactiveIds);
         }
-      })
+      });
 
       const param = new FormData();
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "edit_role");
       param.append("role_id", id);
       param.append("role_name", form.name);
       param.append("role_description", form.description);
-      param.append("menu_access_menu_ids", activeMenuIds.join(','));
+      param.append("menu_access_menu_ids", activeMenuIds.join(","));
       axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
         if (res.data.message == "Session has been expired") {
           localStorage.setItem("login", true);
@@ -81,22 +84,25 @@ const CreateRole = () => {
       data.forEach((element) => {
         if (element.active == true) {
           activeMenuIds.push(element.menu_id);
-          var subMenuactiveIds = element.sub_menu_list.filter((x) => x.active == true).map((sub) => {
-            return sub.menu_id;
-          });
+          var subMenuactiveIds = element.sub_menu_list
+            .filter((x) => x.active == true)
+            .map((sub) => {
+              return sub.menu_id;
+            });
           activeMenuIds.push(...subMenuactiveIds);
         }
-      })
+      });
 
       const param = new FormData();
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "add_role");
       param.append("role_name", form.name);
       param.append("role_description", form.description);
-      param.append("menu_access_menu_ids", activeMenuIds.join(','));
+      param.append("menu_access_menu_ids", activeMenuIds.join(","));
       axios.post(Url + "/ajaxfiles/role_manage.php", param).then((res) => {
         if (res.data.message == "Session has been expired") {
           localStorage.setItem("login", true);
@@ -117,6 +123,7 @@ const CreateRole = () => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     if (id) {
       param.append("view_role_id", id);
@@ -186,7 +193,10 @@ const CreateRole = () => {
                   className="pending-all-15px"
                 >
                   <div className="create-role-content-section">
-                    <div className="input-section" style={{flexDirection:'column', gap: '0px'}}>
+                    <div
+                      className="input-section"
+                      style={{ flexDirection: "column", gap: "0px" }}
+                    >
                       <b>Role Name</b>
                       <input
                         type="text"
@@ -197,8 +207,11 @@ const CreateRole = () => {
                         onChange={input}
                       />
                     </div>
-                    <div className="input-section" style={{flexDirection:'column', gap: '0px'}}>
-                    <b>Role Description</b>
+                    <div
+                      className="input-section"
+                      style={{ flexDirection: "column", gap: "0px" }}
+                    >
+                      <b>Role Description</b>
                       <input
                         type="text"
                         className="create-role-input"
@@ -209,18 +222,20 @@ const CreateRole = () => {
                       />
                     </div>
                     <div className="input-section">
-                      <label>All <small>(select/unselect)</small></label>
+                      <label>
+                        All <small>(select/unselect)</small>
+                      </label>
                       <Switch
-                      onChange={(e) => {
-                        data.forEach((element) => {
-                          element.active = e.target.checked;
-                          element.sub_menu_list.forEach((subMenu) => {
-                            subMenu.active = e.target.checked;
+                        onChange={(e) => {
+                          data.forEach((element) => {
+                            element.active = e.target.checked;
+                            element.sub_menu_list.forEach((subMenu) => {
+                              subMenu.active = e.target.checked;
+                            });
                           });
-                        });
-                        setData([...data]);
-                      }}
-                    />
+                          setData([...data]);
+                        }}
+                      />
                     </div>
                     {/* <br/> */}
                     <ul className="role-management-section">
@@ -228,16 +243,33 @@ const CreateRole = () => {
                         return (
                           <li className="main-menu-section">
                             <a
-                              className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""
-                                }`}
+                              className={`menu-${index} ${
+                                open[`menu-${index}`] ? "active" : ""
+                              }`}
                               onClick={handleClick}
                             >
                               <div>
-                                <i className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""} material-icons`}  onClick={handleClick}>
+                                <i
+                                  className={`menu-${index} ${
+                                    open[`menu-${index}`] ? "active" : ""
+                                  } material-icons`}
+                                  onClick={handleClick}
+                                >
                                   {item.icon_class}
                                 </i>
-                                <span className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""
-                                }`} onClick={handleClick}>{item.menu_name} <small>({item.menu_label})</small> {(item.description == "" || item.description == null) ? "" : "- "+item.description} </span>
+                                <span
+                                  className={`menu-${index} ${
+                                    open[`menu-${index}`] ? "active" : ""
+                                  }`}
+                                  onClick={handleClick}
+                                >
+                                  {item.menu_name}{" "}
+                                  <small>({item.menu_label})</small>{" "}
+                                  {item.description == "" ||
+                                  item.description == null
+                                    ? ""
+                                    : "- " + item.description}{" "}
+                                </span>
                               </div>
 
                               <div>
@@ -253,7 +285,9 @@ const CreateRole = () => {
                                 />
                                 {item.sub_menu_list.length > 0 ? (
                                   <span
-                                    className={`menu-${index} ${open[`menu-${index}`] ? "active" : ""} sidebar-icon-indicator`}
+                                    className={`menu-${index} ${
+                                      open[`menu-${index}`] ? "active" : ""
+                                    } sidebar-icon-indicator`}
                                     onClick={handleClick}
                                   >
                                     {open[`menu-${index}`] ? (
@@ -277,19 +311,42 @@ const CreateRole = () => {
                                 <ul className="sub-menu-section">
                                   {item.sub_menu_list.map((subMenu) => {
                                     return (
-                                      <li className={`sub-menu ${(subMenu.menu_label == "Permission") ? "permission" : ""}`}>
-                                        <span className="sub-menu-title">{subMenu.menu_name} <small>({subMenu.menu_label})</small>  {(subMenu.description == "" || subMenu.description == null) ? "" : "- "+subMenu.description}</span>
-                                        <Switch checked={subMenu.active ? subMenu.active : false} onChange={(e) => {
-                                          subMenu.active = e.target.checked;
-                                          // setData([...data]);
-                                          var activeMenu = item.sub_menu_list.filter((x) => x.active == true);
-                                          if (activeMenu.length > 0) {
-                                            item.active = true;
-                                          } else {
-                                            // item.active = false;
+                                      <li
+                                        className={`sub-menu ${
+                                          subMenu.menu_label == "Permission"
+                                            ? "permission"
+                                            : ""
+                                        }`}
+                                      >
+                                        <span className="sub-menu-title">
+                                          {subMenu.menu_name}{" "}
+                                          <small>({subMenu.menu_label})</small>{" "}
+                                          {subMenu.description == "" ||
+                                          subMenu.description == null
+                                            ? ""
+                                            : "- " + subMenu.description}
+                                        </span>
+                                        <Switch
+                                          checked={
+                                            subMenu.active
+                                              ? subMenu.active
+                                              : false
                                           }
-                                          setData([...data]);
-                                        }} />
+                                          onChange={(e) => {
+                                            subMenu.active = e.target.checked;
+                                            // setData([...data]);
+                                            var activeMenu =
+                                              item.sub_menu_list.filter(
+                                                (x) => x.active == true
+                                              );
+                                            if (activeMenu.length > 0) {
+                                              item.active = true;
+                                            } else {
+                                              // item.active = false;
+                                            }
+                                            setData([...data]);
+                                          }}
+                                        />
                                       </li>
                                     );
                                   })}

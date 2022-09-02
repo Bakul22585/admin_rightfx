@@ -99,7 +99,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const PammUser = () => {
+const PammUser = (prop) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -321,14 +321,18 @@ const PammUser = () => {
       cell: (row) => {
         return (
           <div className="actionButtonGroup">
-            <Button
-              className="btn-edit"
-              onClick={(event) => edit(row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </Button>
+            {prop.permission.update_user_details == 1 ? (
+              <Button
+                className="btn-edit"
+                onClick={(event) => edit(row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },

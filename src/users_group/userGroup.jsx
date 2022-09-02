@@ -88,7 +88,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-const UsersGroups = () => {
+const UsersGroups = (prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -196,22 +196,30 @@ const UsersGroups = () => {
       cell: (row) => {
         return (
           <div className="actionButtonGroup">
-            <Button
-              className="btn-edit"
-              onClick={(event) => editGroup(row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </Button>
-            <Button
-              className="btn-close"
-              onClick={(event) => actionMenuPopup(event, row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </Button>
+            {prop.permission.update_user_group == 1 ? (
+              <Button
+                className="btn-edit"
+                onClick={(event) => editGroup(row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
+            {prop.permission.delete_user_group == 1 ? (
+              <Button
+                className="btn-close"
+                onClick={(event) => actionMenuPopup(event, row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -494,13 +502,17 @@ const UsersGroups = () => {
                   className="pending-all-15px"
                 >
                   <div className="actionGroupButton">
-                    <Button
-                      variant="contained"
-                      className="add-group"
-                      onClick={handleClickOpen}
-                    >
-                      Add
-                    </Button>
+                    {prop.permission.add_user_group == 1 ? (
+                      <Button
+                        variant="contained"
+                        className="add-group"
+                        onClick={handleClickOpen}
+                      >
+                        Add
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <br />
                   <CardContent className="py-3">

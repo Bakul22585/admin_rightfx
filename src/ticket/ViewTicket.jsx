@@ -51,7 +51,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const ViewTicket = () => {
+const ViewTicket = (prop) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [selectedFile, setSelectedFile] = useState();
@@ -217,60 +217,67 @@ const ViewTicket = () => {
                               <div className="content-area">
                                 {viewTicketData.data.conversation
                                   ? viewTicketData.data.conversation.map(
-                                    (item) => {
-                                      if (item.position == "right") {
-                                        return (
-                                          <div className="chat right-side">
-                                            <div className="chat-body">
-                                              <div className="chat-text">
-                                                <p>
-                                                {
-                                                  (item.attachment != "") ? <CustomImageModal image={item.attachment} className='ticket-upload-image'/> : ""
-                                                }
-                                                  {item.ticketconversation}
-                                                </p>
+                                      (item) => {
+                                        if (item.position == "right") {
+                                          return (
+                                            <div className="chat right-side">
+                                              <div className="chat-body">
+                                                <div className="chat-text">
+                                                  <p>
+                                                    {item.attachment != "" ? (
+                                                      <CustomImageModal
+                                                        image={item.attachment}
+                                                        className="ticket-upload-image"
+                                                      />
+                                                    ) : (
+                                                      ""
+                                                    )}
+                                                    {item.ticketconversation}
+                                                  </p>
+                                                </div>
+                                              </div>
+                                              <div className="chat-avatar">
+                                                <a className="avatar">
+                                                  <img
+                                                    src={item.avtar}
+                                                    class="circle"
+                                                    alt="avatar"
+                                                  />
+                                                </a>
                                               </div>
                                             </div>
-                                            <div className="chat-avatar">
-                                              <a className="avatar">
-                                                <img
-                                                  src={item.avtar}
-                                                  class="circle"
-                                                  alt="avatar"
-                                                />
-                                              </a>
-                                            </div>
-                                          </div>
-                                        );
-                                      } else {
-                                        return (
-                                          <div className="chat left-side">
-                                            <div className="chat-avatar">
-                                              <a className="avatar">
-                                                <img
-                                                  src={item.avtar}
-                                                  class="circle"
-                                                  alt="avatar"
-                                                />
-                                              </a>
-                                            </div>
-                                            <div className="chat-body">
-                                              <div className="chat-text">
-                                                {
-                                                  (item.attachment != "") ? <img
-                                                    src={item.attachment}
-                                                  /> : ""
-                                                }
-                                                <p>
-                                                  {item.ticketconversation}
-                                                </p>
+                                          );
+                                        } else {
+                                          return (
+                                            <div className="chat left-side">
+                                              <div className="chat-avatar">
+                                                <a className="avatar">
+                                                  <img
+                                                    src={item.avtar}
+                                                    class="circle"
+                                                    alt="avatar"
+                                                  />
+                                                </a>
+                                              </div>
+                                              <div className="chat-body">
+                                                <div className="chat-text">
+                                                  {item.attachment != "" ? (
+                                                    <img
+                                                      src={item.attachment}
+                                                    />
+                                                  ) : (
+                                                    ""
+                                                  )}
+                                                  <p>
+                                                    {item.ticketconversation}
+                                                  </p>
+                                                </div>
                                               </div>
                                             </div>
-                                          </div>
-                                        );
+                                          );
+                                        }
                                       }
-                                    }
-                                  )
+                                    )
                                   : ""}
 
                                 {/* <div className="chat left-side">
@@ -388,113 +395,118 @@ const ViewTicket = () => {
                       </div>
                       <hr />
                       <div className="action-section">
-                        <div className="input-section">
-                          <input
-                            name="title"
-                            className="send-message-text-element"
-                            value={form.message}
-                            onChange={(e) => {
-                              setForm({
-                                ...form,
-                                message: e.target.value,
-                              });
-                            }}
-                            placeholder="Send Message"
-                            displayEmpty
-                            inputProps={{
-                              "aria-label": "Without label",
-                            }}
-                          />
-                          {form.isLoader ? (
-                            <Button
-                              className="send-message-disabled-button"
-                              disabled
-                            >
-                              <svg class="spinner" viewBox="0 0 50 50">
-                                <circle
-                                  class="path"
-                                  cx="25"
-                                  cy="25"
-                                  r="20"
-                                  fill="none"
-                                  stroke-width="5"
-                                ></circle>
-                              </svg>
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="contained"
-                              className="send-message"
-                              onClick={sendMessage}
-                            >
-                              <i className="material-icons">send</i> &nbsp;Send
-                            </Button>
-                          )}
-                          {form.isLoader ? (
-                            <Button
-                              className="send-message-disabled-button"
-                              disabled
-                            >
-                              <svg class="spinner" viewBox="0 0 50 50">
-                                <circle
-                                  class="path"
-                                  cx="25"
-                                  cy="25"
-                                  r="20"
-                                  fill="none"
-                                  stroke-width="5"
-                                ></circle>
-                              </svg>
-                            </Button>
-                          ) : (
-                            <label
-                              htmlFor="contained-button-file"
-                              className="ticket-file-upload"
-                            >
-                              <Input
-                                accept="image/*"
-                                id="contained-button-file"
-                                multiple
-                                type="file"
-                                onChange={onSelectFile}
-                              />
-                              {selectedFile ? (
-                                <img
-                                  src={preview}
-                                  className="deposit-upload-image-preview"
+                        {prop.permission.replay_ticket == 1 ? (
+                          <div className="input-section">
+                            <input
+                              name="title"
+                              className="send-message-text-element"
+                              value={form.message}
+                              onChange={(e) => {
+                                setForm({
+                                  ...form,
+                                  message: e.target.value,
+                                });
+                              }}
+                              placeholder="Send Message"
+                              displayEmpty
+                              inputProps={{
+                                "aria-label": "Without label",
+                              }}
+                            />
+                            {form.isLoader ? (
+                              <Button
+                                className="send-message-disabled-button"
+                                disabled
+                              >
+                                <svg class="spinner" viewBox="0 0 50 50">
+                                  <circle
+                                    class="path"
+                                    cx="25"
+                                    cy="25"
+                                    r="20"
+                                    fill="none"
+                                    stroke-width="5"
+                                  ></circle>
+                                </svg>
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                className="send-message"
+                                onClick={sendMessage}
+                              >
+                                <i className="material-icons">send</i>{" "}
+                                &nbsp;Send
+                              </Button>
+                            )}
+                            {form.isLoader ? (
+                              <Button
+                                className="send-message-disabled-button"
+                                disabled
+                              >
+                                <svg class="spinner" viewBox="0 0 50 50">
+                                  <circle
+                                    class="path"
+                                    cx="25"
+                                    cy="25"
+                                    r="20"
+                                    fill="none"
+                                    stroke-width="5"
+                                  ></circle>
+                                </svg>
+                              </Button>
+                            ) : (
+                              <label
+                                htmlFor="contained-button-file"
+                                className="ticket-file-upload"
+                              >
+                                <Input
+                                  accept="image/*"
+                                  id="contained-button-file"
+                                  multiple
+                                  type="file"
+                                  onChange={onSelectFile}
                                 />
-                              ) : (
-                                <Button
-                                  className="site-button-color"
-                                  variant="contained"
-                                  component="span"
-                                >
-                                  <i className="material-icons">backup</i>
-                                  &nbsp;Upload
-                                </Button>
-                              )}
-                            </label>
-                          )}
-                          <Select
-                            value={form.status}
-                            displayEmpty
-                            inputProps={{
-                              "aria-label": "Without label",
-                            }}
-                            className="table-dropdown"
-                            input={<BootstrapInput />}
-                            name="interest"
-                            onChange={(e) =>
-                              setForm({
-                                ...form,
-                                status: e.target.value,
-                              })
-                            }
-                          >
-                            <MenuItem value="Open">Open</MenuItem>
-                            <MenuItem value="Close">Close</MenuItem>
-                          </Select>
-                        </div>
+                                {selectedFile ? (
+                                  <img
+                                    src={preview}
+                                    className="deposit-upload-image-preview"
+                                  />
+                                ) : (
+                                  <Button
+                                    className="site-button-color"
+                                    variant="contained"
+                                    component="span"
+                                  >
+                                    <i className="material-icons">backup</i>
+                                    &nbsp;Upload
+                                  </Button>
+                                )}
+                              </label>
+                            )}
+                            <Select
+                              value={form.status}
+                              displayEmpty
+                              inputProps={{
+                                "aria-label": "Without label",
+                              }}
+                              className="table-dropdown"
+                              input={<BootstrapInput />}
+                              name="interest"
+                              onChange={(e) =>
+                                setForm({
+                                  ...form,
+                                  status: e.target.value,
+                                })
+                              }
+                            >
+                              <MenuItem value="Open">Open</MenuItem>
+                              <MenuItem value="Close">Close</MenuItem>
+                            </Select>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </Paper>
                   </Grid>

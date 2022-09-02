@@ -52,10 +52,10 @@ export interface DialogTitleProps {
   children?: React.ReactNode;
   onClose: () => void;
 }
+const re = /^[A-Za-z_ ]*$/;
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
-
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
@@ -107,7 +107,7 @@ function TabPanel(props) {
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
-const MmManagement = () => {
+const MmManagement = (prop) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -321,14 +321,18 @@ const MmManagement = () => {
       cell: (row) => {
         return (
           <div className="actionButtonGroup">
-            <Button
-              className="btn-edit"
-              onClick={(event) => edit(row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </Button>
+            {prop.permission.update_manager_details == 1 ? (
+              <Button
+                className="btn-edit"
+                onClick={(event) => edit(row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -430,69 +434,91 @@ const MmManagement = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              id={`actionButton_${row.sr_no}`}
-              aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.sr_no)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.sr_no}`}
-              anchorEl={openTableMenus[row.sr_no]}
-              open={Boolean(openTableMenus[row.sr_no])}
-              onClose={(event) => handleContextClose(row.sr_no)}
-            >
-              <MenuItem
-                className="view"
-                {...row}
-                onClick={(event) => actionMenuPopup(event, row)}
-              >
-                <i
-                  className="material-icons view"
-                  onClick={(event) => actionMenuPopup(event, row)}
-                >
-                  receipt
-                </i>
-                &nbsp;&nbsp;View
-              </MenuItem>
-              <MenuItem
-                className="edit"
-                {...row}
-                onClick={(event) => actionMenuPopup(event, row)}
-              >
-                <i className="edit material-icons">visibility</i>
-                &nbsp;&nbsp;Edit
-              </MenuItem>
-              {row.status != "1" ? (
-                <MenuItem
-                  className="approve"
+            {prop.permission.view_mm_kyc == 1 ||
+            prop.permission.approve_mm_kyc == 1 ||
+            prop.permission.update_mm_kyc == 1 ||
+            prop.permission.reject_mm_kyc == 1 ? (
+              <>
+                <Button
+                  id={`actionButton_${row.sr_no}`}
+                  aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) => handleContextClick(event, row.sr_no)}
                   {...row}
-                  onClick={(event) => actionMenuPopup(event, row)}
+                  style={{ color: "rgb(144 145 139)" }}
                 >
-                  <i className="approve material-icons font-color-approved">
-                    thumb_up
-                  </i>
-                  &nbsp;&nbsp;Approved
-                </MenuItem>
-              ) : (
-                ""
-              )}
-              <MenuItem
-                className="reject"
-                {...row}
-                onClick={(event) => actionMenuPopup(event, row)}
-              >
-                <i className="reject material-icons font-color-rejected">
-                  thumb_down
-                </i>
-                &nbsp;&nbsp;Rejected
-              </MenuItem>
-            </Menu>
+                  <i className="material-icons">more_horiz</i>
+                </Button>
+                <Menu
+                  id={`basic-menu-${row.sr_no}`}
+                  anchorEl={openTableMenus[row.sr_no]}
+                  open={Boolean(openTableMenus[row.sr_no])}
+                  onClose={(event) => handleContextClose(row.sr_no)}
+                >
+                  {prop.permission.view_mm_kyc == 1 ? (
+                    <MenuItem
+                      className="view"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i
+                        className="material-icons view"
+                        onClick={(event) => actionMenuPopup(event, row)}
+                      >
+                        receipt
+                      </i>
+                      &nbsp;&nbsp;View
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {prop.permission.update_mm_kyc == 1 ? (
+                    <MenuItem
+                      className="edit"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i className="edit material-icons">visibility</i>
+                      &nbsp;&nbsp;Edit
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+
+                  {row.status != "1" && prop.permission.approve_mm_kyc == 1 ? (
+                    <MenuItem
+                      className="approve"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i className="approve material-icons font-color-approved">
+                        thumb_up
+                      </i>
+                      &nbsp;&nbsp;Approved
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {prop.permission.reject_mm_kyc == 1 ? (
+                    <MenuItem
+                      className="reject"
+                      {...row}
+                      onClick={(event) => actionMenuPopup(event, row)}
+                    >
+                      <i className="reject material-icons font-color-rejected">
+                        thumb_down
+                      </i>
+                      &nbsp;&nbsp;Rejected
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                </Menu>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -698,6 +724,23 @@ const MmManagement = () => {
         additional_email: "",
         additional_contact_number: "",
       });
+      setinputinfoTrue({
+        first_name: false,
+        last_name: false,
+        email: false,
+        mobile: false,
+        gender: false,
+        dob: false,
+        address: false,
+        country: false,
+        state: false,
+        city: false,
+        status: false,
+        password: false,
+        confirm_password: false,
+        additional_email: false,
+        additional_contact_number: false,
+      });
     }
     setOpen(true);
   };
@@ -721,7 +764,17 @@ const MmManagement = () => {
                   ? "First Name is required"
                   : ""
               }
-              onChange={input}
+              // onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
               sx={{ width: "100%" }}
               name="first_name"
             />
@@ -731,8 +784,18 @@ const MmManagement = () => {
               className="input-font-small"
               label="Last Name"
               variant="standard"
-              onChange={input}
+              // onChange={input}
               onBlur={inputtrueFalse}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
               value={form.last_name}
               error={
                 form.last_name == "" && inputinfoTrue.last_name ? true : false
@@ -892,7 +955,7 @@ const MmManagement = () => {
               className="input-font-small"
               label="State"
               variant="standard"
-              onChange={input}
+              // onChange={input}
               onBlur={inputtrueFalse}
               error={form.state == "" && inputinfoTrue.state ? true : false}
               helperText={
@@ -900,6 +963,16 @@ const MmManagement = () => {
                   ? "State is required"
                   : ""
               }
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
               sx={{ width: "100%" }}
               name="state"
             />
@@ -914,13 +987,27 @@ const MmManagement = () => {
               helperText={
                 form.city == "" && inputinfoTrue.city ? "City is required" : ""
               }
-              onBlur={inputtrueFalse}
+              // onBlur={inputtrueFalse}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
               sx={{ width: "100%" }}
               name="city"
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.status == "" && inputinfoTrue.status ? true : false}
+            >
               <InputLabel>Status</InputLabel>
               <Select
                 label
@@ -932,6 +1019,11 @@ const MmManagement = () => {
                 <MenuItem value="0">Pending</MenuItem>
                 <MenuItem value="1">Approve</MenuItem>
               </Select>
+              {form.status == "" && inputinfoTrue.status ? (
+                <FormHelperText>Status is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -1009,7 +1101,26 @@ const MmManagement = () => {
               className="input-font-small"
               label="First Name"
               variant="standard"
-              onChange={input}
+              onBlur={inputtrueFalse}
+              error={
+                form.first_name == "" && inputinfoTrue.first_name ? true : false
+              }
+              helperText={
+                form.first_name == "" && inputinfoTrue.first_name
+                  ? "First Name is required"
+                  : ""
+              }
+              // onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
               sx={{ width: "100%" }}
               name="first_name"
               value={form.first_name}
@@ -1020,9 +1131,28 @@ const MmManagement = () => {
               className="input-font-small"
               label="Last Name"
               variant="standard"
-              onChange={input}
+              // onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="last_name"
+              error={
+                form.last_name == "" && inputinfoTrue.last_name ? true : false
+              }
+              helperText={
+                form.last_name == "" && inputinfoTrue.last_name
+                  ? "Last Name is required"
+                  : ""
+              }
               value={form.last_name}
             />
           </div>
@@ -1032,6 +1162,25 @@ const MmManagement = () => {
               label="Email"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
+              helperText={
+                form.email == "" && inputinfoTrue.email
+                  ? "Email is required"
+                  : !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                      form.email
+                    ) && inputinfoTrue.email
+                  ? "Enter a valid email"
+                  : ""
+              }
+              error={
+                (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                  form.email
+                ) ||
+                  form.email == "") &&
+                inputinfoTrue.email == true
+                  ? true
+                  : false
+              }
               sx={{ width: "100%" }}
               name="email"
               value={form.email}
@@ -1054,6 +1203,13 @@ const MmManagement = () => {
               label="Mobile"
               variant="standard"
               name="mobile"
+              onBlur={inputtrueFalse}
+              error={form.mobile == "" && inputinfoTrue.mobile ? true : false}
+              helperText={
+                form.mobile == "" && inputinfoTrue.mobile
+                  ? "Mobile is required"
+                  : ""
+              }
               value={form.mobile}
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
@@ -1075,18 +1231,28 @@ const MmManagement = () => {
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.gender == "" && inputinfoTrue.gender ? true : false}
+            >
               <InputLabel>Gender</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="gender"
+                onBlur={inputtrueFalse}
                 onChange={input}
                 value={form.gender}
               >
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </Select>
+              {form.gender == "" && inputinfoTrue.gender ? (
+                <FormHelperText>Gender is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -1095,9 +1261,16 @@ const MmManagement = () => {
               label="Date Of Birth"
               type="date"
               variant="standard"
+              onBlur={inputtrueFalse}
               onChange={input}
               sx={{ width: "100%" }}
               name="dob"
+              error={form.dob == "" && inputinfoTrue.dob ? true : false}
+              helperText={
+                form.dob == "" && inputinfoTrue.dob
+                  ? "Date Of Birth is required"
+                  : ""
+              }
               value={form.dob}
               focused
             />
@@ -1108,20 +1281,32 @@ const MmManagement = () => {
               label="Address"
               variant="standard"
               onChange={input}
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="address"
+              error={form.address == "" && inputinfoTrue.address ? true : false}
+              helperText={
+                form.address == "" && inputinfoTrue.address
+                  ? "Address is required"
+                  : ""
+              }
               value={form.address}
               multiline
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.country == "" && inputinfoTrue.country ? true : false}
+            >
               <InputLabel>Country</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="country"
                 onChange={input}
+                onBlur={inputtrueFalse}
                 value={form.country}
               >
                 {countryData.data.map((item) => {
@@ -1130,6 +1315,11 @@ const MmManagement = () => {
                   );
                 })}
               </Select>
+              {form.country == "" && inputinfoTrue.country ? (
+                <FormHelperText>Country is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -1137,9 +1327,25 @@ const MmManagement = () => {
               className="input-font-small"
               label="State"
               variant="standard"
-              onChange={input}
+              onBlur={inputtrueFalse}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
               sx={{ width: "100%" }}
               name="state"
+              error={form.state == "" && inputinfoTrue.state ? true : false}
+              helperText={
+                form.state == "" && inputinfoTrue.state
+                  ? "State is required"
+                  : ""
+              }
               value={form.state}
             />
           </div>
@@ -1148,9 +1354,23 @@ const MmManagement = () => {
               className="input-font-small"
               label="City"
               variant="standard"
-              onChange={input}
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
+              error={form.city == "" && inputinfoTrue.city ? true : false}
+              helperText={
+                form.city == "" && inputinfoTrue.city ? "City is required" : ""
+              }
               sx={{ width: "100%" }}
               name="city"
+              onBlur={inputtrueFalse}
               value={form.city}
             />
           </div>
@@ -1158,18 +1378,28 @@ const MmManagement = () => {
             ""
           ) : (
             <div className="input-element">
-              <FormControl variant="standard" sx={{ width: "100%" }}>
+              <FormControl
+                variant="standard"
+                sx={{ width: "100%" }}
+                error={form.status == "" && inputinfoTrue.status ? true : false}
+              >
                 <InputLabel>Status</InputLabel>
                 <Select
                   label
                   className="select-font-small"
                   name="status"
+                  onBlur={inputtrueFalse}
                   onChange={input}
                   value={form.status}
                 >
                   <MenuItem value="0">Pending</MenuItem>
                   <MenuItem value="1">Approve</MenuItem>
                 </Select>
+                {form.status == "" && inputinfoTrue.status ? (
+                  <FormHelperText>Status is required</FormHelperText>
+                ) : (
+                  ""
+                )}
               </FormControl>
             </div>
           )}
@@ -1739,6 +1969,23 @@ const MmManagement = () => {
           additional_email: "",
           additional_contact_number: "",
         });
+        setinputinfoTrue({
+          first_name: false,
+          last_name: false,
+          email: false,
+          mobile: false,
+          gender: false,
+          dob: false,
+          address: false,
+          country: false,
+          state: false,
+          city: false,
+          status: false,
+          password: false,
+          confirm_password: false,
+          additional_email: false,
+          additional_contact_number: false,
+        });
         if (res.data.data.user_status == "1") {
           setApprovestatus(true);
         } else {
@@ -1871,7 +2118,11 @@ const MmManagement = () => {
                   className="tabsBar"
                 >
                   <Tab label="MONEY MANAGER LIST" />
-                  <Tab label="MONEY MANAGER KYC LIST" />
+                  {prop.permission.mm_kyc_list == 1 ? (
+                    <Tab label="MONEY MANAGER KYC LIST" />
+                  ) : (
+                    ""
+                  )}
                 </Tabs>
                 <SwipeableViews
                   axis={theme.direction === "rtl" ? "x-reverse" : "x"}

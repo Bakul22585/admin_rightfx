@@ -2,6 +2,7 @@ import {
   Button,
   CardContent,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -67,7 +68,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const Target = () => {
+const Target = (prop) => {
   const navigate = useNavigate();
   var [salesPerson, setSalesPerson] = useState({});
   const [reportData, setReportData] = useState({
@@ -75,6 +76,12 @@ const Target = () => {
     month: "",
     year: "",
     type: "",
+  });
+
+  const [inputReportinfoTrue, setinputReportinfoTrue] = useState({
+    month: false,
+    year: false,
+    type: false,
   });
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState("");
@@ -90,6 +97,12 @@ const Target = () => {
     money_in_target: "",
     id: "",
     isLoader: false,
+  });
+
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    ac_target: false,
+    money_in_target: false,
+    id: false,
   });
   const [searchBy, setSearchBy] = useState([
     {
@@ -257,9 +270,13 @@ const Target = () => {
       cell: (row) => {
         return (
           <div>
-            <Button onClick={(e) => report(row)}>
-              <i className="material-icons">stacked_bar_chart</i>
-            </Button>
+            {prop.permission.export_saleman_insantive == 1 ? (
+              <Button onClick={(e) => report(row)}>
+                <i className="material-icons">stacked_bar_chart</i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -272,9 +289,13 @@ const Target = () => {
       cell: (row) => {
         return (
           <div>
-            <Button onClick={(e) => edit(row)}>
-              <i className="material-icons">track_changes</i>
-            </Button>
+            {prop.permission.export_saleman_target == 1 ? (
+              <Button onClick={(e) => edit(row)}>
+                <i className="material-icons">track_changes</i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -359,6 +380,15 @@ const Target = () => {
       };
     });
   };
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
 
   const inputReport = (e) => {
     const { name, value } = e.target;
@@ -367,6 +397,15 @@ const Target = () => {
       return {
         ...prevalue,
         [name]: value,
+      };
+    });
+  };
+  const inputReporttrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputReportinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
       };
     });
   };
@@ -413,6 +452,11 @@ const Target = () => {
       type: "",
     });
     setDialogTitle("Report");
+    setinputReportinfoTrue({
+      month: false,
+      year: false,
+      type: false,
+    });
     setOpen(true);
   };
 
@@ -428,6 +472,15 @@ const Target = () => {
               name="ac_target"
               // onChange={input}
               value={form.ac_target}
+              onBlur={inputtrueFalse}
+              error={
+                form.ac_target == "" && inputinfoTrue.ac_target ? true : false
+              }
+              helperText={
+                form.ac_target == "" && inputinfoTrue.ac_target
+                  ? "Account Target is required"
+                  : ""
+              }
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
                   input(e);
@@ -444,6 +497,17 @@ const Target = () => {
               sx={{ width: "100%" }}
               name="money_in_target"
               // onChange={input}
+              error={
+                form.money_in_target == "" && inputinfoTrue.money_in_target
+                  ? true
+                  : false
+              }
+              helperText={
+                form.money_in_target == "" && inputinfoTrue.money_in_target
+                  ? "Money In Target is required"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
                   input(e);
@@ -459,17 +523,29 @@ const Target = () => {
       return (
         <div>
           <div className="element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                reportData.type == "" && inputReportinfoTrue.type ? true : false
+              }
+            >
               <InputLabel>Report Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="type"
+                onBlur={inputReporttrueFalse}
                 onChange={inputReport}
               >
                 <MenuItem value="1">Salesman Incentive</MenuItem>
                 <MenuItem value="2">Salesman Target</MenuItem>
               </Select>
+              {reportData.type == "" && inputReportinfoTrue.type ? (
+                <FormHelperText>Report Type is required </FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
@@ -481,6 +557,17 @@ const Target = () => {
               sx={{ width: "100%" }}
               name="month"
               value={reportData.month}
+              onBlur={inputReporttrueFalse}
+              error={
+                reportData.month == "" && inputReportinfoTrue.month
+                  ? true
+                  : false
+              }
+              helperText={
+                reportData.month == "" && inputReportinfoTrue.month
+                  ? "Month is required"
+                  : ""
+              }
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {
                   reportData.month = Number(e.target.value);
@@ -496,10 +583,19 @@ const Target = () => {
           <div className="element">
             <TextField
               type="text"
-              label="year"
+              label="Year"
               variant="standard"
               sx={{ width: "100%" }}
               name="year"
+              onBlur={inputReporttrueFalse}
+              error={
+                reportData.year == "" && inputReportinfoTrue.year ? true : false
+              }
+              helperText={
+                reportData.year == "" && inputReportinfoTrue.year
+                  ? "Year is required"
+                  : ""
+              }
               value={reportData.year}
               onChange={(e) => {
                 if (!isNaN(Number(e.target.value))) {

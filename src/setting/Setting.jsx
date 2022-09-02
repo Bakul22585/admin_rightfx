@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { IsApprove, Url } from "../global";
 import axios from "axios";
 
-const Setting = () => {
+const Setting = (prop) => {
   const navigate = useNavigate();
   const [upiSelectedFile, setUpiSelectedFile] = useState();
   const [upiPreview, setUpiPreview] = useState();
@@ -261,6 +261,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_copy_invest_active}
                                 name="is_copy_invest_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -271,6 +276,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_copy_withdraw_active}
                                 name="is_copy_withdraw_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -281,6 +291,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_deposit_active}
                                 name="is_deposit_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -291,6 +306,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_ib_withdraw_active}
                                 name="is_ib_withdraw_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -301,6 +321,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_pamm_invest_active}
                                 name="is_pamm_invest_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -311,6 +336,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_pamm_withdraw_active}
                                 name="is_pamm_withdraw_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -321,6 +351,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_transfer_active}
                                 name="is_transfer_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -331,6 +366,11 @@ const Setting = () => {
                               <Checkbox
                                 checked={form.is_withdrawal_active}
                                 name="is_withdrawal_active"
+                                disabled={
+                                  prop.permission.update_settings == 1
+                                    ? false
+                                    : true
+                                }
                                 onChange={input}
                               />
                             }
@@ -344,6 +384,11 @@ const Setting = () => {
                             variant="standard"
                             sx={{ width: "100%" }}
                             name="transfer_wallet_to_wallet_charges"
+                            disabled={
+                              prop.permission.update_settings == 1
+                                ? false
+                                : true
+                            }
                             value={form.transfer_wallet_to_wallet_charges}
                             onChange={(e) => {
                               if (!isNaN(Number(e.target.value))) {
@@ -379,34 +424,38 @@ const Setting = () => {
                                                     </label>
                                                 </div> */}
                         <br />
-                        <div className="action-button-section">
-                          {form.isloader ? (
-                            <Button
-                              variant="contained"
-                              className="btn-gradient btn-success"
-                              disabled
-                            >
-                              <svg class="spinner" viewBox="0 0 50 50">
-                                <circle
-                                  class="path"
-                                  cx="25"
-                                  cy="25"
-                                  r="20"
-                                  fill="none"
-                                  stroke-width="5"
-                                ></circle>
-                              </svg>
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="contained"
-                              className="btn-gradient btn-success"
-                              onClick={saveSetting}
-                            >
-                              Update
-                            </Button>
-                          )}
-                        </div>
+                        {prop.permission.update_settings == 1 ? (
+                          <div className="action-button-section">
+                            {form.isloader ? (
+                              <Button
+                                variant="contained"
+                                className="btn-gradient btn-success"
+                                disabled
+                              >
+                                <svg class="spinner" viewBox="0 0 50 50">
+                                  <circle
+                                    class="path"
+                                    cx="25"
+                                    cy="25"
+                                    r="20"
+                                    fill="none"
+                                    stroke-width="5"
+                                  ></circle>
+                                </svg>
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                className="btn-gradient btn-success"
+                                onClick={saveSetting}
+                              >
+                                Update
+                              </Button>
+                            )}
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </Grid>
                     </Grid>
                   </CardContent>

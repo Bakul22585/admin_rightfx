@@ -87,7 +87,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-const FAQEditor = () => {
+const FAQEditor = (prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -178,22 +178,30 @@ const FAQEditor = () => {
       cell: (row) => {
         return (
           <div className="actionButtonGroup">
-            <Button
-              className="btn-edit"
-              onClick={(event) => editFaqDetails(event, row.faq_id)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </Button>
-            <Button
-              className="btn-close"
-              onClick={(event) => actionMenuPopup(event, row.faq_id)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </Button>
+            {prop.permission.edit_faq == 1 ? (
+              <Button
+                className="btn-edit"
+                onClick={(event) => editFaqDetails(event, row.faq_id)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
+            {prop.permission.delete_faq == 1 ? (
+              <Button
+                className="btn-close"
+                onClick={(event) => actionMenuPopup(event, row.faq_id)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -578,13 +586,17 @@ const FAQEditor = () => {
                   className="pending-all-15px"
                 >
                   <div className="actionGroupButton">
-                    <Button
-                      variant="contained"
-                      className="add-faq"
-                      onClick={handleClickOpen}
-                    >
-                      Add
-                    </Button>
+                    {prop.permission.add_faq == 1 ? (
+                      <Button
+                        variant="contained"
+                        className="add-faq"
+                        onClick={handleClickOpen}
+                      >
+                        Add
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <br />
                   <CardContent className="py-3">

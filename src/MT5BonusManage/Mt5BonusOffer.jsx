@@ -108,7 +108,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Mt5BonusOffer = () => {
+const Mt5BonusOffer = (prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -336,21 +336,30 @@ const Mt5BonusOffer = () => {
       selector: (row) => {
         return (
           <div className="d-flex">
-            <Button
-              className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
-              onClick={() => {
-                actionMenuPopup("reject", row.id);
-              }}
-            >
-              <DeleteIcon sx={{ color: "red" }} />
-            </Button>
-            <Button
-              type="submit"
-              className="cursor-pointer mx-3 p-0 p-md-2 rounded-circle text-muted"
-              onClick={() => updateoffer(row)}
-            >
-              <CreateIcon sx={{ color: "#3D9730" }} />
-            </Button>
+            {prop.permission.update_mt5_bonus_offer == 1 ? (
+              <Button
+                type="submit"
+                className="cursor-pointer mx-3 p-0 p-md-2 rounded-circle text-muted"
+                onClick={() => updateoffer(row)}
+              >
+                <CreateIcon sx={{ color: "#3D9730" }} />
+              </Button>
+            ) : (
+              ""
+            )}
+
+            {prop.permission.delete_mt5_bonus_offer == 1 ? (
+              <Button
+                className="cursor-pointer p-0 p-md-2 rounded-circle text-muted"
+                onClick={() => {
+                  actionMenuPopup("reject", row.id);
+                }}
+              >
+                <DeleteIcon sx={{ color: "red" }} />
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -851,7 +860,12 @@ const Mt5BonusOffer = () => {
                   style={{ borderRadius: "10px" }}
                   className="pending-all-15px"
                 >
-                  <ColorButton onClick={onAdd}>Add Offer</ColorButton>
+                  {prop.permission.add_mt5_bonus_offer == 1 ? (
+                    <ColorButton onClick={onAdd}>Add Offer</ColorButton>
+                  ) : (
+                    ""
+                  )}
+
                   <CardContent className="py-3">
                     <Grid container spacing={2}>
                       <Grid item sm={12} md={12} lg={12}>

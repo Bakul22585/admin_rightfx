@@ -17,6 +17,7 @@ import {
   Select,
   TextField,
   FormHelperText,
+  Autocomplete,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -33,7 +34,7 @@ import Dialog from "@mui/material/Dialog";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const CommisionGroup = () => {
+const CommisionGroup = (prop) => {
   const [mt5GroupName, setmt5GroupName] = useState([]);
   const navigate = useNavigate();
   const [refresh, setRefresh] = useState(false);
@@ -47,8 +48,9 @@ const CommisionGroup = () => {
   const [param, setParam] = useState({});
   const [searchKeyword, setSearchKeyword] = useState("");
   const [resData, setResData] = useState({});
-
+  const [option, setOption] = useState([]);
   const [form, setForm] = useState({
+    assigned_role_id: {},
     ib_group_level_id: "",
     ib_group_main_id: "",
     group_name: "",
@@ -281,124 +283,152 @@ const CommisionGroup = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              id={`actionButton_${row.sr_no}`}
-              aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.sr_no)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.sr_no}`}
-              anchorEl={openTableMenus[row.sr_no]}
-              open={Boolean(openTableMenus[row.sr_no])}
-              onClose={(event) => handleContextClose(row.sr_no)}
-            >
-              <MenuItem
-                className="view"
-                {...row}
-                onClick={(event) => {
-                  setDialogTitle("View");
-                  setViewData(row);
-                  setOpenModel(true);
-                  handleContextClose(row.sr_no);
-                }}
-              >
-                <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-              </MenuItem>
-              <MenuItem
-                className="edit"
-                {...row}
-                onClick={(event) => {
-                  getMt5GroupName();
-                  setDialogTitle("Edit");
-                  setinputinfoTrue({
-                    ib_group_level_id: false,
-                    ib_group_main_id: false,
-                    group_name: false,
-                    ib_mt5group_name: false,
-                    ib_comapny_get: false,
-                    ib_company_passon: false,
-                    plan_title: false,
-                    minimum_deposit: false,
-                    spread: false,
-                    commission: false,
-                    leverage: false,
-                    swap_free: false,
-                    trading_plaform: false,
-                    execution: false,
-                    trading_instrument: false,
-                    account_currency: false,
-                    minimum_trade_size: false,
-                    stop_out_level: false,
-                    is_default: false,
-                    is_private: false,
-                    commission_type: false,
-                    level: false,
-                    will_get: false,
-                    will_passon: false,
-                    partnership: false,
-                    ib_company_forex: false,
-                    ib_company_bullion: false,
-                    ib_company_indices: false,
-                    ib_company_energy: false,
-                    ib_company_crypto: false,
-                  });
-                  setForm({
-                    ib_group_main_id: row.ib_group_main_id,
-                    ib_group_level_id: row.ib_group_level_id,
-                    group_name: row.group_name,
-                    ib_mt5group_name: row.ib_mt5group_name,
-                    ib_comapny_get: row.ib_comapny_get,
-                    ib_company_passon: row.ib_company_passon,
-                    plan_title: row.plan_title,
-                    minimum_deposit: row.minimum_deposit,
-                    spread: row.spread,
-                    commission: row.commission,
-                    leverage: row.leverage,
-                    swap_free: row.swap_free,
-                    trading_plaform: row.trading_plaform,
-                    execution: row.execution,
-                    trading_instrument: row.trading_instrument,
-                    account_currency: row.account_currency,
-                    minimum_trade_size: row.minimum_trade_size,
-                    stop_out_level: row.stop_out_level,
-                    is_default: row.is_default == "0" ? false : true,
-                    is_private: row.is_private == "0" ? false : true,
-                    commission_type: "",
-                    level: "",
-                    will_get: "",
-                    will_passon: "",
-                    partnership: "",
-                    ib_company_forex: row.ib_company_forex,
-                    ib_company_bullion: row.ib_company_bullion,
-                    ib_company_indices: row.ib_company_indices,
-                    ib_company_energy: row.ib_company_energy,
-                    ib_company_crypto: row.ib_company_crypto,
-                    isLoader: false,
-                  });
-                  setOpenModel(true);
-                  handleContextClose(row.sr_no);
-                }}
-              >
-                <i className="material-icons">edit_note</i>&nbsp;&nbsp;Edit
-              </MenuItem>
-              <MenuItem
-                className="delete"
-                {...row}
-                onClick={(event) => {
-                  actionMenuPopup(event, row);
-                }}
-              >
-                <i className="material-icons commission-delete-icon">delete</i>
-                &nbsp;&nbsp;Delete
-              </MenuItem>
-              {/* <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem> */}
-            </Menu>
+            {prop.permission.get_main_ib_groups == 1 ||
+            prop.permission.update_ib_commission_group == 1 ||
+            prop.permission.delete_ib_commission_group == 1 ? (
+              <>
+                <Button
+                  id={`actionButton_${row.sr_no}`}
+                  aria-controls={open ? `basic-menu-${row.sr_no}` : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) => handleContextClick(event, row.sr_no)}
+                  {...row}
+                  style={{ color: "rgb(144 145 139)" }}
+                >
+                  <i className="material-icons">more_horiz</i>
+                </Button>
+                <Menu
+                  id={`basic-menu-${row.sr_no}`}
+                  anchorEl={openTableMenus[row.sr_no]}
+                  open={Boolean(openTableMenus[row.sr_no])}
+                  onClose={(event) => handleContextClose(row.sr_no)}
+                >
+                  {prop.permission.get_main_ib_groups == 1 ? (
+                    <MenuItem
+                      className="view"
+                      {...row}
+                      onClick={(event) => {
+                        setDialogTitle("View");
+                        setViewData(row);
+                        setOpenModel(true);
+                        handleContextClose(row.sr_no);
+                      }}
+                    >
+                      <i className="material-icons">receipt</i>&nbsp;&nbsp;View
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {prop.permission.update_ib_commission_group == 1 ? (
+                    <MenuItem
+                      className="edit"
+                      {...row}
+                      onClick={(event) => {
+                        getMt5GroupName();
+                        setDialogTitle("Edit");
+                        setinputinfoTrue({
+                          ib_group_level_id: false,
+                          ib_group_main_id: false,
+                          group_name: false,
+                          ib_mt5group_name: false,
+                          ib_comapny_get: false,
+                          ib_company_passon: false,
+                          plan_title: false,
+                          minimum_deposit: false,
+                          spread: false,
+                          commission: false,
+                          leverage: false,
+                          swap_free: false,
+                          trading_plaform: false,
+                          execution: false,
+                          trading_instrument: false,
+                          account_currency: false,
+                          minimum_trade_size: false,
+                          stop_out_level: false,
+                          is_default: false,
+                          is_private: false,
+                          commission_type: false,
+                          level: false,
+                          will_get: false,
+                          will_passon: false,
+                          partnership: false,
+                          ib_company_forex: false,
+                          ib_company_bullion: false,
+                          ib_company_indices: false,
+                          ib_company_energy: false,
+                          ib_company_crypto: false,
+                        });
+                        setForm({
+                          assigned_role_id: {
+                            assigned_role_id: row.assigned_role_id,
+                            role_description: row.role_name,
+                          },
+                          ib_group_main_id: row.ib_group_main_id,
+                          ib_group_level_id: row.ib_group_level_id,
+                          group_name: row.group_name,
+                          ib_mt5group_name: row.ib_mt5group_name,
+                          ib_comapny_get: row.ib_comapny_get,
+                          ib_company_passon: row.ib_company_passon,
+                          plan_title: row.plan_title,
+                          minimum_deposit: row.minimum_deposit,
+                          spread: row.spread,
+                          commission: row.commission,
+                          leverage: row.leverage,
+                          swap_free: row.swap_free,
+                          trading_plaform: row.trading_plaform,
+                          execution: row.execution,
+                          trading_instrument: row.trading_instrument,
+                          account_currency: row.account_currency,
+                          minimum_trade_size: row.minimum_trade_size,
+                          stop_out_level: row.stop_out_level,
+                          is_default: row.is_default == "0" ? false : true,
+                          is_private: row.is_private == "0" ? false : true,
+                          commission_type: "",
+                          level: "",
+                          will_get: "",
+                          will_passon: "",
+                          partnership: "",
+                          ib_company_forex: row.ib_company_forex,
+                          ib_company_bullion: row.ib_company_bullion,
+                          ib_company_indices: row.ib_company_indices,
+                          ib_company_energy: row.ib_company_energy,
+                          ib_company_crypto: row.ib_company_crypto,
+                          isLoader: false,
+                        });
+                        setOpenModel(true);
+                        handleContextClose(row.sr_no);
+                      }}
+                    >
+                      <i className="material-icons">edit_note</i>
+                      &nbsp;&nbsp;Edit
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {prop.permission.delete_ib_commission_group == 1 ? (
+                    <MenuItem
+                      className="delete"
+                      {...row}
+                      onClick={(event) => {
+                        actionMenuPopup(event, row);
+                      }}
+                    >
+                      <i className="material-icons commission-delete-icon">
+                        delete
+                      </i>
+                      &nbsp;&nbsp;Delete
+                    </MenuItem>
+                  ) : (
+                    ""
+                  )}
+
+                  {/* <MenuItem className='reject' {...row} onClick={(event) => actionMenuPopup(event, row.sr_no)}><i className="material-icons font-color-rejected">cancel</i>&nbsp;&nbsp;Rejected</MenuItem> */}
+                </Menu>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -709,6 +739,37 @@ const CommisionGroup = () => {
       return (
         <div>
           <div className="view-commission-content-section">
+            <div className="view-content-element">
+              <Autocomplete
+                disablePortal
+                options={option}
+                value={form.assigned_role_id}
+                getOptionLabel={(option) =>
+                  option ? option.role_description : ""
+                }
+                // onInputChange={(event, newInputValue) => {
+                //   form.assigned_role_id = newInputValue.assigned_role_id;
+                //   // setForm({ ...form });
+                // }}
+                // onInputChange={(event, newInputValue) => {
+                //   fetchAccount(event, newInputValue);
+                // }}
+                onChange={(event, newValue) => {
+                  // setValue(newValue);
+                  form.assigned_role_id = newValue;
+                  setForm({ ...form });
+                  console.log(newValue);
+                }}
+                sx={{ width: "100%" }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Assign Role"
+                    variant="standard"
+                  />
+                )}
+              />
+            </div>
             <div className="view-content-element">
               <TextField
                 label="Group Name"
@@ -1292,6 +1353,37 @@ const CommisionGroup = () => {
       return (
         <div>
           <div className="view-commission-content-section">
+            <div className="view-content-element">
+              <Autocomplete
+                disablePortal
+                options={option}
+                value={form.assigned_role_id}
+                getOptionLabel={(option) =>
+                  option ? option.role_description : ""
+                }
+                // onInputChange={(event, newInputValue) => {
+                //   form.assigned_role_id = newInputValue.assigned_role_id;
+                //   // setForm({ ...form });
+                // }}
+                // onInputChange={(event, newInputValue) => {
+                //   fetchAccount(event, newInputValue);
+                // }}
+                onChange={(event, newValue) => {
+                  // setValue(newValue);
+                  form.assigned_role_id = newValue;
+                  setForm({ ...form });
+                  console.log(newValue);
+                }}
+                sx={{ width: "100%" }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Assign Role"
+                    variant="standard"
+                  />
+                )}
+              />
+            </div>
             <div className="view-content-element">
               <TextField
                 label="Group Name"
@@ -2014,6 +2106,8 @@ const CommisionGroup = () => {
       param.append("ib_company_indices", form.ib_company_indices);
       param.append("ib_company_energy", form.ib_company_energy);
       param.append("ib_company_crypto", form.ib_company_crypto);
+      param.append("assigned_role_id", form.assigned_role_id.assigned_role_id);
+
       param.append("account_currency", "USD");
 
       await axios
@@ -2141,6 +2235,9 @@ const CommisionGroup = () => {
       param.append("ib_company_indices", form.ib_company_indices);
       param.append("ib_company_energy", form.ib_company_energy);
       param.append("ib_company_crypto", form.ib_company_crypto);
+
+      param.append("assigned_role_id", form.assigned_role_id.assigned_role_id);
+
       param.append("account_currency", "USD");
 
       await axios
@@ -2180,9 +2277,12 @@ const CommisionGroup = () => {
         }
         if (res.data.status != "error") {
           setmt5GroupName(res.data.data);
+          setOption(res.data.role_list);
           if (prop == "add") {
             setForm({
+              assigned_role_id: {},
               ib_group_level_id: "",
+              assigned_role_id: "",
               ib_group_main_id: "",
               group_name: "",
               ib_mt5group_name: "",
@@ -2340,9 +2440,13 @@ const CommisionGroup = () => {
                   className="pending-all-15px"
                 >
                   <div className="actionGroupButton">
-                    <Button variant="contained" onClick={AddCommissionGroup}>
-                      Add
-                    </Button>
+                    {prop.permission.add_ib_commission_group == 1 ? (
+                      <Button variant="contained" onClick={AddCommissionGroup}>
+                        Add
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <br />
                   <CommonTable

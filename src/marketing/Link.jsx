@@ -3,6 +3,7 @@ import {
   Button,
   CardContent,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -42,6 +43,7 @@ export interface DialogTitleProps {
   children?: React.ReactNode;
   onClose: () => void;
 }
+const re = /^[A-Za-z_ ]*$/;
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
@@ -67,7 +69,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const Link = () => {
+const Link = (prop) => {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [param, setParam] = useState("");
@@ -87,6 +89,14 @@ const Link = () => {
     url_type: "",
     status: "",
     id: "",
+  });
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    source_name: false,
+    source_type: false,
+    sales_person: false,
+    url_type: false,
+    status: false,
+    id: false,
   });
   toast.configure();
 
@@ -187,7 +197,7 @@ const Link = () => {
         return (
           <div className="full-url-section">
             <a
-              className="linkColor"
+              className="linkColor linkwrep"
               title={`${ClientUrl}/register/campaign/${row.campaign_url}`}
               href={`${ClientUrl}/register/campaign/${row.campaign_url}`}
               target="_blank"
@@ -219,7 +229,7 @@ const Link = () => {
         );
       },
       reorder: true,
-      grow: 3,
+      grow: 1,
       wrap: true,
     },
     {
@@ -237,22 +247,30 @@ const Link = () => {
       cell: (row) => {
         return (
           <div className="actionButtonGroup">
-            <Button
-              className="btn-edit"
-              onClick={(event) => editLink(event, row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </Button>
-            <Button
-              className="btn-close"
-              onClick={(event) => actionMenuPopup(event, row)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </Button>
+            {prop.permission.update_campaign == 1 ? (
+              <Button
+                className="btn-edit"
+                onClick={(event) => editLink(event, row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
+            {prop.permission.delete_campaign == 1 ? (
+              <Button
+                className="btn-close"
+                onClick={(event) => actionMenuPopup(event, row)}
+                {...row}
+                style={{ color: "rgb(144 145 139)" }}
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -277,6 +295,14 @@ const Link = () => {
         status: "",
         id: "",
       });
+      setinputinfoTrue({
+        source_name: false,
+        source_type: false,
+        sales_person: false,
+        url_type: false,
+        status: false,
+        id: false,
+      });
     }
     setOpen(true);
   };
@@ -292,34 +318,77 @@ const Link = () => {
               variant="standard"
               sx={{ width: "100%" }}
               name="source_name"
-              onChange={input}
+              onBlur={inputtrueFalse}
+              error={
+                form.source_name == "" && inputinfoTrue.source_name
+                  ? true
+                  : false
+              }
+              helperText={
+                form.source_name == "" && inputinfoTrue.source_name
+                  ? "Source Name is required"
+                  : ""
+              }
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
             />
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.source_type == "" && inputinfoTrue.source_type
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Source Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="source_type"
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {sourceMasterList.source_name?.map((item) => {
                   return <MenuItem value={item}>{item}</MenuItem>;
                 })}
               </Select>
+              {form.source_type == "" && inputinfoTrue.source_type ? (
+                <FormHelperText>Source Type is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.sales_person == "" && inputinfoTrue.sales_person
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Sales Person</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="sales_person"
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {sourceMasterList.list_salesman?.map((item) => {
                   return (
@@ -329,37 +398,64 @@ const Link = () => {
                   );
                 })}
               </Select>
+              {form.sales_person == "" && inputinfoTrue.sales_person ? (
+                <FormHelperText>Sales Person is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.url_type == "" && inputinfoTrue.url_type ? true : false
+              }
+            >
               <InputLabel>URL Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="url_type"
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {sourceMasterList.url_type?.map((item) => {
                   return <MenuItem value={item}>{item}</MenuItem>;
                 })}
               </Select>
+              {form.url_type == "" && inputinfoTrue.url_type ? (
+                <FormHelperText>URL Type is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.status == "" && inputinfoTrue.status ? true : false}
+            >
               <InputLabel>Status</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="status"
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 <MenuItem value="1">Enable</MenuItem>
                 <MenuItem value="0">Disable</MenuItem>
               </Select>
+              {form.status == "" && inputinfoTrue.status ? (
+                <FormHelperText>Status is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
         </div>
@@ -375,29 +471,71 @@ const Link = () => {
               value={form.source_name}
               sx={{ width: "100%" }}
               name="source_name"
-              onChange={input}
+              onBlur={inputtrueFalse}
+              error={
+                form.source_name == "" && inputinfoTrue.source_name
+                  ? true
+                  : false
+              }
+              helperText={
+                form.source_name == "" && inputinfoTrue.source_name
+                  ? "Source Name is required"
+                  : ""
+              }
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  re.test(e.target.value) ||
+                  e.target.value === " "
+                ) {
+                  console.log("ok right");
+                  input(e);
+                }
+              }}
             />
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.source_type == "" && inputinfoTrue.source_type
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Source Type</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="source_type"
                 value={form.source_type}
+                onBlur={inputtrueFalse}
                 onChange={input}
               >
                 {sourceMasterList.source_name?.map((item) => {
                   return <MenuItem value={item}>{item}</MenuItem>;
                 })}
               </Select>
+              {form.source_type == "" && inputinfoTrue.source_type ? (
+                <FormHelperText>Source Type is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.sales_person == "" && inputinfoTrue.sales_person
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Sales Person</InputLabel>
               <Select
                 label
@@ -405,6 +543,7 @@ const Link = () => {
                 name="sales_person"
                 value={form.sales_person}
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {sourceMasterList.list_salesman?.map((item) => {
                   return (
@@ -413,12 +552,30 @@ const Link = () => {
                     </MenuItem>
                   );
                 })}
+                {sourceMasterList.list_salesman?.map((item) => {
+                  return (
+                    <MenuItem value={item.sales_person}>
+                      {item.sales_person_name}
+                    </MenuItem>
+                  );
+                })}
               </Select>
+              {form.sales_person == "" && inputinfoTrue.sales_person ? (
+                <FormHelperText>Sales Person is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                form.url_type == "" && inputinfoTrue.url_type ? true : false
+              }
+            >
               <InputLabel>URL Type</InputLabel>
               <Select
                 label
@@ -426,16 +583,26 @@ const Link = () => {
                 name="url_type"
                 value={form.url_type}
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 {sourceMasterList.url_type?.map((item) => {
                   return <MenuItem value={item}>{item}</MenuItem>;
                 })}
               </Select>
+              {form.url_type == "" && inputinfoTrue.url_type ? (
+                <FormHelperText>URL Type is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <br />
           <div>
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={form.status == "" && inputinfoTrue.status ? true : false}
+            >
               <InputLabel>Status</InputLabel>
               <Select
                 label
@@ -443,10 +610,16 @@ const Link = () => {
                 name="status"
                 value={form.status}
                 onChange={input}
+                onBlur={inputtrueFalse}
               >
                 <MenuItem value="1">Enable</MenuItem>
                 <MenuItem value="0">Disable</MenuItem>
               </Select>
+              {form.status == "" && inputinfoTrue.status ? (
+                <FormHelperText>Status is required</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
         </div>
@@ -546,6 +719,16 @@ const Link = () => {
       };
     });
   };
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
+  console.log("inputinfoTrue", inputinfoTrue);
 
   const editLink = (e, data) => {
     setForm({
@@ -556,6 +739,14 @@ const Link = () => {
       url_type: data.url_type,
       status: data.status,
       id: data.id,
+    });
+    setinputinfoTrue({
+      source_name: false,
+      source_type: false,
+      sales_person: false,
+      url_type: false,
+      status: false,
+      id: false,
     });
     setDialogTitle("Edit");
     setOpen(true);
@@ -718,13 +909,17 @@ const Link = () => {
                   className="pending-all-15px"
                 >
                   <div className="actionGroupButton">
-                    <Button
-                      variant="contained"
-                      className="add"
-                      onClick={openDialogbox}
-                    >
-                      Add
-                    </Button>
+                    {prop.permission.add_campaign == 1 ? (
+                      <Button
+                        variant="contained"
+                        className="add"
+                        onClick={openDialogbox}
+                      >
+                        Add
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <br />
                   <CardContent className="py-3">

@@ -123,7 +123,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Withdraw = () => {
+const Withdraw = (prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
@@ -321,67 +321,103 @@ const Withdraw = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              id={`actionButton_${row.withdrawal_id}`}
-              aria-controls={
-                open ? `basic-menu-${row.withdrawal_id}` : undefined
-              }
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(event) => handleContextClick(event, row.withdrawal_id)}
-              {...row}
-              style={{ color: "rgb(144 145 139)" }}
-            >
-              <i className="material-icons">more_horiz</i>
-            </Button>
-            <Menu
-              id={`basic-menu-${row.withdrawal_id}`}
-              anchorEl={openTableMenus[row.withdrawal_id]}
-              open={Boolean(openTableMenus[row.withdrawal_id])}
-              onClose={(event) => handleContextClose(row.withdrawal_id)}
-            >
-              {row.status != "0" ? (
-                <MenuItem
-                  className="view"
+            {prop.permission.view_update_withdrawal == 1 ||
+            prop.permission.view_withdrawal == 1 ||
+            prop.permission.approve_withdrawal == 1 ||
+            prop.permission.reject_withdrawal == 1 ? (
+              <>
+                {" "}
+                <Button
+                  id={`actionButton_${row.withdrawal_id}`}
+                  aria-controls={
+                    open ? `basic-menu-${row.withdrawal_id}` : undefined
+                  }
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) =>
+                    handleContextClick(event, row.withdrawal_id)
+                  }
                   {...row}
-                  onClick={(event) => viewWithdrawl(row.withdrawal_id)}
+                  style={{ color: "rgb(144 145 139)" }}
                 >
-                  <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                </MenuItem>
-              ) : (
-                <div>
-                  <MenuItem
-                    className="view"
-                    {...row}
-                    onClick={(event) => viewWithdrawl(row.withdrawal_id)}
-                  >
-                    <i className="material-icons">receipt</i>&nbsp;&nbsp;View
-                  </MenuItem>
-                  <MenuItem
-                    className="approve"
-                    {...row}
-                    onClick={(event) =>
-                      actionMenuPopup(event, row.withdrawal_id)
-                    }
-                  >
-                    <i className="material-icons font-color-approved">
-                      task_alt
-                    </i>
-                    &nbsp;&nbsp;Approved
-                  </MenuItem>
-                  <MenuItem
-                    className="reject"
-                    {...row}
-                    onClick={(event) =>
-                      actionMenuPopup(event, row.withdrawal_id)
-                    }
-                  >
-                    <i className="material-icons font-color-rejected">cancel</i>
-                    &nbsp;&nbsp;Rejected
-                  </MenuItem>
-                </div>
-              )}
-            </Menu>
+                  <i className="material-icons">more_horiz</i>
+                </Button>
+                <Menu
+                  id={`basic-menu-${row.withdrawal_id}`}
+                  anchorEl={openTableMenus[row.withdrawal_id]}
+                  open={Boolean(openTableMenus[row.withdrawal_id])}
+                  onClose={(event) => handleContextClose(row.withdrawal_id)}
+                >
+                  {row.status != "0" ? (
+                    <>
+                      {prop.permission.view_update_withdrawal == 1 ||
+                      prop.permission.view_withdrawal == 1 ? (
+                        <MenuItem
+                          className="view"
+                          {...row}
+                          onClick={(event) => viewWithdrawl(row.withdrawal_id)}
+                        >
+                          <i className="material-icons">receipt</i>
+                          &nbsp;&nbsp;View
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      {prop.permission.view_update_withdrawal == 1 ||
+                      prop.permission.view_withdrawal == 1 ? (
+                        <MenuItem
+                          className="view"
+                          {...row}
+                          onClick={(event) => viewWithdrawl(row.withdrawal_id)}
+                        >
+                          <i className="material-icons">receipt</i>
+                          &nbsp;&nbsp;View
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                      {prop.permission.approve_withdrawal == 1 ? (
+                        <MenuItem
+                          className="approve"
+                          {...row}
+                          onClick={(event) =>
+                            actionMenuPopup(event, row.withdrawal_id)
+                          }
+                        >
+                          <i className="material-icons font-color-approved">
+                            task_alt
+                          </i>
+                          &nbsp;&nbsp;Approved
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                      {prop.permission.reject_withdrawal == 1 ? (
+                        <MenuItem
+                          className="reject"
+                          {...row}
+                          onClick={(event) =>
+                            actionMenuPopup(event, row.withdrawal_id)
+                          }
+                        >
+                          <i className="material-icons font-color-rejected">
+                            cancel
+                          </i>
+                          &nbsp;&nbsp;Rejected
+                        </MenuItem>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  )}
+                </Menu>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -472,7 +508,7 @@ const Withdraw = () => {
           >
             Cancel
           </Button>
-          {buttonDis == "0" ? (
+          {buttonDis == "0" && prop.permission.view_update_withdrawal == 1 ? (
             viewWithdrawForm.isLoader == true ? (
               <Button
                 variant="contained"
@@ -717,7 +753,11 @@ const Withdraw = () => {
               value={viewWithdrawForm.remark}
               onChange={input1}
               focused
-              disabled={buttonDis == "0" ? false : true}
+              disabled={
+                buttonDis == "0" && prop.permission.view_update_withdrawal == 1
+                  ? false
+                  : true
+              }
             />
             {/* <TextField id="standard-basic" label="Status" variant="standard" sx={{ width: '100%' }} name='customer_name' value={viewWithdrawForm.status} onChange={input1} focused/> */}
             <FormControl variant="standard" sx={{ width: "100%" }} focused>
@@ -726,7 +766,12 @@ const Withdraw = () => {
                 value={viewWithdrawForm.status}
                 name="status"
                 onChange={input1}
-                disabled={buttonDis == "0" ? false : true}
+                disabled={
+                  buttonDis == "0" &&
+                  prop.permission.view_update_withdrawal == 1
+                    ? false
+                    : true
+                }
               >
                 <MenuItem value="0">Pending</MenuItem>
                 <MenuItem value="1">Approve</MenuItem>
@@ -745,7 +790,11 @@ const Withdraw = () => {
               value={viewWithdrawForm.admin_notes}
               onChange={input1}
               focused
-              disabled={buttonDis == "0" ? false : true}
+              disabled={
+                buttonDis == "0" && prop.permission.view_update_withdrawal == 1
+                  ? false
+                  : true
+              }
             />
           </div>
         </div>

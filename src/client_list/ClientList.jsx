@@ -150,7 +150,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
-const ClientList = () => {
+const ClientList = (prop) => {
   const { id } = useParams();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -321,13 +321,19 @@ const ClientList = () => {
       name: "NAME",
       selector: (row) => {
         return (
-          <a
-            className="linkColor"
-            title={row.name}
-            onClick={(event) => gotoProfile(row)}
-          >
-            {row.name}
-          </a>
+          <>
+            {prop.permission.open_client_panel == 1 ? (
+              <a
+                className="linkColor"
+                title={row.name}
+                onClick={(event) => gotoProfile(row)}
+              >
+                {row.name}
+              </a>
+            ) : (
+              <span title={row.name}>{row.name}</span>
+            )}
+          </>
         );
       },
       sortable: true,
@@ -374,25 +380,29 @@ const ClientList = () => {
       selector: (row) => {
         return (
           <div>
-            <Select
-              displayEmpty
-              inputProps={{
-                "aria-label": "Without label",
-              }}
-              className="table-dropdown"
-              input={<BootstrapInput />}
-              name="interest"
-              value={row.manager_id}
-              onChange={(e) => changeSales(e, row)}
-            >
-              {salesList.map((item) => {
-                return (
-                  <MenuItem value={item.manager_id}>
-                    {item.manager_name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+            {prop.permission.assign_salesman == 1 ? (
+              <Select
+                displayEmpty
+                inputProps={{
+                  "aria-label": "Without label",
+                }}
+                className="table-dropdown"
+                input={<BootstrapInput />}
+                name="interest"
+                value={row.manager_id}
+                onChange={(e) => changeSales(e, row)}
+              >
+                {salesList.map((item) => {
+                  return (
+                    <MenuItem value={item.manager_id}>
+                      {item.manager_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -404,13 +414,19 @@ const ClientList = () => {
       name: "IB Name",
       selector: (row) => {
         return row.sponsor_id != "0" ? (
-          <NavLink
-            className="linkColor"
-            title={row.sponsor_name}
-            to={`/profile/${row.sponsor_id}`}
-          >
-            {row.sponsor_name}
-          </NavLink>
+          <>
+            {prop.permission.open_client_panel == 1 ? (
+              <NavLink
+                className="linkColor"
+                title={row.sponsor_name}
+                to={`/profile/${row.sponsor_id}`}
+              >
+                {row.sponsor_name}
+              </NavLink>
+            ) : (
+              <span title={row.sponsor_name}>{row.sponsor_name}</span>
+            )}
+          </>
         ) : (
           ""
         );
@@ -474,7 +490,7 @@ const ClientList = () => {
       cell: (row) => {
         return (
           <div className="actionButton">
-            {row.lead_user == "1" ? (
+            {row.lead_user == "1" && prop.permission.change_lead_status == 1 ? (
               <Button
                 className={`${
                   row.lead_closed == "0"
@@ -505,13 +521,17 @@ const ClientList = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              onClick={(e) => {
-                userLogin(row);
-              }}
-            >
-              <i className="material-icons">login</i>
-            </Button>
+            {prop.permission.login_as_user == 1 ? (
+              <Button
+                onClick={(e) => {
+                  userLogin(row);
+                }}
+              >
+                <i className="material-icons">login</i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -525,13 +545,17 @@ const ClientList = () => {
       cell: (row) => {
         return (
           <div>
-            <Button
-              onClick={(e) => {
-                transactionStatus(row);
-              }}
-            >
-              <i className="material-icons">manage_accounts</i>
-            </Button>
+            {prop.permission.transaction_access_status == 1 ? (
+              <Button
+                onClick={(e) => {
+                  transactionStatus(row);
+                }}
+              >
+                <i className="material-icons">manage_accounts</i>
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         );
       },

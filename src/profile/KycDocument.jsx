@@ -24,6 +24,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import "./kycDocument.css";
 
 const KycDocument = (prop) => {
+  console.log("asd", prop);
   const navigate = useNavigate();
   const [filterData, setFilterData] = useState(null);
   const [option, setOption] = useState(true);
@@ -542,7 +543,11 @@ const KycDocument = (prop) => {
                                 ID NUMBER
                               </label>
                               <BootstrapInput
-                                disabled={sendKycRequest.proof1}
+                                disabled={
+                                  sendKycRequest.proof1 || prop.permission == 0
+                                    ? true
+                                    : false
+                                }
                                 value={doc.idnumber}
                                 onChange={handleChange}
                                 name="idnumber"
@@ -647,7 +652,7 @@ const KycDocument = (prop) => {
                               container
                               spacing={7}
                               className="mt-4 mb-2 justify-content-center"
-                              style={{ marginLeft: "-28px", gap: "80px" }}
+                              style={{ marginLeft: "-28px" }}
                             >
                               <Grid
                                 item
@@ -664,6 +669,9 @@ const KycDocument = (prop) => {
                                     id="FILE_FRONT_SIDE"
                                     type="file"
                                     name="fontimg"
+                                    disabled={
+                                      prop.permission == 0 ? true : false
+                                    }
                                     // value={doc.fontimg}
                                     onChange={(e) => {
                                       setDoc((prevalue) => {
@@ -685,7 +693,8 @@ const KycDocument = (prop) => {
                                     </label>
                                   ) : (
                                     <>
-                                      {sendKycRequest.proof1 ? (
+                                      {sendKycRequest.proof1 ||
+                                      prop.permission == 0 ? (
                                         ""
                                       ) : (
                                         <button
@@ -723,6 +732,9 @@ const KycDocument = (prop) => {
                                       id="FILE_BACK_SIDE"
                                       type="file"
                                       name="backimg"
+                                      disabled={
+                                        prop.permission == 0 ? true : false
+                                      }
                                       // value={doc.backimg}
                                       onChange={(e) =>
                                         setDoc((prevalue) => {
@@ -744,7 +756,8 @@ const KycDocument = (prop) => {
                                       </label>
                                     ) : (
                                       <>
-                                        {sendKycRequest.proof1 ? (
+                                        {sendKycRequest.proof1 ||
+                                        prop.permission == 0 ? (
                                           ""
                                         ) : (
                                           <button
@@ -774,9 +787,10 @@ const KycDocument = (prop) => {
 
                           <div className="text-dark font-size-xs d-flex justify-content-between align-items-center">
                             <i>
-                              (Maximum size of document 5MB) Allow File Formats
+                              (Maximum size of document 5MB, Allow File Formats
                               *jpg, *png)
                             </i>
+
                             {doc.proof == "Proof of ID" ? (
                               doc.isLoder ? (
                                 <ColorButton
@@ -800,7 +814,7 @@ const KycDocument = (prop) => {
                                     ></circle>
                                   </svg>
                                 </ColorButton>
-                              ) : (
+                              ) : prop.permission == 1 ? (
                                 <ColorButton
                                   onClick={onSubmit}
                                   variant="contained"
@@ -810,6 +824,8 @@ const KycDocument = (prop) => {
                                 >
                                   Save
                                 </ColorButton>
+                              ) : (
+                                ""
                               )
                             ) : doc.proof == "Proof of Address" ? (
                               <ColorButton
@@ -885,6 +901,9 @@ const KycDocument = (prop) => {
                                     accept="image/*"
                                     id="FILE_FRONT_SIDE1"
                                     type="file"
+                                    disabled={
+                                      prop.permission == 0 ? true : false
+                                    }
                                     name="fontimg"
                                     // value={doc.fontimg}
                                     onChange={(e) =>
@@ -907,7 +926,8 @@ const KycDocument = (prop) => {
                                     </label>
                                   ) : (
                                     <>
-                                      {sendKycRequest.proof1 ? (
+                                      {sendKycRequest.proof1 ||
+                                      prop.permission == 0 ? (
                                         ""
                                       ) : (
                                         <button
@@ -945,6 +965,9 @@ const KycDocument = (prop) => {
                                       id="FILE_BACk_SIDE1"
                                       type="file"
                                       name="backimg"
+                                      disabled={
+                                        prop.permission == 0 ? true : false
+                                      }
                                       // value={doc.fontimg}
                                       onChange={(e) =>
                                         setAddDoc((prevalue) => {
@@ -966,7 +989,8 @@ const KycDocument = (prop) => {
                                       </label>
                                     ) : (
                                       <>
-                                        {sendKycRequest.proof1 ? (
+                                        {sendKycRequest.proof1 ||
+                                        prop.permission == 0 ? (
                                           ""
                                         ) : (
                                           <button
@@ -1017,7 +1041,7 @@ const KycDocument = (prop) => {
                                       ></circle>
                                     </svg>
                                   </ColorButton>
-                                ) : (
+                                ) : prop.permission == 1 ? (
                                   <ColorButton
                                     style={{ marginTop: "10px" }}
                                     onClick={onaddsubmit}
@@ -1025,6 +1049,8 @@ const KycDocument = (prop) => {
                                   >
                                     Save
                                   </ColorButton>
+                                ) : (
+                                  ""
                                 )}
                               </div>
                             </Grid>
@@ -1155,7 +1181,7 @@ const KycDocument = (prop) => {
                                       </div>
                                       <div>
                                         Make sure the document shows your
-                                        photo,full name.date of birth and date
+                                        photo,full name,date of birth and date
                                         of issue
                                       </div>
                                     </h5>
@@ -1164,7 +1190,7 @@ const KycDocument = (prop) => {
                                 <div className="picdocMain">
                                   <div className="firstimageofdoc">
                                     <img
-                                      src="./assets/img/image1.jpg"
+                                      src="./assets/img/image1.png"
                                       alt=""
                                       className="firstimageofdoc1"
                                     />
@@ -1186,7 +1212,7 @@ const KycDocument = (prop) => {
                                   </div>
                                   <div className="firstimageofdoc">
                                     <img
-                                      src="./assets/img/image2.jpg"
+                                      src="./assets/img/image2.png"
                                       alt=""
                                       className="firstimageofdoc2"
                                     />
