@@ -1,5 +1,6 @@
 import { useTheme } from "@emotion/react";
 import {
+  Autocomplete,
   Box,
   Button,
   Checkbox,
@@ -107,7 +108,7 @@ const CommonFilter = (prop) => {
   const [openTableMenus, setOpenTableMenus] = useState([]);
   const [filterData, setFilterData] = useState({});
   const [filterSection, setFilterSection] = useState(false);
-  const [filterBy, setFilterBy] = useState("");
+  const [filterBy, setFilterBy] = useState("None");
   const [clientSearch, setClientSearch] = useState("");
   const [state, setState] = useState({
     first_name: false,
@@ -163,7 +164,10 @@ const CommonFilter = (prop) => {
 
   const filterByChange = (e) => {
     setFilterBy(e.target.value);
-    prop.setParam({});
+    if (e.target.value == "None") {
+      prop.setParam({});
+    }
+    // prop.setParam({});
   };
   const handleChange1 = (event: SelectChangeEvent<typeof personName>) => {
     const {
@@ -175,7 +179,7 @@ const CommonFilter = (prop) => {
     );
     prop.setParam((prevalue) => {
       return {
-        ...prevalue,
+        // ...prevalue,
         source_id: typeof value === "string" ? value.split(",") : value,
       };
     });
@@ -214,7 +218,11 @@ const CommonFilter = (prop) => {
                     // value={prop.searchWord}
                     onChange={(e) => prop.searchWord(e.target.value)}
                   />
-                  <Button onClick={(event) => {setFilterSection(!filterSection);}}>
+                  <Button
+                    onClick={(event) => {
+                      setFilterSection(!filterSection);
+                    }}
+                  >
                     <i className="material-icons">
                       {" "}
                       {filterSection ? "menu" : "filter_list"}
@@ -283,12 +291,36 @@ const CommonFilter = (prop) => {
                             input={<BootstrapInput />}
                             sx={{ width: "200px" }}
                           >
-                            <MenuItem value="">None</MenuItem>
-
+                            <MenuItem value="None">None</MenuItem>
                             {prop.date ? (
                               ""
                             ) : (
                               <MenuItem value="Date">Date</MenuItem>
+                            )}
+                            {!prop.source_list ? (
+                              ""
+                            ) : (
+                              <MenuItem value="sourceCilent">Source</MenuItem>
+                            )}
+                            {!prop.ib_users_list ? (
+                              ""
+                            ) : (
+                              <MenuItem value="ibList">IB</MenuItem>
+                            )}{" "}
+                            {!prop.deposit_users_list ? (
+                              ""
+                            ) : (
+                              <MenuItem value="ClientDeposit">Client</MenuItem>
+                            )}{" "}
+                            {!prop.sales_manager_list ? (
+                              ""
+                            ) : (
+                              <MenuItem value="SalesCilent">Sales</MenuItem>
+                            )}{" "}
+                            {!prop.country_list ? (
+                              ""
+                            ) : (
+                              <MenuItem value="countryCilent">Country</MenuItem>
                             )}
                             {prop.salesAgent ? (
                               <MenuItem value="Sales">Sales</MenuItem>
@@ -331,12 +363,28 @@ const CommonFilter = (prop) => {
                               ""
                             )}
                             {prop.lastUpdatedBy ? (
-                              <MenuItem value="lastUpdatedBy">Last Updated By</MenuItem>
+                              <MenuItem value="lastUpdatedBy">
+                                Last Updated By
+                              </MenuItem>
                             ) : (
                               ""
                             )}
                             {prop.checkStatusBonus ? (
-                              <MenuItem value="Bonus Status">Bonus Status</MenuItem>
+                              <MenuItem value="Bonus Status">
+                                Bonus Status
+                              </MenuItem>
+                            ) : (
+                              ""
+                            )}
+                            {prop.search_users_list ? (
+                              <MenuItem value="SearchUsersList">users</MenuItem>
+                            ) : (
+                              ""
+                            )}
+                            {prop.advance_filters ? (
+                              <MenuItem value="advance_filters">
+                                Advance Filters
+                              </MenuItem>
                             ) : (
                               ""
                             )}
@@ -346,7 +394,6 @@ const CommonFilter = (prop) => {
                                 <MenuItem value="admin">Admin</MenuItem>
                               </> : ""
                             } */}
-
                             {/* <MenuItem value="Account Type">Account Type</MenuItem> */}
                             {/* <MenuItem value="IB">IB</MenuItem> */}
                             {/*<MenuItem value="Source">Source</MenuItem>*/}
@@ -362,8 +409,9 @@ const CommonFilter = (prop) => {
                                 type="date"
                                 onChange={(e) => {
                                   prop.setParam((prevalue) => {
+                                    console.log("prevalue", prevalue);
                                     return {
-                                      ...prevalue,
+                                      end_date: prevalue.end_date,
                                       start_date: e.target.value,
                                     };
                                   });
@@ -379,7 +427,7 @@ const CommonFilter = (prop) => {
                                 onChange={(e) => {
                                   prop.setParam((prevalue) => {
                                     return {
-                                      ...prevalue,
+                                      start_date: prevalue.start_date,
                                       end_date: e.target.value,
                                     };
                                   });
@@ -402,7 +450,7 @@ const CommonFilter = (prop) => {
                                 setPersonName(e.target.value);
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     lead_assign_user_id: e.target.value,
                                   };
                                 });
@@ -453,7 +501,7 @@ const CommonFilter = (prop) => {
                                 <MenuItem
                                   key={name}
                                   value={name}
-                                // style={getStyles(name, personName, theme)}
+                                  // style={getStyles(name, personName, theme)}
                                 >
                                   {name}
                                 </MenuItem>
@@ -518,7 +566,7 @@ const CommonFilter = (prop) => {
                                 <MenuItem
                                   key={name}
                                   value={name}
-                                // style={getStyles(name, personName, theme)}
+                                  // style={getStyles(name, personName, theme)}
                                 >
                                   {name}
                                 </MenuItem>
@@ -564,6 +612,263 @@ const CommonFilter = (prop) => {
                         ) : (
                           ""
                         )}
+                        {filterBy == "advance_filters" ? (
+                          <FormControl
+                            sx={{ m: 1, width: 300 }}
+                            className="multipleSelect"
+                          >
+                            <InputLabel>select</InputLabel>
+                            <Select
+                              value={checkStatus}
+                              onChange={(e) => {
+                                console.log(
+                                  "filertest",
+                                  checkStatus,
+                                  e.target.value
+                                );
+                                setcheckStatus(e.target.value);
+                                prop.setParam((prevalue) => {
+                                  return {
+                                    // ...prevalue,
+                                    advance_filters: e.target.value,
+                                  };
+                                });
+                              }}
+                              input={<BootstrapInput />}
+                              sx={{ width: "200px" }}
+                            >
+                              <MenuItem value="">Select Option</MenuItem>
+
+                              {Object.keys(prop.advance_filters).map(
+                                (index, item) => {
+                                  return (
+                                    <MenuItem value={index}>
+                                      {prop.advance_filters[index]}
+                                    </MenuItem>
+                                  );
+                                }
+                              )}
+                              {/* <MenuItem value="0">Disable</MenuItem>
+                              <MenuItem value="1">Enable</MenuItem> */}
+                            </Select>
+                          </FormControl>
+                        ) : (
+                          ""
+                        )}
+                        {filterBy == "sourceCilent" ? (
+                          <Autocomplete
+                            disablePortal
+                            // multiple
+                            options={prop.source_list}
+                            getOptionLabel={(option) =>
+                              option ? option.source_name : ""
+                            }
+                            // onInputChange={(event, newInputValue) => {
+                            //   form.assigned_role_id = newInputValue.assigned_role_id;
+                            //   // setForm({ ...form });
+                            // }}
+                            // onInputChange={(event, newInputValue) => {
+                            //   fetchAccount(event, newInputValue);
+                            // }}
+                            onChange={(event, newValue) => {
+                              prop.setParam((prevalue) => {
+                                return {
+                                  // ...prevalue,
+                                  source_list: newValue
+                                    ? newValue.source_id
+                                    : "",
+                                };
+                              });
+
+                              console.log("newValue1", newValue);
+                            }}
+                            sx={{ width: "200px" }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Source"
+                                variant="standard"
+                              />
+                            )}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {filterBy == "ibList" ? (
+                          <Autocomplete
+                            disablePortal
+                            options={prop.ib_users_list}
+                            getOptionLabel={(option) =>
+                              option ? option.ib_user_name : ""
+                            }
+                            onChange={(event, newValue) => {
+                              prop.setParam((prevalue) => {
+                                return {
+                                  // ...prevalue,
+                                  ib_users_list: newValue
+                                    ? newValue.ib_user_id
+                                    : "",
+                                };
+                              });
+                            }}
+                            sx={{ width: "200px" }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="IB Name"
+                                variant="standard"
+                              />
+                            )}
+                          />
+                        ) : (
+                          ""
+                        )}{" "}
+                        {filterBy == "SearchUsersList" ? (
+                          <Autocomplete
+                            disablePortal
+                            options={prop.search_users_list}
+                            getOptionLabel={(option) =>
+                              option ? option.user_name : ""
+                            }
+                            onChange={(event, newValue) => {
+                              prop.setParam((prevalue) => {
+                                return {
+                                  // ...prevalue,
+                                  search_users_list: newValue
+                                    ? newValue.search_user_id
+                                    : "",
+                                };
+                              });
+                            }}
+                            sx={{ width: "200px" }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="User"
+                                variant="standard"
+                              />
+                            )}
+                          />
+                        ) : (
+                          ""
+                        )}{" "}
+                        {filterBy == "ClientDeposit" ? (
+                          <Autocomplete
+                            disablePortal
+                            // multiple
+                            options={prop.deposit_users_list}
+                            getOptionLabel={(option) =>
+                              option ? option.deposit_user_name : ""
+                            }
+                            // onInputChange={(event, newInputValue) => {
+                            //   form.assigned_role_id = newInputValue.assigned_role_id;
+                            //   // setForm({ ...form });
+                            // }}
+                            // onInputChange={(event, newInputValue) => {
+                            //   fetchAccount(event, newInputValue);
+                            // }}
+                            onChange={(event, newValue) => {
+                              prop.setParam((prevalue) => {
+                                return {
+                                  // ...prevalue,
+                                  deposit_users_list: newValue
+                                    ? newValue.deposit_user_id
+                                    : "",
+                                };
+                              });
+
+                              console.log("newValue1", newValue);
+                            }}
+                            sx={{ width: "200px" }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Client Name"
+                                variant="standard"
+                              />
+                            )}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {filterBy == "SalesCilent" ? (
+                          <Autocomplete
+                            disablePortal
+                            // multiple
+                            options={prop.sales_manager_list}
+                            getOptionLabel={(option) =>
+                              option ? option.sales_manager_name : ""
+                            }
+                            // onInputChange={(event, newInputValue) => {
+                            //   form.assigned_role_id = newInputValue.assigned_role_id;
+                            //   // setForm({ ...form });
+                            // }}
+                            // onInputChange={(event, newInputValue) => {
+                            //   fetchAccount(event, newInputValue);
+                            // }}
+                            onChange={(event, newValue) => {
+                              prop.setParam((prevalue) => {
+                                return {
+                                  // ...prevalue,
+                                  sales_manager_list: newValue
+                                    ? newValue.sales_manager_id
+                                    : "",
+                                };
+                              });
+
+                              console.log("newValue1", newValue);
+                            }}
+                            sx={{ width: "200px" }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Sales Manager"
+                                variant="standard"
+                              />
+                            )}
+                          />
+                        ) : (
+                          ""
+                        )}{" "}
+                        {filterBy == "countryCilent" ? (
+                          <Autocomplete
+                            disablePortal
+                            // multiple
+                            options={prop.country_list}
+                            getOptionLabel={(option) =>
+                              option ? option.country_name : ""
+                            }
+                            // onInputChange={(event, newInputValue) => {
+                            //   form.assigned_role_id = newInputValue.assigned_role_id;
+                            //   // setForm({ ...form });
+                            // }}
+                            // onInputChange={(event, newInputValue) => {
+                            //   fetchAccount(event, newInputValue);
+                            // }}
+                            onChange={(event, newValue) => {
+                              prop.setParam((prevalue) => {
+                                return {
+                                  // ...prevalue,
+                                  country_list: newValue
+                                    ? newValue.country_name
+                                    : "",
+                                };
+                              });
+
+                              console.log("newValue1", newValue);
+                            }}
+                            sx={{ width: "200px" }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Country"
+                                variant="standard"
+                              />
+                            )}
+                          />
+                        ) : (
+                          ""
+                        )}
                         {filterBy == "Bonus Status" ? (
                           <FormControl
                             sx={{ m: 1, width: 300 }}
@@ -577,7 +882,7 @@ const CommonFilter = (prop) => {
 
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     bonus_offer_status: e.target.value,
                                   };
                                 });
@@ -605,7 +910,7 @@ const CommonFilter = (prop) => {
                                 setcheckStatus(e.target.value);
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     status: e.target.value,
                                   };
                                 });
@@ -637,7 +942,7 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     user_id: e.target.value,
                                   };
                                 });
@@ -667,7 +972,7 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     admin_status: e.target.value,
                                     sponsor_status: "",
                                   };
@@ -695,7 +1000,7 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     sponsor_status: e.target.value,
                                     admin_status: "",
                                   };
@@ -723,7 +1028,7 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     user_kyc_status: e.target.value,
                                   };
                                 });
@@ -740,7 +1045,6 @@ const CommonFilter = (prop) => {
                         ) : (
                           ""
                         )}
-
                         {filterBy == "userGroup" ? (
                           <FormControl
                             sx={{ m: 1, width: 300 }}
@@ -751,7 +1055,7 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     user_group_id: e.target.value,
                                   };
                                 });
@@ -771,7 +1075,6 @@ const CommonFilter = (prop) => {
                         ) : (
                           ""
                         )}
-
                         {filterBy == "lastUpdatedBy" ? (
                           <FormControl
                             sx={{ m: 1, width: 300 }}
@@ -782,7 +1085,7 @@ const CommonFilter = (prop) => {
                               onChange={(e) => {
                                 prop.setParam((prevalue) => {
                                   return {
-                                    ...prevalue,
+                                    // ...prevalue,
                                     modified_by: e.target.value,
                                   };
                                 });

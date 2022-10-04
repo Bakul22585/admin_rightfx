@@ -270,7 +270,8 @@ const Target = (prop) => {
       cell: (row) => {
         return (
           <div>
-            {prop.permission.export_saleman_insantive == 1 ? (
+            {prop.permission.export_saleman_insantive == 1 ||
+            prop.permission.export_saleman_target == 1 ? (
               <Button onClick={(e) => report(row)}>
                 <i className="material-icons">stacked_bar_chart</i>
               </Button>
@@ -289,7 +290,7 @@ const Target = (prop) => {
       cell: (row) => {
         return (
           <div>
-            {prop.permission.export_saleman_target == 1 ? (
+            {prop.permission.set_target == 1 ? (
               <Button onClick={(e) => edit(row)}>
                 <i className="material-icons">track_changes</i>
               </Button>
@@ -311,6 +312,7 @@ const Target = (prop) => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     // param.append("user_id", id);
     param.append("action", "get_target");
@@ -347,6 +349,7 @@ const Target = (prop) => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       // param.append("user_id", id);
       param.append("action", "set_target");
@@ -415,6 +418,7 @@ const Target = (prop) => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("user_id", data.user_id);
     param.append("action", "get_target");
@@ -538,8 +542,16 @@ const Target = (prop) => {
                 onBlur={inputReporttrueFalse}
                 onChange={inputReport}
               >
-                <MenuItem value="1">Salesman Incentive</MenuItem>
-                <MenuItem value="2">Salesman Target</MenuItem>
+                {prop.permission.export_saleman_insantive == 1 ? (
+                  <MenuItem value="1">Salesman Incentive</MenuItem>
+                ) : (
+                  ""
+                )}
+                {prop.permission.export_saleman_target == 1 ? (
+                  <MenuItem value="2">Salesman Target</MenuItem>
+                ) : (
+                  ""
+                )}
               </Select>
               {reportData.type == "" && inputReportinfoTrue.type ? (
                 <FormHelperText>Report Type is required </FormHelperText>
@@ -688,6 +700,7 @@ const Target = (prop) => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("user_id", form.id);
       param.append("ac_target", form.ac_target);

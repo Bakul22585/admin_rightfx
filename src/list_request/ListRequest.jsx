@@ -965,7 +965,7 @@ const ListRequest = () => {
                                     {item.ibGroup != undefined ? (
                                       <Autocomplete
                                         className="autoComplete-input-remove-border"
-                                        disablePortal
+                                        // disablePortal
                                         options={item.ibGroup}
                                         getOptionLabel={(option) =>
                                           option ? option.ib_group_name : ""

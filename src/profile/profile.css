@@ -558,7 +558,13 @@ text.highcharts-credits {
     cursor: pointer;
 }
 .referrals-section table tbody tr.referral-child-structure-users {
-    background-color: aliceblue;
+    background-color: #e4e4e4;
+}
+.referrals-section table tbody tr.referral-child-structure-users2 {
+    background-color: #dadada;
+}
+.referrals-section table tbody tr.referral-child-structure-users1 {
+    background-color: #d1d0d0;
 }
 .referral-commission_rebate-content {
     padding: 10px;
@@ -962,6 +968,7 @@ text.highcharts-credits {
     }
     .ib-structure.view-commission-content-section .pair-data input {
         width: 55px !important;
+        margin-top: 0;
     }
     .ib-structure.view-commission-content-section .pair-data div:nth-child(2) {
         display: flex;
@@ -1010,4 +1017,22 @@ text.highcharts-credits {
     font-weight: 700;
     height: 35px;
     outline: 0;
+}
+.tableforriskscroe table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .tableforriskscroe th, .tableforriskscroe td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .tableforriskscroe tr:hover {background-color: #d7ecd9;}
+.statementdate{
+    gap: 10px;
+    display: flex;
+    padding-left: 16px;
+    padding-top: 10px;
 }

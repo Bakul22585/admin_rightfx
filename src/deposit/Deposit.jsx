@@ -1277,6 +1277,9 @@ const Deposit = (prop) => {
                   setParam={setParam}
                   searchWord={setSearchKeyword}
                   setcheckStatus={setcheckStatus}
+                  ib_users_list={resData.ib_users_list}
+                  sales_manager_list={resData.sales_manager_list}
+                  deposit_users_list={resData.deposit_users_list}
                   lastUpdatedBy={resData.modified_by_users}
                 />
                 <br />

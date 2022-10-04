@@ -59,6 +59,7 @@ const CurrencyRate = (prop) => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("action", "currency_rate");
     await axios.post(`${Url}/ajaxfiles/common_api.php`, param).then((res) => {
@@ -92,6 +93,7 @@ const CurrencyRate = (prop) => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "update_rate");
       param.append("deposit_rate", data.deposit_rate);

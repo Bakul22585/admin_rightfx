@@ -59,6 +59,8 @@ import { Url, ClientUrl, IsApprove } from "../global";
 import KycDocument from "./KycDocument";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import Referrals from "./Referrals";
+import Statement from "./Statement";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -351,16 +353,7 @@ const Profile = () => {
     structure: "",
     list: [],
   });
-  const [sendMailForm, setsendMailForm] = useState({
-    from: "",
-    to: "",
-    subject: "",
-    template_title: "",
-    language: "",
-    template: "",
-    body: "",
-    isLoader: false,
-  });
+
   const [cpAccessForm, setCpAccessForm] = useState({
     status: "",
   });
@@ -438,7 +431,23 @@ const Profile = () => {
     wallet_code: false,
     mt5_account_id: false,
   });
-
+  const [sendMailForm, setsendMailForm] = useState({
+    from: "",
+    to: "",
+    subject: "",
+    template_title: "",
+    language: "",
+    template: "",
+    body: "",
+    isLoader: false,
+  });
+  const [sendMailinputinfoTrue, setsendMailinputinfoTrue] = useState({
+    to: false,
+    subject: false,
+    template_title: false,
+    language: false,
+    template: false,
+  });
   const [linkCampaignForm, setLinkCampaignForm] = useState({
     account: "",
     campaign: "",
@@ -480,6 +489,7 @@ const Profile = () => {
       structure_name: "",
       structure_data: [],
       structure_id: "",
+      structure_dataOld: [],
       isLoader: false,
     });
   const [
@@ -489,6 +499,7 @@ const Profile = () => {
     structure_name: "",
     structure_data: [],
     structure_id: "",
+    structure_dataOld: [],
     isLoader: false,
   });
   const [structureList, setStructureList] = useState({
@@ -2213,6 +2224,7 @@ const Profile = () => {
         }
         if (res) {
           partnershipMasterStructureData.structure_data = resData.data.data;
+          partnershipMasterStructureData.structure_dataOld = resData.data.data1;
           setPartnershipMasterStructureData({
             ...partnershipMasterStructureData,
           });
@@ -2571,6 +2583,13 @@ const Profile = () => {
       });
     } else if (e.target.classList.contains("send_email")) {
       setDialogTitle("Send Email");
+      setsendMailinputinfoTrue({
+        to: false,
+        subject: false,
+        template_title: false,
+        language: false,
+        template: false,
+      });
       setsendMailForm({
         from: "",
         to: profileForm.email,
@@ -2708,6 +2727,8 @@ const Profile = () => {
       });
     } else if (e.target.classList.contains("edit_structure")) {
       setDialogTitle("EDIT STRUCTURE");
+      partnershipMasterStructureData.isLoader = false;
+      setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
       setEditSharedStructureForm({
         name: "",
         total_rebate: "",
@@ -2953,27 +2974,20 @@ const Profile = () => {
                 type="password"
                 label={
                   createMt5Form.account_type == "0"
-                    ? "Confirm Password"
-                    : "investor Password"
+                    ? "Investor Password"
+                    : "Investor Password"
                 }
                 error={
-                  createMt5Form.account_type == "0"
-                    ? (createMt5Form.password !==
-                        createMt5Form.confirm_password ||
-                        createMt5Form.confirm_password == "") &&
-                      inputinfoTrue.confirm_password
-                      ? true
-                      : false
-                    : (!createMt5Form.confirm_password.match(/[A-Z]/g) ||
-                        !createMt5Form.confirm_password.match(/[a-z]/g) ||
-                        !createMt5Form.confirm_password.match(/[0-9]/g) ||
-                        createMt5Form.confirm_password == "" ||
-                        createMt5Form.confirm_password.length < 8 ||
-                        createMt5Form.confirm_password.length >= 20 ||
-                        !createMt5Form.confirm_password.match(
-                          /[!@#$%^&*()_+=]/g
-                        )) &&
-                      inputinfoTrue.confirm_password
+                  (!createMt5Form.confirm_password.match(/[A-Z]/g) ||
+                    !createMt5Form.confirm_password.match(/[a-z]/g) ||
+                    !createMt5Form.confirm_password.match(/[0-9]/g) ||
+                    createMt5Form.confirm_password == "" ||
+                    createMt5Form.confirm_password.length < 8 ||
+                    createMt5Form.confirm_password.length >= 20 ||
+                    !createMt5Form.confirm_password.match(
+                      /[!@#$%^&*()_+=]/g
+                    )) &&
+                  inputinfoTrue.confirm_password
                     ? true
                     : false
                 }
@@ -2981,17 +2995,8 @@ const Profile = () => {
                 onChange={input}
                 onBlur={inputtrueFalse}
                 helperText={
-                  createMt5Form.account_type == "0"
-                    ? createMt5Form.confirm_password == "" &&
-                      inputinfoTrue.confirm_password
-                      ? "Enter your Confirm Password"
-                      : createMt5Form.password !==
-                          createMt5Form.confirm_password &&
-                        inputinfoTrue.confirm_password
-                      ? "Passwords must match"
-                      : ""
-                    : createMt5Form.confirm_password == "" &&
-                      inputinfoTrue.confirm_password
+                  createMt5Form.confirm_password == "" &&
+                  inputinfoTrue.confirm_password
                     ? "Enter your investor Password"
                     : inputinfoTrue.confirm_password &&
                       (createMt5Form.confirm_password.length < 8 ||
@@ -3393,9 +3398,23 @@ const Profile = () => {
                           {/* <span>Rebate</span> */}
                           <input
                             type="text"
+                            style={
+                              (item.group_rebate * 100) /
+                                newMasterStructureData.structure_dataOld[index]
+                                  .group_rebate1 >
+                              100
+                                ? { border: "2px solid red" }
+                                : {}
+                            }
                             className="Rebate_amount"
                             placeholder="Rebate"
                             value={item.group_rebate}
+                            disabled={
+                              newMasterStructureData.structure_dataOld[index]
+                                .group_rebate1 == 0
+                                ? true
+                                : false
+                            }
                             onChange={(e) => {
                               var floatNumber = e.target.value.split(".");
                               if (!isNaN(Number(e.target.value))) {
@@ -3410,10 +3429,21 @@ const Profile = () => {
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
                                   ].forEach((value, valueIndex) => {
-                                    newMasterStructureData.structure_data[
-                                      index
-                                    ]["pair_data"][valueIndex]["rebate"] =
-                                      e.target.value;
+                                    if (
+                                      newMasterStructureData.structure_dataOld[
+                                        index
+                                      ]["pair_data1"][valueIndex]["rebate1"] ==
+                                      0
+                                    ) {
+                                      newMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][valueIndex]["rebate"] = 0;
+                                    } else {
+                                      newMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][valueIndex]["rebate"] =
+                                        e.target.value;
+                                    }
                                   });
                                   setNewMasterStructureData({
                                     ...newMasterStructureData,
@@ -3439,16 +3469,30 @@ const Profile = () => {
                               }
                             }}
                           />
-                          <span style={{ marginLeft: "4px" }}>
+                          <span>
                             {item.group_rebate == "0" ? (
-                              "0%"
+                              <span className="fw-700 d-block">0.00%</span>
                             ) : (
-                              <span className="fw-700">
-                                {(item.group_rebate * 100) /
+                              <span className="fw-700 d-block">
+                                {(
+                                  (item.group_rebate * 100) /
                                   newMasterStructureData.structure_dataOld[
                                     index
-                                  ].group_rebate1}
-                                %
+                                  ].group_rebate1
+                                ).toFixed(2) == Infinity ||
+                                (
+                                  (item.group_rebate * 100) /
+                                  newMasterStructureData.structure_dataOld[
+                                    index
+                                  ].group_rebate1
+                                ).toFixed(2) == "NaN"
+                                  ? "0.00%"
+                                  : `${(
+                                      (item.group_rebate * 100) /
+                                      newMasterStructureData.structure_dataOld[
+                                        index
+                                      ].group_rebate1
+                                    ).toFixed(2)}%`}
                               </span>
                             )}
                           </span>
@@ -3504,25 +3548,29 @@ const Profile = () => {
                             }}
                           />
                         </div>
-                      </div>
-                      <div className="action-section">
-                        <span
-                          onClick={(e) => {
-                            newMasterStructureData.structure_data[index][
-                              "is_visible"
-                            ] = !item.is_visible;
-                            setUpdateDate({ ...newMasterStructureData });
-                          }}
-                        >
-                          <i
-                            class={`fa ${
-                              item.is_visible ? "fa-angle-up" : "fa-angle-down"
-                            }`}
-                            aria-hidden="true"
-                          ></i>
-                        </span>
+                        <div style={{ marginLeft: "15px" }}>
+                          <span
+                            onClick={(e) => {
+                              newMasterStructureData.structure_data[index][
+                                "is_visible"
+                              ] = !item.is_visible;
+                              setUpdateDate({ ...newMasterStructureData });
+                            }}
+                          >
+                            <i
+                              style={{ fontSize: "27px" }}
+                              class={`fa ${
+                                item.is_visible
+                                  ? "fa-angle-up"
+                                  : "fa-angle-down"
+                              }`}
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                        </div>
                       </div>
                     </div>
+
                     <div
                       className={`pair-section ${
                         item.is_visible ? "child-section-visible" : ""
@@ -3539,7 +3587,30 @@ const Profile = () => {
                                 type="text"
                                 className="rebert_amount"
                                 placeholder="Rebert"
-                                value={item1.rebate}
+                                // value={item1.rebate}
+                                value={
+                                  newMasterStructureData.structure_dataOld[
+                                    index
+                                  ]["pair_data1"][index1]["rebate1"] == 0
+                                    ? 0
+                                    : item1.rebate
+                                }
+                                disabled={
+                                  newMasterStructureData.structure_dataOld[
+                                    index
+                                  ]["pair_data1"][index1]["rebate1"] == 0
+                                    ? true
+                                    : false
+                                }
+                                style={
+                                  (item1.rebate * 100) /
+                                    newMasterStructureData.structure_dataOld[
+                                      index
+                                    ]["pair_data1"][index1]["rebate1"] >
+                                  100
+                                    ? { border: "2px solid red" }
+                                    : {}
+                                }
                                 onChange={(e) => {
                                   var floatNumber = e.target.value.split(".");
                                   if (!isNaN(Number(e.target.value))) {
@@ -3570,17 +3641,27 @@ const Profile = () => {
                                 }}
                               />
                               {item1.rebate == "0" ? (
-                                "0%"
+                                <span className="fw-700 d-block">0.00%</span>
                               ) : (
-                                <span
-                                  style={{ marginLeft: "4px" }}
-                                  className="fw-700"
-                                >
+                                <span className="fw-700 d-block">
                                   {(item1.rebate * 100) /
                                     newMasterStructureData.structure_dataOld[
                                       index
-                                    ]["pair_data1"][index1]["rebate1"]}
-                                  %
+                                    ]["pair_data1"][index1]["rebate1"] ==
+                                    Infinity ||
+                                  (item1.rebate * 100) /
+                                    newMasterStructureData.structure_dataOld[
+                                      index
+                                    ]["pair_data1"][index1]["rebate1"] ==
+                                    "NaN"
+                                    ? "0.00%"
+                                    : `${(
+                                        (item1.rebate * 100) /
+                                        newMasterStructureData
+                                          .structure_dataOld[index][
+                                          "pair_data1"
+                                        ][index1]["rebate1"]
+                                      ).toFixed(2)}%`}
                                 </span>
                               )}
                             </div>
@@ -3636,20 +3717,6 @@ const Profile = () => {
       return (
         <div className="master-structure-section">
           <div className="structureNameSection view-ib-content-section">
-            {/* <input
-                  type="text"
-                  className=""
-                  placeholder="Structure Name"
-                  name="name"
-                  onChange={(e) => {
-                    setStructureList((preValue) => {
-                      return {
-                        ...preValue,
-                        structure_name: e.target.value,
-                      };
-                    });
-                  }}
-                /> */}
             <FormControl variant="standard" sx={{ width: "100%" }}>
               <InputLabel>Structure</InputLabel>
               <Select
@@ -3700,6 +3767,20 @@ const Profile = () => {
                             type="text"
                             className="Rebate_amount"
                             placeholder="Rebate"
+                            style={
+                              (item.group_rebate * 100) /
+                                newMasterStructureData.structure_dataOld[index]
+                                  .group_rebate1 >
+                              100
+                                ? { border: "2px solid red" }
+                                : {}
+                            }
+                            disabled={
+                              newMasterStructureData.structure_dataOld[index]
+                                .group_rebate1 == 0
+                                ? true
+                                : false
+                            }
                             value={item.group_rebate}
                             onChange={(e) => {
                               var floatNumber = e.target.value.split(".");
@@ -3715,10 +3796,21 @@ const Profile = () => {
                                   newMasterStructureData.structure_data[index][
                                     "pair_data"
                                   ].forEach((value, valueIndex) => {
-                                    newMasterStructureData.structure_data[
-                                      index
-                                    ]["pair_data"][valueIndex]["rebate"] =
-                                      e.target.value;
+                                    if (
+                                      newMasterStructureData.structure_dataOld[
+                                        index
+                                      ]["pair_data1"][valueIndex]["rebate1"] ==
+                                      0
+                                    ) {
+                                      newMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][valueIndex]["rebate"] = 0;
+                                    } else {
+                                      newMasterStructureData.structure_data[
+                                        index
+                                      ]["pair_data"][valueIndex]["rebate"] =
+                                        e.target.value;
+                                    }
                                   });
                                   setNewMasterStructureData({
                                     ...newMasterStructureData,
@@ -3744,16 +3836,30 @@ const Profile = () => {
                               }
                             }}
                           />
-                          <span style={{ marginLeft: "4px" }}>
+                          <span>
                             {item.group_rebate == "0" ? (
-                              "0%"
+                              <span className="fw-700 d-block">0.00%</span>
                             ) : (
-                              <span className="fw-700">
-                                {(item.group_rebate * 100) /
+                              <span className="fw-700 d-block">
+                                {(
+                                  (item.group_rebate * 100) /
                                   newMasterStructureData.structure_dataOld[
                                     index
-                                  ].group_rebate1}
-                                %
+                                  ].group_rebate1
+                                ).toFixed(2) == Infinity ||
+                                (
+                                  (item.group_rebate * 100) /
+                                  newMasterStructureData.structure_dataOld[
+                                    index
+                                  ].group_rebate1
+                                ).toFixed(2) == "NaN"
+                                  ? "0.00%"
+                                  : `${(
+                                      (item.group_rebate * 100) /
+                                      newMasterStructureData.structure_dataOld[
+                                        index
+                                      ].group_rebate1
+                                    ).toFixed(2)}%`}
                               </span>
                             )}
                           </span>
@@ -3792,23 +3898,26 @@ const Profile = () => {
                             }}
                           />
                         </div>
-                      </div>
-                      <div className="action-section">
-                        <span
-                          onClick={(e) => {
-                            newMasterStructureData.structure_data[index][
-                              "is_visible"
-                            ] = !item.is_visible;
-                            setUpdateDate({ ...newMasterStructureData });
-                          }}
-                        >
-                          <i
-                            class={`fa ${
-                              item.is_visible ? "fa-angle-up" : "fa-angle-down"
-                            }`}
-                            aria-hidden="true"
-                          ></i>
-                        </span>
+                        <div style={{ marginLeft: "15px" }}>
+                          <span
+                            onClick={(e) => {
+                              newMasterStructureData.structure_data[index][
+                                "is_visible"
+                              ] = !item.is_visible;
+                              setUpdateDate({ ...newMasterStructureData });
+                            }}
+                          >
+                            <i
+                              style={{ fontSize: "27px" }}
+                              class={`fa ${
+                                item.is_visible
+                                  ? "fa-angle-up"
+                                  : "fa-angle-down"
+                              }`}
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div
@@ -3827,7 +3936,29 @@ const Profile = () => {
                                 type="text"
                                 className="rebert_amount"
                                 placeholder="Rebert"
-                                value={item1.rebate}
+                                value={
+                                  newMasterStructureData.structure_dataOld[
+                                    index
+                                  ]["pair_data1"][index1]["rebate1"] == 0
+                                    ? 0
+                                    : item1.rebate
+                                }
+                                disabled={
+                                  newMasterStructureData.structure_dataOld[
+                                    index
+                                  ]["pair_data1"][index1]["rebate1"] == 0
+                                    ? true
+                                    : false
+                                }
+                                style={
+                                  (item1.rebate * 100) /
+                                    newMasterStructureData.structure_dataOld[
+                                      index
+                                    ]["pair_data1"][index1]["rebate1"] >
+                                  100
+                                    ? { border: "2px solid red" }
+                                    : {}
+                                }
                                 onChange={(e) => {
                                   var floatNumber = e.target.value.split(".");
                                   if (!isNaN(Number(e.target.value))) {
@@ -3858,17 +3989,27 @@ const Profile = () => {
                                 }}
                               />
                               {item1.rebate == "0" ? (
-                                "0%"
+                                <span className="fw-700 d-block">0.00%</span>
                               ) : (
-                                <span
-                                  style={{ marginLeft: "4px" }}
-                                  className="fw-700"
-                                >
+                                <span className="fw-700 d-block">
                                   {(item1.rebate * 100) /
                                     newMasterStructureData.structure_dataOld[
                                       index
-                                    ]["pair_data1"][index1]["rebate1"]}
-                                  %
+                                    ]["pair_data1"][index1]["rebate1"] ==
+                                    Infinity ||
+                                  (item1.rebate * 100) /
+                                    newMasterStructureData.structure_dataOld[
+                                      index
+                                    ]["pair_data1"][index1]["rebate1"] ==
+                                    "NaN"
+                                    ? "0.00%"
+                                    : `${(
+                                        (item1.rebate * 100) /
+                                        newMasterStructureData
+                                          .structure_dataOld[index][
+                                          "pair_data1"
+                                        ][index1]["rebate1"]
+                                      ).toFixed(2)}%`}
                                 </span>
                               )}
                             </div>
@@ -4247,12 +4388,31 @@ const Profile = () => {
             <TextField
               className="input-font-small"
               label="To"
-              type="email"
+              type="text"
               variant="standard"
               sx={{ width: "100%" }}
               name="to"
               value={sendMailForm.to}
+              error={
+                (sendMailForm.to == "" ||
+                  !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                    sendMailForm.to
+                  )) &&
+                sendMailinputinfoTrue.to
+                  ? true
+                  : false
+              }
+              onBlur={sendMailinputtrueFalse}
               onChange={sendMailInput}
+              helperText={
+                sendMailForm.to == "" && sendMailinputinfoTrue.to
+                  ? "Please enter to e-mail address"
+                  : !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                      sendMailForm.to
+                    ) && sendMailinputinfoTrue.to
+                  ? "Enter a valid to e-mail"
+                  : ""
+              }
             />
           </div>
 
@@ -4261,6 +4421,17 @@ const Profile = () => {
               className="input-font-small"
               label="Subject"
               variant="standard"
+              onBlur={sendMailinputtrueFalse}
+              error={
+                sendMailForm.subject == "" && sendMailinputinfoTrue.subject
+                  ? true
+                  : false
+              }
+              helperText={
+                sendMailForm.subject == "" && sendMailinputinfoTrue.subject
+                  ? "Please enter subject"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="subject"
               onChange={sendMailInput}
@@ -4272,6 +4443,19 @@ const Profile = () => {
               className="input-font-small"
               label="Template Title"
               variant="standard"
+              onBlur={sendMailinputtrueFalse}
+              error={
+                sendMailForm.template_title == "" &&
+                sendMailinputinfoTrue.template_title
+                  ? true
+                  : false
+              }
+              helperText={
+                sendMailForm.template_title == "" &&
+                sendMailinputinfoTrue.template_title
+                  ? "Please enter template title"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="template_title"
               onChange={sendMailInput}
@@ -4279,17 +4463,31 @@ const Profile = () => {
           </div>
 
           <div className="padingtopmy5create">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                sendMailForm.language == "" && sendMailinputinfoTrue.language
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Language</InputLabel>
               <Select
                 label
                 className="select-font-small"
                 name="language"
+                onBlur={sendMailinputtrueFalse}
                 onChange={sendMailInput}
               >
                 <MenuItem value="en-gb">English</MenuItem>
                 <MenuItem value="ar-ae">عربي</MenuItem>
               </Select>
+              {sendMailForm.language == "" && sendMailinputinfoTrue.language ? (
+                <FormHelperText>Please select language</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
 
@@ -4569,88 +4767,90 @@ const Profile = () => {
               </RadioGroup>
             </FormControl>
             <Grid container>
-              <Grid item md={bankAccountForm.ibanselect == "IFSC" ? 8 : 12}>
-                <TextField
-                  value={bankAccountForm.iban_number}
-                  className="input-font-small"
-                  label="CODE"
-                  variant="standard"
-                  sx={{ width: "100%" }}
-                  error={
-                    bankAccountForm.iban_number == "" &&
-                    bankIinfoTrue.iban_number
-                      ? true
-                      : false
-                  }
-                  onBlur={bankInputtrueFalse}
-                  name="iban_number"
-                  onChange={(e) => {
-                    if (
-                      e.target.value === "" ||
-                      /^[A-Za-z0-9_ ]*$/.test(e.target.value) ||
-                      e.target.value === " "
-                    ) {
-                      // console.log("ok right");
-                      if (bankAccountForm.show) {
-                        bankInput(e);
-                        bankAccountForm.ifscdata = {};
-                        bankAccountForm.show = false;
-                        setBankAccountForm({ ...bankAccountForm });
-                      } else {
-                        bankInput(e);
-                      }
+              <Grid item md={12}>
+                <div className="d-flex">
+                  <TextField
+                    value={bankAccountForm.iban_number}
+                    className="input-font-small"
+                    label="CODE"
+                    variant="standard"
+                    sx={
+                      bankAccountForm.ibanselect == "IFSC"
+                        ? { width: "70%" }
+                        : { width: "100%" }
                     }
-                  }}
-                  // onChange={(e) => {
+                    error={
+                      bankAccountForm.iban_number == "" &&
+                      bankIinfoTrue.iban_number
+                        ? true
+                        : false
+                    }
+                    onBlur={bankInputtrueFalse}
+                    name="iban_number"
+                    onChange={(e) => {
+                      if (
+                        e.target.value === "" ||
+                        /^[A-Za-z0-9_ ]*$/.test(e.target.value) ||
+                        e.target.value === " "
+                      ) {
+                        // console.log("ok right");
+                        if (bankAccountForm.show) {
+                          bankInput(e);
+                          bankAccountForm.ifscdata = {};
+                          bankAccountForm.show = false;
+                          setBankAccountForm({ ...bankAccountForm });
+                        } else {
+                          bankInput(e);
+                        }
+                      }
+                    }}
+                    // onChange={(e) => {
 
-                  // }}
-                  helperText={
-                    bankAccountForm.iban_number == "" &&
-                    bankIinfoTrue.iban_number
-                      ? "Code is required"
-                      : ""
-                  }
-                />
-              </Grid>
-              {bankAccountForm.ibanselect == "IFSC" ? (
-                <Grid item md={4}>
-                  {bankAccountForm.visLoader != false ? (
-                    <Button
-                      sx={{
-                        marginLeft: "6px",
-                        marginTop: "5px",
-                        padding: "20px 64px",
-                      }}
-                      variant="contained"
-                      disabled
-                      className="add_bank"
-                    >
-                      <svg class="spinner" viewBox="0 0 50 50">
-                        <circle
-                          class="path"
-                          cx="25"
-                          cy="25"
-                          r="20"
-                          fill="none"
-                          stroke-width="5"
-                        ></circle>
-                      </svg>
-                    </Button>
+                    // }}
+                    helperText={
+                      bankAccountForm.iban_number == "" &&
+                      bankIinfoTrue.iban_number ? (
+                        <p className="d-block">Code is required</p>
+                      ) : (
+                        ""
+                      )
+                    }
+                  />
+                  {bankAccountForm.ibanselect == "IFSC" ? (
+                    bankAccountForm.visLoader != false ? (
+                      <Button
+                        sx={{ marginLeft: "10px", width: "30%" }}
+                        variant="contained"
+                        disabled
+                        className="add_bank"
+                      >
+                        <svg class="spinner" viewBox="0 0 50 50">
+                          <circle
+                            class="path"
+                            cx="25"
+                            cy="25"
+                            r="20"
+                            fill="none"
+                            stroke-width="5"
+                          ></circle>
+                        </svg>
+                      </Button>
+                    ) : (
+                      <Button
+                        sx={{ marginLeft: "10px", width: "30%" }}
+                        variant="contained"
+                        className="add_bank"
+                        disabled={bankAccountForm.show}
+                        onClick={checkIfscCode}
+                      >
+                        Verify Code
+                      </Button>
+                    )
                   ) : (
-                    <Button
-                      sx={{ marginLeft: "6px", marginTop: "5px" }}
-                      variant="contained"
-                      className="add_bank"
-                      disabled={bankAccountForm.show}
-                      onClick={checkIfscCode}
-                    >
-                      Verify Code
-                    </Button>
+                    ""
                   )}
-                </Grid>
-              ) : (
-                ""
-              )}
+                </div>
+              </Grid>
 
               {bankAccountForm.show && bankAccountForm.ifscdata.BRANCH ? (
                 <div>
@@ -5845,6 +6045,20 @@ const Profile = () => {
                               type="text"
                               className="Rebate_amount"
                               placeholder="Rebate"
+                              style={
+                                (item.group_rebate * 100) /
+                                  partnershipMasterStructureData
+                                    .structure_dataOld[index].group_rebate1 >
+                                100
+                                  ? { border: "2px solid red" }
+                                  : {}
+                              }
+                              disabled={
+                                partnershipMasterStructureData
+                                  .structure_dataOld[index].group_rebate1 == 0
+                                  ? true
+                                  : false
+                              }
                               value={item.group_rebate}
                               onChange={(e) => {
                                 var floatNumber = e.target.value.split(".");
@@ -5861,10 +6075,23 @@ const Profile = () => {
                                       index
                                     ]["pair_data"].forEach(
                                       (value, valueIndex) => {
-                                        partnershipMasterStructureData.structure_data[
-                                          index
-                                        ]["pair_data"][valueIndex]["rebate"] =
-                                          e.target.value;
+                                        if (
+                                          partnershipMasterStructureData
+                                            .structure_dataOld[index][
+                                            "pair_data1"
+                                          ][valueIndex]["rebate1"] == 0
+                                        ) {
+                                          partnershipMasterStructureData.structure_data[
+                                            index
+                                          ]["pair_data"][valueIndex][
+                                            "rebate"
+                                          ] = 0;
+                                        } else {
+                                          partnershipMasterStructureData.structure_data[
+                                            index
+                                          ]["pair_data"][valueIndex]["rebate"] =
+                                            e.target.value;
+                                        }
                                       }
                                     );
                                     setPartnershipMasterStructureData({
@@ -5893,6 +6120,31 @@ const Profile = () => {
                                 }
                               }}
                             />
+                            <span>
+                              {item.group_rebate == "0" ? (
+                                <span className="fw-700 d-block">0.00%</span>
+                              ) : (
+                                <span className="fw-700 d-block">
+                                  {(
+                                    (item.group_rebate * 100) /
+                                    partnershipMasterStructureData
+                                      .structure_dataOld[index].group_rebate1
+                                  ).toFixed(2) == Infinity ||
+                                  (
+                                    (item.group_rebate * 100) /
+                                    partnershipMasterStructureData
+                                      .structure_dataOld[index].group_rebate1
+                                  ).toFixed(2) == "NaN"
+                                    ? "0.00%"
+                                    : `${(
+                                        (item.group_rebate * 100) /
+                                        partnershipMasterStructureData
+                                          .structure_dataOld[index]
+                                          .group_rebate1
+                                      ).toFixed(2)}%`}
+                                </span>
+                              )}
+                            </span>
                           </div>
                           <div>
                             {/* <span>Commission</span> */}
@@ -5991,7 +6243,33 @@ const Profile = () => {
                                   type="text"
                                   className="rebert_amount"
                                   placeholder="Rebert"
-                                  value={item1.rebate}
+                                  // value={item1.rebate}
+                                  value={
+                                    partnershipMasterStructureData
+                                      .structure_dataOld[index]["pair_data1"][
+                                      index1
+                                    ]["rebate1"] == 0
+                                      ? 0
+                                      : item1.rebate
+                                  }
+                                  disabled={
+                                    partnershipMasterStructureData
+                                      .structure_dataOld[index]["pair_data1"][
+                                      index1
+                                    ]["rebate1"] == 0
+                                      ? true
+                                      : false
+                                  }
+                                  style={
+                                    (item1.rebate * 100) /
+                                      partnershipMasterStructureData
+                                        .structure_dataOld[index]["pair_data1"][
+                                        index1
+                                      ]["rebate1"] >
+                                    100
+                                      ? { border: "2px solid red" }
+                                      : {}
+                                  }
                                   onChange={(e) => {
                                     var floatNumber = e.target.value.split(".");
                                     if (!isNaN(Number(e.target.value))) {
@@ -6021,6 +6299,32 @@ const Profile = () => {
                                     }
                                   }}
                                 />
+                                {item1.rebate == "0" ? (
+                                  <span className="fw-700 d-block">0.00%</span>
+                                ) : (
+                                  <span className="fw-700 d-block">
+                                    {(item1.rebate * 100) /
+                                      partnershipMasterStructureData
+                                        .structure_dataOld[index]["pair_data1"][
+                                        index1
+                                      ]["rebate1"] ==
+                                      Infinity ||
+                                    (item1.rebate * 100) /
+                                      partnershipMasterStructureData
+                                        .structure_dataOld[index]["pair_data1"][
+                                        index1
+                                      ]["rebate1"] ==
+                                      "NaN"
+                                      ? "0.00%"
+                                      : `${(
+                                          (item1.rebate * 100) /
+                                          partnershipMasterStructureData
+                                            .structure_dataOld[index][
+                                            "pair_data1"
+                                          ][index1]["rebate1"]
+                                        ).toFixed(2)}%`}
+                                  </span>
+                                )}
                               </div>
                               <div>
                                 <input
@@ -7206,14 +7510,34 @@ const Profile = () => {
           >
             Cancel
           </Button>
-
-          <Button
-            variant="contained"
-            className="btn-gradient btn-success"
-            onClick={masterStructureSubmit}
-          >
-            Add Structure
-          </Button>
+          {newMasterStructureData.isLoader ? (
+            <Button
+              tabIndex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              {" "}
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={masterStructureSubmit}
+            >
+              Add Structure
+            </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "Edit Master Structure") {
@@ -7227,13 +7551,34 @@ const Profile = () => {
             Cancel
           </Button>
 
-          <Button
-            variant="contained"
-            className="btn-gradient btn-success"
-            onClick={masterStructureSubmit1}
-          >
-            Edit Structure
-          </Button>
+          {newMasterStructureData.isLoader ? (
+            <Button
+              tabIndex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              {" "}
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={masterStructureSubmit1}
+            >
+              Edit Structure
+            </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "ADD SHARED STRUCTURE") {
@@ -7316,13 +7661,33 @@ const Profile = () => {
           >
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            className="btn-gradient btn-success"
-            onClick={partnerMasterStructureSubmit}
-          >
-            Edit Structure
-          </Button>
+          {partnershipMasterStructureData.isLoader ? (
+            <Button
+              tabIndex="0"
+              size="large"
+              className=" btn-gradient  btn-success createMt5Formloder"
+              disabled
+            >
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle
+                  class="path"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                ></circle>
+              </svg>
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              className="btn-gradient btn-success"
+              onClick={partnerMasterStructureSubmit}
+            >
+              Edit Structure
+            </Button>
+          )}
         </div>
       );
     } else if (dialogTitle == "Change MT5 Password") {
@@ -7754,7 +8119,7 @@ const Profile = () => {
       ) */
       toast.error("Minimum eight characters is required in Main password");
     } else if (createMt5Form.confirm_password == "") {
-      toast.error("Please enter confirm password");
+      toast.error("Please enter investor password");
     } else if (createMt5Form.confirm_password == createMt5Form.password) {
       toast.error("Investor password can't be the same as Main password");
     } else if (createMt5Form.confirm_password.length <= 7) {
@@ -8386,6 +8751,8 @@ const Profile = () => {
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
+    newMasterStructureData.isLoader = true;
+    setNewMasterStructureData({ ...newMasterStructureData });
     param.append("user_id", id);
     param.append(
       "pair_data",
@@ -8403,8 +8770,13 @@ const Profile = () => {
         }
         if (res.data.status == "error") {
           toast.error(res.data.message);
+          newMasterStructureData.isLoader = false;
+          setNewMasterStructureData({ ...newMasterStructureData });
         } else {
+          newMasterStructureData.isLoader = false;
+          setNewMasterStructureData({ ...newMasterStructureData });
           toast.success(res.data.message);
+          getMasterStructureList();
           handleClose();
         }
       });
@@ -8416,56 +8788,57 @@ const Profile = () => {
       if (partnershipMasterStructureData.structure_name == "") {
         toast.error("Please enter structure name");
         error = true;
-      } else {
-        partnershipMasterStructureData.structure_data.forEach((element) => {
-          if (element.group_rebate === "") {
-            toast.error(`Please enter ${element.ib_group_name} rebate`);
-            error = true;
-            return false;
-          } else if (element.group_commission === "") {
-            toast.error(`Please enter ${element.ib_group_name} commission`);
-            error = true;
-            return false;
-          } else if (element.ib_group_level_id === 0) {
-            toast.error(`Please enter ${element.ib_group_name} ib group`);
-            error = true;
-            return false;
-          } else {
-            element.pair_data.forEach((element1) => {
-              if (element1.rebate === "") {
-                toast.error(
-                  `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
-                );
-                error = true;
-                return false;
-              } else if (element1.rebate > element.group_rebate) {
-                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
-                toast.error(
-                  `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
-                );
-                error = true;
-                return false;
-              } else if (element1.commission === "") {
-                toast.error(
-                  `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
-                );
-                error = true;
-                return false;
-              } else if (element1.commission > element.group_commission) {
-                // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
-                toast.error(
-                  `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
-                );
-                error = true;
-                return false;
-              }
-            });
-          }
-          if (error) {
-            return false;
-          }
-        });
       }
+      // else {
+      //   partnershipMasterStructureData.structure_data.forEach((element) => {
+      //     if (element.group_rebate === "") {
+      //       toast.error(`Please enter ${element.ib_group_name} rebate`);
+      //       error = true;
+      //       return false;
+      //     } else if (element.group_commission === "") {
+      //       toast.error(`Please enter ${element.ib_group_name} commission`);
+      //       error = true;
+      //       return false;
+      //     } else if (element.ib_group_level_id === 0) {
+      //       toast.error(`Please enter ${element.ib_group_name} ib group`);
+      //       error = true;
+      //       return false;
+      //     } else {
+      //       element.pair_data.forEach((element1) => {
+      //         if (element1.rebate === "") {
+      //           toast.error(
+      //             `Please enter ${element.ib_group_name} in ${element1.pair_name} rebate`
+      //           );
+      //           error = true;
+      //           return false;
+      //         } else if (element1.rebate > element.group_rebate) {
+      //           // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} rebate invalid`);
+      //           toast.error(
+      //             `Pair Rebate for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group rebate`
+      //           );
+      //           error = true;
+      //           return false;
+      //         } else if (element1.commission === "") {
+      //           toast.error(
+      //             `Please enter ${element.ib_group_name} in ${element1.pair_name} commission`
+      //           );
+      //           error = true;
+      //           return false;
+      //         } else if (element1.commission > element.group_commission) {
+      //           // toast.error(`Please enter ${element.ib_group_name} in ${element1.pair_name} commission invalid`);
+      //           toast.error(
+      //             `Pair Commission for ${element1.pair_name} can not be greater then ${element.ib_group_name} 1 group commission`
+      //           );
+      //           error = true;
+      //           return false;
+      //         }
+      //       });
+      //     }
+      //     if (error) {
+      //       return false;
+      //     }
+      //   });
+      // }
       if (error) {
         return false;
       }
@@ -8477,6 +8850,8 @@ const Profile = () => {
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
+    partnershipMasterStructureData.isLoader = true;
+    setPartnershipMasterStructureData({ ...partnershipMasterStructureData });
     param.append("user_id", id);
     param.append(
       "pair_data",
@@ -8497,7 +8872,17 @@ const Profile = () => {
         }
         if (res.data.status == "error") {
           toast.error(res.data.message);
+          partnershipMasterStructureData.isLoader = false;
+          setPartnershipMasterStructureData({
+            ...partnershipMasterStructureData,
+          });
         } else {
+          getMasterStructureList();
+
+          partnershipMasterStructureData.isLoader = false;
+          setPartnershipMasterStructureData({
+            ...partnershipMasterStructureData,
+          });
           toast.success(res.data.message);
           getPartnershipMasterStructure(
             partnershipMasterStructureData.structure_id
@@ -8569,6 +8954,8 @@ const Profile = () => {
     }
 
     const param = new FormData();
+    newMasterStructureData.isLoader = true;
+    setNewMasterStructureData({ ...newMasterStructureData });
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
@@ -8591,7 +8978,11 @@ const Profile = () => {
         }
         if (res.data.status == "error") {
           toast.error(res.data.message);
+          newMasterStructureData.isLoader = false;
+          setNewMasterStructureData({ ...newMasterStructureData });
         } else {
+          newMasterStructureData.isLoader = false;
+          setNewMasterStructureData({ ...newMasterStructureData });
           toast.success(res.data.message);
           handleClose();
         }
@@ -8947,13 +9338,25 @@ const Profile = () => {
       };
     });
   };
-
+  const sendMailinputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setsendMailinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const sendMailSubmit = () => {
     /* if (sendMailForm.from == "") {
       toast.error("Please select from e-mail address");
     } else  */
     if (sendMailForm.to == "") {
       toast.error("Please enter to e-mail address");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(sendMailForm.to)
+    ) {
+      toast.error("Enter a valid to e-mail");
     } else if (sendMailForm.subject == "") {
       toast.error("Please enter subject");
     } else if (sendMailForm.template_title == "") {
@@ -10619,7 +11022,15 @@ const Profile = () => {
                     ) : (
                       ""
                     )}
-
+                    {permission.list_my_structures == 1 ? (
+                      userData.data.is_ib_account == "0" ? (
+                        ""
+                      ) : (
+                        <Tab label="statement " value={13} />
+                      )
+                    ) : (
+                      ""
+                    )}
                     {permission.get_my_assigned_structure == 1 ? (
                       userData.data.is_ib_account == "0" ? (
                         ""
@@ -12115,146 +12526,7 @@ const Profile = () => {
                       )
                     ) : permission.list_my_structures == 1 ? (
                       <TabPanel value={7} index={7} dir={theme.direction}>
-                        <Grid container spacing={3} className="grid-handle">
-                          <Grid item md={12} lg={12} xl={12}>
-                            <Paper
-                              elevation={2}
-                              style={{ borderRadius: "10px" }}
-                              className="paper-main-section"
-                            >
-                              <div className="headerSection header-title">
-                                <p className="margin-0">Referrals</p>
-                              </div>
-                              <div className="bankDetailsTabSection">
-                                <br />
-                                <FormControl
-                                  variant="standard"
-                                  className="referrals_structure_dropdown"
-                                  sx={{ width: "20%" }}
-                                >
-                                  <InputLabel>Structure</InputLabel>
-                                  <Select
-                                    label
-                                    className="select-font-small"
-                                    name="structure"
-                                    onChange={(e) => {
-                                      getReferralData(e.target.value);
-                                      // setStructureList((prevalue) => {
-                                      //   return {
-                                      //     ...prevalue,
-                                      //     structure_name: structureList.data.filter(
-                                      //       (x) => x.structure_id == e.target.value
-                                      //     )[0].structure_name,
-                                      //     structure_id: e.target.value,
-                                      //   };
-                                      // });
-                                    }}
-                                  >
-                                    {structureList.data.map((item) => {
-                                      return (
-                                        <MenuItem value={item.structure_id}>
-                                          {item.structure_name}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                </FormControl>
-                                <br />
-                                <div className="referrals-section">
-                                  <table>
-                                    <thead>
-                                      <tr>
-                                        <th>Name</th>
-                                        <th>Client Type</th>
-                                        <th>MT5 Account</th>
-                                        <th>Commission</th>
-                                        <th>Rebate</th>
-                                        <th>Sponsor Name</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {referralData.data.map((item, index) => {
-                                        return (
-                                          <>
-                                            <tr>
-                                              <td>
-                                                <div className="collaps-content">
-                                                  <i
-                                                    class={`fa fa-angle-${
-                                                      item.is_collapse
-                                                        ? "up"
-                                                        : "down"
-                                                    }`}
-                                                    onClick={(e) => {
-                                                      referralData.data[
-                                                        index
-                                                      ].is_collapse =
-                                                        !item.is_collapse;
-                                                      setReferralData({
-                                                        ...referralData,
-                                                      });
-                                                    }}
-                                                  ></i>
-                                                  {item.ib_group_name}
-                                                </div>
-                                              </td>
-                                              <td>{item.client_type}</td>
-                                              <td>{item.mt5_acc_no}</td>
-                                              <td>
-                                                <div
-                                                  className="referral-commission_rebate-content"
-                                                  style={{
-                                                    backgroundColor: `${item.group_color}`,
-                                                  }}
-                                                >
-                                                  {item.group_commission}
-                                                </div>
-                                              </td>
-                                              <td>
-                                                <div
-                                                  className="referral-commission_rebate-content"
-                                                  style={{
-                                                    backgroundColor: `${item.group_color}`,
-                                                  }}
-                                                >
-                                                  {item.group_rebate}
-                                                </div>
-                                              </td>
-                                              <td>{item.sponsor_name}</td>
-                                            </tr>
-                                            {item.is_collapse
-                                              ? item.structure_users.map(
-                                                  (item1) => {
-                                                    return (
-                                                      <tr className="referral-child-structure-users">
-                                                        <td>
-                                                          {item1.client_name}
-                                                        </td>
-                                                        <td>{item1.client}</td>
-                                                        <td>
-                                                          {item1.mt5_acc_no}
-                                                        </td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>
-                                                          {item1.sponsor_name}
-                                                        </td>
-                                                      </tr>
-                                                    );
-                                                  }
-                                                )
-                                              : ""}
-                                          </>
-                                        );
-                                      })}
-                                      <tr></tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-                            </Paper>
-                          </Grid>
-                        </Grid>
+                        <Referrals id={id} />
                       </TabPanel>
                     ) : (
                       ""
@@ -13837,6 +14109,9 @@ const Profile = () => {
                     ) : (
                       ""
                     )}
+                    <TabPanel value={13} index={13} dir={theme.direction}>
+                      <Statement id={id} />
+                    </TabPanel>
                   </SwipeableViews>
                   {/* </Box> */}
                 </Grid>

@@ -62,6 +62,7 @@
     border: 1px solid #73748b;
     padding: 5px;
     width: 120px;
+    margin-top: 0;
     text-align: center;
 }
 .ib-structure.view-commission-content-section .main-section input, .ib-structure.view-commission-content-section .pair-data .pair-data-title  {
@@ -72,6 +73,7 @@
     background-color: aliceblue;
     padding: 10px;
     border-radius: 10px;
+    display: block;
 }
 .ib-structure.view-commission-content-section .group-structure-section .main-section .main-section-title {
     width: 100%;

@@ -412,23 +412,23 @@ const Dashboard = (prop) => {
   useEffect(() => {
     if (localStorage.getItem("login") == "true") {
       prop.setLogin("true");
-    }else{
-    const param = new FormData();
-    if (IsApprove !== "") {
-      param.append("is_app", IsApprove.is_app);
-      param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
-    }
-    axios.post(Url + "/ajaxfiles/dashboard.php", param).then((res) => {
-      if (res.data.message == "Session has been expired") {
-        localStorage.setItem("login", true);
-        prop.setLogin("true");
-        navigate("/");
-      } else {
-        setFullData(res.data);
-        setPageLoader(false);
+    } else {
+      const param = new FormData();
+      if (IsApprove !== "") {
+        param.append("is_app", IsApprove.is_app);
+        param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
       }
-    });
-  }
+      axios.post(Url + "/ajaxfiles/dashboard.php", param).then((res) => {
+        if (res.data.message == "Session has been expired") {
+          localStorage.setItem("login", true);
+          prop.setLogin("true");
+          navigate("/");
+        } else {
+          setFullData(res.data);
+          setPageLoader(false);
+        }
+      });
+    }
   }, []);
 
   const facthMapData = () => {

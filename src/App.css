@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+.watchListTable th{
+  /* padding-top: 12px;
+  padding-bottom: 12px; */
+  text-align: center;
+  background-color: #636967;
+  color: white;
+  
+  width: 22% !important;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 1px 8px 2px 8px;
+}
+.watchListTable{
+  width: 100%;
+  border-collapse: collapse; 
+  margin-top: 15px;
+
+}
+.firstcol32{
+  margin-right: 10px;
+  width: 19%;
+  /* align-items: center; */
+  /* margin: auto; */
+  justify-content: center;
+  display: flex;
+}

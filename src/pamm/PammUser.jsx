@@ -559,11 +559,20 @@ const PammUser = (prop) => {
               onBlur={inputtrueFalse}
               value={form.user_phone}
               error={
-                form.user_phone == "" && inputinfoTrue.user_phone ? true : false
+                (form.user_phone == "" ||
+                  form.user_phone.toString().length < 4 ||
+                  form.user_phone.toString().length > 12) &&
+                inputinfoTrue.user_phone
+                  ? true
+                  : false
               }
               helperText={
                 form.user_phone == "" && inputinfoTrue.user_phone
                   ? "Mobile Number is required"
+                  : (form.user_phone.toString().length < 4 ||
+                      form.user_phone.toString().length > 12) &&
+                    inputinfoTrue.user_phone
+                  ? "Mobile number is not valid"
                   : ""
               }
               onChange={(e) => {
@@ -575,7 +584,15 @@ const PammUser = (prop) => {
             />
           </div>
           <div className="input-element">
-            <FormControl variant="standard" sx={{ width: "100%" }}>
+            <FormControl
+              variant="standard"
+              sx={{ width: "100%" }}
+              error={
+                inputinfoTrue.user_gender == true && form.user_gender == ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Gender</InputLabel>
               <Select
                 label
@@ -588,6 +605,11 @@ const PammUser = (prop) => {
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </Select>
+              {inputinfoTrue.user_gender == true && form.user_gender == "" ? (
+                <FormHelperText>Please select gender</FormHelperText>
+              ) : (
+                ""
+              )}
             </FormControl>
           </div>
           <div className="input-element">
@@ -894,8 +916,17 @@ const PammUser = (prop) => {
       toast.error("Please enter last name");
     } else if (form.user_email == "") {
       toast.error("Please enter email address");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.user_email)
+    ) {
+      toast.error("Enter a valid email");
     } else if (form.user_phone == "") {
       toast.error("Please enter mobile number");
+    } else if (
+      form.user_phone.toString().length < 4 ||
+      form.user_phone.toString().length > 12
+    ) {
+      toast.error("mobile number is not valid");
     } else if (form.user_gender == "") {
       toast.error("Please select gender");
     } else if (form.user_address_1 == "") {
@@ -905,7 +936,10 @@ const PammUser = (prop) => {
     } else if (form.login_block == "") {
       toast.error("Please select login block");
     } else {
+      form.isLoader = true;
+      setForm({ ...form });
       const param = new FormData();
+
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
@@ -931,10 +965,14 @@ const PammUser = (prop) => {
         }
         if (res.data.status == "error") {
           toast.error(res.data.message);
+          form.isLoader = false;
+          setForm({ ...form });
         } else {
           toast.success(res.data.message);
           setRefresh(!refresh);
           setOpen(false);
+          form.isLoader = false;
+          setForm({ ...form });
         }
       });
     }

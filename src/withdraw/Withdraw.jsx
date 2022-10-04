@@ -307,6 +307,18 @@ const Withdraw = (prop) => {
       grow: 0.5,
     },
     {
+      name: "updated date",
+      selector: (row) => {
+        return (
+          <span title={row.approved_datetime}>{row.approved_datetime}</span>
+        );
+      },
+      sortable: true,
+      reorder: true,
+      wrap: true,
+      grow: 0.5,
+    },
+    {
       name: "Updated By",
       selector: (row) => {
         return <span title={row.modified_by_name}>{row.modified_by_name}</span>;

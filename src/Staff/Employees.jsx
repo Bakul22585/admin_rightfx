@@ -266,8 +266,17 @@ const Employees = (prop) => {
       toast.error("Last Name is required");
     } else if (form.user_email == "") {
       toast.error("Email is required");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.user_email)
+    ) {
+      toast.error("Enter a valid email");
     } else if (form.user_phone == "") {
       toast.error("Phone number is required");
+    } else if (
+      form.user_phone.toString().length < 4 ||
+      form.user_phone.toString().length > 12
+    ) {
+      toast.error("Phone number is not valid");
     } else if (form.role_id == "" || form.role_id == "0") {
       toast.error("Role is required");
     } else if (form.manger_master_id == "" && form.role_id == "3") {
@@ -276,7 +285,19 @@ const Employees = (prop) => {
       toast.error("Account target is required");
     } else if (form.money_in_target == "" && form.role_id == "3") {
       toast.error("Money in target is required");
-    } else if (form.user_status == "") {
+    }
+    // else if (form.user_password == "") {
+    //   toast.error("Enter your password");
+    // } else if (
+    //   !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+    //     form.user_password
+    //   )
+    // ) {
+    //   toast.error(
+    //     "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+    //   );
+    // }
+    else if (form.user_status == "") {
       toast.error("Status is required");
     } else {
       const param = new FormData();
@@ -384,8 +405,17 @@ const Employees = (prop) => {
       toast.error("Last Name is required");
     } else if (form.user_email == "") {
       toast.error("Email is required");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.user_email)
+    ) {
+      toast.error("Enter a valid email");
     } else if (form.user_phone == "") {
-      toast.error("Email is required");
+      toast.error("Phone is required");
+    } else if (
+      form.user_phone.toString().length < 4 ||
+      form.user_phone.toString().length > 12
+    ) {
+      toast.error("Phone number is not valid");
     } else if (form.role_id == "" || form.role_id == "0") {
       toast.error("Role is required");
     } else if (form.manger_master_id == "" && form.role_id == "3") {
@@ -394,7 +424,19 @@ const Employees = (prop) => {
       toast.error("Account target is required");
     } else if (form.money_in_target == "" && form.role_id == "3") {
       toast.error("Money in target is required");
-    } else if (form.user_status == "") {
+    }
+    //  else if (form.user_password == "") {
+    //   toast.error("Enter your password");
+    // } else if (
+    //   !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+    //     form.user_password
+    //   )
+    // ) {
+    //   toast.error(
+    //     "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+    //   );
+    // }
+    else if (form.user_status == "") {
       toast.error("Status is required");
     } else {
       const param = new FormData();
@@ -557,7 +599,8 @@ const Employees = (prop) => {
                 sx={{ width: "100%" }}
                 type="text"
                 error={
-                  (form.user_phone.toString().length <= 5 ||
+                  (form.user_phone.toString().length < 4 ||
+                    form.user_phone.toString().length > 12 ||
                     form.user_phone == "") &&
                   infoTrue.user_phone
                     ? true
@@ -571,8 +614,8 @@ const Employees = (prop) => {
                     setForm({
                       ...form,
                     });
-                  } else if (e.target.value == "" || e.target.value == 0) {
-                    form.user_phone = 0;
+                  } else if (e.target.value == "") {
+                    form.user_phone = "";
                     setForm({
                       ...form,
                     });
@@ -582,7 +625,8 @@ const Employees = (prop) => {
                 helperText={
                   form.user_phone == "" && infoTrue.user_phone
                     ? "Phone is required"
-                    : form.user_phone.toString().length <= 5 &&
+                    : (form.user_phone.toString().length < 4 ||
+                        form.user_phone.toString().length > 12) &&
                       infoTrue.user_phone
                     ? "Phone number is not valid"
                     : ""
@@ -739,38 +783,39 @@ const Employees = (prop) => {
               <TextField
                 label="Password"
                 type="password"
-                error={
-                  (!form.user_password.match(/[A-Z]/g) ||
-                    !form.user_password.match(/[a-z]/g) ||
-                    !form.user_password.match(/[0-9]/g) ||
-                    form.user_password == "" ||
-                    form.user_password.length < 8 ||
-                    form.user_password.length >= 20 ||
-                    !form.user_password.match(/[!@#$%^&*()_+=]/g)) &&
-                  infoTrue.user_password
-                    ? true
-                    : false
-                }
+                // error={
+                //   (!form.user_password.match(/[A-Z]/g) ||
+                //     !form.user_password.match(/[a-z]/g) ||
+                //     !form.user_password.match(/[0-9]/g) ||
+                //     form.user_password == "" ||
+                //     form.user_password.length < 8 ||
+                //     form.user_password.length > 20 ||
+                //     !form.user_password.match(/[!@#$%^&*()_+=]/g)) &&
+                //   infoTrue.user_password == true
+                //     ? true
+                //     : false
+                // }
                 variant="standard"
                 sx={{ width: "100%" }}
                 name="user_password"
                 onChange={input}
                 onBlur={trueFalse}
                 value={form.user_password}
-                helperText={
-                  form.user_password == "" && infoTrue.user_password
-                    ? "Enter your password"
-                    : infoTrue.user_password &&
-                      (form.user_password.length < 8 ||
-                        form.user_password.length >= 20)
-                    ? "Password must contain atleast 8-20 characters"
-                    : infoTrue.user_password &&
-                      (!form.user_password.match(/[A-Z]/g) ||
-                        !form.user_password.match(/[a-z]/g) ||
-                        !form.user_password.match(/[0-9]/g))
-                    ? "Atleast one lower case, upper case and number required"
-                    : ""
-                }
+                // helperText={
+                //   form.user_password == "" && infoTrue.user_password == true
+                //     ? "Enter your password"
+                //     : infoTrue.user_password == true &&
+                //       (form.user_password.length < 8 ||
+                //         form.user_password.length > 20)
+                //     ? "Password must contain atleast 8-20 characters"
+                //     : infoTrue.user_password == true &&
+                //       (!form.user_password.match(/[A-Z]/g) ||
+                //         !form.user_password.match(/[a-z]/g) ||
+                //         !form.user_password.match(/[0-9]/g) ||
+                //         !form.user_password.match(/[!@#$%^&*()_+=]/g))
+                //     ? "Atleast one lower case, upper case,special character and number required"
+                //     : ""
+                // }
               />
             </div>{" "}
             <div className="element  w-100">
@@ -1197,7 +1242,7 @@ const Employees = (prop) => {
                         <CommonTable
                           url={`${Url}/datatable/employees_list.php`}
                           column={columns}
-                          sort="2"
+                          sort="0"
                           refresh={refresh}
                           search={searchBy}
                           param={param}

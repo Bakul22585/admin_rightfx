@@ -786,9 +786,10 @@ const Link = (prop) => {
 
   const deleteLink = async (data) => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     // param.append("user_id", id);
     param.append("id", data.id);
@@ -812,9 +813,10 @@ const Link = (prop) => {
 
   const listSourceMaster = async () => {
     const param = new FormData();
-    if (IsApprove !== "") {
+    if (IsApprove != "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     // param.append("user_id", id);
     param.append("action", "list_campaign_master");
@@ -849,9 +851,10 @@ const Link = (prop) => {
       form.isLoader = true;
       setForm({ ...form });
       const param = new FormData();
-      if (IsApprove !== "") {
+      if (IsApprove != "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("url_type", form.url_type);
       param.append("sales_person", form.sales_person);

@@ -117,7 +117,20 @@ const FAQEditor = (prop) => {
   ]);
   const [param, setParam] = useState("");
   toast.configure();
-
+  const [inputinfoTrue, setinputinfoTrue] = useState({
+    question: false,
+    answer: false,
+    order: false,
+  });
+  const inputtrueFalse = (event) => {
+    var { name, value } = event.target;
+    setinputinfoTrue((prevalue) => {
+      return {
+        ...prevalue,
+        [name]: true,
+      };
+    });
+  };
   const column = [
     {
       name: "SR.NO",
@@ -217,6 +230,7 @@ const FAQEditor = (prop) => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("faq_id", id);
     await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
@@ -237,6 +251,11 @@ const FAQEditor = (prop) => {
             faqId: id,
           };
         });
+        setinputinfoTrue({
+          question: false,
+          answer: false,
+          order: false,
+        });
         setDialogTitle("Edit FAQ");
         setOpen(true);
       }
@@ -249,6 +268,7 @@ const FAQEditor = (prop) => {
     if (IsApprove !== "") {
       param.append("is_app", IsApprove.is_app);
       param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+      param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
     }
     param.append("faq_id", id);
     await axios.post(`${Url}/ajaxfiles/faq_manage.php`, param).then((res) => {
@@ -314,6 +334,11 @@ const FAQEditor = (prop) => {
       isLoader: "",
       faqId: "",
     });
+    setinputinfoTrue({
+      question: false,
+      answer: false,
+      order: false,
+    });
     setDialogTitle("Add FAQ");
     setOpen(true);
   };
@@ -326,6 +351,15 @@ const FAQEditor = (prop) => {
             <TextField
               label="Question"
               variant="standard"
+              error={
+                form.question == "" && inputinfoTrue.question ? true : false
+              }
+              helperText={
+                form.question == "" && inputinfoTrue.question
+                  ? "Please enter question"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
               sx={{ width: "100%" }}
               name="question"
               onChange={input}
@@ -337,6 +371,13 @@ const FAQEditor = (prop) => {
               multiline
               label="Answer"
               variant="standard"
+              onBlur={inputtrueFalse}
+              error={form.answer == "" && inputinfoTrue.answer ? true : false}
+              helperText={
+                form.answer == "" && inputinfoTrue.answer
+                  ? "Please enter answer"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="answer"
               onChange={input}
@@ -347,6 +388,13 @@ const FAQEditor = (prop) => {
             <TextField
               label="Order"
               variant="standard"
+              onBlur={inputtrueFalse}
+              error={form.order == "" && inputinfoTrue.order ? true : false}
+              helperText={
+                form.order == "" && inputinfoTrue.order
+                  ? "Please enter order"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="order"
               onChange={input}
@@ -370,6 +418,15 @@ const FAQEditor = (prop) => {
               variant="standard"
               sx={{ width: "100%" }}
               name="question"
+              error={
+                form.question == "" && inputinfoTrue.question ? true : false
+              }
+              helperText={
+                form.question == "" && inputinfoTrue.question
+                  ? "Please enter question"
+                  : ""
+              }
+              onBlur={inputtrueFalse}
               value={form.question}
               onChange={input}
             />
@@ -380,6 +437,13 @@ const FAQEditor = (prop) => {
               multiline
               label="Answer"
               variant="standard"
+              onBlur={inputtrueFalse}
+              error={form.answer == "" && inputinfoTrue.answer ? true : false}
+              helperText={
+                form.answer == "" && inputinfoTrue.answer
+                  ? "Please enter answer"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="answer"
               value={form.answer}
@@ -391,6 +455,13 @@ const FAQEditor = (prop) => {
             <TextField
               label="Order"
               variant="standard"
+              onBlur={inputtrueFalse}
+              error={form.order == "" && inputinfoTrue.order ? true : false}
+              helperText={
+                form.order == "" && inputinfoTrue.order
+                  ? "Please enter order"
+                  : ""
+              }
               sx={{ width: "100%" }}
               name="order"
               value={form.order}
@@ -457,7 +528,7 @@ const FAQEditor = (prop) => {
               className="btn-gradient btn-success"
               onClick={formSubmit}
             >
-              Add
+              {dialogTitle == "Edit FAQ" ? "Edit" : "Add"}
             </Button>
           )}
         </div>
@@ -515,6 +586,7 @@ const FAQEditor = (prop) => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("question", form.question);
       param.append("answer", form.answer);

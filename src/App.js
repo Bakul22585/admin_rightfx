@@ -68,6 +68,20 @@ import Mt5BonusOffer from "./MT5BonusManage/Mt5BonusOffer";
 import RefreshData from "./refresha/RefreshData";
 import { IsApprove, Url } from "./global";
 import axios from "axios";
+import Oldclient from "./client_list/Oldclient";
+import TeamCompare from "./report/TeamCompare";
+import TotalDepositsReport from "./TransactionReports/TotalDepositsReport";
+import TotalWithdrawalReport from "./TransactionReports/TotalWithdrawalReport";
+import TotalCreditInReport from "./TransactionReports/TotalCreditInReport";
+import TotalCreditOutReport from "./TransactionReports/TotalCreditOutReport";
+import UnfundedAccounts from "./TransactionReports/UnfundedAccounts";
+import ClientPassword from "./TransactionReports/ClientPassword";
+import LeasConverted from "./TransactionReports/LeasConverted";
+import LeadCallStatus from "./TransactionReports/LeadCallStatus";
+import Referrals from "./profile/Referrals";
+import RebateCommissionSummary from "./TransactionReports/RebateCommissionSummary";
+import io from "socket.io-client";
+import Watchlist from "./Watchlist";
 
 function useScrollToTop() {
   const { pathname } = useLocation();
@@ -177,11 +191,7 @@ const App = () => {
                   path="/client_list"
                   element={<ClientList permission={permission} />}
                 />
-                <Route
-                  exact
-                  path="/client_list"
-                  element={<ClientList permission={permission} />}
-                />
+                {/* <Route exact path="/client_list" element={<Oldclient />} /> */}
                 <Route
                   exact
                   path="/client_list/:id"
@@ -212,6 +222,7 @@ const App = () => {
                   path="/setting"
                   element={<Setting permission={permission} />}
                 />
+                <Route exact path="/watchlist" element={<Watchlist />} />
                 <Route
                   exact
                   path="/popup_image"
@@ -240,6 +251,28 @@ const App = () => {
                   element={<IBWithdraw permission={permission} />}
                 />
                 <Route exact path="/sales_report" element={<SalesReport />} />
+                <Route exact path="/team_compare" element={<TeamCompare />} />
+                <Route
+                  exact
+                  path="/total_deposit_report"
+                  element={<TotalDepositsReport />}
+                />
+                <Route
+                  exact
+                  path="/total_withdraw_report"
+                  element={<TotalWithdrawalReport />}
+                />
+                <Route
+                  exact
+                  path="/total_credit_in_report"
+                  element={<TotalCreditInReport />}
+                />
+                <Route
+                  exact
+                  path="/total_credit_out_report"
+                  element={<TotalCreditOutReport />}
+                />
+
                 <Route exact path="/refresh_data" element={<RefreshData />} />
 
                 <Route
@@ -273,7 +306,11 @@ const App = () => {
                   path="/leads_list"
                   element={<Leads permission={permission} />}
                 />
-                <Route exact path="/leads_list/:id" element={<Leads />} />
+                <Route
+                  exact
+                  path="/leads_list/:id"
+                  element={<Leads permission={permission} />}
+                />
                 <Route exact path="/reminder" element={<Remainder />} />
                 <Route exact path="/ib_commisions" element={<IBCommisions />} />
                 <Route exact path="/copy_trading" element={<CopyTrading />} />
@@ -294,10 +331,22 @@ const App = () => {
                   path="/withdraw_report"
                   element={<WithdrawHistory />}
                 />
+                {/* <Route exact path="/referrals" element={<Referrals />} /> */}
+
+                <Route
+                  exact
+                  path="/rebate_and_commission_summary"
+                  element={<RebateCommissionSummary />}
+                />
                 <Route
                   exact
                   path="/trade_statistics"
                   element={<TradeStatistics />}
+                />
+                <Route
+                  exact
+                  path="/lead_call_status"
+                  element={<LeadCallStatus />}
                 />
                 <Route exact path="/mt5_bonus" element={<MT5Bonus />} />
                 <Route exact path="/position" element={<PositionReport />} />
@@ -327,6 +376,21 @@ const App = () => {
                   exact
                   path="/basic_ib_report"
                   element={<BasicIbReport />}
+                />
+                <Route
+                  exact
+                  path="/unfunded_accounts"
+                  element={<UnfundedAccounts />}
+                />
+                <Route
+                  exact
+                  path="/client_password"
+                  element={<ClientPassword />}
+                />
+                <Route
+                  exact
+                  path="/lead_converted"
+                  element={<LeasConverted />}
                 />
                 <Route exact path="/ib_structure" element={<IBStructure />} />
                 <Route

@@ -2561,48 +2561,53 @@ const Leads = (prop) => {
                         htmlFor="contained-button-file"
                         className="fileuploadButton"
                       >
-                        <input
-                          accept=".csv"
-                          id="contained-button-file"
-                          type="file"
-                          ref={LeadRef}
-                          onChange={(e) => {
-                            doc.file = e.target.files[0];
-                            setDoc({ ...doc });
-                            confirmAlert({
-                              customUI: ({ onClose }) => {
-                                return (
-                                  <div className="custom-ui">
-                                    <h1>Are you sure?</h1>
-                                    <p>Do you want to import leads file?</p>
-                                    <div className="confirmation-alert-action-button">
-                                      <Button
-                                        variant="contained"
-                                        className="cancelButton"
-                                        onClick={(e) => {
-                                          LeadRef.current.value = "";
-                                          onClose();
-                                        }}
-                                      >
-                                        No
-                                      </Button>
-                                      <Button
-                                        variant="contained"
-                                        className="btn-gradient btn-success"
-                                        onClick={() => {
-                                          handleAction();
-                                          onClose();
-                                        }}
-                                      >
-                                        Yes, Import it!
-                                      </Button>
+                        {prop.permission.import_lead == 1 ? (
+                          <input
+                            accept=".csv"
+                            id="contained-button-file"
+                            type="file"
+                            ref={LeadRef}
+                            onChange={(e) => {
+                              doc.file = e.target.files[0];
+                              setDoc({ ...doc });
+                              confirmAlert({
+                                customUI: ({ onClose }) => {
+                                  return (
+                                    <div className="custom-ui">
+                                      <h1>Are you sure?</h1>
+                                      <p>Do you want to import leads file?</p>
+                                      <div className="confirmation-alert-action-button">
+                                        <Button
+                                          variant="contained"
+                                          className="cancelButton"
+                                          onClick={(e) => {
+                                            LeadRef.current.value = "";
+                                            onClose();
+                                          }}
+                                        >
+                                          No
+                                        </Button>
+                                        <Button
+                                          variant="contained"
+                                          className="btn-gradient btn-success"
+                                          onClick={() => {
+                                            handleAction();
+                                            onClose();
+                                          }}
+                                        >
+                                          Yes, Import it!
+                                        </Button>
+                                      </div>
                                     </div>
-                                  </div>
-                                );
-                              },
-                            });
-                          }}
-                        />
+                                  );
+                                },
+                              });
+                            }}
+                          />
+                        ) : (
+                          ""
+                        )}
+
                         {prop.permission.import_lead == 1 ? (
                           <Button variant="contained" component="span">
                             <i className="material-icons">backup</i>&nbsp;Import

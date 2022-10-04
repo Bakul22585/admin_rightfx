@@ -59,6 +59,7 @@ const RefreshData = () => {
         } else {
           option.group = res.data.groups_data;
           setOption({ ...option });
+          // toast.success(res.data.message);
         }
       });
   };
@@ -116,7 +117,7 @@ const RefreshData = () => {
       param.append("action", "refresh_data");
       param.append("filter_type", data.filter_type);
       if (data.filter_type == "user") {
-        param.append("user_id", data.user_id);
+        param.append("user_id", data.user);
         param.append("mt5_acc_no", data.mt5_acc_no);
       } else {
         param.append("mt5group_name", data.mt5group_name);
@@ -137,8 +138,10 @@ const RefreshData = () => {
             data.isLoder = false;
             setData({ ...data });
           } else {
-            option.mt5_acc_no = res.data.mt5_accounts;
-            setOption({ ...option });
+            // option.mt5_acc_no = res.data.mt5_accounts;
+            // setOption({ ...option });
+            toast.success(res.data.message);
+
             setData({
               filter_type: "",
               mt5_acc_no: "",

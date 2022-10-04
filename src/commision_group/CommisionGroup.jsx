@@ -50,7 +50,7 @@ const CommisionGroup = (prop) => {
   const [resData, setResData] = useState({});
   const [option, setOption] = useState([]);
   const [form, setForm] = useState({
-    assigned_role_id: {},
+    assigned_role_id: [],
     ib_group_level_id: "",
     ib_group_main_id: "",
     group_name: "",
@@ -156,7 +156,7 @@ const CommisionGroup = (prop) => {
       name: "plan_title",
     },
   ]);
-
+  console.log("form", form.assigned_role_id);
   const column = [
     {
       name: "SR.NO",
@@ -360,10 +360,7 @@ const CommisionGroup = (prop) => {
                           ib_company_crypto: false,
                         });
                         setForm({
-                          assigned_role_id: {
-                            assigned_role_id: row.assigned_role_id,
-                            role_description: row.role_name,
-                          },
+                          assigned_role_id: row.role_data,
                           ib_group_main_id: row.ib_group_main_id,
                           ib_group_level_id: row.ib_group_level_id,
                           group_name: row.group_name,
@@ -739,9 +736,10 @@ const CommisionGroup = (prop) => {
       return (
         <div>
           <div className="view-commission-content-section">
-            <div className="view-content-element">
+            <div className="w-100">
               <Autocomplete
-                disablePortal
+                // disablePortal
+                multiple
                 options={option}
                 value={form.assigned_role_id}
                 getOptionLabel={(option) =>
@@ -755,10 +753,10 @@ const CommisionGroup = (prop) => {
                 //   fetchAccount(event, newInputValue);
                 // }}
                 onChange={(event, newValue) => {
-                  // setValue(newValue);
                   form.assigned_role_id = newValue;
                   setForm({ ...form });
-                  console.log(newValue);
+
+                  console.log("newValue1", newValue);
                 }}
                 sx={{ width: "100%" }}
                 renderInput={(params) => (
@@ -1355,9 +1353,10 @@ const CommisionGroup = (prop) => {
           <div className="view-commission-content-section">
             <div className="view-content-element">
               <Autocomplete
-                disablePortal
+                multiple
                 options={option}
-                value={form.assigned_role_id}
+                // value={form.assigned_role_id}
+                // value={[]}
                 getOptionLabel={(option) =>
                   option ? option.role_description : ""
                 }
@@ -1369,10 +1368,10 @@ const CommisionGroup = (prop) => {
                 //   fetchAccount(event, newInputValue);
                 // }}
                 onChange={(event, newValue) => {
-                  // setValue(newValue);
                   form.assigned_role_id = newValue;
                   setForm({ ...form });
-                  console.log(newValue);
+
+                  console.log("newValue1", newValue);
                 }}
                 sx={{ width: "100%" }}
                 renderInput={(params) => (
@@ -2106,8 +2105,12 @@ const CommisionGroup = (prop) => {
       param.append("ib_company_indices", form.ib_company_indices);
       param.append("ib_company_energy", form.ib_company_energy);
       param.append("ib_company_crypto", form.ib_company_crypto);
-      param.append("assigned_role_id", form.assigned_role_id.assigned_role_id);
-
+      param.append(
+        "assigned_role_id",
+        form.assigned_role_id.map((item, index) => {
+          return item.assigned_role_id;
+        })
+      );
       param.append("account_currency", "USD");
 
       await axios
@@ -2236,7 +2239,12 @@ const CommisionGroup = (prop) => {
       param.append("ib_company_energy", form.ib_company_energy);
       param.append("ib_company_crypto", form.ib_company_crypto);
 
-      param.append("assigned_role_id", form.assigned_role_id.assigned_role_id);
+      param.append(
+        "assigned_role_id",
+        form.assigned_role_id.map((item, index) => {
+          return item.assigned_role_id;
+        })
+      );
 
       param.append("account_currency", "USD");
 
@@ -2280,7 +2288,7 @@ const CommisionGroup = (prop) => {
           setOption(res.data.role_list);
           if (prop == "add") {
             setForm({
-              assigned_role_id: {},
+              assigned_role_id: [],
               ib_group_level_id: "",
               assigned_role_id: "",
               ib_group_main_id: "",

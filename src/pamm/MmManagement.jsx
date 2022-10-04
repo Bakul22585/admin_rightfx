@@ -847,10 +847,21 @@ const MmManagement = (prop) => {
               // onChange={input}
               name="mobile"
               onBlur={inputtrueFalse}
-              error={form.mobile == "" && inputinfoTrue.mobile ? true : false}
+              error={
+                (form.mobile == "" ||
+                  form.mobile.toString().length < 4 ||
+                  form.mobile.toString().length > 12) &&
+                inputinfoTrue.mobile
+                  ? true
+                  : false
+              }
               helperText={
                 form.mobile == "" && inputinfoTrue.mobile
                   ? "Mobile is required"
+                  : (form.mobile.toString().length < 4 ||
+                      form.mobile.toString().length > 12) &&
+                    inputinfoTrue.mobile
+                  ? "Mobile number is not valid"
                   : ""
               }
               value={form.mobile}
@@ -981,13 +992,15 @@ const MmManagement = (prop) => {
             <TextField
               className="input-font-small"
               label="City"
+              name="city"
               variant="standard"
-              onChange={input}
+              // onChange={input}
               error={form.city == "" && inputinfoTrue.city ? true : false}
               helperText={
                 form.city == "" && inputinfoTrue.city ? "City is required" : ""
               }
-              // onBlur={inputtrueFalse}
+              onBlur={inputtrueFalse}
+              value={form.city}
               onChange={(e) => {
                 if (
                   e.target.value === "" ||
@@ -999,7 +1012,6 @@ const MmManagement = (prop) => {
                 }
               }}
               sx={{ width: "100%" }}
-              name="city"
             />
           </div>
           <div className="input-element">
@@ -1163,6 +1175,7 @@ const MmManagement = (prop) => {
               variant="standard"
               onChange={input}
               onBlur={inputtrueFalse}
+              value={form.email}
               helperText={
                 form.email == "" && inputinfoTrue.email
                   ? "Email is required"
@@ -1183,7 +1196,6 @@ const MmManagement = (prop) => {
               }
               sx={{ width: "100%" }}
               name="email"
-              value={form.email}
             />
           </div>
           <div className="input-element">
@@ -1202,12 +1214,24 @@ const MmManagement = (prop) => {
               className="input-font-small"
               label="Mobile"
               variant="standard"
+              // onChange={input}
               name="mobile"
               onBlur={inputtrueFalse}
-              error={form.mobile == "" && inputinfoTrue.mobile ? true : false}
+              error={
+                (form.mobile == "" ||
+                  form.mobile.toString().length < 4 ||
+                  form.mobile.toString().length > 12) &&
+                inputinfoTrue.mobile
+                  ? true
+                  : false
+              }
               helperText={
                 form.mobile == "" && inputinfoTrue.mobile
                   ? "Mobile is required"
+                  : (form.mobile.toString().length < 4 ||
+                      form.mobile.toString().length > 12) &&
+                    inputinfoTrue.mobile
+                  ? "Mobile number is not valid"
                   : ""
               }
               value={form.mobile}
@@ -1777,8 +1801,17 @@ const MmManagement = (prop) => {
       toast.error("Please enter last name");
     } else if (form.email == "") {
       toast.error("Please enter email");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email)
+    ) {
+      toast.error("Enter a valid email");
     } else if (form.mobile == "") {
       toast.error("Please enter mobile number");
+    } else if (
+      form.mobile.toString().length < 4 ||
+      form.mobile.toString().length > 12
+    ) {
+      toast.error("Mobile number is not valid");
     } else if (form.gender == "") {
       toast.error("Please select gender");
     } else if (form.dob == "") {
@@ -1795,6 +1828,15 @@ const MmManagement = (prop) => {
       toast.error("Please select status");
     } else if (form.password == "") {
       toast.error("Please enter password");
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+        form.password
+      )
+    ) {
+      // errors.portalPassword = "Password is requied";
+      toast.error(
+        "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+      );
     } else if (form.confirm_password == "") {
       toast.error("Please enter confirm password");
     } else if (form.confirm_password != form.password) {
@@ -1847,8 +1889,17 @@ const MmManagement = (prop) => {
       toast.error("Please enter last name");
     } else if (form.email == "") {
       toast.error("Please enter email");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email)
+    ) {
+      toast.error("Enter a valid email");
     } else if (form.mobile == "") {
       toast.error("Please enter mobile number");
+    } else if (
+      form.mobile.toString().length < 4 ||
+      form.mobile.toString().length > 12
+    ) {
+      toast.error("Mobile number is not valid");
     } else if (form.gender == "") {
       toast.error("Please select gender");
     } else if (form.dob == "") {
@@ -1865,6 +1916,15 @@ const MmManagement = (prop) => {
       toast.error("Please select status");
     } else if (form.password == "") {
       toast.error("Please enter password");
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/.test(
+        form.password
+      )
+    ) {
+      // errors.portalPassword = "Password is requied";
+      toast.error(
+        "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+      );
     } else if (form.confirm_password == "") {
       toast.error("Please enter confirm password");
     } else if (form.confirm_password != form.password) {
@@ -1876,6 +1936,7 @@ const MmManagement = (prop) => {
       if (IsApprove !== "") {
         param.append("is_app", IsApprove.is_app);
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
+        param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
       param.append("action", "update_manager_details");
       param.append("user_id", form.id);

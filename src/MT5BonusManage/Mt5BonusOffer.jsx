@@ -170,7 +170,7 @@ const Mt5BonusOffer = (prop) => {
     bonus_offer_image: "",
     isLoader: false,
   });
-
+  const [mainImage, setMainImage] = useState("");
   const [inputinfoTrue, setinputinfoTrue] = useState({
     bonus_title: false,
     bonus_percentage: false,
@@ -423,6 +423,7 @@ const Mt5BonusOffer = (prop) => {
       bonus_offer_image: prop.bonus_offer_image,
       isLoader: false,
     });
+    setPreviewBonusOfferImage(prop.bonus_offer_image);
     setinputinfoTrue({
       bonus_title: false,
       bonus_percentage: false,
@@ -439,6 +440,7 @@ const Mt5BonusOffer = (prop) => {
     tableMenus[index] = null;
     setOpenTableMenus(tableMenus);
   };
+  // console.log("prop.bonus_offer_image", edit.bonus_offer_image, mainImage);
   const onUpdate = async () => {
     if (edit.bonus_title == "") {
       toast.error("Bonus Title is requied");
@@ -471,13 +473,15 @@ const Mt5BonusOffer = (prop) => {
         param.append("AADMIN_LOGIN_ID", IsApprove.AADMIN_LOGIN_ID);
         param.append("role_id", IsApprove.AADMIN_LOGIN_ROLE_ID);
       }
+      if (edit.bonus_offer_image != previewBonusOfferImage) {
+        param.append("bonus_offer_image", selectedBonusOfferImage);
+      }
       param.append("bonus_title", edit.bonus_title);
       param.append("bonus_percentage", edit.bonus_percentage);
       param.append("start_date", edit.start_date);
       param.append("end_date", edit.end_date);
       param.append("bonus_offer_status", edit.status);
-      if (edit.bonus_offer_image == "")
-        param.append("bonus_offer_image", selectedBonusOfferImage);
+
       await axios
         .post(`${Url}/ajaxfiles/mt5_bonus_offers_manage.php`, param)
         .then((res) => {
